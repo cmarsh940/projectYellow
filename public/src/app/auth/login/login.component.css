@@ -1,0 +1,16 @@
+form {
+    width: 25%;
+    margin: auto;
+}
+.mat-form-field {
+    display: block;
+}
+
+p {
+    text-align: center;
+    color: red;
+}
+
+button {
+    width:100%;
+}

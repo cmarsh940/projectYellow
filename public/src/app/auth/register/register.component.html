@@ -1,0 +1,20 @@
+<div class="container" id="head">
+  <h2 class="text-center">Add a new administrative user</h2>
+  <form (ngSubmit)="createUser()" #registerForm="ngForm">
+    <mat-form-field>
+      <input matInput type="text" name="name" [(ngModel)]="newUser.name" placeholder="Name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="email" name="email" autocomplete="username email" [(ngModel)]="newUser.email" placeholder="Email">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" name="password" autocomplete="new-password" [(ngModel)]="newUser.password" placeholder="Password">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="password" name="password_confirmation" autocomplete="new-password-confirmation" required [(ngModel)]="newUser.password_confirmation"
+        placeholder="Confirm Password">
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" color="accent" [disabled]="!registerForm.form.valid" (click)="createUser(); registerForm.reset()">Register</button>
+  </form>
+</div>
