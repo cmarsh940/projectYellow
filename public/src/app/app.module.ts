@@ -1,3 +1,4 @@
+import { LandingModule } from './landing/landing.module';
 import { HttpModule } from '@angular/http';
 import { LoginComponent } from './auth/login/login.component';
 import { UserService } from './services/user.service';
@@ -13,11 +14,16 @@ import { ClientModule } from './client/client.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RegisterComponent } from './auth/register/register.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { httpInterceptorProviders } from './interceptors';
+import { RequestCache, RequestCacheWithMap } from './Services/cache.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent],
   imports: [
     BrowserModule,
+    LandingModule,
     ClientModule,
     AppRoutingModule,
     FormsModule,
@@ -25,9 +31,17 @@ import { RegisterComponent } from './auth/register/register.component';
     HttpModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    ServiceWorkerModule.register("/ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
-  providers: [MessagesService, UserService],
+  providers: [
+    MessagesService,
+    UserService,
+    { provide: RequestCache, useClass: RequestCacheWithMap },
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

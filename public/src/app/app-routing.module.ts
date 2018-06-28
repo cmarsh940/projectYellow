@@ -1,13 +1,17 @@
-import { DashboardComponent } from './client/dashboard/dashboard.component';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+
 
 const routes: Routes = [
   {
     path: "",
-    component: LoginComponent,
+    loadChildren: "./landing/landing.module#LandingModule"
+  },
+  {
+    path: "login",
+    component: LoginComponent
   },
   {
     path: "register",
@@ -16,9 +20,8 @@ const routes: Routes = [
   },
   {
     path: "dashboard",
-    loadChildren: "./Components/client/client.module#ClientModule"
-  },
-
+    loadChildren: "./client/client.module#ClientModule"
+  }
 ];
 
 @NgModule({
