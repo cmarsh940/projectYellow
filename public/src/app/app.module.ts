@@ -17,7 +17,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { httpInterceptorProviders } from './interceptors';
-import { RequestCache, RequestCacheWithMap } from './Services/cache.service';
+import { RequestCache, RequestCacheWithMap } from './services/cache.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent],

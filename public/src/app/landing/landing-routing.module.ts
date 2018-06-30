@@ -1,3 +1,4 @@
+import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { RightsComponent } from './rights/rights.component';
 import { NgModule } from '@angular/core';
@@ -13,7 +14,7 @@ const routes: Routes = [
       {
         path: "",
         pathMatch: "full",
-        component: LandingComponent
+        component: HomeComponent
       },
       {
         path: "about",

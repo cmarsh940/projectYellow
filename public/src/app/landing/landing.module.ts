@@ -1,3 +1,4 @@
+import { MainNavComponent } from './../layout/main-nav/main-nav.component';
 import { MaterialModule } from './../material/material.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -8,6 +9,7 @@ import { AboutComponent } from './about/about.component';
 import { PricingComponent } from './pricing/pricing.component';
 import { LandingComponent } from './landing.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   imports: [
@@ -18,10 +20,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
   ],
   declarations: [
+    MainNavComponent,
     LandingComponent,
     RightsComponent, 
     AboutComponent, 
-    PricingComponent
+    PricingComponent, HomeComponent
   ]
 })
 export class LandingModule { }

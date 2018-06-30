@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { finalize, tap } from 'rxjs/operators';
-import { MessagesService } from '../Services/messages.service';
+import { MessagesService } from '../services/messages.service';
 
 
 @Injectable()
