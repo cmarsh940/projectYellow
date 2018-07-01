@@ -1,3 +1,5 @@
+import { ClientNavComponent } from './../layout/client-nav/client-nav.component';
+import { ClientComponent } from './client.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -14,6 +16,10 @@ import { MaterialModule } from '../material/material.module';
     MaterialModule,
     ReactiveFormsModule
   ],
-  declarations: [DashboardComponent]
+  declarations: [
+    ClientComponent,
+    ClientNavComponent,
+    DashboardComponent
+  ]
 })
 export class ClientModule {}

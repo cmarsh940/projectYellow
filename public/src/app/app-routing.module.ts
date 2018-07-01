@@ -6,10 +6,6 @@ import { LoginComponent } from './auth/login/login.component';
 
 const routes: Routes = [
   {
-    path: "",
-    loadChildren: "./landing/landing.module#LandingModule"
-  },
-  {
     path: "login",
     component: LoginComponent
   },
@@ -17,6 +13,10 @@ const routes: Routes = [
     path: "register",
     pathMatch: "full",
     component: RegisterComponent
+  },
+  {
+    path: "",
+    loadChildren: "./landing/landing.module#LandingModule"
   },
   {
     path: "dashboard",

@@ -1,0 +1,53 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item href="/" [class.activated]="currentUrl == '/'">
+        <span mat-line>HOME</span>
+      </a>
+      <a mat-list-item routerLink="/about" [class.activated]="currentUrl == '/about'">
+        <span mat-line>About</span>
+      </a>
+      <a mat-list-item routerLink="/pricing" [class.activated]="currentUrl == '/pricing'">
+        <span mat-line>Pricing</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span id="projectType">SURVEY ME</span>
+
+      <!-- Spacing to the right -->
+      <span class="spacer"></span>
+
+      <!-- SETTING MENU ICON -->
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>apps</mat-icon>
+      </button>
+      <!-- END MENU ICON -->
+
+      <!-- Settings Menu -->
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>folder</mat-icon>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>help</mat-icon>
+        </button>
+        <mat-divider></mat-divider>
+
+        <!--  Language Setting-->
+        <button mat-menu-item [matMenuTriggerFor]="languages">Languages</button>
+        <mat-menu #languages="matMenu">
+          <button mat-menu-item disabled>Coming Soon</button>
+        </mat-menu>
+      </mat-menu>
+      <!-- End Settings Menu -->
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

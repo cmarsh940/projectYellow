@@ -1,22 +1,28 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>SURVEY ME</span>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <div class="container">
-  <h2 class="text-center">Login</h2>
+  <h2 class="text-center title">Login</h2>
   <form (submit)="loginUser(); loginForm.reset()" #loginForm="ngForm">
     <!-- ** EMAIL ** -->
-
-    <mat-form-field>
-      <input matInput placeholder="Enter your email" autocomplete="email" name="email"  autocomplete="username email"
-        required [(ngModel)]="currentUser.email">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Enter your email" autocomplete="email" name="email"  autocomplete="username email" required [(ngModel)]="currentUser.email">
     </mat-form-field>
 
     <!-- **  PASSWORD ** -->
-    <mat-form-field>
+    <mat-form-field appearance="outline">
+    <mat-label>Password</mat-label>
       <input matInput placeholder="Enter your password" autocomplete="current-password" name="password" autocomplete="new-password"
         required [(ngModel)]="currentUser.password" [type]="hide ? 'password' : 'text'">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
     </mat-form-field>
-    <button mat-raised-button type="submit" value="Login" [disabled]="!currentUser.email" color="accent">Login
+    <button mat-stroked-button type="submit" value="Login" [disabled]="!currentUser.email" color="primary">Login
     </button>
   </form>
 
-  <button mat-raised-button routerLink="/register" color="primary">Register</button>
+  <button mat-raised-button routerLink="/register" color="accent">Register</button>
 </div>

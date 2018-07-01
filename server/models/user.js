@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
         required: [true, 'First name cannot be blank'],
         maxlength: [250, "Max characters reached. please stay below 250 characters"],
@@ -13,17 +13,17 @@ const UserSchema = new mongoose.Schema({
             message: "First name cannot contain numbers or symbols."
         }
     },
-    // lastName: {
-    //     type: String,
-    //     required: [true, 'Last name cannot be blank'],
-    //     maxlength: [250, "Max characters reached. please stay below 250 characters"],
-    //     validate: {
-    //         validator: function (name) {
-    //             return /^[a-zA-Z]+$/.test(name);
-    //         },
-    //         message: "Last name cannot contain numbers or symbols."
-    //     }
-    // },
+    lastName: {
+        type: String,
+        required: [true, 'Last name cannot be blank'],
+        maxlength: [250, "Max characters reached. please stay below 250 characters"],
+        validate: {
+            validator: function (name) {
+                return /^[a-zA-Z]+$/.test(name);
+            },
+            message: "Last name cannot contain numbers or symbols."
+        }
+    },
     email: {
         type: String,
         required: [true, 'Email cannot be blank'],
