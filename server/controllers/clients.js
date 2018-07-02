@@ -4,21 +4,52 @@ const Client = mongoose.model('Client');
 
 class ClientsController {
   index(req, res) {
-    Client.find({})
-      .exec((err, clients) => {
-        if (err) {
-          return res.json(err);
-        }
-        return res.json(clients);
-      });
-  }
-
-  create(req, res) {
-    Client.create(req.body, (err, client) => {
+    Client.find({}, (err, clients) => {
       if (err) {
         return res.json(err);
       }
-      return res.json(client);
+      return res.json(clients);
+    });
+  }
+
+  create(req, res) {
+    console.log("*** SERVER CREATING Client")
+    if (req.body.password != req.body.password_confirmation) {
+      return res.json({
+        errors: {
+          password: {
+            message: 'Your passwords do not match'
+          }
+        }
+      })
+    }
+    Client.create(req.body, (err, client) => {
+      console.log("*** SERVER CREATING Client")
+      if (err) {
+        console.log("*** SERVER CREATING ERROR", err);
+        return res.json(err);
+      }
+      req.session.client_id = client._id;
+      return res.json(client)
+    })
+  }
+
+  authenticate(req, res) {
+    Client.findOne({ email: req.body.email }, (err, client) => {
+      if (err) {
+        return res.json(err);
+      }
+      if (client && client.authenticate(req.body.password)) {
+        req.session.client_id = client._id;
+        return res.json(client);
+      }
+      return res.json({
+        errors: {
+          login: {
+            message: 'Invalid credentials'
+          }
+        }
+      });
     });
   }
 
@@ -36,26 +67,41 @@ class ClientsController {
       req.params.id,
       { $set: req.body },
       { new: true },
-      (err, venue) => {
-        console.log("*** SERVER REQ", req.body);
+      (err, client) => {
         if (err) {
-          console.log("*** SERVER ERROR", err);
           return res.json(err);
         }
-        console.log("*** SERVER VENUE UPDATE", venue);
-        return res.json(venue);
+        return res.json(client);
       }
     );
   }
 
+  session(req, res) {
+    if (req.session.client_id) {
+      Client.findById(req.session.client_id, (err, client) => {
+        if (err) {
+          return res.json(err);
+        }
+        return res.json(client);
+      });
+    } else {
+      return res.json({ status: false });
+    }
+  }
+
+  logout(req, res) {
+    delete req.session.client_id;
+    return res.json({ status: true });
+  }
+
   delete(req, res) {
-    Client.findByIdAndRemove(req.params.id, (err, venue) => {
+    Client.findByIdAndRemove(req.params.id, (err, client) => {
       if (err) {
         return res.json(err);
       } else {
         return res.json(true);
       }
-    });
+    })
   }
 }
 

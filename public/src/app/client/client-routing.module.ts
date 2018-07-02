@@ -1,11 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ClientComponent } from './client.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   {
-    path: "dashboard",
-    component: DashboardComponent,
+    path: "",
+    component: ClientComponent,
+    children: [
+      {
+        path: "dashboard",
+        pathMatch: "full",
+        component: DashboardComponent
+      },
+    ]
   }
 ];
 

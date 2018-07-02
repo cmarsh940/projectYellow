@@ -1,0 +1,79 @@
+<form (ngSubmit)="createUser()" #registerForm="ngForm">
+  <!-- FIRST NAME -->
+  <div class="input-container">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" name="firstName" required [(ngModel)]="newUser.firstName" autocomplete="given-name" placeholder="First Name">
+    </mat-form-field>
+
+    <!-- LAST NAME -->
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" name="lastName" required [(ngModel)]="newUser.lastName" autocomplete="family-name" placeholder="Last Name">
+    </mat-form-field>
+  </div>
+
+  <!-- EMAIL -->
+  <div class="input-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" name="email" required autocomplete="username email" [(ngModel)]="newUser.email" autocomplete="email"
+        placeholder="Email">
+    </mat-form-field>
+
+    <!-- PHONE -->
+    <mat-form-field appearance="outline">
+      <mat-label>Phone #</mat-label>
+      <input matInput type="tel" name="phone" [(ngModel)]="newUser.phone" autocomplete="tel" placeholder="Phone #">
+    </mat-form-field>
+  </div>
+
+  <div class="input-container">
+    <!-- ADDRESS -->
+    <mat-form-field appearance="outline">
+      <mat-label>Address</mat-label>
+      <input matInput type="text" name="address" required [(ngModel)]="newUser.address" autocomplete="street-address" placeholder="Address">
+    </mat-form-field>
+
+    <!-- CITY -->
+
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <input matInput type="text" name="city" required [(ngModel)]="newUser.city" autocomplete="address-level2" placeholder="City">
+    </mat-form-field>
+  </div>
+  <div class="input-container">
+    <!-- STATE -->
+    <mat-form-field appearance="outline">
+      <mat-select placeholder="State*" required [(ngModel)]="newUser.state" autocomplete="state">
+        <mat-option *ngFor="let state of states" [value]="state.abbreviation">{{state.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- ZIP CODE -->
+    <mat-form-field appearance="outline">
+      <mat-label>Zip Code</mat-label>
+      <input matInput type="text" name="zip" required [(ngModel)]="newUser.zip" autocomplete="postal-code" placeholder="Zip Code">
+    </mat-form-field>
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="input-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" name="password" autocomplete="new-password" required [(ngModel)]="newUser.password" placeholder="Password">
+    </mat-form-field>
+
+    <!-- CONFIRM PASSWORD -->
+    <mat-form-field appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput type="password" name="password_confirmation" autocomplete="new-password-confirmation" required [(ngModel)]="newUser.password_confirmation"
+        placeholder="Confirm Password">
+    </mat-form-field>
+  </div>
+
+  <!-- SUBMIT BUTTON -->
+  <div class="text-center">
+    <button mat-stroked-button type="submit" color="accent" [disabled]="!registerForm.form.valid" (click)="createUser(); registerForm.reset()">Register</button>
+  </div>
+</form>

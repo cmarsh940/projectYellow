@@ -9,14 +9,14 @@ const Answers = require('../controllers/answers');
 
 
 module.exports = function (app) {
-    app.get('/users', Users.index);
-    app.post('/users', Users.create);
-    app.delete('/users', Users.logout);
-    app.post('/users/login', Users.authenticate);
-    app.delete('/users/:id', Users.delete);
-    app.get('/users/:id', Users.show);
-    app.put('/users/:id', Users.update);
-    app.get('/session', Users.session);
+    app.get('/clients', Clients.index);
+    app.post('/clients', Clients.create);
+    app.delete('/clients', Clients.logout);
+    app.post('/clients/login', Clients.authenticate);
+    app.delete('/clients/:id', Clients.delete);
+    app.get('/clients/:id', Clients.show);
+    app.put('/clients/:id', Clients.update);
+    app.get('/session', Clients.session);
 
     app.get('/roles', Roles.index);
     app.post('/roles', Roles.create);
@@ -48,11 +48,11 @@ module.exports = function (app) {
     app.get('/answers/:id', Answers.show);
     app.put('/answers/:id', Answers.update);
 
-    app.get('/clients', Clients.index);
-    app.post('/clients', Clients.create);
-    app.delete('/clients/:id', Clients.delete);
-    app.get('/clients/:id', Clients.show);
-    app.put('/clients/:id', Clients.update);
+    app.get('/users', Users.index);
+    app.post('/users', Users.create);
+    app.delete('/users/:id', Users.delete);
+    app.get('/users/:id', Users.show);
+    app.put('/users/:id', Users.update);
 
 
     app.all('*', (req, res, next) => {

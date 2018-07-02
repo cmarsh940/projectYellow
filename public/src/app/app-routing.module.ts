@@ -15,12 +15,12 @@ const routes: Routes = [
     component: RegisterComponent
   },
   {
-    path: "",
-    loadChildren: "./landing/landing.module#LandingModule"
-  },
-  {
     path: "dashboard",
     loadChildren: "./client/client.module#ClientModule"
+  },
+  {
+    path: "",
+    loadChildren: "./landing/landing.module#LandingModule"
   }
 ];
 

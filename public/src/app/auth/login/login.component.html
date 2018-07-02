@@ -6,23 +6,24 @@
 
 <div class="container">
   <h2 class="text-center title">Login</h2>
-  <form (submit)="loginUser(); loginForm.reset()" #loginForm="ngForm">
+  <form (submit)="loginClient()" #loginForm="ngForm">
     <!-- ** EMAIL ** -->
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
-      <input matInput placeholder="Enter your email" autocomplete="email" name="email"  autocomplete="username email" required [(ngModel)]="currentUser.email">
+      <input matInput placeholder="Enter your email" autocomplete="email" name="email" required [(ngModel)]="currentClient.email">
     </mat-form-field>
 
     <!-- **  PASSWORD ** -->
     <mat-form-field appearance="outline">
     <mat-label>Password</mat-label>
-      <input matInput placeholder="Enter your password" autocomplete="current-password" name="password" autocomplete="new-password"
-        required [(ngModel)]="currentUser.password" [type]="hide ? 'password' : 'text'">
+      <input matInput placeholder="Enter your password" autocomplete="current-password" name="password" required [(ngModel)]="currentClient.password" [type]="hide ? 'password' : 'text'">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
     </mat-form-field>
-    <button mat-stroked-button type="submit" value="Login" [disabled]="!currentUser.email" color="primary">Login
+    <button mat-stroked-button type="submit" value="Login" [disabled]="!loginForm.valid" color="primary">Login
     </button>
   </form>
-
+<div>
+  <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+</div>
   <button mat-raised-button routerLink="/register" color="accent">Register</button>
 </div>
