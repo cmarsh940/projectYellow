@@ -1,3 +1,26 @@
-<p>
-  add-survey works!
-</p>
+<form [formGroup]="surveyForm" (ngSubmit)="submitForm(surveyForm.value)" class="form">
+
+  <!-- SURVEY NAME -->
+  <mat-form-field appearance="outline">
+    <mat-label>Survey Name:</mat-label>
+    <input matInput formControlName="name" [errorStateMatcher]="matcher" />
+    <mat-error>
+      <span *ngIf="!surveyForm.get('name').valid && surveyForm.get('name').touched">Please enter Survey Name</span>
+    </mat-error>
+  </mat-form-field>
+
+  <div formArrayName="questions">
+    <div class="input-container" *ngFor="let survey of surveyForm.controls['questions']['controls']; let i = index">
+      <mat-form-field [formGroupName]="i">
+        <mat-label>Question {{i}}:</mat-label>
+        <input matInput formControlName="questions" [errorStateMatcher]="matcher" />
+        <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
+      </mat-form-field>
+    </div>
+  </div>
+  <button type="button" mat-stroked-button color="accent" (click)="addQuestion()">Add Question</button>
+
+
+  <!-- Submit Button -->
+  <button mat-stroked-button type='submit' [disabled]=!partnerForm.valid>Submit</button>
+</form>

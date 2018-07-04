@@ -1,6 +1,13 @@
+img {
+    padding-top: 5em;
+}
+
 form {
     margin: auto;
-    padding: 5% 0;
+    position: fixed;
+    bottom: 6em;
+    left: 1em;
+    right: 1em;
 }
 
 .mat-form-field {
@@ -11,6 +18,11 @@ button {
     width:100%;
 }
 
-h2 {
-    padding: 5% 0;
+#footer {
+    position: fixed;
+    bottom: 0;
+}
+
+a {
+    color: yellow;
 }

@@ -6,6 +6,12 @@
       <a mat-list-item routerLink="/dashboard" [class.activated]="currentUrl == '/dashboard'">
         <span mat-line>Dashboard</span>
       </a>
+      <a mat-list-item routerLink="/survey" [class.activated]="currentUrl == '/survey'">
+        <span mat-line>Surveys</span>
+      </a>
+      <a mat-list-item routerLink="/user" [class.activated]="currentUrl == '/user'">
+        <span mat-line>Users</span>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -13,7 +19,7 @@
       <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span id="projectType">SURVEY ME</span>
+      <span id="projectType">SURVEY BY ME</span>
 
       <!-- Spacing to the right -->
       <span class="spacer"></span>

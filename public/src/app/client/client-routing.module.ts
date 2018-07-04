@@ -1,7 +1,14 @@
+import { AddUserComponent } from './user/add-user/add-user.component';
+import { UserComponent } from './user/user.component';
+import { AddSurveyComponent } from './survey/add-survey/add-survey.component';
+import { SurveyComponent } from './survey/survey.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ClientComponent } from './client.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { EditSurveyComponent } from './survey/edit-survey/edit-survey.component';
+import { EditUserComponent } from './user/edit-user/edit-user.component';
+import { SurveyCategoryComponent } from './survey/survey-category/survey-category.component';
 
 const routes: Routes = [
   {
@@ -12,6 +19,41 @@ const routes: Routes = [
         path: "dashboard",
         pathMatch: "full",
         component: DashboardComponent
+      },
+      {
+        path: "survey",
+        pathMatch: "full",
+        component: SurveyComponent
+      },
+      {
+        path: "survey/:id",
+        pathMatch: "full",
+        component: EditSurveyComponent
+      },
+      {
+        path: "survey/add",
+        pathMatch: "full",
+        component: AddSurveyComponent
+      },
+      {
+        path: "survey_categories",
+        pathMatch: "full",
+        component: SurveyCategoryComponent
+      },
+      {
+        path: "user",
+        pathMatch: "full",
+        component: UserComponent
+      },
+      {
+        path: "user/:id",
+        pathMatch: "full",
+        component: EditUserComponent
+      },
+      {
+        path: "user/add",
+        pathMatch: "full",
+        component: AddUserComponent
       },
     ]
   }

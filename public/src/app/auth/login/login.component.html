@@ -1,29 +1,45 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span>SURVEY ME</span>
+    <span>SURVEY BY ME</span>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <div class="container">
-  <h2 class="text-center title">Login</h2>
+  <div class="text-center">
+    <img src="assets/icons/icon-128x128.png" alt="MESURVEY icon">
+  </div>
   <form (submit)="loginClient()" #loginForm="ngForm">
     <!-- ** EMAIL ** -->
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
+      <span matPrefix>
+        <mat-icon>
+          email
+        </mat-icon>
+      </span>
       <input matInput placeholder="Enter your email" autocomplete="email" name="email" required [(ngModel)]="currentClient.email">
     </mat-form-field>
 
     <!-- **  PASSWORD ** -->
     <mat-form-field appearance="outline">
     <mat-label>Password</mat-label>
+      <span matPrefix> 
+        <mat-icon>
+          https
+        </mat-icon>
+      </span>
       <input matInput placeholder="Enter your password" autocomplete="current-password" name="password" required [(ngModel)]="currentClient.password" [type]="hide ? 'password' : 'text'">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
     </mat-form-field>
     <button mat-stroked-button type="submit" value="Login" [disabled]="!loginForm.valid" color="primary">Login
     </button>
   </form>
-<div>
-  <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+  <div>
+    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+  </div>
 </div>
-  <button mat-raised-button routerLink="/register" color="accent">Register</button>
-</div>
+<mat-toolbar id="footer" color="primary">
+  <div class="text-center">
+    <p class="mat-h5">Don't have a account? <a routerLink="/register" color="accent">Sign up</a></p>
+  </div>
+</mat-toolbar> 

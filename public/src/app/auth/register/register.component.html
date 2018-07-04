@@ -4,7 +4,7 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <div class="container" id="head">
-  <h2 class="text-center title">Register</h2>
+  <h2 class="text-center mat-title">Create Your Account</h2>
   <form (ngSubmit)="createClient()" #registerForm="ngForm">
     <!-- FIRST NAME -->
     <div class="input-container">
@@ -80,7 +80,7 @@
 
     <!-- SUBMIT BUTTON -->
     <div class="text-center">
-      <button mat-stroked-button type="submit" color="accent" [disabled]="!registerForm.form.valid" (click)="createClient()">Register</button>
+      <button mat-stroked-button type="submit" color="accent" [disabled]="!registerForm.form.valid" (click)="createClient()">Create Account</button>
     </div>
   </form>
 
@@ -88,3 +88,11 @@
     <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
   </div>
 </div>
+
+<mat-toolbar id="footer" color="primary">
+  <div class="text-center">
+    <p class="mat-h5">Already have a account?
+      <a routerLink="/login" color="accent">Login</a>
+    </p>
+  </div>
+</mat-toolbar>

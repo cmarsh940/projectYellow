@@ -1,3 +1,5 @@
+import { ClientService } from './services/client.service';
+import { SurveyService } from './services/survey.service';
 import { LandingModule } from './landing/landing.module';
 import { HttpModule } from '@angular/http';
 import { LoginComponent } from './auth/login/login.component';
@@ -19,10 +21,16 @@ import { environment } from '../environments/environment';
 import { httpInterceptorProviders } from './interceptors';
 import { RequestCache, RequestCacheWithMap } from './services/cache.service';
 import { MainFooterComponent } from './layout/main-footer/main-footer.component';
+import { HttpErrorHandler } from './services/http-error-handler.service';
 
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RegisterComponent, MainFooterComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegisterComponent,
+    MainFooterComponent
+  ],
   imports: [
     BrowserModule,
     LandingModule,
@@ -39,7 +47,10 @@ import { MainFooterComponent } from './layout/main-footer/main-footer.component'
     })
   ],
   providers: [
+    HttpErrorHandler,
     MessagesService,
+    ClientService,
+    SurveyService,
     UserService,
     { provide: RequestCache, useClass: RequestCacheWithMap },
     httpInterceptorProviders
