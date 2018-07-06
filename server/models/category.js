@@ -5,10 +5,15 @@ const CategorySchema = new mongoose.Schema({
         type: String,
         required: [true, 'Name cannot be blank']
     },
-    survey: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Survey"
-    }],
+    survey: {
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Survey"
+            }
+        ],
+        default: []
+    }
 }, { timestamps: true });
 
 const Category = mongoose.model('Category', CategorySchema);

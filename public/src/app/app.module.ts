@@ -20,7 +20,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { httpInterceptorProviders } from './interceptors';
 import { RequestCache, RequestCacheWithMap } from './services/cache.service';
-import { MainFooterComponent } from './layout/main-footer/main-footer.component';
 import { HttpErrorHandler } from './services/http-error-handler.service';
 
 
@@ -29,7 +28,6 @@ import { HttpErrorHandler } from './services/http-error-handler.service';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    MainFooterComponent
   ],
   imports: [
     BrowserModule,

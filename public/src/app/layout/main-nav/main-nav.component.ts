@@ -4,8 +4,7 @@ import { map } from "rxjs/operators";
 import { Router, NavigationEnd } from "@angular/router";
 import {
   BreakpointObserver,
-  Breakpoints,
-  BreakpointState
+  Breakpoints
 } from "@angular/cdk/layout";
 
 @Component({

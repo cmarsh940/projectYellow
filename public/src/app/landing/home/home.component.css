@@ -1,3 +1,112 @@
-mat-grid-tile {
-  background: lightblue;
+.container-fluid {
+  background-color: #FFD600;
+  overflow: hidden;
+}
+#top {
+  padding: 2em 0;
+}
+
+h1 {
+  font-size: 5em;
+  text-shadow: 5px 5px #FFD600, 8px 8px rgba(0,0,0,.19); 
+  margin: .4em;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin: 0 25px;
+}
+
+h6 {
+  font-size: .7em;
+}
+
+
+h3:before, h3:after, h6:before, h6:after {
+  content: " ";
+  position: absolute;
+  border-top: 3px dashed rgba(0,0,0, 0.1);
+}
+
+h3:nth-of-type(1):before {
+  width: 42%;
+  height: 4px;
+  margin: 3% 0 0 -43%;
+}
+
+h3:nth-of-type(1):after {
+  width: 50%;
+  height: 4px;
+  margin: 3% 0 0 2%;
+}
+
+h6:nth-of-type(1):before {
+  width: 42%;
+  height: 4px;
+  margin: 3% 0 0 -43%;
+}
+
+h6:nth-of-type(1):after {
+  width: 50%;
+  height: 4px;
+  margin: 3% 0 0 2%;
+}
+
+h1, h3, h6 {
+  transform:matrix(1.00,-0.25,0.00,1.00,0,0);
+  -ms-transform:matrix(1.00,-0.25,0.00,1.00,0,0);
+  -webkit-transform:matrix(1.00,-0.25,0.00,1.00,0,0);
+  text-transform: uppercase;
+}
+
+#me-text {
+  -webkit-animation: appear 3s ease 0s 1 normal ;
+  animation: appear 3s ease 0s 1 normal ;
+}
+
+@-webkit-keyframes appear {
+  0%{
+	opacity: 0;
+	-webkit-transform: scale3d(0.3, 0.3, 0.3);
+	transform: scale3d(0.3, 0.3, 0.3);
+  }
+  60%{
+	opacity: 1;
+	-webkit-transform: scale3d(1,1,1);
+	transform: scale3d(1,1,1);
+  }
+}
+
+@keyframes appear {
+  0%{
+	opacity: 0;
+	transform: scale3d(0.3, 0.3, 0.3);
+  }
+  60%{
+	opacity: 1;
+	transform: scale3d(1,1,1);
+  }
+}
+
+
+.grid-container {
+  margin: 20px;
+}
+
+.dashboard-card {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+}
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.dashboard-card-content {
+  text-align: center;
 }

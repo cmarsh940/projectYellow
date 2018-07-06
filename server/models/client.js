@@ -42,7 +42,6 @@ const ClientSchema = new mongoose.Schema({
     type: Number,
     // required: [true, 'Phone number cannot be blank'],
     trim: true,
-    unique: true,
   },
   address: {
     type: String,
@@ -76,14 +75,25 @@ const ClientSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role"
   },
-  surveys: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Survey"
-  }],
-  users: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  }],
+  surveys: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Survey"
+      }
+    ],
+    default: []
+  },
+  users: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
+    default: []
+  }
+
 }, { timestamps: true });
 
 ClientSchema.pre('save', function (next) {

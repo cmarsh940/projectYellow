@@ -24,5 +24,10 @@ button {
 }
 
 a {
-    color: yellow;
+    color: #FFD600;
+}
+
+#icon {
+    padding: 0;
+    width: 2em;
 }

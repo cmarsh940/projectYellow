@@ -1,15 +1,30 @@
 const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
+const Survey = mongoose.model("Survey");
+const User = mongoose.model("User");
 
 
 class ClientsController {
   index(req, res) {
-    Client.find({}, (err, clients) => {
+    Client.find({})
+      .populate({ path: "surveys", model: Survey })
+      .populate({ path: "users", model: User })
+      .exec((err, clients) => {
       if (err) {
         return res.json(err);
       }
       return res.json(clients);
     });
+    Venue.find({})
+      .populate({ path: "amenities", model: Amenity })
+      .populate({ path: "reviews", model: Review })
+      .populate({ path: "_category", model: Category })
+      .exec((err, venues) => {
+        if (err) {
+          return res.json(err);
+        }
+        return res.json(venues);
+      });
   }
 
   create(req, res) {

@@ -7,9 +7,9 @@ const RoleSchema = new mongoose.Schema(
       required: [true, "Name cannot be blank"],
       trim: true
     },
-    _user: {
+    _client: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "Client"
     },
   },
   { timestamps: true }

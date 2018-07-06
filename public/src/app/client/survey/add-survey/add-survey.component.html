@@ -10,7 +10,7 @@
   </mat-form-field>
 
   <div formArrayName="questions">
-    <div class="input-container" *ngFor="let survey of surveyForm.controls['questions']['controls']; let i = index">
+    <div *ngFor="let survey of surveyForm.controls['questions']['controls']; let i = index">
       <mat-form-field [formGroupName]="i">
         <mat-label>Question {{i}}:</mat-label>
         <input matInput formControlName="questions" [errorStateMatcher]="matcher" />
@@ -18,9 +18,9 @@
       </mat-form-field>
     </div>
   </div>
-  <button type="button" mat-stroked-button color="accent" (click)="addQuestion()">Add Question</button>
+  <button type="button" mat-raised-button color="accent" (click)="addQuestion()">Add Question</button>
 
 
   <!-- Submit Button -->
-  <button mat-stroked-button type='submit' [disabled]=!partnerForm.valid>Submit</button>
+  <button mat-stroked-button type='submit' [disabled]=!surveyForm.valid>Submit</button>
 </form>

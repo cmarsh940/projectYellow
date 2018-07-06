@@ -30,6 +30,7 @@ import {
   MatStepperModule,
   MAT_CHECKBOX_CLICK_ACTION
 } from '@angular/material';
+import { ObserversModule } from '../../../node_modules/@angular/cdk/observers';
 
 @NgModule({
   imports: [
@@ -59,6 +60,7 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatStepperModule,
+    ObserversModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -87,9 +89,8 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatStepperModule,
+    ObserversModule
   ],
-  providers: [
-    { provide: MAT_CHECKBOX_CLICK_ACTION, useValue: "check" }
-  ]
+  providers: [{ provide: MAT_CHECKBOX_CLICK_ACTION, useValue: "check" }]
 })
-export class MaterialModule { }
+export class MaterialModule {}

@@ -1,3 +1,4 @@
+import { MainFooterComponent } from './../layout/main-footer/main-footer.component';
 import { MainNavComponent } from './../layout/main-nav/main-nav.component';
 import { MaterialModule } from './../material/material.module';
 import { NgModule } from '@angular/core';
@@ -21,6 +22,7 @@ import { HomeComponent } from './home/home.component';
   ],
   declarations: [
     MainNavComponent,
+    MainFooterComponent,
     LandingComponent,
     RightsComponent, 
     AboutComponent, 

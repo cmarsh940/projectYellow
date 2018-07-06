@@ -1,0 +1,12 @@
+div.container {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+h1 {
+    text-align: center;
+}
+
+div.col {
+    margin: 5%;
+}

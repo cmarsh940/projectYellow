@@ -17,9 +17,12 @@ button {
 }
 
 a {
-    color: yellow;
+    color: #FFD600;
 }
 
+#icon {
+    width: 2em;
+}
 
 
 @media (min-width: 600px) {

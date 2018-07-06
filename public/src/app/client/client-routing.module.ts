@@ -26,14 +26,14 @@ const routes: Routes = [
         component: SurveyComponent
       },
       {
-        path: "survey/:id",
-        pathMatch: "full",
-        component: EditSurveyComponent
-      },
-      {
         path: "survey/add",
         pathMatch: "full",
         component: AddSurveyComponent
+      },
+      {
+        path: "survey/:id",
+        pathMatch: "full",
+        component: EditSurveyComponent
       },
       {
         path: "survey_categories",
@@ -54,7 +54,7 @@ const routes: Routes = [
         path: "user/add",
         pathMatch: "full",
         component: AddUserComponent
-      },
+      }
     ]
   }
 ];
