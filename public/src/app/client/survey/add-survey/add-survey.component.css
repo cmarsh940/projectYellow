@@ -1,14 +1,16 @@
 form {
     margin: auto;
-    position: fixed;
-    left: 1em;
-    right: 1em;
+    padding: 1em;
 }
 
 .mat-form-field {
     display: block;
 }
 
-button {
+.spacer {
+  flex: 1 1 auto;
+}
+
+#submit-button {
     width:100%;
 }

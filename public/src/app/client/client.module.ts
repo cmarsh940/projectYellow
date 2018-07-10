@@ -1,4 +1,4 @@
-import { ClientNavComponent } from './../layout/client-nav/client-nav.component';
+import { ClientNavComponent } from '../layout/client-nav/client-nav.component';
 import { ClientComponent } from './client.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

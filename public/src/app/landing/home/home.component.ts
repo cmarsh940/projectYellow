@@ -6,6 +6,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ["./home.component.css"]
 })
 export class HomeComponent implements OnInit {
+  step = 0;
+
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
+  }
   
   constructor() {}
 

@@ -1,4 +1,4 @@
-.container-fluid {
+#container-top {
   background-color: #FFD600;
   overflow: hidden;
 }
@@ -107,6 +107,15 @@ h1, h3, h6 {
   right: 10px;
 }
 
-.dashboard-card-content {
-  text-align: center;
+#container-middle {
+  padding: 0;
+}
+
+mat-grid-tile {
+  background: #181818;
+  color: #fff;
+}
+
+.accordion {
+  width: 100%;
 }

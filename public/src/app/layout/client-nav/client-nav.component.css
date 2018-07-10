@@ -7,39 +7,6 @@
   box-shadow: 3px 0 6px rgba(0,0,0,.24);
 }
 
-.mat-expansion-panel-body {
-  padding: 0 24px 16px;
-  background: #fafafa;
-}
-
-
-.mat-drawer-content {
-  margin-left: 200px;
-}
-
-.activated {
-  background-color: #FFD600;
-}
-
-.mat-toolbar.mat-primary {
-  max-height: 2.5em;
-}
-
-.mat-list-icon {
-  width: 15px !important;
-  height: 15px !important;
-  margin-right: inherit;
-}
-
-
-#projectType {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-#projectType:hover {
-  color: #fff;
-}
-
 .spacer {
   flex: 1 1 auto;
 }

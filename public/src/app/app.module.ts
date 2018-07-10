@@ -21,6 +21,8 @@ import { environment } from '../environments/environment';
 import { httpInterceptorProviders } from './interceptors';
 import { RequestCache, RequestCacheWithMap } from './services/cache.service';
 import { HttpErrorHandler } from './services/http-error-handler.service';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
 
 
 @NgModule({
@@ -42,7 +44,13 @@ import { HttpErrorHandler } from './services/http-error-handler.service';
     MaterialModule,
     ServiceWorkerModule.register("/ngsw-worker.js", {
       enabled: environment.production
-    })
+    }),
+    LayoutModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule
   ],
   providers: [
     HttpErrorHandler,

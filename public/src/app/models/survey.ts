@@ -1,10 +1,10 @@
 export class Survey {
     _id: any;
     name: string;
-    _questions: any;
-    _answers: any;
-    _user: any;
-    _clients: any;
+    questions: any;
+    answers: any;
+    user: any;
+    _client: any;
     createdAt: any;
     updatedAt: any;
 }

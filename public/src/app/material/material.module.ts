@@ -30,7 +30,7 @@ import {
   MatStepperModule,
   MAT_CHECKBOX_CLICK_ACTION
 } from '@angular/material';
-import { ObserversModule } from '../../../node_modules/@angular/cdk/observers';
+import { ObserversModule } from '@angular/cdk/observers';
 
 @NgModule({
   imports: [

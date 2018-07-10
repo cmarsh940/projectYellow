@@ -1,18 +1,77 @@
-<div class="container-fluid">
+<!-- TOP CONTAINER -->
+<div class="container-fluid" id="container-top">
   <div class="text-center" id="top">
     <h3>survey by</h3>
     <h1 class="mat-h1" id="me-text">ME</h1>
     <h6>your data is <span>"YOURS".</span></h6>
   </div>
 </div>
-<div class="grid-container">
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile>
-      <mat-card class="dashboard-card" colspan=2, rowspan=1>
-        <mat-card-content class="dashboard-card-content">
-          <div>Real time data anywhere you are!</div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
+
+<div class="container-fluid" id="container-middle">
+  <mat-grid-list cols="2" rowHeight="2:1">
+    <mat-grid-tile>Real Time Data</mat-grid-tile>
+    <mat-grid-tile>Safe & Secure</mat-grid-tile>
+    <mat-grid-tile>"YOUR" Data</mat-grid-tile>
+    <mat-grid-tile>User friendly</mat-grid-tile>
   </mat-grid-list>
+
+  <!-- expansion -->
+  <div class="row">
+    <mat-accordion class="accordion">
+      <!-- WHY -->
+      <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            WHY?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row>
+          <button mat-button color="primary" (click)="nextStep()">NEXT</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <!-- WHO -->
+      <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            WHO?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Previous</button>
+          <button mat-button color="primary" (click)="nextStep()">NEXT</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <!-- PRICE -->
+      <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            PRICE?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+      
+      <!-- MORE -->
+      <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            MORE?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+
+        <mat-action-row>
+          <button mat-button color="primary" routerLink="/about">More</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+  </div>
 </div>

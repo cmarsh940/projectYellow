@@ -1,26 +1,61 @@
+<div class="text-center">
+  <h1 class="mat-title">New Survey</h1>
+</div>
+
 <form [formGroup]="surveyForm" (ngSubmit)="submitForm(surveyForm.value)" class="form">
 
   <!-- SURVEY NAME -->
   <mat-form-field appearance="outline">
     <mat-label>Survey Name:</mat-label>
-    <input matInput formControlName="name" [errorStateMatcher]="matcher" />
+    <input matInput formControlName="name" />
     <mat-error>
       <span *ngIf="!surveyForm.get('name').valid && surveyForm.get('name').touched">Please enter Survey Name</span>
     </mat-error>
   </mat-form-field>
 
   <div formArrayName="questions">
-    <div *ngFor="let survey of surveyForm.controls['questions']['controls']; let i = index">
-      <mat-form-field [formGroupName]="i">
-        <mat-label>Question {{i}}:</mat-label>
-        <input matInput formControlName="questions" [errorStateMatcher]="matcher" />
-        <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
-      </mat-form-field>
+    <div *ngFor="let question of surveyForm.controls['questions']['controls']; let i=index" formGroupName="{{i}}">
+      <!-- The repeated address template -->
+      <mat-card>
+        <mat-card-header>
+          <h6>Question #{{i + 1}}</h6>
+          <mat-form-field>
+            <mat-select placeholder="Question type" formControlName="type">
+              <mat-option *ngFor="let type of questionTypes" [value]="type.value">
+                {{type.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </mat-card-header>
+        <mat-card-content *ngIf="type">
+          <div *ngIf="question[i].type == 'text'">
+            <mat-form-field>
+              <mat-label >Question:</mat-label>
+              <input matInput formControlName="question">
+              <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
+            </mat-form-field>
+          </div>
+          <div *ngIf="question[i].type == 'boolean'">
+            <mat-form-field>
+              <mat-label>Question:</mat-label>
+              <input matInput formControlName="question">
+              <mat-radio-group>
+                <mat-radio-button formControlName="type" value="true">YES</mat-radio-button>
+                <mat-radio-button formControlName="type" value="false">NO</mat-radio-button>
+              </mat-radio-group>
+            </mat-form-field>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
+    <!-- Submit Button -->
+    <button mat-raised-button (click)="addQuestion()" color="accent">Add Question</button>
+    <button mat-stroked-button type='submit' [disabled]=!surveyForm.valid>Submit</button>
   </div>
-  <button type="button" mat-raised-button color="accent" (click)="addQuestion()">Add Question</button>
-
-
-  <!-- Submit Button -->
-  <button mat-stroked-button type='submit' [disabled]=!surveyForm.valid>Submit</button>
 </form>
+
+
+<p>surveyForm value: {{ surveyForm.value | json}}</p>
+
+<h4>Name change log</h4>
+<div *ngFor="let name of nameChangeLog">{{name}}</div>

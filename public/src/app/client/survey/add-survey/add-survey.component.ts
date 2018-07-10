@@ -1,5 +1,5 @@
 import { Survey } from './../../../models/survey';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { states } from '../../../models/states';
 import { Router } from '@angular/router';
@@ -16,61 +16,119 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
+export interface Type {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: "app-add-survey",
   templateUrl: "./add-survey.component.html",
   styleUrls: ["./add-survey.component.css"]
 })
 export class AddSurveyComponent implements OnInit {
-  surveyForm: FormGroup;
-  newSurvey = new Survey();
-  states = states;
-  matcher = new MyErrorStateMatcher();
-  question = new Question();
-  questions: Question[];
+  selectedValue: string;
 
-  constructor(
-    private fb: FormBuilder,
-    private _surveyService: SurveyService,
-    private router: Router
-  ) {
+  questionTypes: Type[] = [
+    { value: "boolean", viewValue: "YES / NO" },
+    { value: "mutiplechoice", viewValue: "Multiple Choice" },
+    { value: "text", viewValue: "User Feedback" }
+  ];
+
+  @Input() survey: Survey;
+
+  surveyForm: FormGroup;
+  nameChangeLog: string[] = [];
+  states = states;
+  type = "";
+
+  constructor(private fb: FormBuilder, private surveyService: SurveyService) {
     this.createForm();
+    this.logNameChange();
   }
 
   ngOnInit() {}
 
   createForm() {
     this.surveyForm = this.fb.group({
-      name: new FormControl("", [Validators.required]),
+      name: "",
       questions: this.fb.array([this.initQuestion()])
     });
   }
+  initQuestion() {
+    return this.fb.group({
+      type: ["", Validators.required],
+      question: ["", Validators.required]
+    });
+  }
+
+  ngOnChanges() {
+    this.rebuildForm();
+  }
+
+  rebuildForm() {
+    this.surveyForm.reset({
+      name: this.survey.name
+    });
+    this.setQuestions(this.survey.questions);
+  }
+
+  get question(): FormArray {
+    return this.surveyForm.get("question") as FormArray;
+  }
+
+  setQuestions(questions: Question[]) {
+    const questionFGs = questions.map(question => this.fb.group(question));
+    const questionFormArray = this.fb.array(questionFGs);
+    this.surveyForm.setControl("questions", questionFormArray);
+  }
 
   addQuestion() {
-    const questionsControl = <FormArray>this.surveyForm.controls['questions'];
+    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
     questionsControl.push(this.initQuestion());
   }
 
-  getQuestionName(i) {
-    return `Question ${i + 1}`;
-  }
-
-  initQuestion() {
-    return this.fb.group({
-      value: ['', Validators.required]
-    });
-  }
-
   removeQuestion(i) {
-    const questionsControl = <FormArray>this.surveyForm.controls['questions'];
+    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
     questionsControl.removeAt(i);
   }
 
-  submitForm(survey) {
-    this._surveyService.addSurvey(survey).subscribe((data: any) => {
-      this.router.navigate([`/survey/${data._id}`]);
-    }, (error) => {
-      console.log(error);
-    });
+  submitForm() {
+    this.survey = this.prepareSaveSurvey();
+    // this.surveyService.updateSurvey(this.survey).subscribe();
+    this.rebuildForm();
+  }
+
+  prepareSaveSurvey(): Survey {
+    const formModel = this.surveyForm.value;
+
+    // deep copy of form model lairs
+    const questionsDeepCopy: Question[] = formModel.questions.map(
+      (question: Question) => Object.assign({}, question)
+    );
+
+    // return new `Survey` object containing a combination of original survey value(s)
+    // and deep copies of changed form model values
+    const saveSurvey: Survey = {
+      _id: Number,
+      name: formModel.name as string,
+      questions: questionsDeepCopy,
+      answers: [""],
+      user: "",
+      _client: "",
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+    return saveSurvey;
+  }
+
+  revert() {
+    this.rebuildForm();
+  }
+
+  logNameChange() {
+    const nameControl = this.surveyForm.get("name");
+    nameControl.valueChanges.forEach((value: string) =>
+      this.nameChangeLog.push(value)
+    );
   }
 }
