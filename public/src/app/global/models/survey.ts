@@ -1,5 +1,6 @@
 export class Survey {
     _id: any;
+    category: string;
     name: string;
     questions: any;
     answers: any;

@@ -14,3 +14,11 @@ form {
 #submit-button {
     width:100%;
 }
+
+button {
+    width: 90%;
+}
+
+#button-group {
+    margin: 2em 0;
+}

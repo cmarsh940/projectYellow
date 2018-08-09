@@ -1,7 +1,6 @@
-export class Client {
+export class User {
     _id: any;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     phone: number;
     address: string;
@@ -9,10 +8,8 @@ export class Client {
     state: string;
     zip: any;
     role: string;
+    surveyOwner: any;
     surveys: any;
-    users: any;
-    password: string;
-    password_confirmation: any;
     createdAt: any;
     updatedAt: any;
 }

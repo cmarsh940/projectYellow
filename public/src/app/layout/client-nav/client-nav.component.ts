@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Router } from '../../../../node_modules/@angular/router';
-import { ClientService } from '../../services/client.service';
-import { Client } from '../../models/client';
+import { Router } from '@angular/router';
+import { Client } from './../../global/models/client';
+import { ClientService } from '../../client/client.service';
 
 @Component({
   selector: "client-nav",
@@ -24,10 +24,10 @@ export class ClientNavComponent {
     private _router: Router
   ) {}
 
-  logout() {
-    this._clientService.logout(res => {
-      this.currentClient = null;
-      this._router.navigateByUrl("/");
-    });
-  }
+  // logout() {
+  //   this._clientService.logout(res => {
+  //     this.currentClient = null;
+  //     this._router.navigateByUrl("/");
+  //   });
+  // }
 }

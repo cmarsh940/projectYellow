@@ -1,26 +1,34 @@
 const mongoose = require('mongoose');
 
 const SurveySchema = new mongoose.Schema({
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category"
+  },
   name: {
     type: String,
     required: [true, "Survey name cannot be blank"]
   },
-  _questions: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Question"
-  }],
-  _answers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Answer"
-  }],
-  _user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
-  },
-  _clients: [
+  questions: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Client"
+      ref: "Question"
+    }
+  ],
+  answers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Answer"
+    }
+  ],
+  client: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Client"
+  },
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     }
   ]
 });

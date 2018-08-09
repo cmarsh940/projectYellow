@@ -1,13 +1,9 @@
-import { ClientService } from './services/client.service';
-import { SurveyService } from './services/survey.service';
+import { NgModule } from '@angular/core';
 import { LandingModule } from './landing/landing.module';
 import { HttpModule } from '@angular/http';
 import { LoginComponent } from './auth/login/login.component';
-import { UserService } from './services/user.service';
-import { MessagesService } from './services/messages.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,11 +14,16 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RegisterComponent } from './auth/register/register.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { httpInterceptorProviders } from './interceptors';
-import { RequestCache, RequestCacheWithMap } from './services/cache.service';
-import { HttpErrorHandler } from './services/http-error-handler.service';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, MatListModule } from '@angular/material';
+import { RequestCache, RequestCacheWithMap } from './global/services/cache.service';
+import { httpInterceptorProviders } from './global/interceptors';
+import { UserService } from './client/user/user.service';
+import { SurveyService } from './client/survey/survey.service';
+import { ClientService } from './client/client.service';
+import { MessagesService } from './global/services/messages.service';
+import { HttpErrorHandler } from './global/services/http-error-handler.service';
+import { AuthService } from './auth/auth.service';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { MatToolbarModule, MatButtonModule, MatSidenavModule, MatIconModule, Mat
   ],
   providers: [
     HttpErrorHandler,
+    AuthService,
     MessagesService,
     ClientService,
     SurveyService,

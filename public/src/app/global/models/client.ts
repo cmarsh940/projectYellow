@@ -1,4 +1,4 @@
-export class User {
+export class Client {
     _id: any;
     firstName: string;
     lastName: string;
@@ -10,7 +10,7 @@ export class User {
     zip: any;
     role: string;
     surveys: any;
-    clients: any;
+    users: any;
     password: string;
     password_confirmation: any;
     createdAt: any;

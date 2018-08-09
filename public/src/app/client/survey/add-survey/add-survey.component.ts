@@ -1,12 +1,14 @@
-import { Survey } from './../../../models/survey';
+import { SurveyCategoryService } from '../survey-category/survey-category.service';
+import { SurveyService } from '../survey.service';
+import { SurveyCategory } from '../../../global/models/survey-category';
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
-import { states } from '../../../models/states';
 import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
-import { SurveyService } from '../../../services/survey.service';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Question } from '../../../models/question';
+import { Question } from '../../../global/models/question';
+import { Survey } from '../../../global/models/survey';
+
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -27,6 +29,10 @@ export interface Type {
 })
 export class AddSurveyComponent implements OnInit {
   selectedValue: string;
+  surveyForm: FormGroup;
+  nameChangeLog: string[] = [];
+  categories: SurveyCategory[];
+  type = "";
 
   questionTypes: Type[] = [
     { value: "boolean", viewValue: "YES / NO" },
@@ -36,27 +42,33 @@ export class AddSurveyComponent implements OnInit {
 
   @Input() survey: Survey;
 
-  surveyForm: FormGroup;
-  nameChangeLog: string[] = [];
-  states = states;
-  type = "";
-
-  constructor(private fb: FormBuilder, private surveyService: SurveyService) {
+  constructor(
+    private fb: FormBuilder,
+    private surveyService: SurveyService,
+    private _categoryService: SurveyCategoryService
+  ) {
     this.createForm();
     this.logNameChange();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getCategories();
+  }
+
+  getCategories(): void {
+    this._categoryService.getAll();
+  }
 
   createForm() {
     this.surveyForm = this.fb.group({
-      name: "",
+      category: ["", Validators.required],
+      name: ["", Validators.required],
       questions: this.fb.array([this.initQuestion()])
     });
   }
   initQuestion() {
     return this.fb.group({
-      type: ["", Validators.required],
+      type: "",
       question: ["", Validators.required]
     });
   }
@@ -93,9 +105,9 @@ export class AddSurveyComponent implements OnInit {
   }
 
   submitForm() {
-    this.survey = this.prepareSaveSurvey();
+    // this.survey = this.prepareSaveSurvey();
     // this.surveyService.updateSurvey(this.survey).subscribe();
-    this.rebuildForm();
+    // this.rebuildForm();
   }
 
   prepareSaveSurvey(): Survey {
@@ -110,6 +122,7 @@ export class AddSurveyComponent implements OnInit {
     // and deep copies of changed form model values
     const saveSurvey: Survey = {
       _id: Number,
+      category: formModel.category as string,
       name: formModel.name as string,
       questions: questionsDeepCopy,
       answers: [""],
