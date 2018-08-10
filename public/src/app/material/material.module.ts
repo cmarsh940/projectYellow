@@ -28,7 +28,8 @@ import {
   MatTabsModule,
   MatTooltipModule,
   MatStepperModule,
-  MAT_CHECKBOX_CLICK_ACTION
+  MAT_CHECKBOX_CLICK_ACTION,
+  MatPaginatorModule
 } from '@angular/material';
 import { ObserversModule } from '@angular/cdk/observers';
 
@@ -47,6 +48,7 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatRadioModule,
     MatRippleModule,
@@ -55,11 +57,11 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatSliderModule,
     MatSlideToggleModule,
     MatSortModule,
+    MatStepperModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatStepperModule,
     ObserversModule
   ],
   exports: [
@@ -76,6 +78,7 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatRadioModule,
     MatRippleModule,
@@ -84,11 +87,11 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatSliderModule,
     MatSlideToggleModule,
     MatSortModule,
+    MatStepperModule,
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatStepperModule,
     ObserversModule
   ],
   providers: [{ provide: MAT_CHECKBOX_CLICK_ACTION, useValue: "check" }]

@@ -10,45 +10,25 @@
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
-
-
-
-
-
+          <!-- ID -->
           <div class="form-group text-left">
-            <label for="categoryId">categoryId</label>
-
+            <label for="categoryId">ID</label>
             <input formControlName="categoryId" type="text" class="form-control">
-
           </div>
-
-
-
-
+          <!-- NAME -->
           <div class="form-group text-left">
             <label for="name">name</label>
-
             <input formControlName="name" type="text" class="form-control">
-
           </div>
-
-
-
-
+          <!-- SURVEYS -->
           <div class="form-group text-left">
             <label for="surveys">surveys</label>
-
             <textarea formControlName="surveys" class="form-control" rows="3"></textarea>
-
           </div>
-
-
-
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
           <button (click)="addAsset(myForm);" type="submit" class="btn btn-success" data-dismiss="modal">Confirm</button>
-
         </div>
       </form>
     </div>
@@ -69,9 +49,6 @@
       </div>
       <form [formGroup]="myForm">
         <div class="modal-body">
-
-
-
           <div class="form-group text-left">
             <label for="categoryId">categoryId</label>
 

@@ -33,6 +33,7 @@ export class AddSurveyComponent implements OnInit {
   nameChangeLog: string[] = [];
   categories: SurveyCategory[];
   type = "";
+  errorMessage;
 
   questionTypes: Type[] = [
     { value: "boolean", viewValue: "YES / NO" },
@@ -45,18 +46,37 @@ export class AddSurveyComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private surveyService: SurveyService,
-    private _categoryService: SurveyCategoryService
+    private _categoryService: SurveyCategoryService,
+    private _router: Router
   ) {
     this.createForm();
     this.logNameChange();
   }
 
   ngOnInit() {
-    this.getCategories();
+    this.loadCategories();
   }
 
-  getCategories(): void {
-    this._categoryService.getAll();
+  loadCategories(): Promise<any> {
+    const tempList = [];
+    return this._categoryService.getAll()
+      .toPromise()
+      .then((result) => {
+        this.errorMessage = null;
+        result.forEach(asset => {
+          tempList.push(asset);
+        });
+        this.categories = tempList;
+      })
+      .catch((error) => {
+        if (error === 'Server error') {
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else if (error === '404 - Not Found') {
+          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+        } else {
+          this.errorMessage = error;
+        }
+      });
   }
 
   createForm() {
@@ -105,9 +125,10 @@ export class AddSurveyComponent implements OnInit {
   }
 
   submitForm() {
-    // this.survey = this.prepareSaveSurvey();
-    // this.surveyService.updateSurvey(this.survey).subscribe();
-    // this.rebuildForm();
+    this.survey = this.prepareSaveSurvey();
+    this.surveyService.addAsset(this.survey).subscribe();
+    this.rebuildForm();
+    this._router.navigate(["/survey"]);
   }
 
   prepareSaveSurvey(): Survey {

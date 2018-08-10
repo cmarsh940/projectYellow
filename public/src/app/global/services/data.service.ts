@@ -80,7 +80,7 @@ export class DataService<Type> {
   }
 
   private extractData(res: Response): any {
-    return res.json();
+    return res;
   }
 
   /** Log a DataService message with the MessageService */

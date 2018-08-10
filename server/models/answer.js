@@ -4,7 +4,7 @@ const AnswerSchema = new mongoose.Schema(
     {
         answer: {
             type: String,
-            required: [true, "Answer cannot be blank"],
+            default: ""
         },
         _client: {
             type: mongoose.Schema.Types.ObjectId,

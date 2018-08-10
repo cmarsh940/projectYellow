@@ -2,9 +2,8 @@ const mongoose = require('mongoose');
 
 const QuestionSchema = new mongoose.Schema(
     {
-        type: {
-            type: String,
-            required: [true, "Type of question cannot be blank"],
+        questionType: {
+            type: String
         },
         question: {
             type: String,
