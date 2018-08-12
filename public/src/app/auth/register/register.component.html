@@ -1,16 +1,9 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <a routerLink="/">
-      <img src="/assets/icons/icon-192x192.png" id="icon">
-    </a>
-  </mat-toolbar-row>
-</mat-toolbar>
 <div class="container" id="head">
   <h2 class="text-center mat-title">Create Your Account</h2>
   <form (ngSubmit)="createClient()" #registerForm="ngForm">
     <!-- FIRST NAME -->
     <div class="input-container">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" color="primary">
         <mat-label>First Name</mat-label>
         <input matInput type="text" required [(ngModel)]="newClient.firstName" name="firstName" autocomplete="given-name" placeholder="First Name">
       </mat-form-field>

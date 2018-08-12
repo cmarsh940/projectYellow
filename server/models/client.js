@@ -63,14 +63,15 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password cannot be blank"],
     minlength: [8, "Password must be at least 8 characters"],
-    maxlength: [32, "Password cannot be greater then 32 characters"],
+    maxlength: [50, "Password cannot be greater then 50 characters"],
     validate: {
       validator: function (value) {
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d$@$!%*?&]{8,32}/.test(value);
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d$@$!%*?&]{8,50}/.test(value);
       },
       message: "Password must have at least 1 number, and 1 uppercase"
     }
   },
+  used:[String],
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role"

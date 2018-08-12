@@ -16,6 +16,7 @@ export class AuthService {
 
   authenticate(loginClient: Client, callback) {
     console.log("*** SERVICE LOGIN HIT ***");
+    console.log("*** POST ***");
     return this._http.post('/api/clients/login', loginClient).subscribe(
       res => {
         const client = res.json();
@@ -39,6 +40,7 @@ export class AuthService {
 
   createClient(newClient: Client, callback) {
     console.log("*** SERVICE HIT CREAT CLIENT ***", newClient);
+    console.log("*** POST ***");
     return this._http.post('/clients', newClient).subscribe(
       res => {
         const client = res.json();
@@ -63,6 +65,7 @@ export class AuthService {
 
     logout(callback) {
       console.log("*** SERVICE CLIENT LOGOUT ***");
+      console.log("*** DELETE ***");
       return this._http.delete('/clients').subscribe(
         res => {
           this.currentClient = null;

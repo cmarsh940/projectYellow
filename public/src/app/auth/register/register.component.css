@@ -1,10 +1,16 @@
+h2 {
+    color: white;
+}
+
 form {
     margin: auto;
     padding: 5% 0;
+    color: white;
 }
 
 .mat-form-field {
     display: block;
+    background-color: white;
 }
 
 button {
@@ -30,6 +36,7 @@ a {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    color:white;
   }
 
   .input-container > * {

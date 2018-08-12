@@ -50,18 +50,27 @@ class ClientsController {
   }
 
   authenticate(req, res) {
+    let word = '';
     Client.findOne({ email: req.body.email }, (err, client) => {
       if (err) {
         return res.json(err);
       }
       if (client && client.authenticate(req.body.password)) {
         req.session.client_id = client._id;
-        return res.json(client);
+        req.body.password = word;
+        client.used.push(word);
+        client.save((err) => {
+          if (err) {
+            return res.json(err);
+          }
+        })
+        console.log("**** CLIENT ****", client);
+        return res.json(client)
       }
       return res.json({
         errors: {
           login: {
-            message: 'Invalid credentials'
+            message: "email or password is not correct."
           }
         }
       });

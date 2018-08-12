@@ -45,7 +45,7 @@
     body,
     html {
       height: 100%;
-      background-color: #FFD600;
+      background-color: #000;
     }
 
     .app-loading {
@@ -58,8 +58,8 @@
     }
 
     .app-loading .spinner {
-      height: 200px;
-      width: 200px;
+      height: 300px;
+      width: 300px;
       animation: rotate 1s linear infinite;
       transform-origin: center center;
       position: absolute;
@@ -75,7 +75,12 @@
       stroke-dashoffset: 0;
       animation: dash 1.5s ease-in-out infinite;
       stroke-linecap: round;
-      stroke: #000;
+      stroke: #ffd600;
+    }
+
+    .logo img {
+      max-width: 15em;
+      max-height: 15em;
     }
 
     @keyframes rotate {
@@ -110,7 +115,7 @@
     <!-- loading layout replaced by app after startupp -->
     <div class="app-loading">
       <div class="logo">
-        <img src="/assets/icons/icon-96x96.png" alt="ME icon">
+        <img src="/assets/SurveysbyME.png" alt="ME icon">
       </div>
       <svg class="spinner" viewBox="25 25 50 50">
         <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />

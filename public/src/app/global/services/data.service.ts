@@ -15,10 +15,10 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class DataService<Type> {
-  private resolveSuffix = "?resolve=true";
-  handleError: HandleError;
 
+  private resolveSuffix = "?resolve=true";
   private actionUrl = '/api/';
+  private handleError: HandleError;
 
   constructor(
     private http: HttpClient,
@@ -32,6 +32,7 @@ export class DataService<Type> {
 
   public getAll(ns: string): Observable<Type[]> {
     console.log('GetAll ' + ns + ' to ' + this.actionUrl + ns);
+    console.log("*** GET ***");
     return this.http.get<Type[]>(`${this.actionUrl}${ns}`)
       .pipe(
         retry(3),
@@ -41,7 +42,7 @@ export class DataService<Type> {
 
   public getSingle(ns: string, id: string): Observable<Type> {
     console.log('GetSingle ' + ns);
-
+    console.log("*** GET ***");
     return this.http.get<Type>(this.actionUrl + ns + '/' + id + this.resolveSuffix).pipe(
       map(this.extractData),
       catchError(this.handleError('getSingle', []))
@@ -52,7 +53,7 @@ export class DataService<Type> {
     console.log('Entered DataService add');
     console.log('Add ' + ns);
     console.log('asset', asset);
-
+    console.log("*** POST ***");
     return this.http.post<Type>(this.actionUrl + ns, asset).pipe(
       tap(this.extractData),
       catchError(this.handleError('getAll', []))
@@ -64,6 +65,7 @@ export class DataService<Type> {
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
     console.log('what is the updated item?', JSON.stringify(itemToUpdate));
+    console.log("*** PUT ***");
     return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate).pipe(
       tap(this.extractData),
       catchError(this.handleError('getAll', []))
@@ -72,7 +74,7 @@ export class DataService<Type> {
 
   public delete(ns: string, id: string): Observable<Type> {
     console.log('Delete ' + ns);
-
+    console.log("*** DELETE ***");
     return this.http.delete<Type>(this.actionUrl + ns + '/' + id).pipe(
       tap(_ => this.log(`deleted id=${id}`)),
       catchError(this.handleError<Type>('deleteHero'))
