@@ -1,3 +1,15 @@
-<p>
-  profile works!
-</p>
+<div class="container">
+  <div class="info">
+    <img src="assets/missing.jpg" alt="profile image">
+    <div class="info-text">
+      <h3>{{currentUser.name}}</h3>
+      <h3>{{currentUser.phone}}</h3>
+      <h3>{{ currentUser.street }}</h3>
+      <h3>{{ currentUser.city }}</h3>
+      <h3>{{ currentUser.state }}</h3>
+      <h3>{{ currentUser.zip }}</h3>
+      <h3>Surveys Created:{{ currentUser.surveys.length }}</h3>
+      <h3>{{ currentUser.subscription }}</h3>
+    </div>
+  </div>
+</div>

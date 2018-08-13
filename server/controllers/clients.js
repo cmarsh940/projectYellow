@@ -57,13 +57,13 @@ class ClientsController {
       }
       if (client && client.authenticate(req.body.password)) {
         req.session.client_id = client._id;
-        req.body.password = word;
-        client.used.push(word);
-        client.save((err) => {
-          if (err) {
-            return res.json(err);
-          }
-        })
+        // req.body.password = word;
+        // client.used.push(word);
+        // client.save((err) => {
+        //   if (err) {
+        //     return res.json(err);
+        //   }
+        // })
         console.log("**** CLIENT ****", client);
         return res.json(client)
       }

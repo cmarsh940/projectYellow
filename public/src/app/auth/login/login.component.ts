@@ -37,11 +37,9 @@ export class LoginComponent implements OnInit {
         }
       } else {
         console.log("*** LOGING IN ***")
-
         this._authService.setCurrentClient(client);
         this._router.navigateByUrl("/dashboard");
       }
     });
   }
-
 }

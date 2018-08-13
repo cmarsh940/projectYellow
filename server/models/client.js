@@ -93,6 +93,10 @@ const ClientSchema = new mongoose.Schema({
       }
     ],
     default: []
+  },
+  subscription: {
+    type: String,
+    default: "FREE"
   }
 
 }, { timestamps: true });

@@ -1,3 +1,4 @@
+import { Client } from './../../global/models/client';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  currentUser: Client;
 
   constructor() { }
 
