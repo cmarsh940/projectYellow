@@ -10,6 +10,7 @@ import { EditSurveyComponent } from './survey/edit-survey/edit-survey.component'
 import { SurveyCategoryComponent } from './survey/survey-category/survey-category.component';
 import { EditUserComponent } from './user/edit-user/edit-user.component';
 import { AddUserComponent } from './user/add-user/add-user.component';
+import { AddCategoryComponent } from './survey/survey-category/add-category/add-category.component';
 
 const routes: Routes = [
   {
@@ -42,11 +43,15 @@ const routes: Routes = [
         component: SurveyCategoryComponent
       },
       {
+        path: "survey_categories/add",
+        pathMatch: "full",
+        component: AddCategoryComponent
+      },
+      {
         path: "category/edit/:id",
         pathMatch: "full",
         component: EditCategoryComponent
       },
-
       {
         path: "user",
         pathMatch: "full",

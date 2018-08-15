@@ -3,10 +3,6 @@ div.container {
     min-width: 100%;
 }
 
-h1 {
-    text-align: center;
-}
-
 div.col {
     margin: 5%;
 }

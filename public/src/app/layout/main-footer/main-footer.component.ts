@@ -1,15 +1,21 @@
+import { RightsComponent } from './../../landing/rights/rights.component';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '../../../../node_modules/@angular/material';
 
 @Component({
   selector: 'app-main-footer',
   templateUrl: './main-footer.component.html',
   styleUrls: ['./main-footer.component.css']
 })
-export class MainFooterComponent implements OnInit {
+export class MainFooterComponent {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
+  openDialog() {
+    const dialogRef = this.dialog.open(RightsComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
-
 }

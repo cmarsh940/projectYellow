@@ -1,4 +1,4 @@
-<button mat-raised-button [routerLink]="['/survey_categories']">Cancel</button>
+<button mat-raised-button (click)="cancel()">Cancel</button>
 <h2 class="text-center">Edit {{category.name}} </h2>
 <div class="container">
   <form (submit)="updateCategory()" #formData="ngForm" class="form">

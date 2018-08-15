@@ -8,7 +8,7 @@ import { SurveyCategory } from '../../../global/models/survey-category';
   styleUrls: ['./survey-category.component.css']
 })
 export class SurveyCategoryComponent implements OnInit {
-  displayedColumns: string[] = ['name'];
+  displayedColumns: string[] = ['name', 'action'];
   dataSource: SurveyCategory[];
   errorMessage;
 
