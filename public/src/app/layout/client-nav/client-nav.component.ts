@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Client } from './../../global/models/client';
-import { ClientService } from '../../client/client.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: "client-nav",
@@ -20,14 +20,14 @@ export class ClientNavComponent {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private _clientService: ClientService,
+    private _authService: AuthService,
     private _router: Router
   ) {}
 
-  // logout() {
-  //   this._clientService.logout(res => {
-  //     this.currentClient = null;
-  //     this._router.navigateByUrl("/");
-  //   });
-  // }
+  logout(): void {
+    this._authService.logout((res) => {
+      this.currentClient = null;
+      this._router.navigateByUrl('/');
+    });
+  }
 }

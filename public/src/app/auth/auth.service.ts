@@ -22,7 +22,7 @@ export class AuthService {
         const client = res.json();
         console.log("*** SERVICE CLIENT ***", client);
         if (!client.errors) {
-          localStorage.setItem('currentClient', JSON.stringify(client));
+          sessionStorage.setItem('currentClient', JSON.stringify(client._id));
           console.log("*** SERVICE SET CLIENT ***", client);
         } else {
           console.log("*** SERVICE LOGIN ERROR ***", client.errors);
@@ -46,7 +46,8 @@ export class AuthService {
         const client = res.json();
         console.log("*** SERVICE CLIENT: ***", client);
         if (!client.errors) {
-          localStorage.setItem('current_client', JSON.stringify(client));
+          localStorage.setItem('currentClient', JSON.stringify(client));
+          this.setCurrentClient(client);
           console.log("*** SERVICE SET CLIENT ***", client);
         } else {
           console.log("*** SERVICE CREATE CLIENT ERROR ***", client.errors);
@@ -60,15 +61,16 @@ export class AuthService {
 
     setCurrentClient(client) {
       console.log("*** SERVICE HIT SET CURRENT CLIENT ***", client)
-      sessionStorage.setItem('currentClient', JSON.stringify(client));
+      sessionStorage.setItem('currentClient', JSON.stringify(client._id));
     }
 
     logout(callback) {
       console.log("*** SERVICE CLIENT LOGOUT ***");
       console.log("*** DELETE ***");
-      return this._http.delete('/clients').subscribe(
+      return this._http.delete('/api/clients').subscribe(
         res => {
           this.currentClient = null;
+          sessionStorage.removeItem('currentClient');
           callback(res.json());
         },
         err => console.error(err)
