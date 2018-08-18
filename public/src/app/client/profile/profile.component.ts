@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 import { AuthService } from './../../auth/auth.service';
 import { Client } from './../../global/models/client';
+import { ProfileService } from './profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -9,15 +12,19 @@ import { Client } from './../../global/models/client';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  currentUser: Client = null;
+  currentUser= new Client();
+  subscription: Subscription;
+  id: String;
 
   constructor(
+    private _profileService: ProfileService,
     private _authService: AuthService,
     private _router: Router
   ) { }
 
   ngOnInit() {
     this.isLoggedIn();
+    this.getUserInformation();
   }
 
   isLoggedIn() {
@@ -26,4 +33,7 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  getUserInformation() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentClient'));
+  }
 }

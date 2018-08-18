@@ -2,14 +2,14 @@
   <div class="info">
     <img src="assets/missing.jpg" alt="profile image">
     <div class="info-text">
-      <h3>{{currentUser.name}}</h3>
-      <h3>{{currentUser.phone}}</h3>
-      <h3>{{ currentUser.street }}</h3>
-      <h3>{{ currentUser.city }}</h3>
-      <h3>{{ currentUser.state }}</h3>
-      <h3>{{ currentUser.zip }}</h3>
-      <h3>Surveys Created:{{ currentUser.surveys.length }}</h3>
-      <h3>{{ currentUser.subscription }}</h3>
+      <h3>Name: {{currentUser.firstName}} {{currentUser.lastName}}</h3>
+      <h3>Phone: {{currentUser.phone}}</h3>
+      <h3>Address: {{ currentUser.street }}</h3>
+      <h3>City: {{ currentUser.city }}</h3>
+      <h3>State: {{ currentUser.state }}</h3>
+      <h3>Zip: {{ currentUser.zip }}</h3>
+      <h3>Surveys Created:{{ currentUser.surveys }}</h3>
+      <h3>Subscription: {{ currentUser.subscription }}</h3>
     </div>
   </div>
 </div>

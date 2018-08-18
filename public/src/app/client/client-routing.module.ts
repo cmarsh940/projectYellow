@@ -1,16 +1,19 @@
-import { EditCategoryComponent } from './survey/survey-category/edit-category/edit-category.component';
-import { UserComponent } from './user/user.component';
-import { AddSurveyComponent } from './survey/add-survey/add-survey.component';
-import { SurveyComponent } from './survey/survey.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
+
+import { AddCategoryComponent } from './survey/survey-category/add-category/add-category.component';
+import { EditCategoryComponent } from './survey/survey-category/edit-category/edit-category.component';
 import { ClientComponent } from './client.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProfileComponent } from './profile/profile.component';
+import { AddSurveyComponent } from './survey/add-survey/add-survey.component';
+import { SurveyComponent } from './survey/survey.component';
 import { EditSurveyComponent } from './survey/edit-survey/edit-survey.component';
 import { SurveyCategoryComponent } from './survey/survey-category/survey-category.component';
+import { UserComponent } from './user/user.component';
 import { EditUserComponent } from './user/edit-user/edit-user.component';
 import { AddUserComponent } from './user/add-user/add-user.component';
-import { AddCategoryComponent } from './survey/survey-category/add-category/add-category.component';
 
 const routes: Routes = [
   {
@@ -21,6 +24,11 @@ const routes: Routes = [
         path: "dashboard",
         pathMatch: "full",
         component: DashboardComponent
+      },
+      {
+        path: "profile",
+        pathMatch: "full",
+        component: ProfileComponent
       },
       {
         path: "survey",
@@ -48,7 +56,7 @@ const routes: Routes = [
         component: AddCategoryComponent
       },
       {
-        path: "category/edit/:id",
+        path: "survey_category/edit/:id",
         pathMatch: "full",
         component: EditCategoryComponent
       },

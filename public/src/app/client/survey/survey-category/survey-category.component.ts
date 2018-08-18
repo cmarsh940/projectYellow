@@ -1,6 +1,9 @@
-import { SurveyCategoryService } from './survey-category.service';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../../../auth/auth.service';
 import { SurveyCategory } from '../../../global/models/survey-category';
+import { SurveyCategoryService } from './survey-category.service';
 
 @Component({
   selector: 'app-survey-category',
@@ -12,10 +15,21 @@ export class SurveyCategoryComponent implements OnInit {
   dataSource: SurveyCategory[];
   errorMessage;
 
-  constructor(private _surveyCategory: SurveyCategoryService) { }
+  constructor(
+    private _authService: AuthService,
+    private _router: Router,
+    private _surveyCategory: SurveyCategoryService
+  ) { }
 
   ngOnInit() {
+    this.isLoggedIn();
     this.loadAll();
+  }
+
+  isLoggedIn() {
+    if (this._authService.getCurrentClient() == null) {
+      this._router.navigateByUrl('/login');
+    }
   }
 
   loadAll(): Promise<any> {

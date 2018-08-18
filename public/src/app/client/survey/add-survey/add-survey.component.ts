@@ -8,6 +8,7 @@ import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Valida
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
+import { AuthService } from '../../../auth/auth.service';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -44,6 +45,7 @@ export class AddSurveyComponent implements OnInit {
   @Input() survey: Survey;
 
   constructor(
+    private _authService: AuthService,
     private fb: FormBuilder,
     private surveyService: SurveyService,
     private _categoryService: SurveyCategoryService,
@@ -54,7 +56,14 @@ export class AddSurveyComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isLoggedIn();
     this.loadCategories();
+  }
+
+  isLoggedIn() {
+    if (this._authService.getCurrentClient() == null) {
+      this._router.navigateByUrl('/login');
+    }
   }
 
   loadCategories(): Promise<any> {
