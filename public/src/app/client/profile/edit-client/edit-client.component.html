@@ -1,0 +1,43 @@
+<div class="container-fluid">
+  <h4 class="modal-title" id="updateParticipantModalLabel">Editing {{ client.firstName | titlecase }}</h4>
+  <form (submit)="updateClient()" #formData="ngForm" class="form">
+    <mat-form-field>
+      <input matInput name='firstName' [(ngModel)]="client.firstName" #firstName='ngModel' placeholder="First Name" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput name='lastName' [(ngModel)]="client.lastName" #lastName='ngModel' placeholder="Last Name" required>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <input matInput name='email' [(ngModel)]="client.email" #email='ngModel' placeholder="Email" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput name='phone' [(ngModel)]="client.phone" #phone='ngModel' placeholder="Phone #" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput name='address' [(ngModel)]="client.address" #address='ngModel' placeholder="Address" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput name='city' [(ngModel)]="client.city" #city='ngModel' placeholder="City" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput name='state' [(ngModel)]="client.state" #state='ngModel' placeholder="State" required>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput name='zip' [(ngModel)]="client.zip" #zip='ngModel' placeholder="Zip Code" required>
+    </mat-form-field>
+
+    <button mat-raised-button (click)="cancel()">Cancel</button>
+    <button mat-raised-button type='submit' [disabled]=!formData.valid>Submit</button>
+  </form>
+</div>
+
+
+

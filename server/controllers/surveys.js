@@ -4,7 +4,7 @@ const Category = mongoose.model('Category');
 
 class SurveysController {
   index(req, res) {
-    Survey.find({}).populate({ path: "categories", select: 'name', model: Category }).exec((err, surveys) => {
+    Survey.find({}).populate({ path: "category", select: 'name', model: Category }).exec((err, surveys) => {
       if (err) {
         console.log("*** ERROR: FINDING SURVEYS=", err);
         return res.json(err);
@@ -27,14 +27,14 @@ class SurveysController {
 
   show(req, res) {
     Survey.findById({ _id: req.params.id })
-      .populate({ path: "category", model: Category })
+      .populate({ path: "category", select: 'name', model: Category })
       .exec((err, survey) => {
         if (err) {
-          console.log("*** ERROR: FINDING SURVEYS=", err);
+          console.log("*** ERROR: FINDING SURVEY =", err);
           return res.json(err);
         }
-        console.log("*** FOUND SURVEYS ***", surveys);
-        return res.json(surveys);
+        console.log("*** FOUND SURVEY ***", survey);
+        return res.json(survey);
     });
   }
 

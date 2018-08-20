@@ -19,6 +19,7 @@ import { EditCategoryComponent } from './survey/survey-category/edit-category/ed
 import { SurveyListComponent } from './survey/survey-list/survey-list.component';
 import { UsersListComponent } from './user/users-list/users-list.component';
 import { ProfileComponent } from './profile/profile.component';
+import { EditClientComponent } from './profile/edit-client/edit-client.component';
 
 @NgModule({
   imports: [
@@ -44,6 +45,10 @@ import { ProfileComponent } from './profile/profile.component';
     SurveyListComponent,
     UsersListComponent,
     ProfileComponent,
-  ]
+    EditClientComponent
+  ],
+  entryComponents: [
+    EditClientComponent
+  ],
 })
 export class ClientModule {}

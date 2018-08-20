@@ -1,15 +1,35 @@
-<div class="container">
-  <div class="info">
-    <img src="assets/missing.jpg" alt="profile image">
-    <div class="info-text">
-      <h3>Name: {{currentUser.firstName}} {{currentUser.lastName}}</h3>
-      <h3>Phone: {{currentUser.phone}}</h3>
-      <h3>Address: {{ currentUser.street }}</h3>
-      <h3>City: {{ currentUser.city }}</h3>
-      <h3>State: {{ currentUser.state }}</h3>
-      <h3>Zip: {{ currentUser.zip }}</h3>
-      <h3>Surveys Created:{{ currentUser.surveys }}</h3>
-      <h3>Subscription: {{ currentUser.subscription }}</h3>
-    </div>
-  </div>
+<div class="container-fluid">
+  <mat-card class="info">
+    <mat-card-header>
+      <div mat-card-avatar class="header-image">
+        <img src="assets/missing.jpg" alt="profile image">
+      </div>
+      <div class="header-text">
+        <mat-card-title>{{currentUser.firstName}} {{currentUser.lastName}}</mat-card-title>
+        <mat-card-subtitle>Testing</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="content-box">
+        <p class="content-top">Surveys</p>
+        <p class="content-bottom">{{ currentUser.surveys.length }}</p>
+      </div>
+      <div class="content-box">
+        <p class="content-top">Users</p>
+        <p class="content-bottom">{{ currentUser.users.length }}</p>
+      </div>
+      <div class="content-body">
+        <p>Email: {{currentUser.email}}</p>
+        <p>Phone: {{currentUser.phone}}</p>
+        <p>Address: {{ currentUser.address }}</p>
+        <p>City: {{ currentUser.city }}</p>
+        <p>State: {{ currentUser.state }}</p>
+        <p>Zip: {{ currentUser.zip }}</p>
+        <p>Subscription: {{ currentUser.subscription }}</p>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button (click)="openDialog()">EDIT</button>
+    </mat-card-actions>
+  </mat-card>
 </div>
