@@ -1,8 +1,8 @@
-div.container {
-    max-width: 100%;
-    min-width: 100%;
+.container-fluid {
+    padding: 0;
+    margin: 0;
 }
 
 div.col {
-    margin: 5%;
+    margin: 0;
 }

@@ -1,6 +1,8 @@
 #container-top {
   background-color: #FFD600;
   overflow: hidden;
+  clip-path: polygon(50% 0%, 100% 0, 100% 93%, 44% 100%, 50% 93%, 0 100%, 0 0);
+  margin-bottom: 1em;
 }
 #top {
   padding: 2em 0;

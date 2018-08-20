@@ -24,12 +24,5 @@ export class DashboardComponent {
     private _router: Router
   ) { }
 
-  ngOnInit() {
-    this.isLoggedIn();
-  }
-  isLoggedIn() {
-    if (this._authService.getCurrentClient() == null) {
-      this._router.navigateByUrl('/login');
-    }
-  }
+  ngOnInit() { }
 }

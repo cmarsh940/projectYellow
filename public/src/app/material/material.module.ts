@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 
-
 import {
   MatButtonModule,
   MatToolbarModule,
@@ -23,13 +22,15 @@ import {
   MatSidenavModule,
   MatSliderModule,
   MatSlideToggleModule,
+  MatSnackBarModule,
   MatSortModule,
   MatTableModule,
   MatTabsModule,
   MatTooltipModule,
   MatStepperModule,
   MAT_CHECKBOX_CLICK_ACTION,
-  MatPaginatorModule
+  MatPaginatorModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS
 } from '@angular/material';
 import { ObserversModule } from '@angular/cdk/observers';
 
@@ -56,6 +57,7 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatSidenavModule,
     MatSliderModule,
     MatSlideToggleModule,
+    MatSnackBarModule,
     MatSortModule,
     MatStepperModule,
     MatTableModule,
@@ -86,6 +88,7 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatSidenavModule,
     MatSliderModule,
     MatSlideToggleModule,
+    MatSnackBarModule,
     MatSortModule,
     MatStepperModule,
     MatTableModule,
@@ -94,6 +97,17 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatTooltipModule,
     ObserversModule
   ],
-  providers: [{ provide: MAT_CHECKBOX_CLICK_ACTION, useValue: "check" }]
+  providers: [
+    { 
+      provide: MAT_CHECKBOX_CLICK_ACTION,
+      useValue: "check"
+    },
+    { 
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, 
+      useValue: { 
+        duration: 2500 
+      }
+    }
+  ]
 })
 export class MaterialModule {}

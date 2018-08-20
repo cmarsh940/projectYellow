@@ -53,6 +53,7 @@ class ClientsController {
     let word = '';
     Client.findOne({ email: req.body.email }, (err, client) => {
       if (err) {
+        console.log("*** AUTHENTICATE ERROR", err);
         return res.json(err);
       }
       if (client && client.authenticate(req.body.password)) {

@@ -46,9 +46,6 @@ import { EditClientComponent } from './profile/edit-client/edit-client.component
     UsersListComponent,
     ProfileComponent,
     EditClientComponent
-  ],
-  entryComponents: [
-    EditClientComponent
-  ],
+  ]
 })
 export class ClientModule {}

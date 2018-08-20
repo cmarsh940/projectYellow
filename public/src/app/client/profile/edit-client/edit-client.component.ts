@@ -9,7 +9,8 @@ import { Subscription } from 'rxjs';
   templateUrl: './edit-client.component.html',
   styleUrls: ['./edit-client.component.css']
 })
-export class EditClientComponent implements OnDestroy {
+
+export class EditClientComponent {
   client = new Client();
   subscription: Subscription;
   clientId: string = "";
@@ -17,32 +18,22 @@ export class EditClientComponent implements OnDestroy {
 
 
   constructor(
-    public _clientService: ClientService, 
-    public dialogRef: MatDialogRef<EditClientComponent>,
+    private _clientService: ClientService,
+    private dialogRef: MatDialogRef<EditClientComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Client
   ) { };
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
-
-  getClient() {
-    this._clientService.getparticipant(this.clientId)
-      .subscribe(res => {
-        console.log("Client", res);
-        this.client = res
-      });
-  }
 
   updateClient(): void {
     this.errors = [];
-    this._clientService.updateParticipant(this.client, res => {
+    this._clientService.updateParticipant(this.data, res => {
       if (res.errors) {
         for (const key of Object.keys(res.errors)) {
           const errors = res.errors[key];
           this.errors.push(errors.message);
         }
-      } 
+      }
+      this.dialogRef.close();
     });
   }
 
@@ -50,5 +41,6 @@ export class EditClientComponent implements OnDestroy {
     this.dialogRef.close();
   }
 
-  
+
 }
+

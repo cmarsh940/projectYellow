@@ -29,7 +29,8 @@
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-button (click)="openDialog()">EDIT</button>
+      <!-- <button mat-button [routerLink]="['/profile', currentUser._id]">EDIT</button> -->
+      <button mat-button (click)="openDialog(currentUser._id)">EDIT</button>
     </mat-card-actions>
   </mat-card>
 </div>

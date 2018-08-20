@@ -13,7 +13,7 @@ import { EditClientComponent } from './edit-client/edit-client.component';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit, OnDestroy {
+export class ProfileComponent implements OnInit {
   currentUser= new Client();
   subscription: Subscription;
   id: String;
@@ -30,9 +30,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.getUserInformation();
   }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this.subscription.unsubscribe();
+  // }
 
   openDialog() {
     const dialogRef = this.dialog.open(EditClientComponent, {

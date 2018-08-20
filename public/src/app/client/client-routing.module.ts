@@ -1,3 +1,4 @@
+import { EditClientComponent } from './profile/edit-client/edit-client.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -29,6 +30,11 @@ const routes: Routes = [
         path: "profile",
         pathMatch: "full",
         component: ProfileComponent
+      },
+      {
+        path: "profile/:id",
+        pathMatch: "full",
+        component: EditClientComponent
       },
       {
         path: "survey",
