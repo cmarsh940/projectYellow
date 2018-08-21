@@ -13,6 +13,7 @@ const ClientSchema = new mongoose.Schema({
       message: "First name cannot contain numbers or symbols."
     }
   },
+
   lastName: {
     type: String,
     required: [true, 'Last name cannot be blank'],
@@ -24,9 +25,11 @@ const ClientSchema = new mongoose.Schema({
       message: "Last name cannot contain numbers or symbols."
     }
   },
+
   businessName: {
     type: String,
   },
+
   email: {
     type: String,
     required: [true, 'Email cannot be blank'],
@@ -41,27 +44,33 @@ const ClientSchema = new mongoose.Schema({
       message: "Please enter your email in the correct format."
     }
   },
+
   phone: {
     type: Number,
     required: [true, 'Phone number cannot be blank'],
     trim: true,
   },
+
   address: {
     type: String,
     required: [true, 'Address cannot be blank'],
   },
+
   city: {
     type: String,
     required: [true, 'City cannot be blank'],
   },
+
   state: {
     type: String,
     required: [true, 'State cannot be blank'],
   },
+
   zip: {
     type: Number,
     required: [true, 'Zip code cannot be blank'],
   },
+
   password: {
     type: String,
     required: [true, "Password cannot be blank"],
@@ -74,11 +83,14 @@ const ClientSchema = new mongoose.Schema({
       message: "Password must have at least 1 number, and 1 uppercase"
     }
   },
+
   used:[String],
+
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role"
   },
+
   surveys: {
     type: [
       {
@@ -88,6 +100,7 @@ const ClientSchema = new mongoose.Schema({
     ],
     default: []
   },
+
   users: {
     type: [
       {
@@ -97,10 +110,11 @@ const ClientSchema = new mongoose.Schema({
     ],
     default: []
   },
+
   subscription: {
-    type: String,
-    default: "FREE"
-  }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Subscription"
+  },
 
 }, { timestamps: true });
 

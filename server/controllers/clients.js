@@ -6,25 +6,17 @@ const User = mongoose.model("User");
 
 class ClientsController {
   index(req, res) {
-    Client.find({})
-      .populate({ path: "surveys", model: Survey })
-      .populate({ path: "users", model: User })
-      .exec((err, clients) => {
+    Client.find({}).populate(
+      { path: "role", select: 'name', model: Role },
+      { path: "subscription", select: 'name', model: Subscription },
+      { path: "surveys", select: 'name', model: Survey },
+      { path: "users", model: User }
+    ).exec((err, clients) => {
       if (err) {
         return res.json(err);
       }
       return res.json(clients);
     });
-    Venue.find({})
-      .populate({ path: "amenities", model: Amenity })
-      .populate({ path: "reviews", model: Review })
-      .populate({ path: "_category", model: Category })
-      .exec((err, venues) => {
-        if (err) {
-          return res.json(err);
-        }
-        return res.json(venues);
-      });
   }
 
   create(req, res) {
@@ -50,7 +42,6 @@ class ClientsController {
   }
 
   authenticate(req, res) {
-    let word = '';
     Client.findOne({ email: req.body.email }, (err, client) => {
       if (err) {
         console.log("*** AUTHENTICATE ERROR", err);
@@ -58,13 +49,6 @@ class ClientsController {
       }
       if (client && client.authenticate(req.body.password)) {
         req.session.client_id = client._id;
-        // req.body.password = word;
-        // client.used.push(word);
-        // client.save((err) => {
-        //   if (err) {
-        //     return res.json(err);
-        //   }
-        // })
         console.log("**** CLIENT ****", client);
         return res.json(client)
       }
@@ -86,6 +70,20 @@ class ClientsController {
       return res.json(client);
     });
   }
+  // show(req, res) {
+  //   Client.findById({ _id: req.params.id })
+  //     .populate(
+  //       { path: "role", select: 'name', model: Role },
+  //       { path: "subscription", select: 'name', model: Subscription },
+  //       { path: "surveys", select: 'name', model: Survey },
+  //       { path: "users", model: User })
+  //     .exec((err, client) => {
+  //     if (err) {
+  //       return res.json(err);
+  //     }
+  //     return res.json(client);
+  //   });
+  // }
 
   update(req, res) {
     Client.findByIdAndUpdate(

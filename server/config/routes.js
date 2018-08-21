@@ -1,6 +1,7 @@
 const path = require('path');
 const Users = require('../controllers/users');
 const Roles = require('../controllers/roles');
+const Subscriptions = require('../controllers/subscriptions');
 const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
 const Surveys = require('../controllers/surveys');
@@ -23,6 +24,12 @@ module.exports = function (app) {
     app.delete('/api/roles/:id', Roles.delete);
     app.get('/api/roles/:id', Roles.show);
     app.put('/api/roles/:id', Roles.update);
+
+    app.get('/api/subscriptions', Subscriptions.index);
+    app.post('/api/subscriptions', Subscriptions.create);
+    app.delete('/api/subscriptions/:id', Subscriptions.delete);
+    app.get('/api/subscriptions/:id', Subscriptions.show);
+    app.put('/api/subscriptions/:id', Subscriptions.update);
 
     app.get('/api/survey-categories', Categories.index);
     app.post('/api/survey-categories', Categories.create);

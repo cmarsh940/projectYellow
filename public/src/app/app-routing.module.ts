@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: "./client/client.module#ClientModule"
   },
   {
+    path: "overview",
+    loadChildren: "./overview/overview.module#OverviewModule"
+  },
+  {
     path: "",
     loadChildren: "./landing/landing.module#LandingModule"
   }

@@ -33,6 +33,7 @@ import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS
 } from '@angular/material';
 import { ObserversModule } from '@angular/cdk/observers';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   imports: [
@@ -64,7 +65,8 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    ObserversModule
+    ObserversModule,
+    ScrollDispatchModule
   ],
   exports: [
     MatAutocompleteModule,
@@ -95,7 +97,8 @@ import { ObserversModule } from '@angular/cdk/observers';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    ObserversModule
+    ObserversModule,
+    ScrollDispatchModule
   ],
   providers: [
     { 

@@ -6,6 +6,7 @@ import { AuthService } from './../../auth/auth.service';
 import { Client } from './../../global/models/client';
 import { MatDialog } from '@angular/material';
 import { EditClientComponent } from './edit-client/edit-client.component';
+import { ProfileService } from './profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +20,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private _authService: AuthService,
+    private _profileService: ProfileService,
     public dialog: MatDialog,
     private _router: Router
   ) { }
@@ -45,6 +47,11 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserInformation() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentClient'));
+    let id = JSON.parse(sessionStorage.getItem('currentClient'));
+    this._profileService.getparticipant(id)
+      .subscribe(res => {
+        console.log("User", res);
+        this.currentUser = res
+      });
   }
 }

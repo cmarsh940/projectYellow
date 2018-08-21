@@ -1,0 +1,39 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MaterialModule } from '../material/material.module';
+
+import { OverviewRoutingModule } from './overview-routing.module';
+import { OverviewComponent } from './overview.component';
+import { OverviewNavComponent } from '../layout/overview-nav/overview-nav.component';
+import { ReportComponent } from './report/report.component';
+import { SurveyReportComponent } from './survey-report/survey-report.component';
+import { ClientReportComponent } from './client-report/client-report.component';
+import { UserReportComponent } from './user-report/user-report.component';
+import { SurveyCategoryReportComponent } from './survey-category-report/survey-category-report.component';
+import { RoleReportComponent } from './role-report/role-report.component';
+import { SubscriptionReportComponent } from './subscription-report/subscription-report.component';
+import { AddRoleComponent } from './role-report/add-role/add-role.component';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    OverviewRoutingModule,
+    FormsModule,
+    MaterialModule,
+    ReactiveFormsModule
+  ],
+  declarations: [
+    OverviewComponent,
+    OverviewNavComponent,
+    ReportComponent,
+    SurveyReportComponent,
+    ClientReportComponent,
+    UserReportComponent,
+    SurveyCategoryReportComponent,
+    RoleReportComponent,
+    SubscriptionReportComponent,
+    AddRoleComponent
+  ]
+})
+export class OverviewModule { }

@@ -8,7 +8,7 @@ import { DataService } from './../../global/services/data.service';
   providedIn: 'root'
 })
 export class ProfileService {
-  private NAMESPACE = 'Clients';
+  private NAMESPACE = 'clients';
 
   constructor(private dataService: DataService<Client>) { }
 

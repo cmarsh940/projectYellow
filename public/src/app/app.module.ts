@@ -1,3 +1,7 @@
+import { AddRoleComponent } from './overview/role-report/add-role/add-role.component';
+import { SubscriptionService } from './overview/subscription-report/subscription.service';
+import { RoleService } from './overview/role-report/role.service';
+import { OverviewService } from './overview/overview.service';
 // MODULES
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -10,6 +14,7 @@ import { LandingModule } from './landing/landing.module';
 import { MaterialModule } from './material/material.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { OverviewModule } from './overview/overview.module';
 
 // COMPONENTS
 import { AppComponent } from './app.component';
@@ -43,6 +48,7 @@ import { UserService } from './client/user/user.service';
     BrowserModule,
     LandingModule,
     ClientModule,
+    OverviewModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
@@ -61,10 +67,14 @@ import { UserService } from './client/user/user.service';
     ClientService,
     SurveyService,
     UserService,
+    OverviewService,
+    RoleService,
+    SubscriptionService,
     { provide: RequestCache, useClass: RequestCacheWithMap },
     httpInterceptorProviders
   ],
   entryComponents: [
+    AddRoleComponent,
     EditClientComponent,
     RightsComponent
   ],
