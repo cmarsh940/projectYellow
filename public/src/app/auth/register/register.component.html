@@ -1,6 +1,18 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <a routerLink="/">
+      <img src="/assets/icons/icon-192x192.png" id="icon">
+    </a>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <div class="container" id="head">
   <h2 class="text-center mat-title">Create Your Account</h2>
   <form (ngSubmit)="createClient()" #registerForm="ngForm">
+    <div class="label">
+      <b class="text-center">Information</b>
+    </div>
+
     <!-- FIRST NAME -->
     <div class="input-container">
       <mat-form-field appearance="outline" color="primary">
@@ -14,6 +26,16 @@
         <input matInput type="text" required [(ngModel)]="newClient.lastName" name="lastName" autocomplete="family-name" placeholder="Last Name">
       </mat-form-field>
     </div>
+
+      <!-- BUSINESS NAME -->
+      <mat-form-field appearance="outline">
+        <mat-label>Business Name <span>- optional</span></mat-label>
+        <input matInput type="text" [(ngModel)]="newClient.businessName" name="businessName" placeholder="Business Name">
+      </mat-form-field>
+
+    <div class="label">
+      <b class="text-center">Login Info</b>
+    </div>
     
     <!-- EMAIL -->
     <div class="input-container">
@@ -21,6 +43,25 @@
         <mat-label>Email</mat-label>
         <input matInput required [(ngModel)]="newClient.email" name="email" autocomplete="email" placeholder="Email">
       </mat-form-field>
+      
+      <!-- PASSWORD -->
+      <div class="input-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" autocomplete="new-password" required [(ngModel)]="newClient.password" name="password" placeholder="Password">
+        </mat-form-field>
+      
+        <!-- CONFIRM PASSWORD -->
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" autocomplete="new-password-confirmation" required [(ngModel)]="newClient.password_confirmation"
+            name="password_confirmation" placeholder="Confirm Password">
+        </mat-form-field>
+      </div>
+
+      <div class="label">
+        <b class="text-center">Contact Info</b>
+      </div>
 
       <!-- PHONE -->
       <mat-form-field appearance="outline">
@@ -58,20 +99,7 @@
       </mat-form-field>
     </div>
 
-    <!-- PASSWORD -->
-    <div class="input-container">
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" autocomplete="new-password" required [(ngModel)]="newClient.password" name="password" placeholder="Password">
-      </mat-form-field>
-
-      <!-- CONFIRM PASSWORD -->
-      <mat-form-field appearance="outline">
-        <mat-label>Confirm Password</mat-label>
-        <input matInput type="password" autocomplete="new-password-confirmation" required [(ngModel)]="newClient.password_confirmation" name="password_confirmation"
-          placeholder="Confirm Password">
-      </mat-form-field>
-    </div>
+    <mat-divider></mat-divider>
 
     <!-- SUBMIT BUTTON -->
     <div class="text-center">

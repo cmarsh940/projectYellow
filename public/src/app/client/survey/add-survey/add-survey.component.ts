@@ -56,7 +56,6 @@ export class AddSurveyComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isLoggedIn();
     this.loadCategories();
   }
 

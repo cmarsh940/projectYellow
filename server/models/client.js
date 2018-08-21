@@ -24,6 +24,9 @@ const ClientSchema = new mongoose.Schema({
       message: "Last name cannot contain numbers or symbols."
     }
   },
+  businessName: {
+    type: String,
+  },
   email: {
     type: String,
     required: [true, 'Email cannot be blank'],
@@ -40,24 +43,24 @@ const ClientSchema = new mongoose.Schema({
   },
   phone: {
     type: Number,
-    // required: [true, 'Phone number cannot be blank'],
+    required: [true, 'Phone number cannot be blank'],
     trim: true,
   },
   address: {
     type: String,
-    // required: [true, 'Address cannot be blank'],
+    required: [true, 'Address cannot be blank'],
   },
   city: {
     type: String,
-    // required: [true, 'City cannot be blank'],
+    required: [true, 'City cannot be blank'],
   },
   state: {
     type: String,
-    // required: [true, 'State cannot be blank'],
+    required: [true, 'State cannot be blank'],
   },
   zip: {
     type: Number,
-    // required: [true, 'Zip code cannot be blank'],
+    required: [true, 'Zip code cannot be blank'],
   },
   password: {
     type: String,

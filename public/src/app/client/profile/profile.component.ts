@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 
 import { AuthService } from './../../auth/auth.service';
 import { Client } from './../../global/models/client';
-import { ProfileService } from './profile.service';
 import { MatDialog } from '@angular/material';
 import { EditClientComponent } from './edit-client/edit-client.component';
 
@@ -19,20 +18,15 @@ export class ProfileComponent implements OnInit {
   id: String;
 
   constructor(
-    private _profileService: ProfileService,
     private _authService: AuthService,
     public dialog: MatDialog,
     private _router: Router
   ) { }
 
   ngOnInit() {
-    this.isLoggedIn();
     this.getUserInformation();
   }
 
-  // ngOnDestroy() {
-  //   this.subscription.unsubscribe();
-  // }
 
   openDialog() {
     const dialogRef = this.dialog.open(EditClientComponent, {

@@ -1,16 +1,27 @@
 h2 {
-    color: white;
+    color: #000;
 }
 
 form {
     margin: auto;
     padding: 5% 0;
-    color: white;
 }
 
 .mat-form-field {
     display: block;
-    background-color: white;
+}
+
+.label {
+    min-width: 100%!important;
+    text-align: center;
+    padding: 1em 0;
+    margin: 1em 0;
+    border-top: 1px solid gainsboro;
+    border-bottom: 1px solid gainsboro;
+}
+.label:first-child {
+    border-top: none;
+    margin-top: 0;
 }
 
 button {
@@ -36,7 +47,6 @@ a {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    color:white;
   }
 
   .input-container > * {

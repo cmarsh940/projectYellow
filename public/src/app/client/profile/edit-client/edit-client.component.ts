@@ -1,5 +1,5 @@
 import { Client } from './../../../global/models/client';
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ClientService } from '../../client.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';

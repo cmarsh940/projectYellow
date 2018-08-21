@@ -22,7 +22,6 @@ export class SurveyCategoryComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.isLoggedIn();
     this.loadAll();
   }
 
