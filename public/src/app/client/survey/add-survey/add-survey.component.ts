@@ -1,4 +1,3 @@
-import { SurveyCategoryService } from '../survey-category/survey-category.service';
 import { SurveyService } from '../survey.service';
 import { SurveyCategory } from '../../../global/models/survey-category';
 import { Component, OnInit, Input } from '@angular/core';
@@ -9,6 +8,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
 import { AuthService } from '../../../auth/auth.service';
+import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */

@@ -1,10 +1,14 @@
 #container-top {
-  background-color: #FFD600;
-  overflow: hidden;
-  clip-path: polygon(100% 0, 100% 67%, 70% 78%, 75% 72%, 0 100%, 0 0);
+  background-image: url("/assets/SurveysbyME.png");
+  background-size: cover;
+  min-height: 300px;
+  max-height: 300px;
+  -webkit-clip-path: polygon(100% 0, 100% 67%, 70% 78%, 75% 72%, 0 100%, 0 0);
+  clip-path: polygon(100% 0, 100% 80%, 70% 87%, 74% 83%, 0 100%, 0 0);
   margin-bottom: 1em;
   padding-bottom: 1em;
 }
+
 #top {
   padding: 2em 0;
 }

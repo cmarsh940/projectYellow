@@ -1,3 +1,4 @@
+import { SurveyCategoryService } from './overview/survey-category-report/survey-category.service';
 import { AddRoleComponent } from './overview/role-report/add-role/add-role.component';
 import { SubscriptionService } from './overview/subscription-report/subscription.service';
 import { RoleService } from './overview/role-report/role.service';
@@ -66,6 +67,7 @@ import { UserService } from './client/user/user.service';
     MessagesService,
     ClientService,
     SurveyService,
+    SurveyCategoryService,
     UserService,
     OverviewService,
     RoleService,

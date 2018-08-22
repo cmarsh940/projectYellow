@@ -1,3 +1,4 @@
+import { AddCategoryComponent } from './survey-category-report/add-category/add-category.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +15,7 @@ import { SurveyCategoryReportComponent } from './survey-category-report/survey-c
 import { RoleReportComponent } from './role-report/role-report.component';
 import { SubscriptionReportComponent } from './subscription-report/subscription-report.component';
 import { AddRoleComponent } from './role-report/add-role/add-role.component';
+import { EditCategoryComponent } from './survey-category-report/edit-category/edit-category.component';
 
 @NgModule({
   imports: [
@@ -31,6 +33,8 @@ import { AddRoleComponent } from './role-report/add-role/add-role.component';
     ClientReportComponent,
     UserReportComponent,
     SurveyCategoryReportComponent,
+    EditCategoryComponent,
+    AddCategoryComponent,
     RoleReportComponent,
     SubscriptionReportComponent,
     AddRoleComponent

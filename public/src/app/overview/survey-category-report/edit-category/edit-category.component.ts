@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Client } from '../../../../global/models/client';
-import { SurveyCategory } from '../../../../global/models/survey-category';
 import { SurveyCategoryService } from '../survey-category.service';
-import { ClientService } from '../../../client.service';
 import { Location } from '@angular/common';
+import { SurveyCategory } from '../../../global/models/survey-category';
 
 
 @Component({
@@ -15,7 +13,6 @@ import { Location } from '@angular/common';
 })
 export class EditCategoryComponent implements OnInit {
   category = new SurveyCategory();
-  currentClient: Client;
   _routeSubscription: Subscription;
   categoryId: string = "";
   errors = [];
@@ -46,11 +43,6 @@ export class EditCategoryComponent implements OnInit {
       });
   }
 
-  validateSession(): void {
-    if (!this.currentClient) {
-      this._router.navigateByUrl('/');
-    }
-  }
 
   updateCategory(): void {
     this.errors = [];

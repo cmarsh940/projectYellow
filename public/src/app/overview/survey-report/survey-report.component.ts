@@ -1,12 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Survey } from '../../global/models/survey';
-import { Question } from '../../global/models/question';
-import { FormArray, Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { SurveyCategoryService } from '../../client/survey/survey-category/survey-category.service';
 import { SurveyService } from '../../client/survey/survey.service';
-import { AuthService } from '../../auth/auth.service';
-import { SurveyCategory } from '../../global/models/survey-category';
+
 
 export interface Type {
   value: string;
@@ -19,52 +14,31 @@ export interface Type {
   styleUrls: ['./survey-report.component.css']
 })
 export class SurveyReportComponent implements OnInit {
-  selectedValue: string;
-  surveyForm: FormGroup;
-  nameChangeLog: string[] = [];
-  categories: SurveyCategory[];
-  type = "";
+  dataSource: Survey[];
   errorMessage;
 
-  questionTypes: Type[] = [
-    { value: "boolean", viewValue: "YES / NO" },
-    { value: "mutiplechoice", viewValue: "Multiple Choice" },
-    { value: "text", viewValue: "User Feedback" }
-  ];
-
-  @Input() survey: Survey;
+  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
+  displayedColumns = ['name', 'category'];
 
   constructor(
-    private _authService: AuthService,
-    private fb: FormBuilder,
-    private surveyService: SurveyService,
-    private _categoryService: SurveyCategoryService,
-    private _router: Router
-  ) {
-    this.createForm();
-    this.logNameChange();
-  }
+    private _surveyService: SurveyService
+  ) { }
 
   ngOnInit() {
-    this.loadCategories();
+    this.loadAll();
   }
 
-  isLoggedIn() {
-    if (this._authService.getCurrentClient() == null) {
-      this._router.navigateByUrl('/login');
-    }
-  }
-
-  loadCategories(): Promise<any> {
+  loadAll(): Promise<any> {
     const tempList = [];
-    return this._categoryService.getAll()
+    return this._surveyService.getAll()
       .toPromise()
       .then((result) => {
         this.errorMessage = null;
         result.forEach(asset => {
           tempList.push(asset);
         });
-        this.categories = tempList;
+        this.dataSource = tempList;
+        console.log("*** SURVEYS RETURNED ***:", this.dataSource);
       })
       .catch((error) => {
         if (error === 'Server error') {
@@ -75,93 +49,6 @@ export class SurveyReportComponent implements OnInit {
           this.errorMessage = error;
         }
       });
-  }
-
-  createForm() {
-    this.surveyForm = this.fb.group({
-      category: ["", Validators.required],
-      name: ["", Validators.required],
-      questions: this.fb.array([this.initQuestion()])
-    });
-  }
-  initQuestion() {
-    return this.fb.group({
-      type: "",
-      question: ["", Validators.required]
-    });
-  }
-
-  ngOnChanges() {
-    this.rebuildForm();
-  }
-
-  rebuildForm() {
-    this.surveyForm.reset({
-      name: this.survey.name
-    });
-    this.setQuestions(this.survey.questions);
-  }
-
-  get question(): FormArray {
-    return this.surveyForm.get("question") as FormArray;
-  }
-
-  setQuestions(questions: Question[]) {
-    const questionFGs = questions.map(question => this.fb.group(question));
-    const questionFormArray = this.fb.array(questionFGs);
-    this.surveyForm.setControl("questions", questionFormArray);
-  }
-
-  addQuestion() {
-    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
-    questionsControl.push(this.initQuestion());
-  }
-
-  removeQuestion(i) {
-    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
-    questionsControl.removeAt(i);
-  }
-
-  submitForm() {
-    this.survey = this.prepareSaveSurvey();
-    this.surveyService.addAsset(this.survey).subscribe();
-    this.rebuildForm();
-    this._router.navigate(["/survey"]);
-  }
-
-  prepareSaveSurvey(): Survey {
-    const formModel = this.surveyForm.value;
-
-    // deep copy of form model lairs
-    const questionsDeepCopy: Question[] = formModel.questions.map(
-      (question: Question) => Object.assign({}, question)
-    );
-
-    // return new `Survey` object containing a combination of original survey value(s)
-    // and deep copies of changed form model values
-    const saveSurvey: Survey = {
-      _id: Number,
-      category: formModel.category as string,
-      name: formModel.name as string,
-      questions: questionsDeepCopy,
-      answers: [""],
-      user: "",
-      _client: "",
-      createdAt: Date.now(),
-      updatedAt: Date.now()
-    };
-    return saveSurvey;
-  }
-
-  revert() {
-    this.rebuildForm();
-  }
-
-  logNameChange() {
-    const nameControl = this.surveyForm.get("name");
-    nameControl.valueChanges.forEach((value: string) =>
-      this.nameChangeLog.push(value)
-    );
   }
 
 }

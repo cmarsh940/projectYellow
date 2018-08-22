@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { SurveyCategoryService } from '../../client/survey/survey-category/survey-category.service';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { SurveyCategory } from '../../global/models/survey-category';
+import { SurveyCategoryService } from './survey-category.service';
 
 @Component({
   selector: 'app-survey-category-report',

@@ -8,7 +8,7 @@ import { Client } from '../global/models/client';
   providedIn: 'root'
 })
 export class ClientService {
-  private NAMESPACE = 'Clients';
+  private NAMESPACE = 'clients';
 
   constructor(private dataService: DataService<Client>) {
   };

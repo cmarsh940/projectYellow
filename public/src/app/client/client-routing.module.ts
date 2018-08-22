@@ -3,15 +3,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 
-import { AddCategoryComponent } from './survey/survey-category/add-category/add-category.component';
-import { EditCategoryComponent } from './survey/survey-category/edit-category/edit-category.component';
 import { ClientComponent } from './client.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AddSurveyComponent } from './survey/add-survey/add-survey.component';
 import { SurveyComponent } from './survey/survey.component';
 import { EditSurveyComponent } from './survey/edit-survey/edit-survey.component';
-import { SurveyCategoryComponent } from './survey/survey-category/survey-category.component';
 import { UserComponent } from './user/user.component';
 import { EditUserComponent } from './user/edit-user/edit-user.component';
 import { AddUserComponent } from './user/add-user/add-user.component';
@@ -50,21 +47,6 @@ const routes: Routes = [
         path: "survey/:id",
         pathMatch: "full",
         component: EditSurveyComponent
-      },
-      {
-        path: "survey_categories",
-        pathMatch: "full",
-        component: SurveyCategoryComponent
-      },
-      {
-        path: "survey_categories/add",
-        pathMatch: "full",
-        component: AddCategoryComponent
-      },
-      {
-        path: "survey_category/edit/:id",
-        pathMatch: "full",
-        component: EditCategoryComponent
       },
       {
         path: "user",

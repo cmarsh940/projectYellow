@@ -35,6 +35,16 @@ const routes: Routes = [
         component: SurveyCategoryReportComponent
       },
       {
+        path: "surveyCategoriesReport",
+        pathMatch: "full",
+        component: SurveyCategoryReportComponent
+      },
+      {
+        path: "surveyCategoriesReport",
+        pathMatch: "full",
+        component: SurveyCategoryReportComponent
+      },
+      {
         path: "userReport",
         pathMatch: "full",
         component: UserReportComponent

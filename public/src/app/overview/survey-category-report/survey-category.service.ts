@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { SurveyCategory } from '../../global/models/survey-category';
+import { DataService } from '../../global/services/data.service';
 
-import { SurveyCategory } from '../../../global/models/survey-category';
-import { DataService } from '../../../global/services/data.service';
+
 
 
 @Injectable({

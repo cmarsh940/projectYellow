@@ -13,9 +13,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SurveyComponent } from './survey/survey.component';
 import { AddSurveyComponent } from './survey/add-survey/add-survey.component';
 import { EditSurveyComponent } from './survey/edit-survey/edit-survey.component';
-import { SurveyCategoryComponent } from './survey/survey-category/survey-category.component';
-import { AddCategoryComponent } from './survey/survey-category/add-category/add-category.component';
-import { EditCategoryComponent } from './survey/survey-category/edit-category/edit-category.component';
 import { SurveyListComponent } from './survey/survey-list/survey-list.component';
 import { UsersListComponent } from './user/users-list/users-list.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -39,9 +36,6 @@ import { EditClientComponent } from './profile/edit-client/edit-client.component
     SurveyComponent,
     AddSurveyComponent,
     EditSurveyComponent,
-    SurveyCategoryComponent,
-    AddCategoryComponent,
-    EditCategoryComponent,
     SurveyListComponent,
     UsersListComponent,
     ProfileComponent,
