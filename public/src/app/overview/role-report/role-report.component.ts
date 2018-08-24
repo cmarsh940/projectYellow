@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { RoleService } from './role.service';
 import { MatDialog } from '@angular/material';
 import { Role } from '../../global/models/role';
 import { AddRoleComponent } from './add-role/add-role.component';
 
+
+export interface DialogData {
+  name: string;
+}
 @Component({
   selector: 'app-role-report',
   templateUrl: './role-report.component.html',
@@ -13,22 +16,17 @@ import { AddRoleComponent } from './add-role/add-role.component';
 export class RoleReportComponent implements OnInit {
   displayedColumns: string[] = ['name', 'action'];
   dataSource: Role[];
-  myForm: FormGroup;
   allRoles;
   errorMessage;
-  private role;
+  errors = [];
+  name: string;
 
-  name = new FormControl('', Validators.required);
 
 
   constructor(
     private _roleService: RoleService,
-    public dialog: MatDialog, 
-    fb: FormBuilder) {
-    this.myForm = fb.group({
-      name: this.name,
-    });
-  };
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.loadAll();
@@ -58,42 +56,47 @@ export class RoleReportComponent implements OnInit {
 
 
 
-	/**
-   * Event handler for changing the checked state of a checkbox (handles array enumeration values)
-   * @param {String} name - the name of the role field to update
-   * @param {any} value - the enumeration value for which to toggle the checked state
-   */
-  changeArrayValue(name: string, value: any): void {
-    const index = this[name].value.indexOf(value);
-    if (index === -1) {
-      this[name].value.push(value);
+  addDialog() {
+    this.errors = [];
+    const dialogRef = this.dialog.open(AddRoleComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`)
+      this.loadAll();
+    });
+  }
+
+  destroyRole(id: string) {
+    let r = window.confirm("Delete Role?");
+    if (r == true) {
+      this._roleService.deleteAsset(id);
     } else {
-      this[name].value.splice(index, 1);
+      window.close()
     }
   }
 
-
-  addDialog() {
-    const dialogRef = this.dialog.open(AddRoleComponent, {
-      data: this.role,
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-      return this._roleService.add(result)
+  deleteAsset(id: string): Promise<any> {
+    let r = window.confirm("Delete Role?");
+    if (r == true) {
+      return this._roleService.deleteAsset(id)
         .toPromise()
         .then(() => {
           this.errorMessage = null;
           this.loadAll();
         })
         .catch((error) => {
-          if (error === 'Server error') {
-            this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-          } else {
+          if (error == 'Server error') {
+            this.errorMessage = "Could not connect to REST server. Please check your configuration details";
+          }
+          else if (error == '404 - Not Found') {
+            this.errorMessage = "404 - Could not find API route. Please check your available APIs."
+          }
+          else {
             this.errorMessage = error;
           }
         });
-    });
+    } else {
+      window.close()
+    }
   }
-
 }

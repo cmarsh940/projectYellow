@@ -1,6 +1,7 @@
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { SurveyCategoryService } from '../survey-category.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-category',
@@ -12,46 +13,23 @@ export class AddCategoryComponent implements OnInit {
 
   allAssets;
   private asset;
-  private currentId;
   errorMessage;
 
-  categoryId = new FormControl('', Validators.required);
   name = new FormControl('', Validators.required);
-  surveys = new FormControl('', Validators.required);
 
-  constructor(public serviceSurveyCategory: SurveyCategoryService, fb: FormBuilder) {
+  constructor(
+    public serviceSurveyCategory: SurveyCategoryService, 
+    private _router: Router,
+    fb: FormBuilder
+  ) {
     this.myForm = fb.group({
-      categoryId: this.categoryId,
       name: this.name,
-      surveys: this.surveys
     });
   };
 
   ngOnInit(): void {
-    this.loadAll();
   }
 
-  loadAll(): Promise<any> {
-    const tempList = [];
-    return this.serviceSurveyCategory.getAll()
-      .toPromise()
-      .then((result) => {
-        this.errorMessage = null;
-        result.forEach(asset => {
-          tempList.push(asset);
-        });
-        this.allAssets = tempList;
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
-  }
 
 	/**
    * Event handler for changing the checked state of a checkbox (handles array enumeration values)
@@ -80,16 +58,11 @@ export class AddCategoryComponent implements OnInit {
 
   addAsset(form: any): Promise<any> {
     this.asset = {
-      $class: 'org.me.survey.SurveyCategory',
-      'categoryId': this.categoryId.value,
       'name': this.name.value,
-      'surveys': this.surveys.value
     };
 
     this.myForm.setValue({
-      'categoryId': null,
       'name': null,
-      'surveys': null
     });
 
     return this.serviceSurveyCategory.addAsset(this.asset)
@@ -97,11 +70,9 @@ export class AddCategoryComponent implements OnInit {
       .then(() => {
         this.errorMessage = null;
         this.myForm.setValue({
-          'categoryId': null,
           'name': null,
-          'surveys': null
         });
-        this.loadAll();
+        this._router.navigate(["/surveyCategoriesReport"]);
       })
       .catch((error) => {
         if (error === 'Server error') {
@@ -113,54 +84,7 @@ export class AddCategoryComponent implements OnInit {
   }
 
 
-  updateAsset(form: any): Promise<any> {
-    this.asset = {
-      $class: 'org.me.survey.SurveyCategory',
-      'name': this.name.value,
-      'surveys': this.surveys.value
-    };
-
-    return this.serviceSurveyCategory.updateAsset(form.get('categoryId').value, this.asset)
-      .toPromise()
-      .then(() => {
-        this.errorMessage = null;
-        this.loadAll();
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
-  }
-
-
-  deleteAsset(): Promise<any> {
-
-    return this.serviceSurveyCategory.deleteAsset(this.currentId)
-      .toPromise()
-      .then(() => {
-        this.errorMessage = null;
-        this.loadAll();
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
-  }
-
-  setId(id: any): void {
-    this.currentId = id;
-  }
-
+  
   getForm(id: any): Promise<any> {
 
     return this.serviceSurveyCategory.getAsset(id)
@@ -168,27 +92,13 @@ export class AddCategoryComponent implements OnInit {
       .then((result) => {
         this.errorMessage = null;
         const formObject = {
-          'categoryId': null,
           'name': null,
-          'surveys': null
         };
-
-        if (result._id) {
-          formObject.categoryId = result._id;
-        } else {
-          formObject.categoryId = null;
-        }
 
         if (result.name) {
           formObject.name = result.name;
         } else {
           formObject.name = null;
-        }
-
-        if (result.surveys) {
-          formObject.surveys = result.surveys;
-        } else {
-          formObject.surveys = null;
         }
 
         this.myForm.setValue(formObject);
@@ -207,9 +117,7 @@ export class AddCategoryComponent implements OnInit {
 
   resetForm(): void {
     this.myForm.setValue({
-      'categoryId': null,
       'name': null,
-      'surveys': null
     });
   }
 }

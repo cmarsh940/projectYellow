@@ -1,12 +1,13 @@
 <mat-dialog-content class="container-fluid">
   <h4 class="modal-title" id="addRoleModalLabel">Add a role</h4>
-  <form (submit)="updateClient()" #formData="ngForm" class="form">
-    <mat-form-field>
-      <input matInput name='name' [(ngModel)]="data.name" #name='ngModel' placeholder="Name" required>
+  <form [formGroup]="myForm">
+    <mat-form-field appearance="outline" color="primary">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" type="text" required>
     </mat-form-field>
     <mat-dialog-actions>
-      <button mat-raised-button (click)="cancel()">Cancel</button>
-      <button mat-raised-button type='submit' [disabled]=!formData.valid>Save</button>
+      <button mat-button type="button">Cancel</button>
+      <button mat-button (click)="addRole(myForm);" type="submit">Confirm</button>
     </mat-dialog-actions>
   </form>
 </mat-dialog-content>

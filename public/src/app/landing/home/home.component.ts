@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: "app-home",
   templateUrl: "./home.component.html",
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   step = 0;
+  
 
   setStep(index: number) {
     this.step = index;
@@ -22,5 +24,8 @@ export class HomeComponent implements OnInit {
   
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log("DEVICE", window.clientInformation.platform);
+    console.log("BROWSER", window.clientInformation.vendor);
+  }
 }

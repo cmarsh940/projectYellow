@@ -2,7 +2,7 @@
   <h1 class="mat-title">New Survey</h1>
 </div>
 
-<form [formGroup]="surveyForm" (ngSubmit)="submitForm(surveyForm.value)" class="form">
+<form [formGroup]="surveyForm" (ngSubmit)="submitForm()" class="form">
 
   <mat-form-field>
     <mat-select placeholder="Survey Category" formControlName="category">

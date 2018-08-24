@@ -1,5 +1,19 @@
+.container-top {
+  padding: 0!important;
+  margin: 0!important;
+}
+
+#background-top {
+  background: linear-gradient(to bottom, #000000 0%, #ffffff 46%);
+  min-height: 300px;
+  max-height: 300px;
+  width: 100%;
+  padding: 0!important;
+  margin: 0!important;
+}
+
 #container-top {
-  background-image: url("/assets/SurveysbyME.png");
+ background-image: url("/assets/SurveysbyME.png"); 
   background-size: cover;
   min-height: 300px;
   max-height: 300px;

@@ -2,6 +2,7 @@ import { AuthService } from './../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Client } from '../../global/models/client';
+import { states } from '../../global/models/states';
 
 
 @Component({
@@ -13,6 +14,8 @@ export class RegisterComponent implements OnInit {
   newClient: Client = new Client();
   errors: string[] = [];
   password_confirmation: string;
+
+  states = states;
 
   constructor(private _authService: AuthService, private _router: Router) {}
 

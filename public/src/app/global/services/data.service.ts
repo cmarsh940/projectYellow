@@ -31,7 +31,7 @@ export class DataService<Type> {
   }
 
   public getAll(ns: string): Observable<Type[]> {
-    console.log('GetAll ' + ns + ' to ' + this.actionUrl + ns);
+    console.log('GetAll ' + ns + ' from ' + this.actionUrl + ns);
     console.log("*** GET ***");
     return this.http.get<Type[]>(`${this.actionUrl}${ns}`)
       .pipe(
@@ -55,8 +55,8 @@ export class DataService<Type> {
     console.log('asset', asset);
     console.log("*** POST ***");
     return this.http.post<Type>(this.actionUrl + ns, asset).pipe(
-      tap(this.extractData),
-      catchError(this.handleError('getAll', []))
+      map(this.extractData),
+      catchError(this.handleError('Add', []))
     );
   }
 
@@ -67,21 +67,22 @@ export class DataService<Type> {
     console.log('what is the updated item?', JSON.stringify(itemToUpdate));
     console.log("*** PUT ***");
     return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate).pipe(
-      tap(this.extractData),
-      catchError(this.handleError('getAll', []))
+      map(this.extractData),
+      catchError(this.handleError('Update', []))
     );
   }
 
-  public delete(ns: string, id: string): Observable<Type> {
+  public delete(ns: string, id: string): Observable<any> {
     console.log('Delete ' + ns);
+    console.log('what is the id to delete?', id);
     console.log("*** DELETE ***");
-    return this.http.delete<Type>(this.actionUrl + ns + '/' + id).pipe(
-      tap(_ => this.log(`deleted id=${id}`)),
-      catchError(this.handleError<Type>('deleteHero'))
+    return this.http.delete<any>(this.actionUrl + ns + '/' + id).pipe(
+      catchError(this.handleError('Delete', []))
     );
   }
 
   private extractData(res: Response): any {
+    console.log("*** extractData: ***", res);
     return res;
   }
 

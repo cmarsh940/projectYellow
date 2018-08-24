@@ -1,3 +1,4 @@
+import { AddCategoryComponent } from './survey-category-report/add-category/add-category.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { OverviewComponent } from './overview.component';
@@ -8,6 +9,7 @@ import { SurveyCategoryReportComponent } from './survey-category-report/survey-c
 import { UserReportComponent } from './user-report/user-report.component';
 import { RoleReportComponent } from './role-report/role-report.component';
 import { SubscriptionReportComponent } from './subscription-report/subscription-report.component';
+import { EditCategoryComponent } from './survey-category-report/edit-category/edit-category.component';
 
 const routes: Routes = [
   {
@@ -35,14 +37,14 @@ const routes: Routes = [
         component: SurveyCategoryReportComponent
       },
       {
-        path: "surveyCategoriesReport",
+        path: "addCategory",
         pathMatch: "full",
-        component: SurveyCategoryReportComponent
+        component: AddCategoryComponent
       },
       {
-        path: "surveyCategoriesReport",
+        path: "editCategory/:id",
         pathMatch: "full",
-        component: SurveyCategoryReportComponent
+        component: EditCategoryComponent
       },
       {
         path: "userReport",
