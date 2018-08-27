@@ -1,4 +1,4 @@
-import { SurveyService } from '../survey.service';
+
 import { SurveyCategory } from '../../../global/models/survey-category';
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
 import { AuthService } from '../../../auth/auth.service';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
+import { SurveyService } from '../survey.service';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -156,7 +157,7 @@ export class AddSurveyComponent implements OnInit {
       questions: questionsDeepCopy,
       answers: [""],
       user: "",
-      _client: "",
+      creator: "",
       createdAt: Date.now(),
       updatedAt: Date.now()
     };

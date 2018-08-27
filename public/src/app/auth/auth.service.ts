@@ -41,7 +41,7 @@ export class AuthService {
   createClient(newClient: Client, callback) {
     console.log("*** SERVICE HIT CREAT CLIENT ***", newClient);
     console.log("*** POST ***");
-    return this._http.post('/clients', newClient).subscribe(
+    return this._http.post('/api/clients', newClient).subscribe(
       res => {
         const client = res.json();
         console.log("*** SERVICE CLIENT: ***", client);
@@ -77,6 +77,13 @@ export class AuthService {
       );
     }
 
+  verify() {
+    let data = sessionStorage.getItem('currentClient');
+    if(data) {
+      return true;
+    }
+    return false;
+  }
   private log(message: string) {
     this._messageService.add('AuthService: ' + message);
   }

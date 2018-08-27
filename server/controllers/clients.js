@@ -74,7 +74,6 @@ class ClientsController {
   //   Client.findById({ _id: req.params.id })
   //     .populate(
   //       { path: "role", select: 'name', model: Role },
-  //       { path: "subscription", select: 'name', model: Subscription },
   //       { path: "surveys", select: 'name', model: Survey },
   //       { path: "users", model: User })
   //     .exec((err, client) => {

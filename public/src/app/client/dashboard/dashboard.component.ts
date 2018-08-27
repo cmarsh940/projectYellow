@@ -24,5 +24,6 @@ export class DashboardComponent {
     private _router: Router
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+  }
 }

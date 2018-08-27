@@ -17,10 +17,13 @@ const SurveySchema = new mongoose.Schema({
       question: {
         type: String,
         required: [true, "Qustion cannot be blank"]
+      },
+      answer: {
+        type: String
       }
     }
   ],
-  client: {
+  creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client"
   },

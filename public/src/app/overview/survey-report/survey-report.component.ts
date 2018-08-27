@@ -18,7 +18,7 @@ export class SurveyReportComponent implements OnInit {
   errorMessage;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'category'];
+  displayedColumns = ['owner', 'name', 'category', 'date'];
 
   constructor(
     private _surveyService: SurveyService

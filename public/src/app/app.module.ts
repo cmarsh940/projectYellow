@@ -36,8 +36,8 @@ import { ClientService } from './client/client.service';
 import { HttpErrorHandler } from './global/services/http-error-handler.service';
 import { MessagesService } from './global/services/messages.service';
 import { RequestCache, RequestCacheWithMap } from './global/services/cache.service';
-import { SurveyService } from './client/survey/survey.service';
 import { UserService } from './client/user/user.service';
+import { SurveyService } from './client/survey/survey.service';
 
 @NgModule({
   declarations: [

@@ -6,6 +6,12 @@
 
   <!-- Name Column -->
   <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.creator}} </mat-cell>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
   </ng-container>
@@ -14,6 +20,12 @@
   <ng-container matColumnDef="category">
     <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element.category.name}} </mat-cell>
+  </ng-container>
+
+  <!-- Date Column -->
+  <ng-container matColumnDef="category">
+    <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.createdAt}} </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

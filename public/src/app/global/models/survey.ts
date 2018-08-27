@@ -5,7 +5,7 @@ export class Survey {
     questions: any;
     answers: any;
     user: any;
-    _client: any;
+    creator: any;
     createdAt: any;
     updatedAt: any;
 }

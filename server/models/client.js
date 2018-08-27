@@ -85,6 +85,11 @@ const ClientSchema = new mongoose.Schema({
   },
 
   used:[String],
+  
+  subscription: {
+    type: String,
+    default: "FREE"
+  },
 
   role: {
     type: mongoose.Schema.Types.ObjectId,
@@ -109,12 +114,7 @@ const ClientSchema = new mongoose.Schema({
       }
     ],
     default: []
-  },
-
-  subscription: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Subscription"
-  },
+  }
 
 }, { timestamps: true });
 

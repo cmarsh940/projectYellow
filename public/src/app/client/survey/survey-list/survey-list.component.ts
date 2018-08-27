@@ -1,7 +1,7 @@
+import { ProfileService } from './../../profile/profile.service';
 import { Component, OnInit} from '@angular/core';
 
 import { Survey } from './../../../global/models/survey';
-import { SurveyService } from '../survey.service';
 
 @Component({
   selector: 'survey-list',
@@ -16,33 +16,19 @@ export class SurveyListComponent implements OnInit {
   displayedColumns = ['name', 'category'];
 
   constructor(
-    private _surveyService: SurveyService
+    private _profileService: ProfileService
   ) { }
 
   ngOnInit() {
-    this.loadAll();
+    this.getUserSurveys();
   }
 
-  loadAll(): Promise<any> {
-    const tempList = [];
-    return this._surveyService.getAll()
-      .toPromise()
-      .then((result) => {
-        this.errorMessage = null;
-        result.forEach(asset => {
-          tempList.push(asset);
-        });
-        this.dataSource = tempList;
-        console.log("*** SURVEYS RETURNED ***:", this.dataSource);
+  getUserSurveys() {
+    let id = JSON.parse(sessionStorage.getItem('currentClient'));
+    this._profileService.getparticipant(id)
+      .subscribe(res => {
+        console.log("User", res);
+        this.dataSource = res.surveys;
       })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
   }
 }
