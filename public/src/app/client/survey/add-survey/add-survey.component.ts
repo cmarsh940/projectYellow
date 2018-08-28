@@ -10,6 +10,7 @@ import { Survey } from '../../../global/models/survey';
 import { AuthService } from '../../../auth/auth.service';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { SurveyService } from '../survey.service';
+import { ClientService } from '../../client.service';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -48,7 +49,7 @@ export class AddSurveyComponent implements OnInit {
   constructor(
     private _authService: AuthService,
     private fb: FormBuilder,
-    private surveyService: SurveyService,
+    private _clientService: ClientService,
     private _categoryService: SurveyCategoryService,
     private _router: Router
   ) {
@@ -135,7 +136,7 @@ export class AddSurveyComponent implements OnInit {
 
   submitForm() {
     this.survey = this.prepareSaveSurvey();
-    this.surveyService.addAsset(this.survey).subscribe();
+    this._clientService.addAsset(this.survey).subscribe();
     this.rebuildForm();
     this._router.navigate(["/survey"]);
   }

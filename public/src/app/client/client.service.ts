@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from "rxjs";
 
 import { Client } from '../global/models/client';
+import { Survey } from '../global/models/survey';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,10 @@ import { Client } from '../global/models/client';
 export class ClientService {
   private NAMESPACE = 'clients';
 
-  constructor(private dataService: DataService<Client>) {
+  constructor(
+    private dataService: DataService<Client>,
+    private dataServiceSurvey: DataService<Survey>
+  ) {
   };
 
   public getAll(): Observable<Client[]> {
@@ -31,5 +35,13 @@ export class ClientService {
 
   public deleteParticipant(id: any): Observable<Client> {
     return this.dataService.delete(this.NAMESPACE, id);
+  }
+
+  public addAsset(itemToAdd: any): Observable<Survey> {
+    let NAMESPACE = "surveys";
+    let id = JSON.parse(sessionStorage.getItem('currentClient'));
+    itemToAdd.creator = id;
+    console.log("____ ITEM _____",itemToAdd)
+    return this.dataServiceSurvey.add(NAMESPACE, itemToAdd);
   }
 }

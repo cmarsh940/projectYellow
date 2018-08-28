@@ -15,14 +15,27 @@ class SurveysController {
   }
 
   create(req, res) {
+    console.log("REQ", req.body)
     Survey.create(req.body, (err, survey) => {
       if (err) {
-        console.log("*** ERROR: CREATING SURVEY=", err);
         return res.json(err);
+      } else {
+        Client.findByIdAndUpdate(req.body.creator, { $push: { surveys: survey._id } }, { new: true }, (err, client) => {
+          if (err) {
+            return res.json(err);
+          } else {
+            Category.findByIdAndUpdate(req.body.category._id, { $push: { surveys: survey._id } }, { new: true }, (err, category) => {
+              if (err) {
+                console.log(err);
+                return res.json(err);
+              } else {
+                return res.json(survey);
+              }
+            })
+          }
+        })
       }
-      console.log("*** CREATED SURVEY ***", survey);
-      return res.json(survey);
-    });
+    })
   }
 
   show(req, res) {
