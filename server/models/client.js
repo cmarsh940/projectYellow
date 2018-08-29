@@ -6,6 +6,7 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: [true, 'First name cannot be blank'],
     maxlength: [250, "Max characters reached. please stay below 250 characters"],
+    trim: true,
     validate: {
       validator: function (name) {
         return /^[a-zA-Z]+$/.test(name);
@@ -18,6 +19,7 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Last name cannot be blank'],
     maxlength: [250, "Max characters reached. please stay below 250 characters"],
+    trim: true,
     validate: {
       validator: function (name) {
         return /^[a-zA-Z]+$/.test(name);
@@ -88,12 +90,18 @@ const ClientSchema = new mongoose.Schema({
   
   subscription: {
     type: String,
+    enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
+    uppercase: true,
+    trim: true,
     default: "FREE"
   },
 
   role: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Role"
+    type: String,
+    enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
+    uppercase: true,
+    trim: true,
+    default: "CLIENT"
   },
 
   surveys: {
@@ -116,7 +124,12 @@ const ClientSchema = new mongoose.Schema({
     default: []
   }
 
-}, { timestamps: true });
+}, {
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at'
+    }
+  });
 
 ClientSchema.pre('save', function (next) {
   if (this.isNew) {

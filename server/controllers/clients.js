@@ -63,7 +63,7 @@ class ClientsController {
   }
 
   show(req, res) {
-    Client.findById(req.params.id, (err, client) => {
+    Client.findById({ _id: req.params.id }).populate('connections.item').exec((err, client) => {
       if (err) {
         return res.json(err);
       }

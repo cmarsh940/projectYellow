@@ -32,7 +32,16 @@ const SurveySchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }
-  ]
-});
+  ],
+  date: { 
+    type: Date, 
+    default: Date.now 
+  }
+}, {
+    timestamps: {
+      createdAt: 'created_at',
+      updatedAt: 'updated_at'
+    }
+  });
 
 const Survey = mongoose.model('Survey', SurveySchema); 

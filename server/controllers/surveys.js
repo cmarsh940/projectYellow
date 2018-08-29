@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 const Survey = mongoose.model("Survey");
 const Category = mongoose.model('Category');
+const Client = mongoose.model('Client');
 
 class SurveysController {
   index(req, res) {
-    Survey.find({}).populate({ path: "category", select: 'name', model: Category }).exec((err, surveys) => {
+    Survey.find({}).populate(
+      { path: "category", select: 'name', model: Category },
+      { path: "owner", model: Client },
+  ).exec((err, surveys) => {
       if (err) {
         console.log("*** ERROR: FINDING SURVEYS=", err);
         return res.json(err);
@@ -15,7 +19,7 @@ class SurveysController {
   }
 
   create(req, res) {
-    console.log("REQ", req.body)
+    console.log("REQ", req)
     Survey.create(req.body, (err, survey) => {
       if (err) {
         return res.json(err);
@@ -40,7 +44,10 @@ class SurveysController {
 
   show(req, res) {
     Survey.findById({ _id: req.params.id })
-      .populate({ path: "category", select: 'name', model: Category })
+      .populate(
+        { path: "category", select: 'name', model: Category },
+        { path: "creator", model: Client },
+    )
       .exec((err, survey) => {
         if (err) {
           console.log("*** ERROR: FINDING SURVEY =", err);

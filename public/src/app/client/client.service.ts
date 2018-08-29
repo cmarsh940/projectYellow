@@ -40,8 +40,6 @@ export class ClientService {
   public addAsset(itemToAdd: any): Observable<Survey> {
     let NAMESPACE = "surveys";
     let id = JSON.parse(sessionStorage.getItem('currentClient'));
-    itemToAdd.creator = id;
-    console.log("____ ITEM _____",itemToAdd)
-    return this.dataServiceSurvey.add(NAMESPACE, itemToAdd);
+    return this.dataServiceSurvey.custom(NAMESPACE, id, itemToAdd);
   }
 }

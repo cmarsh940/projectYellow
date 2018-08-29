@@ -90,4 +90,16 @@ export class DataService<Type> {
   private log(message: string) {
     this.messageService.add(`DataService: ${message}`);
   }
+
+  public custom(ns: string, asset: Type, id: any): Observable<Type> {
+    console.log('Entered DataService add');
+    console.log('Add ' + ns);
+    console.log('asset', asset);
+    console.log('id', id);
+    console.log("*** POST ***");
+    return this.http.post<Type>(this.actionUrl + ns, asset).pipe(
+      map(this.extractData),
+      catchError(this.handleError('Add', []))
+    );
+  }
 }

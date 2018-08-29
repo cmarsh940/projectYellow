@@ -19,11 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(busboyBodyParser());
 app.use(morgan('tiny'));
+
+app.set('trust proxy', 1) // trust first proxy
 app.use(session({
-    secret: "sad9#cdSsjdi-Ajion38*3lL-43*sdfs",
+    secret: 'sad9#cdSsjdi-Ajion38*3lL-43*sdfs',
     resave: false,
-    saveUninitialized: true
-}));
+    saveUninitialized: true,
+    cookie: { maxAge: 60000 }
+}))
 
 require('./server/config/mongoose');
 require('./server/config/routes')(app);

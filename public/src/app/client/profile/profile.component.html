@@ -12,11 +12,11 @@
     <mat-card-content>
       <div class="content-box">
         <p class="content-top">Surveys</p>
-        <p class="content-bottom">{{ currentUser.surveys.length }}</p>
+        <p class="content-bottom">{{ currentUser.surveys }}</p>
       </div>
       <div class="content-box">
         <p class="content-top">Users</p>
-        <p class="content-bottom">{{ currentUser.users.length }}</p>
+        <p class="content-bottom">{{ currentUser.users }}</p>
       </div>
       <div class="content-body">
         <p>Email: {{currentUser.email}}</p>
@@ -34,3 +34,5 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
+{{currentUser | json}}

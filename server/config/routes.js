@@ -23,7 +23,7 @@ module.exports = function (app) {
     app.delete('/api/clients/:id', Clients.delete);
     app.get('/api/clients/:id', Clients.show);
     app.put('/api/clients/:id', Clients.update);
-    app.get('/session', Clients.session);
+    app.get('/sessions', Clients.session);
 
     app.get('/api/questions', Questions.index);
     app.post("/api/questions/:id", Questions.create);

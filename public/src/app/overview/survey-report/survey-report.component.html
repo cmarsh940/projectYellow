@@ -4,12 +4,12 @@
 
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
+  <!-- Owner Column -->
+  <ng-container matColumnDef="owner">
     <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element.creator}} </mat-cell>
   </ng-container>
-
+  
   <!-- Name Column -->
   <ng-container matColumnDef="name">
     <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
@@ -22,12 +22,8 @@
     <mat-cell *matCellDef="let element"> {{element.category.name}} </mat-cell>
   </ng-container>
 
-  <!-- Date Column -->
-  <ng-container matColumnDef="category">
-    <mat-header-cell *matHeaderCellDef> Created </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.createdAt}} </mat-cell>
-  </ng-container>
-
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 </mat-table>
+
+{{element | json}}

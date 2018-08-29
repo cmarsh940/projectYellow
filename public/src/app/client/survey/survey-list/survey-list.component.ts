@@ -2,6 +2,7 @@ import { ProfileService } from './../../profile/profile.service';
 import { Component, OnInit} from '@angular/core';
 
 import { Survey } from './../../../global/models/survey';
+import { Client } from '../../../global/models/client';
 
 @Component({
   selector: 'survey-list',
@@ -10,6 +11,7 @@ import { Survey } from './../../../global/models/survey';
 })
 export class SurveyListComponent implements OnInit {
   dataSource: Survey[];
+  currentClient: Client;
   errorMessage;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -20,15 +22,24 @@ export class SurveyListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getUserSurveys();
+    this.getClient();
   }
 
-  getUserSurveys() {
+  getClient() {
     let id = JSON.parse(sessionStorage.getItem('currentClient'));
     this._profileService.getparticipant(id)
       .subscribe(res => {
         console.log("User", res);
-        this.dataSource = res.surveys;
+        this.currentClient = res;
+      })
+  }
+
+  getSurveys() {
+    let id = JSON.parse(sessionStorage.getItem('currentClient'));
+    this._profileService.getparticipant(id)
+      .subscribe(res => {
+        console.log("User", res);
+        this.currentClient = res;
       })
   }
 }
