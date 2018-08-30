@@ -7,7 +7,6 @@ import { ClientReportComponent } from './client-report/client-report.component';
 import { SurveyReportComponent } from './survey-report/survey-report.component';
 import { SurveyCategoryReportComponent } from './survey-category-report/survey-category-report.component';
 import { UserReportComponent } from './user-report/user-report.component';
-import { RoleReportComponent } from './role-report/role-report.component';
 import { SubscriptionReportComponent } from './subscription-report/subscription-report.component';
 import { EditCategoryComponent } from './survey-category-report/edit-category/edit-category.component';
 
@@ -50,11 +49,6 @@ const routes: Routes = [
         path: "userReport",
         pathMatch: "full",
         component: UserReportComponent
-      },
-      {
-        path: "roleReport",
-        pathMatch: "full",
-        component: RoleReportComponent
       },
       {
         path: "subscriptionReport",

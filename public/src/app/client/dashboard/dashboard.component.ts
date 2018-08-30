@@ -19,10 +19,7 @@ export class DashboardComponent {
     { title: 'Card 4', cols: 2, rows: 1 }
   ];
 
-  constructor(
-    private _authService: AuthService,
-    private _router: Router
-  ) { }
+  constructor() { }
 
   ngOnInit() { 
   }

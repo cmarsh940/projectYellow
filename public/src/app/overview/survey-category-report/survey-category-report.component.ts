@@ -24,11 +24,6 @@ export class SurveyCategoryReportComponent implements OnInit {
     this.loadAll();
   }
 
-  isLoggedIn() {
-    if (this._authService.getCurrentClient() == null) {
-      this._router.navigateByUrl('/login');
-    }
-  }
 
   loadAll(): Promise<any> {
     const tempList = [];

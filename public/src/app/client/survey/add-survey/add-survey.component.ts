@@ -1,16 +1,13 @@
 
 import { SurveyCategory } from '../../../global/models/survey-category';
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
-import { AuthService } from '../../../auth/auth.service';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { SurveyService } from '../survey.service';
-import { ClientService } from '../../client.service';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -36,7 +33,7 @@ export class AddSurveyComponent implements OnInit {
   nameChangeLog: string[] = [];
   categories: SurveyCategory[];
   type = "";
-  errorMessage;
+  errors = [];
 
   questionTypes: Type[] = [
     { value: "boolean", viewValue: "YES / NO" },
@@ -47,9 +44,8 @@ export class AddSurveyComponent implements OnInit {
   @Input() survey: Survey;
 
   constructor(
-    private _authService: AuthService,
     private fb: FormBuilder,
-    private _clientService: ClientService,
+    private _surveyService: SurveyService,
     private _categoryService: SurveyCategoryService,
     private _router: Router
   ) {
@@ -61,32 +57,23 @@ export class AddSurveyComponent implements OnInit {
     this.loadCategories();
   }
 
-  isLoggedIn() {
-    if (this._authService.getCurrentClient() == null) {
-      this._router.navigateByUrl('/login');
-    }
-  }
-
   loadCategories(): Promise<any> {
+    this.errors = [];
     const tempList = [];
-    return this._categoryService.getAll()
-      .toPromise()
-      .then((result) => {
-        this.errorMessage = null;
-        result.forEach(asset => {
-          tempList.push(asset);
-        });
-        this.categories = tempList;
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
+    return this._categoryService.getAll().toPromise().then((result) => {
+      this.errors = null;
+      result.forEach(asset => {
+        tempList.push(asset);
       });
+      this.categories = tempList;
+    }).catch((error) => {
+      if (error) {
+        for (const key of Object.keys(error)) {
+          const errors = error[key];
+          this.errors.push(errors.message);
+        }
+      }
+    });
   }
 
   createForm() {
@@ -135,11 +122,24 @@ export class AddSurveyComponent implements OnInit {
   }
 
   submitForm() {
+    this.errors = [];
     this.survey = this.prepareSaveSurvey();
-    this._clientService.addAsset(this.survey).subscribe();
-    this.rebuildForm();
-    this._router.navigate(["/survey"]);
-  }
+    this._surveyService.addAsset(this.survey).subscribe(
+      result => {
+        console.log("___RESULTS___:",result);
+      },
+      error => {
+        console.log("___ERROR___:",error);
+          for (const key of Object.keys(error)) {
+            const errors = error[key];
+            this.errors.push(errors.message);
+          }
+      });
+      if(!this.errors) {
+        this.rebuildForm();
+        this._router.navigate(["/survey"]);
+      }
+    }
 
   prepareSaveSurvey(): Survey {
     const formModel = this.surveyForm.value;
@@ -158,7 +158,7 @@ export class AddSurveyComponent implements OnInit {
       questions: questionsDeepCopy,
       answers: [""],
       user: "",
-      creator: "",
+      creator: JSON.parse(sessionStorage.getItem('currentClient')),
       createdAt: Date.now(),
       updatedAt: Date.now()
     };

@@ -12,9 +12,7 @@ import { SurveyReportComponent } from './survey-report/survey-report.component';
 import { ClientReportComponent } from './client-report/client-report.component';
 import { UserReportComponent } from './user-report/user-report.component';
 import { SurveyCategoryReportComponent } from './survey-category-report/survey-category-report.component';
-import { RoleReportComponent } from './role-report/role-report.component';
 import { SubscriptionReportComponent } from './subscription-report/subscription-report.component';
-import { AddRoleComponent } from './role-report/add-role/add-role.component';
 import { EditCategoryComponent } from './survey-category-report/edit-category/edit-category.component';
 
 @NgModule({
@@ -35,9 +33,7 @@ import { EditCategoryComponent } from './survey-category-report/edit-category/ed
     SurveyCategoryReportComponent,
     EditCategoryComponent,
     AddCategoryComponent,
-    RoleReportComponent,
-    SubscriptionReportComponent,
-    AddRoleComponent
+    SubscriptionReportComponent
   ]
 })
 export class OverviewModule { }

@@ -50,9 +50,9 @@
     </div>
   </div>
 </form>
+<div>
+  <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+</div>
 
 
 <p>surveyForm value: {{ surveyForm.value | json}}</p>
-
-<h4>Name change log</h4>
-<div *ngFor="let name of nameChangeLog">{{name}}</div>

@@ -24,6 +24,10 @@ export class SurveyService {
   public addAsset(itemToAdd: any): Observable<Survey> {
     return this.dataService.add(this.NAMESPACE, itemToAdd);
   }
+  // public addAsset(itemToAdd: any): Observable<Survey> {
+  //   let id = JSON.parse(sessionStorage.getItem('currentClient'));
+  //   return this.dataService.custom(this.NAMESPACE, id, itemToAdd);
+  // }
 
   public updateAsset(id: any, itemToUpdate: any): Observable<Survey> {
     return this.dataService.update(this.NAMESPACE, id, itemToUpdate);

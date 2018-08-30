@@ -3,7 +3,7 @@ const Category = mongoose.model('Category');
 
 class CategoriesController {
     index(req, res) {
-        Category.find({}, (err, categories) => {
+        Category.find({}).populate('connections.item').exec((err, categories) => {
             if (err) {
                 return res.json(err);
             }
@@ -21,7 +21,7 @@ class CategoriesController {
     }
 
     show(req, res) {
-        Category.findById(req.params.id, (err, category) => {
+        Category.findById({ _id: req.params.id }).populate('connections.item').exec((err, category) => {
             if (err) {
                 return res.json(err);
             }

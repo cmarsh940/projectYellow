@@ -39,12 +39,7 @@ export class ProfileComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
-  
-  isLoggedIn() {
-    if (this._authService.getCurrentClient() == null) {
-      this._router.navigateByUrl('/login');
-    }
-  }
+
 
   getUserInformation() {
     let id = JSON.parse(sessionStorage.getItem('currentClient'));

@@ -1,7 +1,5 @@
 import { SurveyCategoryService } from './overview/survey-category-report/survey-category.service';
-import { AddRoleComponent } from './overview/role-report/add-role/add-role.component';
 import { SubscriptionService } from './overview/subscription-report/subscription.service';
-import { RoleService } from './overview/role-report/role.service';
 import { OverviewService } from './overview/overview.service';
 // MODULES
 import { NgModule } from '@angular/core';
@@ -70,13 +68,11 @@ import { SurveyService } from './client/survey/survey.service';
     SurveyCategoryService,
     UserService,
     OverviewService,
-    RoleService,
     SubscriptionService,
     { provide: RequestCache, useClass: RequestCacheWithMap },
     httpInterceptorProviders
   ],
   entryComponents: [
-    AddRoleComponent,
     EditClientComponent,
     RightsComponent
   ],

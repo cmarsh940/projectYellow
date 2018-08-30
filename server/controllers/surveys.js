@@ -5,10 +5,7 @@ const Client = mongoose.model('Client');
 
 class SurveysController {
   index(req, res) {
-    Survey.find({}).populate(
-      { path: "category", select: 'name', model: Category },
-      { path: "owner", model: Client },
-  ).exec((err, surveys) => {
+    Survey.find({}).populate('connections.item').exec((err, surveys) => {
       if (err) {
         console.log("*** ERROR: FINDING SURVEYS=", err);
         return res.json(err);
@@ -17,6 +14,19 @@ class SurveysController {
       return res.json(surveys);
     });
   }
+  // index(req, res) {
+  //   Survey.find({}).populate(
+  //     { path: "category", select: 'name', model: Category },
+  //     { path: "owner", model: Client },
+  // ).exec((err, surveys) => {
+  //     if (err) {
+  //       console.log("*** ERROR: FINDING SURVEYS=", err);
+  //       return res.json(err);
+  //     }
+  //     console.log("*** FOUND SURVEYS ***", surveys);
+  //     return res.json(surveys);
+  //   });
+  // }
 
   create(req, res) {
     console.log("REQ", req)
@@ -43,12 +53,7 @@ class SurveysController {
   }
 
   show(req, res) {
-    Survey.findById({ _id: req.params.id })
-      .populate(
-        { path: "category", select: 'name', model: Category },
-        { path: "creator", model: Client },
-    )
-      .exec((err, survey) => {
+    Survey.findById({ _id: req.params.id }).populate('connections.item').exec((err, survey) => {
         if (err) {
           console.log("*** ERROR: FINDING SURVEY =", err);
           return res.json(err);
@@ -57,6 +62,18 @@ class SurveysController {
         return res.json(survey);
     });
   }
+  // show(req, res) {
+  //   Survey.findById({ _id: req.params.id }).lean()
+  //     .populate('creator')
+  //     .exec(function (err, doc) {
+  //       if (err) {
+  //         console.log("*** ERROR: FINDING SURVEY =", err);
+  //         return res.json(err);
+  //       }
+  //       console.log("*** FOUND SURVEY ***", doc);
+  //       return res.json(doc);
+  //   });
+  // }
 
   update(req, res) {
     Survey.findByIdAndUpdate(

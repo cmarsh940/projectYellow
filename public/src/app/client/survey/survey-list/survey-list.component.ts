@@ -29,8 +29,8 @@ export class SurveyListComponent implements OnInit {
     let id = JSON.parse(sessionStorage.getItem('currentClient'));
     this._profileService.getparticipant(id)
       .subscribe(res => {
-        console.log("User", res);
         this.currentClient = res;
+        console.log("CURRENT CLIENT:", this.currentClient);
       })
   }
 

@@ -33,10 +33,6 @@ const SurveySchema = new mongoose.Schema({
       ref: "User"
     }
   ],
-  date: { 
-    type: Date, 
-    default: Date.now 
-  }
 }, {
     timestamps: {
       createdAt: 'created_at',

@@ -35,9 +35,12 @@ export class LoginComponent implements OnInit {
           const error = client.errors[key];
           this.errors.push(error.message);
         }
+        this._router.navigate(["/login"]);
       } else {
         console.log("*** LOGING IN ***")
-        this._authService.setCurrentClient(client);
+        if(client.role === 'CAPTAIN') {
+          this._router.navigateByUrl("/overview");
+        }
         this._router.navigateByUrl("/dashboard");
       }
     });

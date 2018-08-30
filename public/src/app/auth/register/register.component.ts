@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
   newClient: Client = new Client();
   errors: string[] = [];
   password_confirmation: string;
+  currentClient: Client;
 
   states = states;
 
@@ -26,16 +27,11 @@ export class RegisterComponent implements OnInit {
 
   createClient() {
     this.errors = [];
-    return this._authService.createClient(this.newClient, client => {
-      if (client.errors) {
-        for (let key in client.errors) {
-          let errors = client.errors[key];
-          this.errors.push(errors.message);
-        }
-      } else {
-        this._authService.setCurrentClient(client);
-        this._router.navigate(["/dashboard"]);
-      }
+    return this._authService.createClient(this.newClient).subscribe(client => {
+      this.currentClient = client;
+      console.log(this.currentClient);
+      this._router.navigate(["/dashboard"]);
     });
+        
   }
 }
