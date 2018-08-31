@@ -30,26 +30,14 @@ export class AuthService {
     httpOptions;
   }
 
-  authenticate(loginClient: Client, callback) {
-    console.log("*** SERVICE LOGIN HIT ***");
-    console.log("*** POST ***");
-    return this._http.post('/api/clients/login', loginClient).subscribe(
-      res => {
-        const client = res.json();
-        console.log("*** SERVICE CLIENT ***", client);
-        if (!client.errors) {
-          sessionStorage.setItem('currentClient', JSON.stringify(client._id));
-          console.log("*** SERVICE SET CLIENT ***", client);
-        } else {
-          console.log("*** SERVICE LOGIN ERROR ***", client.errors);
-          this.currentClient = null;
-        }
-        callback(client);
-      },
-      err => console.log(err)
+  authenticate(asset: Client): Observable<any> {
+    console.log("*** POST AUTHENTICATE ***");
+    return this._httpClient.post<any>('/api/clients/login', asset).pipe(
+      map(this.extractData),
+      catchError(this.handleError('Authenticate', []))
     );
   }
-
+  
 
   createClient(asset: Client): Observable<any> {
     console.log('Entered AuthService Create');
@@ -60,25 +48,6 @@ export class AuthService {
       catchError(this.handleError('createClient', []))
     );
   }
-  // createClient(newClient: Client, callback) {
-  //   console.log("*** SERVICE HIT CREAT CLIENT ***", newClient);
-  //   console.log("*** POST ***");
-  //   return this._http.post('/api/clients', newClient).subscribe(
-  //     res => {
-  //       const client = res.json();
-  //       if (!client.errors) {
-  //         console.log("*** SERVICE HIT SET CLIENT***");
-  //         this.setCurrentClient(client);
-  //       } else {
-  //         this.log(client.errors);
-  //         this.currentClient = null;
-  //         return res.json
-  //       }
-  //       callback(client);
-  //     },
-  //     err => console.log(err)
-  //   );
-  // }
 
     setCurrentClient(client) {
       console.log("*** SERVICE SET CURRENT CLIENT ***", client)
@@ -100,10 +69,16 @@ export class AuthService {
 
   verify() {
     let data = sessionStorage.getItem('currentClient');
-    if(data) {
-      return true;
+    console.log("VERIFY DATA", data);
+    if (data == undefined) {
+      return false;
+    } else if(data == null) {
+      return false;
+    } else if(data == '') {
+      return false;
+    } else {
+    return true;
     }
-    return false;
   }
   private extractData(res: Response): any {
     console.log("*** extractData: ***", res);

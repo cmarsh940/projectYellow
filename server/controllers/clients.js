@@ -74,19 +74,21 @@ class ClientsController {
   // }
 
   authenticate(req, res) {
+    console.log("_____AUTH REQ_____", req);
     Client.findOne({ email: req.body.email }).populate('connections.item').exec((err, client) => {
       if (err) {
         console.log("*** AUTHENTICATE ERROR", err);
         return res.json(err);
       }
       if (client && client.authenticate(req.body.password)) {
+        console.log("_____CLIENT LOGGING IN_____", client);
         let fullName = client.firstName.toUpperCase() + " " + client.lastName.toUpperCase();
         req.session.client = {
           _id: client._id,
           name: fullName,
           surveys: client.surveys
         };
-        return res.json(client)
+        return res.json(req.session.client)
       }
       return res.json({
         errors: {

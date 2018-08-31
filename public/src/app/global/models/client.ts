@@ -12,6 +12,7 @@ export class Client {
     role: string;
     surveys: any;
     users: any;
+    used: any;
     subscription: string;
     password: string;
     password_confirmation: any;

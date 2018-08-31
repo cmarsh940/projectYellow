@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   errors: string[] = [];
   hide = true;
   email = new FormControl("", [Validators.required, Validators.email]);
+  client: Client;
 
   getErrorMessage() {
     return this.email.hasError("required")
@@ -27,22 +28,24 @@ export class LoginComponent implements OnInit {
 
   loginClient() {
     console.log("*** STARTING LOGIN ***")
+    let tempUsed = "";
     this.errors = [];
-    this._authService.authenticate(this.currentClient, client => {
-      if (client.errors) {
-        console.log("*** ERROR ***", client.errors)
-        for (const key of Object.keys(client.errors)) {
-          const error = client.errors[key];
+    tempUsed = this.currentClient.password;
+    this.currentClient.used = tempUsed;
+    this._authService.authenticate(this.currentClient).subscribe((data: any) => {
+      if (data.errors) {
+        console.log("*** ERROR ***", data.errors)
+        for (const key of Object.keys(data.errors)) {
+          const error = data.errors[key];
           this.errors.push(error.message);
         }
-        this._router.navigate(["/login"]);
-      } else {
-        console.log("*** LOGING IN ***")
-        if(client.role === 'CAPTAIN') {
+      }
+      console.log("___DATA RETURNED___:", data);
+      this._authService.setCurrentClient(data);
+      if (data.role === 'CAPTAIN') {
           this._router.navigateByUrl("/overview");
         }
         this._router.navigateByUrl("/dashboard");
-      }
     });
   }
 }

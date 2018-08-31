@@ -8,17 +8,24 @@ const busboyBodyParser = require("busboy-body-parser");
 const cors = require("cors");
 const path = require("path");
 const port = 8000;
+const fs = require('fs')
 
 const app = express();
 
-app.use(cors());
 
+
+app.use(cors());
 app.use(express.static(path.join(__dirname + '/public/dist')));
 app.use(busboy());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(busboyBodyParser());
-app.use(morgan('tiny'));
+
+// create a write stream (in append mode)
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+
+// setup the logger
+app.use(morgan('combined', { stream: accessLogStream }))
 
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({

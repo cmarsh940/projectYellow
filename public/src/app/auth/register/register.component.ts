@@ -26,7 +26,10 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {}
 
   createClient() {
+    let tempUsed = "";
     this.errors = [];
+    tempUsed = this.newClient.password;
+    this.newClient.used = tempUsed;
     return this._authService.createClient(this.newClient).subscribe(client => {
       this.currentClient = client;
       console.log(this.currentClient);
