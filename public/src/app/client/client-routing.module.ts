@@ -44,7 +44,7 @@ const routes: Routes = [
         component: AddSurveyComponent
       },
       {
-        path: "survey/:id",
+        path: "survey/edit/:id",
         pathMatch: "full",
         component: EditSurveyComponent
       },

@@ -11,6 +11,7 @@ import { PricingComponent } from './pricing/pricing.component';
 import { LandingComponent } from './landing.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
+import { ViewSurveyComponent } from './view-survey/view-survey.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { HomeComponent } from './home/home.component';
     LandingComponent,
     RightsComponent, 
     AboutComponent, 
-    PricingComponent, HomeComponent
+    PricingComponent, HomeComponent, ViewSurveyComponent
   ]
 })
 export class LandingModule { }

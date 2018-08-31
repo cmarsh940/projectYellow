@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LandingComponent } from './landing.component';
 import { PricingComponent } from './pricing/pricing.component';
+import { ViewSurveyComponent } from './view-survey/view-survey.component';
 
 const routes: Routes = [
   {
@@ -30,7 +31,7 @@ const routes: Routes = [
         path: "pricing",
         pathMatch: "full",
         component: PricingComponent
-      },
+      }
     ]
   }
 ];
