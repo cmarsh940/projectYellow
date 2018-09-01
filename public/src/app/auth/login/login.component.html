@@ -7,7 +7,7 @@
 </mat-toolbar>
 
 <div class="container">
-  <form (submit)="loginClient()" #loginForm="ngForm">
+  <form [formGroup]="myForm">
     <!-- ** EMAIL ** -->
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
@@ -16,7 +16,7 @@
           email
         </mat-icon>
       </span>
-      <input matInput placeholder="Enter your email" autocomplete="email" name="email" required [(ngModel)]="currentClient.email">
+      <input matInput required formControlName="email" autocomplete="email" placeholder="Email">
     </mat-form-field>
 
     <!-- **  PASSWORD ** -->
@@ -27,10 +27,10 @@
           https
         </mat-icon>
       </span>
-      <input matInput placeholder="Enter your password" autocomplete="current-password" name="password" required [(ngModel)]="currentClient.password" [type]="hide ? 'password' : 'text'">
+      <input matInput type="password" formControlName="password" required autocomplete="new-password" placeholder="Password">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
     </mat-form-field>
-    <button mat-stroked-button type="submit" value="Login" [disabled]="!loginForm.valid" color="primary">Login
+    <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" color="primary">Login
     </button>
   </form>
   <div>

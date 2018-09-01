@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
 
+const root = 'https://s3.amazonaws.com/mybucket';
+
 const ClientSchema = new mongoose.Schema({
   firstName: {
     type: String,
@@ -84,6 +86,11 @@ const ClientSchema = new mongoose.Schema({
       },
       message: "Password must have at least 1 number, and 1 uppercase"
     }
+  },
+
+  picture: {
+    type: String,
+    get: v => `${root}${v}`
   },
 
   used:[String],

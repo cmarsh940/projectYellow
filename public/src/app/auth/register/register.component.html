@@ -8,7 +8,7 @@
 
 <div class="container" id="head">
   <h2 class="text-center mat-title">Create Your Account</h2>
-  <form (ngSubmit)="createClient()" #registerForm="ngForm">
+  <form [formGroup]="myForm">
     <div class="label">
       <b class="text-center">Information</b>
     </div>
@@ -17,20 +17,20 @@
     <div class="input-container">
       <mat-form-field appearance="outline" color="primary">
         <mat-label>First Name</mat-label>
-        <input matInput type="text" required [(ngModel)]="newClient.firstName" name="firstName" autocomplete="given-name" placeholder="First Name">
+        <input matInput type="text" formControlName="firstName" required autocomplete="given-name" placeholder="First Name">
       </mat-form-field>
 
       <!-- LAST NAME -->
       <mat-form-field appearance="outline">
         <mat-label>Last Name</mat-label>
-        <input matInput type="text" required [(ngModel)]="newClient.lastName" name="lastName" autocomplete="family-name" placeholder="Last Name">
+        <input matInput type="text" formControlName="lastName" required autocomplete="family-name" placeholder="Last Name">
       </mat-form-field>
     </div>
 
       <!-- BUSINESS NAME -->
       <mat-form-field appearance="outline">
         <mat-label>Business Name <span>- optional</span></mat-label>
-        <input matInput type="text" [(ngModel)]="newClient.businessName" name="businessName" placeholder="Business Name">
+        <input matInput type="text" formControlName="businessName" placeholder="Business Name">
       </mat-form-field>
 
     <div class="label">
@@ -41,21 +41,20 @@
     <div class="input-container">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput required [(ngModel)]="newClient.email" name="email" autocomplete="email" placeholder="Email">
+        <input matInput required formControlName="email" autocomplete="email" placeholder="Email">
       </mat-form-field>
       
       <!-- PASSWORD -->
       <div class="input-container">
         <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
-          <input matInput type="password" autocomplete="new-password" required [(ngModel)]="newClient.password" name="password" placeholder="Password">
+          <input matInput type="password" formControlName="password" required autocomplete="new-password" placeholder="Password">
         </mat-form-field>
       
         <!-- CONFIRM PASSWORD -->
         <mat-form-field appearance="outline">
           <mat-label>Confirm Password</mat-label>
-          <input matInput type="password" autocomplete="new-password-confirmation" required [(ngModel)]="newClient.password_confirmation"
-            name="password_confirmation" placeholder="Confirm Password">
+          <input matInput type="password" formControlName="confirm_pass" required autocomplete="new-password-confirmation"  placeholder="Confirm Password">
         </mat-form-field>
       </div>
 
@@ -66,7 +65,7 @@
       <!-- PHONE -->
       <mat-form-field appearance="outline">
         <mat-label>Phone #</mat-label>
-        <input matInput type="tel" [(ngModel)]="newClient.phone" name="phone" autocomplete='tel-national' placeholder="Phone #">
+        <input matInput type="tel" formControlName="phone" autocomplete='tel-national' placeholder="Phone #">
       </mat-form-field>
     </div>
   
@@ -74,20 +73,20 @@
     <!-- ADDRESS -->
     <mat-form-field appearance="outline">
       <mat-label>Address</mat-label>
-      <input matInput type="text"  required [(ngModel)]="newClient.address" name="address" autocomplete="street-address" placeholder="Address">
+      <input matInput type="text" formControlName="address"  required  autocomplete="street-address" placeholder="Address">
     </mat-form-field>
 
     <!-- CITY -->
 
       <mat-form-field appearance="outline">
         <mat-label>City</mat-label>
-        <input matInput type="text" required [(ngModel)]="newClient.city" name="city" autocomplete="address-level2" placeholder="City">
+        <input matInput type="text" formControlName="city" required autocomplete="address-level2" placeholder="City">
       </mat-form-field>
     </div>
     <div class="input-container">
       <!-- STATE -->
       <mat-form-field appearance="outline">
-        <mat-select placeholder="State*" required [(ngModel)]="newClient.state" name="state" autocomplete="state">
+        <mat-select placeholder="State*" formControlName="state" required autocomplete="state">
           <mat-option *ngFor="let state of states" [value]="state.abbreviation">{{state.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -95,7 +94,7 @@
       <!-- ZIP CODE -->
       <mat-form-field appearance="outline">
         <mat-label>Zip Code</mat-label>
-        <input matInput type="text" required [(ngModel)]="newClient.zip" name="zip" autocomplete="postal-code" placeholder="Zip Code">
+        <input matInput type="text" formControlName="zip" required autocomplete="postal-code" placeholder="Zip Code">
       </mat-form-field>
     </div>
 
@@ -103,12 +102,12 @@
 
     <!-- SUBMIT BUTTON -->
     <div class="text-center">
-      <button mat-stroked-button type="submit" color="primary" [disabled]="!registerForm.form.valid" (click)="createClient()">Create Account</button>
+      <button mat-stroked-button type="submit" color="primary" (click)="addParticipant(myForm)">Create Account</button>
     </div>
   </form>
 
   <div>
-    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errorMessage">{{ error }}</p>
   </div>
 </div>
 

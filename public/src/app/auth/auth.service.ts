@@ -32,18 +32,17 @@ export class AuthService {
 
   authenticate(asset: Client): Observable<any> {
     console.log("*** POST AUTHENTICATE ***");
-    return this._httpClient.post<any>('/api/clients/login', asset).pipe(
+    return this._httpClient.post<any>(this.actionUrl + this.ns + '/login', asset).pipe(
       map(this.extractData),
       catchError(this.handleError('Authenticate', []))
     );
   }
   
-
-  createClient(asset: Client): Observable<any> {
+  addParticipant(asset: Client): Observable<Client> {
     console.log('Entered AuthService Create');
     console.log('newClient', asset);
     console.log("*** POST ***");
-    return this._httpClient.post<any>(this.actionUrl + this.ns, asset).pipe(
+    return this._httpClient.post<Client>(this.actionUrl + this.ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('createClient', []))
     );

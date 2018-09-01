@@ -27,7 +27,7 @@ class ClientsController {
 
   create(req, res) {
     console.log("*** SERVER HIT CREATE CLIENT")
-    if (req.body.password != req.body.password_confirmation) {
+    if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {
           password: {
@@ -73,30 +73,21 @@ class ClientsController {
   //   })
   // }
 
-  authenticate(req, res) {
-    console.log("_____AUTH REQ_____", req);
-    Client.findOne({ email: req.body.email }).populate('connections.item').exec((err, client) => {
+  authenticate(req, res, next) {
+    console.log("SERVER HIT AUTHENTICATE");
+    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }, function (err, client) {
       if (err) {
-        console.log("*** AUTHENTICATE ERROR", err);
-        return res.json(err);
+        return res.send("CLIENT LOGIN ERROR: " + err);
       }
       if (client && client.authenticate(req.body.password)) {
         console.log("_____CLIENT LOGGING IN_____", client);
-        let fullName = client.firstName.toUpperCase() + " " + client.lastName.toUpperCase();
         req.session.client = {
           _id: client._id,
-          name: fullName,
+          name: client.firstName + " " + client.lastName,
           surveys: client.surveys
         };
         return res.json(req.session.client)
       }
-      return res.json({
-        errors: {
-          login: {
-            message: "email or password is not correct."
-          }
-        }
-      });
     });
   }
 
