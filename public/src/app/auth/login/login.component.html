@@ -16,7 +16,7 @@
           email
         </mat-icon>
       </span>
-      <input matInput required formControlName="email" autocomplete="email" placeholder="Email">
+      <input matInput required formControlName="email" autocomplete="email">
     </mat-form-field>
 
     <!-- **  PASSWORD ** -->
@@ -27,10 +27,10 @@
           https
         </mat-icon>
       </span>
-      <input matInput type="password" formControlName="password" required autocomplete="new-password" placeholder="Password">
+      <input matInput type="password" formControlName="password" required autocomplete="new-password">
       <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
     </mat-form-field>
-    <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" color="primary">Login
+    <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary">Login
     </button>
   </form>
   <div>

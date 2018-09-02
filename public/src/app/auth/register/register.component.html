@@ -102,7 +102,7 @@
 
     <!-- SUBMIT BUTTON -->
     <div class="text-center">
-      <button mat-stroked-button type="submit" color="primary" (click)="addParticipant(myForm)">Create Account</button>
+      <button mat-stroked-button type="submit" color="primary" (click)="addParticipant(myForm)" [disabled]="!myForm.valid">Create Account</button>
     </div>
   </form>
 

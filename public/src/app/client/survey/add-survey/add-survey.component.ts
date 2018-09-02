@@ -127,6 +127,7 @@ export class AddSurveyComponent implements OnInit {
     this._surveyService.addAsset(this.survey).subscribe(
       result => {
         console.log("___RESULTS___:",result);
+        this._router.navigate(["/survey"]);
       },
       error => {
         console.log("___ERROR___:",error);

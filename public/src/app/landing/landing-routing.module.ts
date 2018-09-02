@@ -31,7 +31,12 @@ const routes: Routes = [
         path: "pricing",
         pathMatch: "full",
         component: PricingComponent
-      }
+      },
+      {
+        path: "takeSurvey/:id",
+        pathMatch: "full",
+        component: ViewSurveyComponent
+      },
     ]
   }
 ];

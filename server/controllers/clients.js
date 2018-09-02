@@ -13,17 +13,6 @@ class ClientsController {
       return res.json(clients);
     });
   }
-  // index(req, res) {
-  //   Client.find({}).populate(
-  //     { path: "surveys", model: Survey },
-  //     { path: "users", model: User }
-  //   ).exec((err, clients) => {
-  //     if (err) {
-  //       return res.json(err);
-  //     }
-  //     return res.json(clients);
-  //   });
-  // }
 
   create(req, res) {
     console.log("*** SERVER HIT CREATE CLIENT")
@@ -46,36 +35,10 @@ class ClientsController {
       return res.json(client)
     })
   }
-  // create(req, res) {
-  //   console.log("*** SERVER HIT CREATE CLIENT")
-  //   if (req.body.password != req.body.password_confirmation) {
-  //     return res.json({
-  //       errors: {
-  //         password: {
-  //           message: "Your passwords do not match"
-  //         }
-  //       }
-  //     })
-  //   }
-  //   Client.create(req.body, (err, client) => {
-  //     console.log("*** SERVER CREATING CLIENT")
-  //     if (err) {
-  //       console.log("*** SERVER CREATING ERROR", err);
-  //       return res.json(err);
-  //     }
-  //     let fullName = req.body.firstName.charAt(0).toUpperCase() + req.body.firstName.slice(1) + " " + req.body.lastName.charAt(0).toUpperCase() + req.body.lastName.slice(1);
-  //     req.session.client = {
-  //       _id: client._id,
-  //       name: fullName,
-  //       surveys: client.surveys
-  //     };
-  //     return res.json(client)
-  //   })
-  // }
 
-  authenticate(req, res, next) {
+  authenticate(req, res) {
     console.log("SERVER HIT AUTHENTICATE");
-    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }, function (err, client) {
+    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).populate('surveys').exec((err, client) => {
       if (err) {
         return res.send("CLIENT LOGIN ERROR: " + err);
       }
@@ -83,12 +46,14 @@ class ClientsController {
         console.log("_____CLIENT LOGGING IN_____", client);
         req.session.client = {
           _id: client._id,
-          name: client.firstName + " " + client.lastName,
-          surveys: client.surveys
+          n: client.firstName + " " + client.lastName,
+          a8o1: client.role,
+          b801: client.subscription,
+          s: client.surveys
         };
-        return res.json(req.session.client)
+        return res.json(req.session.client);
       }
-    });
+    })
   }
 
   // show(req, res) {

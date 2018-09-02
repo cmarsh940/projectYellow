@@ -29,7 +29,7 @@ class SurveysController {
   // }
 
   create(req, res) {
-    console.log("REQ", req)
+    console.log("______ SERVER HIT CREATE SURVEY ______");
     Survey.create(req.body, (err, survey) => {
       if (err) {
         return res.json(err);

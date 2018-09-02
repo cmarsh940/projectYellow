@@ -12,15 +12,16 @@ import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition
 })
 export class DashboardComponent {
 
-  currentUser: Client;
+  currentClient: Client = new Client;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  data = JSON.parse(sessionStorage.getItem('currentClient'));
   
   cards = [
-    { title: 'Card 1', cols: 2, rows: 1 },
-    { title: 'Card 2', cols: 2, rows: 1 },
-    { title: 'Card 3', cols: 2, rows: 1 },
-    { title: 'Card 4', cols: 2, rows: 1 }
+    { title: 'Activity', cols: 2, rows: 1 },
+    { title: 'Surveys', cols: 2, rows: 1 },
+    { title: 'Users', cols: 2, rows: 1 },
+    { title: 'Custom', cols: 2, rows: 1 }
   ];
 
   constructor(
@@ -30,7 +31,7 @@ export class DashboardComponent {
   ) { }
 
   ngOnInit() { 
-    // this.isLoggedIn();
+    console.log(this.data);
   }
 
   isLoggedIn() {
