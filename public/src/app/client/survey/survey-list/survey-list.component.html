@@ -7,17 +7,12 @@
       <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
     </ng-container>
 
-    <!-- Category Column -->
-    <ng-container matColumnDef="category">
-      <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.category.name}} </mat-cell>
-    </ng-container>
-
-    <!-- Category Column -->
+    <!-- Action Column -->
     <ng-container matColumnDef="action">
       <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
       <mat-cell *matCellDef="let element"> 
         <button mat-button [routerLink]="['/takeSurvey', element._id]">view</button> 
+        <button mat-button [routerLink]="['edit', element._id]">edit</button> 
       </mat-cell>
     </ng-container>
 

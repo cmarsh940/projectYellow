@@ -1,1 +1,30 @@
-{{survey$ | json}}
+<h4>Taking {{ survey?.name }}</h4>
+<!-- <form [formGroup]="formGroup">
+    <mat-horizontal-stepper formArrayName="questions" linear>
+        <div *ngFor="let i = idx">
+            <mat-step formGroupName="i" [stepControl]="questions.get([i])">
+                <mat-form-field>
+                    <input matInput type="text">
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperNext type="button">Next</button>
+                </div>
+            </mat-step>
+        </div>
+        
+    </mat-horizontal-stepper>
+</form> -->
+<form (submit)="updateSurvey()" #formData="ngForm" class="form">
+    <div *ngFor="let question of questions; let i = idx">
+        <mat-form-field>
+            <p>{{ question.question }}</p>
+            <input matInput type="text" [(ngModel)]="question.answer" name="answer" >
+        </mat-form-field>
+        <div class="text-center" id="button-group">
+            <button mat-stroked-button type='submit' [disabled]=!formData.valid>Submit</button>
+        </div>
+    </div>
+</form>
+<div>
+    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+</div>

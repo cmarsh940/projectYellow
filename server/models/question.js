@@ -10,9 +10,9 @@ const QuestionSchema = new mongoose.Schema(
             required: [true, "Question cannot be blank"],
             trim: true
         },
-        _answer: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Answer"
+        answer: {
+            type: String,
+            default: ''
         },
     },
     { timestamps: true }

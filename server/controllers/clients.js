@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
-const Survey = mongoose.model("Survey");
-const User = mongoose.model("User");
+
 
 
 class ClientsController {

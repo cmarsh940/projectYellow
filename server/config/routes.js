@@ -1,4 +1,3 @@
-const Answers = require('../controllers/answers');
 const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
 const path = require('path');
@@ -9,11 +8,6 @@ const Questions = require('../controllers/questions');
 
 
 module.exports = function (app) {
-    app.get('/api/answers', Answers.index);
-    app.post("/api/answers/:id", Answers.create);
-    app.delete('/api/answers/:id', Answers.delete);
-    app.get('/api/answers/:id', Answers.show);
-    app.put('/api/answers/:id', Answers.update);
 
     app.get('/api/clients', Clients.index);
     app.post('/api/clients', Clients.create);

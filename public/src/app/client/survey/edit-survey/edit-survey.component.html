@@ -1,3 +1,17 @@
-<p>
-  edit-survey works!
-</p>
+<mat-dialog-content class="container-fluid">
+  <h4 class="modal-title" id="updateParticipantModalLabel">Editing {{ survey?.name | titlecase }}</h4>
+  <form (submit)="updateClient()" #formData="ngForm" class="form">
+    <mat-form-field>
+      <input matInput name='name' [(ngModel)]="survey.name" #name='ngModel' required>
+    </mat-form-field>
+
+      <mat-form-field *ngFor="let item of survey.questions; let i = index">
+        <input matInput name='question[i]' [(ngModel)]="item.question" #question='ngModel' required>
+      </mat-form-field>
+
+    <mat-dialog-actions>
+      <button mat-raised-button type='button' (click)="cancel()">Cancel</button>
+      <button mat-raised-button type='submit' [disabled]=!formData.valid>Save</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

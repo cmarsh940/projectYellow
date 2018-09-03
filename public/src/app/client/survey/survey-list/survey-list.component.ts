@@ -16,7 +16,7 @@ export class SurveyListComponent implements OnInit {
   errorMessage;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'category', 'action'];
+  displayedColumns = ['name', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -29,7 +29,9 @@ export class SurveyListComponent implements OnInit {
   }
 
   getSurveys() {
-    let id = JSON.parse(sessionStorage.getItem('currentClient'));
+    let surveyOwner = JSON.parse(sessionStorage.getItem('currentClient'));
+    let id = surveyOwner._id
+    console.log("__ID__:", id);
     this._profileService.getparticipant(id)
       .subscribe(res => {
         this.dataSource = res.surveys;

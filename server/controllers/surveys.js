@@ -53,7 +53,7 @@ class SurveysController {
   }
 
   show(req, res) {
-    Survey.findById({ _id: req.params.id }).populate('connections.item').exec((err, survey) => {
+    Survey.findById({ _id: req.params.id }).lean().populate({ path: 'creator', select: 'firstName', model: Client }).exec((err, survey) => {
         if (err) {
           console.log("*** ERROR: FINDING SURVEY =", err);
           return res.json(err);
