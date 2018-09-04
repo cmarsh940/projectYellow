@@ -2,7 +2,6 @@
 /server/config/config.js
 # dependencies
 /node_modules
-information.txt
 
 # IDEs and editors
 /.idea
@@ -23,3 +22,7 @@ information.txt
 
 # System Files
 .DS_Store
+
+# OTHER
+access.log
+information.txt

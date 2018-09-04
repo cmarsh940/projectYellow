@@ -8,7 +8,7 @@ const Questions = require('../controllers/questions');
 
 
 module.exports = function (app) {
-    app.patch('/api/answers/:id', Surveys.updateAnswer);
+    app.put('/api/answers/:id', Surveys.updateAnswer);
 
     app.get('/api/clients', Clients.index);
     app.post('/api/clients', Clients.create);

@@ -75,16 +75,32 @@ class SurveysController {
   //   });
   // }
 
+  // updateAnswer(req, res) {
+  //   console.log("___ HIT SERVER UPDATE ANSWER ___");
+  //   console.log("___ BODY ___", req.body);
+  //   Survey.findOneAndUpdate(
+  //     { _id: req.body._id, "questions._id": req.body.questions._id },
+  //     { $push: { "questions.0.answer": req.body.questions.answer } }).exec((err, survey) => {
+  //     if (err) {
+  //       console.log("*** ERROR: UPDATING SURVEY=", err);
+  //       return res.json(err);
+  //     }
+  //     console.log("*** SURVEY UPDATED ***", survey);
+  //     return res.json(survey);
+  //   }
+  //   );
+  // }
   updateAnswer(req, res) {
     console.log("___ HIT SERVER UPDATE ANSWER ___");
     console.log("___ PARAMS ___", req.params);
+    console.log("___ ANSWER ___", req.body.questions[0].answer);
     Survey.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $push: {
-          questions: {
-            $each: [{ question: req.params.question, answer: req.params.answer }]
-          }
+          questions: [{
+            $each: { answer: req.body.questions[0].answer }
+          }]
         }
       }
     ).exec((err, survey) => {
