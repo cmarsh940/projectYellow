@@ -56,7 +56,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateSurvey(): void {
+  updateSurvey() {
     this.errors = [];
     this._surveyService.updateAsset(this.survey, res => {
       if (res.errors) {
@@ -65,6 +65,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
           this.errors.push(errors.message);
         }
       } else {
+        console.log("UPDATE RES", res);
         this._router.navigate(["/survey"]);
       }
     });

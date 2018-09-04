@@ -20,6 +20,8 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   errorMessage;
   errors = [];
 
+  private asset;
+
   constructor(
     private fb: FormBuilder,
     private _activatedRoute: ActivatedRoute,
@@ -60,20 +62,24 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
 
   updateSurvey(): void {
     this.errors = [];
-    this._surveyService.updateAsset(this.survey, res => {
-      if (res.errors) {
-        for (const key of Object.keys(res.errors)) {
-          const errors = res.errors[key];
-          this.errors.push(errors.message);
-        }
-      }
-      let r = window.confirm("Thank you for you response");
-      if (r == true) {
-        this._router.navigate(["/"]);
-      } else {
-        window.close();
-      }
-    });
+    this._surveyService.updateAnswer(this.survey._id, this.survey);
   }
+  // updateSurvey(): void {
+  //   this.errors = [];
+  //   this._surveyService.updateAnswer(this.survey, res => {
+  //     if (res.errors) {
+  //       for (const key of Object.keys(res.errors)) {
+  //         const errors = res.errors[key];
+  //         this.errors.push(errors.message);
+  //       }
+  //     }
+  //     let r = window.confirm("Thank you for you response");
+  //     if (r == true) {
+  //       this._router.navigate(["/"]);
+  //     } else {
+  //       window.close();
+  //     }
+  //   });
+  // }
 
 }

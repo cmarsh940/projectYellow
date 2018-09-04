@@ -64,9 +64,9 @@ export class DataService<Type> {
     console.log('Update ' + ns);
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
-    console.log('what is the updated item?', JSON.stringify(itemToUpdate));
     console.log("*** PUT ***");
-    return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate).pipe(
+    console.log(`${this.actionUrl}${ns}/${id}`)
+    return this.http.patch<Type>(this.actionUrl + ns + id, itemToUpdate, httpOptions).pipe(
       map(this.extractData),
       catchError(this.handleError('Update', []))
     );

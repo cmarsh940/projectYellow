@@ -14,7 +14,8 @@ class ClientsController {
   }
 
   create(req, res) {
-    console.log("*** SERVER HIT CREATE CLIENT")
+    console.log("*** SERVER HIT CREATE CLIENT");
+    console.log("______IP:______", req.connection.remoteAddress);
     if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {
@@ -55,14 +56,6 @@ class ClientsController {
     })
   }
 
-  // show(req, res) {
-  //   Client.findById({ _id: req.params.id }).populate('connections.item').exec((err, client) => {
-  //     if (err) {
-  //       return res.json(err);
-  //     }
-  //     return res.json(client);
-  //   });
-  // }
   show(req, res) {
     Client.findById({ _id: req.params.id }).lean()
       .populate('surveys')

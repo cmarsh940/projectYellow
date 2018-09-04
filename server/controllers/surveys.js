@@ -75,7 +75,31 @@ class SurveysController {
   //   });
   // }
 
+  updateAnswer(req, res) {
+    console.log("___ HIT SERVER UPDATE ANSWER ___");
+    console.log("___ PARAMS ___", req.params);
+    Survey.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: {
+          questions: {
+            $each: [{ question: req.params.question, answer: req.params.answer }]
+          }
+        }
+      }
+    ).exec((err, survey) => {
+      if (err) {
+        console.log("*** ERROR: UPDATING SURVEY=", err);
+        return res.json(err);
+      }
+      console.log("*** SURVEY UPDATED ***", survey);
+      return res.json(survey);
+    }
+    );
+  }
+
   update(req, res) {
+    console.log("___ HIT SERVER UPDATE ___");
     Survey.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -90,6 +114,7 @@ class SurveysController {
       }
     );
   }
+  
 
   delete(req, res) {
     Survey.findByIdAndRemove(req.params.id, (err, survey) => {
