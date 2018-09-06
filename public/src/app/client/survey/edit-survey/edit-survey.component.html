@@ -1,6 +1,6 @@
 <mat-dialog-content class="container-fluid">
   <h4 class="modal-title" id="updateParticipantModalLabel">Editing {{ survey?.name | titlecase }}</h4>
-  <form (submit)="updateSurvey(formData.value)" #formData="ngForm" class="form">
+  <form (submit)="updateSurvey(survey)" #formData="ngForm" class="form">
     <mat-form-field>
       <input matInput name='name' [(ngModel)]="survey.name" #name='ngModel' required>
     </mat-form-field>

@@ -3,3 +3,14 @@
     position: fixed!important;
     bottom: 0!important;
 }
+
+
+.mat-button {
+    min-width: 64px;
+    padding: 0 10px;
+}
+
+.mat-header-cell span {
+    width: 100%;
+    text-align: center;
+}

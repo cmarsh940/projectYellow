@@ -15,7 +15,7 @@ import { Survey } from '../../../global/models/survey';
 })
 export class EditSurveyComponent implements OnInit, OnDestroy {
   myForm: FormGroup;
-  survey: Survey;
+  survey = new Survey;
   questions: Question[];
   _routeSubscription: Subscription;
   errorMessage;
@@ -56,10 +56,10 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateSurvey(form: any) {
+  updateSurvey(survey) {
     this.errors = [];
-    console.log("___ THE FORM ___", form);
-    this._surveyService.updateAsset(this.survey._id, form).toPromise()
+    console.log("___ THE FORM ___", this.survey);
+    this._surveyService.updateAsset(this.survey._id, this.survey).toPromise()
       .then(() => {
         this.errorMessage = null;
         this._router.navigate(["/survey"])

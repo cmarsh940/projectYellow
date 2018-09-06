@@ -122,11 +122,12 @@ class SurveysController {
   // }
   update(req, res) {
     console.log("*** HIT SERVER UPDATE ***");
+    console.log("*** BODY ***", req.body);
 
     Survey.findByIdAndUpdate(
     { _id: req.params.id },
     {
-      $push: {
+      $set: {
         questions: {
           $each: [{ question: req.body.question }]
        }

@@ -4,6 +4,7 @@ import { Component, OnInit, ViewChild} from '@angular/core';
 import { Survey } from './../../../global/models/survey';
 import { Client } from '../../../global/models/client';
 import { MatPaginator } from '@angular/material';
+import { SurveyService } from '../survey.service';
 
 @Component({
   selector: 'survey-list',
@@ -21,7 +22,8 @@ export class SurveyListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    private _profileService: ProfileService
+    private _profileService: ProfileService,
+    private _surveyService: SurveyService
   ) { }
 
   ngOnInit() {
@@ -37,5 +39,14 @@ export class SurveyListComponent implements OnInit {
         this.dataSource = res.surveys;
         console.log("DATA:", this.dataSource);
       })
+  }
+
+  destroySurvey(id: string) {
+    this._surveyService.deleteAsset(id).subscribe(res => {
+      console.log("DESTROY SURVEY", res);
+      if(true) {
+        this.getSurveys();
+      }
+    });
   }
 }

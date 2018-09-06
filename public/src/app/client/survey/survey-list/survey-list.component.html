@@ -3,20 +3,25 @@
 
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> 
+        <span> Name </span>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
     </ng-container>
 
     <!-- Action Column -->
     <ng-container matColumnDef="action">
-      <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+      <mat-header-cell *matHeaderCellDef> 
+       <span> Action </span>
+      </mat-header-cell>
       <mat-cell *matCellDef="let element"> 
-        <button mat-button [routerLink]="['/takeSurvey', element._id]">view</button> 
-        <button mat-button [routerLink]="['edit', element._id]">edit</button> 
+        <button mat-button [routerLink]="['/takeSurvey', element._id]">v</button> 
+        <button mat-button [routerLink]="['edit', element._id]">e</button> 
+        <button mat-button (click)="destroySurvey(element._id)">x</button> 
       </mat-cell>
     </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
