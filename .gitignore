@@ -26,3 +26,4 @@
 # OTHER
 access.log
 information.txt
+/access.log
