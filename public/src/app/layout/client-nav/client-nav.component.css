@@ -10,3 +10,8 @@
 .spacer {
   flex: 1 1 auto;
 }
+
+.mat-drawer-content {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}

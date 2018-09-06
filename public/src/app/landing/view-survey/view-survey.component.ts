@@ -60,26 +60,18 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       )
   }
 
-  updateSurvey(): void {
+  updateSurvey(form: any) {
     this.errors = [];
-    this._surveyService.updateAnswer(this.survey._id, this.survey);
+    console.log("___ THE FORM ___", form);
+    this._surveyService.updateAnswer(this.survey._id, form).toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this._router.navigate(["/survey"])
+      })
+      .catch((error) => {
+          this.errorMessage = error;
+      }
+    )
   }
-  // updateSurvey(): void {
-  //   this.errors = [];
-  //   this._surveyService.updateAnswer(this.survey, res => {
-  //     if (res.errors) {
-  //       for (const key of Object.keys(res.errors)) {
-  //         const errors = res.errors[key];
-  //         this.errors.push(errors.message);
-  //       }
-  //     }
-  //     let r = window.confirm("Thank you for you response");
-  //     if (r == true) {
-  //       this._router.navigate(["/"]);
-  //     } else {
-  //       window.close();
-  //     }
-  //   });
-  // }
 
 }

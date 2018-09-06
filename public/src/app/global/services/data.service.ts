@@ -60,14 +60,14 @@ export class DataService<Type> {
     );
   }
 
-  public update(ns: string, id: string, itemToUpdate: Type): Observable<Type> {
+  public update(ns: string, id: string, itemToUpdate: Type): Observable<any> {
     console.log('Update ' + ns);
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
     console.log("*** PUT ***");
     console.log(`${this.actionUrl}${ns}/${id}`)
-    return this.http.patch<Type>(this.actionUrl + ns + id, itemToUpdate, httpOptions).pipe(
-      map(this.extractData),
+    return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate, httpOptions)
+    .pipe(
       catchError(this.handleError('Update', []))
     );
   }

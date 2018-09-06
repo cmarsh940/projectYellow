@@ -39,7 +39,7 @@ export class SurveyService {
     console.log("HIT SERVICE UPDATE ANSWER");
     console.log("*** ID ***", id);
     console.log("*** ITEM TO UPDATE ***", itemToUpdate);
-    let NAMESPACE = "answers/";
+    let NAMESPACE = "answer/surveys";
     return this.dataService.update(NAMESPACE, id, itemToUpdate);
   }
 

@@ -1,9 +1,11 @@
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard(COMING Soon!)</h1>
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile colspan="2" rowspan="1">
+  <div class="title">
+    <h2 class="mat-h2">Dashboard-(COMING SOON!)</h2>
+  </div>
+  <mat-grid-list cols="1" rowHeight="2:2">
 
-      <!-- ACTIVITY CARD -->
+    <!-- ACTIVITY CARD -->
+    <mat-grid-tile>
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
@@ -21,8 +23,10 @@
           <div>COMING SOON!</div>
         </mat-card-content>
       </mat-card>
+    </mat-grid-tile>
 
-      <!-- SURVEYS CARD -->
+    <!-- SURVEYS CARD -->
+    <mat-grid-tile>
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
@@ -40,9 +44,11 @@
           <div>{{data.s.length}}</div>
         </mat-card-content>
       </mat-card>
+    </mat-grid-tile> 
 
-      <!-- USERS CARD -->
-      <!-- <mat-card class="dashboard-card">
+    <!-- USERS CARD -->
+    <!-- <mat-grid-tile>
+      <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
             Users
@@ -58,9 +64,7 @@
         <mat-card-content class="dashboard-card-content">
           <div>COMING SOON!</div>
         </mat-card-content>
-      </mat-card> -->
-
-
-    </mat-grid-tile>
+      </mat-card>
+    </mat-grid-tile>-->
   </mat-grid-list>
 </div>

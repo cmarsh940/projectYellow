@@ -18,7 +18,9 @@ const SurveySchema = new mongoose.Schema({
         type: String,
         required: [true, "Qustion cannot be blank"]
       },
-      answer: [String]
+      answer: {
+        type: [String]
+      }
     }
   ],
   creator: {

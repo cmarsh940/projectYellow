@@ -9,11 +9,7 @@ const QuestionSchema = new mongoose.Schema(
             type: String,
             required: [true, "Question cannot be blank"],
             trim: true
-        },
-        answer: {
-            type: String,
-            default: ''
-        },
+        }
     },
     { timestamps: true }
 );

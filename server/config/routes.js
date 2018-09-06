@@ -8,7 +8,6 @@ const Questions = require('../controllers/questions');
 
 
 module.exports = function (app) {
-    app.put('/api/answers/:id', Surveys.updateAnswer);
 
     app.get('/api/clients', Clients.index);
     app.post('/api/clients', Clients.create);
@@ -36,6 +35,8 @@ module.exports = function (app) {
     app.delete('/api/surveys/:id', Surveys.delete);
     app.get('/api/surveys/:id', Surveys.show);
     app.put('/api/surveys/:id', Surveys.update);
+
+    app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
 
     app.get('/api/survey-categories', Categories.index);
     app.post('/api/survey-categories', Categories.create);

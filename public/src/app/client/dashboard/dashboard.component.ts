@@ -16,13 +16,7 @@ export class DashboardComponent {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   data = JSON.parse(sessionStorage.getItem('currentClient'));
-  
-  cards = [
-    { title: 'Activity', cols: 2, rows: 1 },
-    { title: 'Surveys', cols: 2, rows: 1 },
-    { title: 'Users', cols: 2, rows: 1 },
-    { title: 'Custom', cols: 2, rows: 1 }
-  ];
+
 
   constructor(
     private _authService: AuthService,

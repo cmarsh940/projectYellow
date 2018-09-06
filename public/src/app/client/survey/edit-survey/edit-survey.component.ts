@@ -14,7 +14,7 @@ import { Survey } from '../../../global/models/survey';
   styleUrls: ['./edit-survey.component.css']
 })
 export class EditSurveyComponent implements OnInit, OnDestroy {
-  formGroup: FormGroup;
+  myForm: FormGroup;
   survey: Survey;
   questions: Question[];
   _routeSubscription: Subscription;
@@ -56,19 +56,23 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateSurvey() {
+  updateSurvey(form: any) {
     this.errors = [];
-    this._surveyService.updateAsset(this.survey, res => {
-      if (res.errors) {
-        for (const key of Object.keys(res.errors)) {
-          const errors = res.errors[key];
-          this.errors.push(errors.message);
+    console.log("___ THE FORM ___", form);
+    this._surveyService.updateAsset(this.survey._id, form).toPromise()
+      .then(() => {
+        this.errorMessage = null;
+        this._router.navigate(["/survey"])
+      })
+      .catch((error) => {
+        if (error === 'Server error') {
+          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+        } else if (error === '404 - Not Found') {
+          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+        } else {
+          this.errorMessage = error;
         }
-      } else {
-        console.log("UPDATE RES", res);
-        this._router.navigate(["/survey"]);
-      }
-    });
+      });
   }
 
   cancel() {

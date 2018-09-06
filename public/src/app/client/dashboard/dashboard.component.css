@@ -1,3 +1,11 @@
+.title {
+  width: 100%;
+}
+
+.title h2 {
+  text-align: center;
+}
+
 .grid-container {
   margin: 20px;
 }

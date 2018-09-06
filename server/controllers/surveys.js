@@ -55,80 +55,88 @@ class SurveysController {
   show(req, res) {
     Survey.findById({ _id: req.params.id }).lean().populate({ path: 'creator', select: 'firstName', model: Client }).exec((err, survey) => {
         if (err) {
-          console.log("*** ERROR: FINDING SURVEY =", err);
+          console.log("*** ERROR: FINDING SURVEY ***", err);
           return res.json(err);
         }
         console.log("*** FOUND SURVEY ***", survey);
         return res.json(survey);
     });
   }
-  // show(req, res) {
-  //   Survey.findById({ _id: req.params.id }).lean()
-  //     .populate('creator')
-  //     .exec(function (err, doc) {
-  //       if (err) {
-  //         console.log("*** ERROR: FINDING SURVEY =", err);
-  //         return res.json(err);
-  //       }
-  //       console.log("*** FOUND SURVEY ***", doc);
-  //       return res.json(doc);
-  //   });
-  // }
 
-  // updateAnswer(req, res) {
+
+  // answerSurvey(req, res) {
   //   console.log("___ HIT SERVER UPDATE ANSWER ___");
   //   console.log("___ BODY ___", req.body);
-  //   Survey.findOneAndUpdate(
-  //     { _id: req.body._id, "questions._id": req.body.questions._id },
-  //     { $push: { "questions.0.answer": req.body.questions.answer } }).exec((err, survey) => {
+  //   Survey.findById(req.params.id, function (err, survey) {
   //     if (err) {
-  //       console.log("*** ERROR: UPDATING SURVEY=", err);
+  //       console.log("*** ERROR UPDATING SURVEY  ***", err);
   //       return res.json(err);
   //     }
-  //     console.log("*** SURVEY UPDATED ***", survey);
-  //     return res.json(survey);
-  //   }
-  //   );
+
+  //     survey.questions.set({ answer: req.body.answer.value });
+  //     survey.save(function (err, updatedSurvey) {
+  //       if (err) {
+  //         console.log("*** ERROR UPDATING SURVEY  ***", err);
+  //         return res.json(err);
+  //       }
+  //       console.log("*** UPDATED SURVEY ***", updatedSurvey);
+  //       return res.send(updatedSurvey);
+  //     });
+  //   });
   // }
-  updateAnswer(req, res) {
-    console.log("___ HIT SERVER UPDATE ANSWER ___");
-    console.log("___ PARAMS ___", req.params);
-    console.log("___ ANSWER ___", req.body.questions[0].answer);
+  answerSurvey(req, res) {
+    console.log("*** HIT SERVER UPDATE ANSWER ***");
+    console.log("*** PARAMS ***", req.params);
+    console.log("*** BODY ***", req.body);
     Survey.findByIdAndUpdate(
       { _id: req.params.id },
       {
         $push: {
-          questions: [{
-            $each: { answer: req.body.questions[0].answer }
-          }]
+          "questions.$[].answer.$[]": { $each: req.body.answer }
         }
-      }
-    ).exec((err, survey) => {
-      if (err) {
-        console.log("*** ERROR: UPDATING SURVEY=", err);
-        return res.json(err);
-      }
-      console.log("*** SURVEY UPDATED ***", survey);
-      return res.json(survey);
-    }
-    );
+      },
+      {
+        "new": true,
+      } )
+      .then(data => {
+        console.log("Updated survey", data)
+        res.json(data)
+      })
+      .catch(err => res.json(err))
   }
 
+  // update(req, res) {
+  //   console.log("*** HIT SERVER UPDATE ***");
+
+  //   Survey.findOneAndUpdate(
+  //     { "_id": req.params.id },
+  //     {
+  //       "$push": {
+  //         "questions.$[].": { "$each":  }
+  //       }
+  //     },
+  //     {
+  //       "new": true,
+  //     }
+  //   );
+  // }
   update(req, res) {
-    console.log("___ HIT SERVER UPDATE ___");
+    console.log("*** HIT SERVER UPDATE ***");
+
     Survey.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body },
-      { new: true },
-      (err, survey) => {
-        if (err) {
-          console.log("*** ERROR: UPDATING SURVEY=", err);
-          return res.json(err);
-        }
-        console.log("*** SURVEY UPDATED ***", survey);
-        return res.json(survey);
-      }
-    );
+    { _id: req.params.id },
+    {
+      $push: {
+        questions: {
+          $each: [{ question: req.body.question }]
+       }
+     }
+      })
+      .then(data => {
+        console.log("Updated survey", data)
+        res.json(data)
+      })
+      .catch(err => res.json(err))
   }
   
 

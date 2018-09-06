@@ -14,7 +14,7 @@
         
     </mat-horizontal-stepper>
 </form> -->
-<form (submit)="updateSurvey()" #formData="ngForm" class="form">
+<form (submit)="updateSurvey(formData.value)" #formData="ngForm" class="form">
     <div *ngFor="let question of questions; let i = idx">
         <mat-form-field>
             <p>{{ question.question }}</p>
