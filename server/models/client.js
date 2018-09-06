@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
+const unique = require('mongoose-unique-validator');
 
 const root = 'https://s3.amazonaws.com/mybucket';
 
@@ -132,18 +133,34 @@ const ClientSchema = new mongoose.Schema({
   }
 
 }, {
-    timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at'
-    }
+    timestamps: true
   });
 
-ClientSchema.pre('save', function (next) {
-  if (this.isNew) {
-    this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync());
+// Uniqueness
+ClientSchema.plugin(unique, { message: "Email'{VALUE}' already exists." });
+
+ClientSchema.methods = {
+  full_name: () => {
+    return `${this.firstName} ${this.lastName}`;
+  },
+  encrypt: function (next) {
+    let client = this;
+
+    bcrypt.hash(client.password, 10)
+      .then((hashPW) => {
+        client.password = hashPW;
+
+        next();
+      })
   }
-  next();
+}
+
+ClientSchema.pre('save', function (next) {
+  let client = this;
+
+  client.encrypt(next);
 });
+
 
 ClientSchema.methods.authenticate = function (password) {
   return bcrypt.compareSync(password, this.password);

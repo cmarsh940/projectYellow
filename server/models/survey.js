@@ -7,20 +7,26 @@ const SurveySchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: [true, "Survey name cannot be blank"]
+    required: [true, "Survey name cannot be blank"],
+    trim: true,
   },
   questions: [
     {
       questionType: {
-        type: String
+        type: String,
+        trim: true,
       },
       question: {
         type: String,
         required: [true, "Qustion cannot be blank"]
       },
-      answer: {
-        type: [String]
-      }
+      answers: [
+        {
+          answer: {
+            type: String
+          }
+        }
+      ]
     }
   ],
   creator: {

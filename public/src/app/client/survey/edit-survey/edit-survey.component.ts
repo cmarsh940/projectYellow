@@ -15,7 +15,8 @@ import { Survey } from '../../../global/models/survey';
 })
 export class EditSurveyComponent implements OnInit, OnDestroy {
   myForm: FormGroup;
-  survey = new Survey;
+  survey = new Survey();
+  newSurvey: Survey = new Survey();
   questions: Question[];
   _routeSubscription: Subscription;
   errorMessage;
@@ -56,24 +57,53 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateSurvey(survey) {
+  // updateSurvey(survey) {
+  //   this.errors = [];
+  //   console.log("___ THE FORM ___", this.survey);
+  //   this._surveyService.updateAsset(this.survey._id, this.survey).toPromise()
+  //     .then(() => {
+  //       this.errorMessage = null;
+  //       this._router.navigate(["/survey"])
+  //     })
+  //     .catch((error) => {
+  //       if (error === 'Server error') {
+  //         this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+  //       } else if (error === '404 - Not Found') {
+  //         this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+  //       } else {
+  //         this.errorMessage = error;
+  //       }
+  //     });
+  // }
+
+  updateSurvey(form: any) {
     this.errors = [];
-    console.log("___ THE FORM ___", this.survey);
-    this._surveyService.updateAsset(this.survey._id, this.survey).toPromise()
-      .then(() => {
-        this.errorMessage = null;
-        this._router.navigate(["/survey"])
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
+    return this._surveyService.updateAsset(this.survey._id, this.survey).subscribe(res => {
+      console.log("UPDATE RES",res);
+      this._router.navigate(["/survey"]);
+    });
+
   }
+
+  
+  // updateSurvey(survey) {
+  //   this.errors = [];
+  //   console.log("___ THE FORM ___", this.survey);
+  //   this._surveyService.updateAsset(this.survey._id, this.survey).toPromise()
+  //     .then(() => {
+  //       this.errorMessage = null;
+  //       this._router.navigate(["/survey"])
+  //     })
+  //     .catch((error) => {
+  //       if (error === 'Server error') {
+  //         this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+  //       } else if (error === '404 - Not Found') {
+  //         this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
+  //       } else {
+  //         this.errorMessage = error;
+  //       }
+  //     });
+  // }
 
   cancel() {
     this.location.back();

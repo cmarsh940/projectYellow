@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
   firstName = new FormControl('', Validators.required);
   lastName = new FormControl('', Validators.required);
   businessName = new FormControl('');
-  email = new FormControl('', Validators.required);
+  email = new FormControl('', [Validators.required, Validators.email]);
   password = new FormControl('', Validators.required);
   confirm_pass = new FormControl('', Validators.required);
   phone = new FormControl('');
@@ -57,6 +57,12 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  getErrorMessage() {
+    return this.email.hasError('required') ? 'You must enter a value' :
+      this.email.hasError('email') ? 'Not a valid email' :
+        '';
+  }
 
   addParticipant(form: any): Promise<any> {
     this.participant = {
