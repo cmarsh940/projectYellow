@@ -3,7 +3,7 @@ export class Question {
     type: any;
     qustion: string;
     options: any;
-    _client: any;
+    answer: any;
     createdAt: any;
     updatedAt: any;
 }

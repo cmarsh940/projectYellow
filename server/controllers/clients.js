@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
 
-
-
 class ClientsController {
   index(req, res) {
     Client.find({}).populate('connections.item').exec((err, clients) => {
@@ -40,7 +38,8 @@ class ClientsController {
     console.log("SERVER HIT AUTHENTICATE");
     Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).populate('surveys').exec((err, client) => {
       if (err) {
-        return res.send("CLIENT LOGIN ERROR: " + err);
+        console.log("____ AUTHENTICATE ERROR ____", err);
+        return res.json("____ AUTHENTICATE ERROR ____" + err);
       }
       if (client && client.authenticate(req.body.password)) {
         console.log("_____CLIENT LOGGING IN_____", client);
@@ -59,6 +58,7 @@ class ClientsController {
   show(req, res) {
     Client.findById({ _id: req.params.id }).lean()
       .populate('surveys')
+      .populate('category')
       .exec(function (err, doc) {
         if (err) {
           return res.json(err);

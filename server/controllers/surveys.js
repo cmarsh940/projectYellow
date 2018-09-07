@@ -30,19 +30,23 @@ class SurveysController {
 
   create(req, res) {
     console.log("______ SERVER HIT CREATE SURVEY ______");
+    console.log("______ req.body ______", req.body);
     Survey.create(req.body, (err, survey) => {
       if (err) {
+        console.log("___ CREATE SURVEY ERROR ___", err);
         return res.json(err);
       } else {
         Client.findByIdAndUpdate(req.body.creator, { $push: { surveys: survey._id } }, { new: true }, (err, client) => {
           if (err) {
+            console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
             return res.json(err);
           } else {
             Category.findByIdAndUpdate(req.body.category._id, { $push: { surveys: survey._id } }, { new: true }, (err, category) => {
               if (err) {
-                console.log(err);
+                console.log("___ CREATE SURVEY  CATEGORY ERROR ___", err);
                 return res.json(err);
               } else {
+                console.log("___ CREATE SURVEY ___", survey);
                 return res.json(survey);
               }
             })

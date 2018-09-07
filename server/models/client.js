@@ -33,6 +33,7 @@ const ClientSchema = new mongoose.Schema({
 
   businessName: {
     type: String,
+    trim:true
   },
 
   email: {
@@ -42,11 +43,12 @@ const ClientSchema = new mongoose.Schema({
     maxlength: [200, "Email cannot be greater then 200 characters"],
     trim: true,
     unique: true,
+    lowercase: true,
     validate: {
       validator: function (email) {
         return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
       },
-      message: "Please enter your email in the correct format."
+      message: "Please enter a valid email"
     }
   },
 
@@ -54,6 +56,8 @@ const ClientSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Phone number cannot be blank'],
     trim: true,
+    minlength: 10,
+    maxlength: 12,
   },
 
   address: {
@@ -64,6 +68,7 @@ const ClientSchema = new mongoose.Schema({
   city: {
     type: String,
     required: [true, 'City cannot be blank'],
+    trim: true
   },
 
   state: {
@@ -99,6 +104,7 @@ const ClientSchema = new mongoose.Schema({
   subscription: {
     type: String,
     enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
+    required: true,
     uppercase: true,
     trim: true,
     default: "FREE"
@@ -107,6 +113,7 @@ const ClientSchema = new mongoose.Schema({
   role: {
     type: String,
     enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
+    required: true,
     uppercase: true,
     trim: true,
     default: "CLIENT"
@@ -140,7 +147,7 @@ const ClientSchema = new mongoose.Schema({
 ClientSchema.plugin(unique, { message: "Email'{VALUE}' already exists." });
 
 ClientSchema.methods = {
-  full_name: () => {
+  fullName: () => {
     return `${this.firstName} ${this.lastName}`;
   },
   encrypt: function (next) {

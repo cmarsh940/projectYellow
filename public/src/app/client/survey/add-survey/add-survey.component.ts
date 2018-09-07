@@ -35,7 +35,7 @@ export class AddSurveyComponent implements OnInit {
   type = "";
   errors = [];
 
-  questionTypes: Type[] = [
+  questionTypes: any[] = [
     { value: "boolean", viewValue: "YES / NO" },
     { value: "mutiplechoice", viewValue: "Multiple Choice" },
     { value: "text", viewValue: "User Feedback" }
@@ -85,7 +85,7 @@ export class AddSurveyComponent implements OnInit {
   }
   initQuestion() {
     return this.fb.group({
-      type: "",
+      questionType: "",
       question: ["", Validators.required]
     });
   }
@@ -154,10 +154,9 @@ export class AddSurveyComponent implements OnInit {
     // and deep copies of changed form model values
     const saveSurvey: Survey = {
       _id: Number,
-      category: formModel.category as string,
+      category: formModel.category._id,
       name: formModel.name as string,
       questions: questionsDeepCopy,
-      answers: [""],
       user: "",
       creator: JSON.parse(sessionStorage.getItem('currentClient')),
       createdAt: Date.now(),

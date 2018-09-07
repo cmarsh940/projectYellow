@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
+import { MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material';
 
 
 @Component({
@@ -8,10 +11,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientComponent implements OnInit {
 
-    constructor() { }
+    verticalPosition: MatSnackBarVerticalPosition = 'top';
+    horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
+    constructor(
+        private _authService: AuthService,
+        private _router: Router,
+        public snackBar: MatSnackBar
+        ) { }
 
     ngOnInit() {
-    
+        this.isLoggedIn();
+    }
+
+    isLoggedIn() {
+        let verify = this._authService.verify();
+        console.log("VERIFY:", verify);
+        if (!verify) {
+            this.openSnackBar();
+            this._router.navigateByUrl('/login');
+        } else {
+            console.log("YOU ARE VERIFIED");
+        }
+    }
+
+    openSnackBar() {
+        const config = new MatSnackBarConfig();
+        config.verticalPosition = this.verticalPosition;
+        config.horizontalPosition = this.horizontalPosition;
+        config.duration = 2500;
+        config.panelClass = ['logout-snackbar']
+        this.snackBar.open("You are not logged in!", '', config);
     }
 
 }

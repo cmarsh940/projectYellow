@@ -26,16 +26,17 @@ export class DashboardComponent {
 
   ngOnInit() { 
     console.log(this.data);
+    this.isLoggedIn();
   }
 
   isLoggedIn() {
     let verify = this._authService.verify();
     console.log("VERIFY:", verify);
-    if(verify == false) {
+    if (!verify) {
       this.openSnackBar();
       this._router.navigateByUrl('/login');
     } else {
-      console.log("You are verified");
+      console.log("YOU ARE VERIFIED");
     }
   }
 

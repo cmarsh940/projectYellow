@@ -3,7 +3,6 @@ export class Survey {
     category: string;
     name: string;
     questions: any;
-    answers: any;
     user: any;
     creator: any;
     createdAt: any;
