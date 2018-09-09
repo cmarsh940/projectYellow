@@ -50,7 +50,6 @@ export class AddSurveyComponent implements OnInit {
     private _router: Router
   ) {
     this.createForm();
-    this.logNameChange();
   }
 
   ngOnInit() {
@@ -167,12 +166,5 @@ export class AddSurveyComponent implements OnInit {
 
   revert() {
     this.rebuildForm();
-  }
-
-  logNameChange() {
-    const nameControl = this.surveyForm.get("name");
-    nameControl.valueChanges.forEach((value: string) =>
-      this.nameChangeLog.push(value)
-    );
   }
 }

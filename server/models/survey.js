@@ -33,25 +33,6 @@ const SurveySchema = new mongoose.Schema({
       }
     ]
   },
-  // questions: [
-  //   {
-  //     questionType: {
-  //       type: String,
-  //       trim: true,
-  //     },
-  //     question: {
-  //       type: String,
-  //       required: [true, "Qustion cannot be blank"]
-  //     },
-  //     answers: [
-  //       {
-  //         answer: {
-  //           type: String
-  //         }
-  //       }
-  //     ]
-  //   }
-  // ],
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client"

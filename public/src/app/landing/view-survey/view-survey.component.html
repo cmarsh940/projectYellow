@@ -20,9 +20,9 @@
             <p>{{ question.question }}</p>
             <input matInput type="text" [(ngModel)]="question.answer" name="answer" >
         </mat-form-field>
-        <div class="text-center" id="button-group">
-            <button mat-stroked-button type='submit' [disabled]=!formData.valid>Submit</button>
-        </div>
+    </div>
+    <div class="text-center" id="button-group">
+        <button mat-stroked-button type='submit' [disabled]=!formData.valid>Submit</button>
     </div>
 </form>
 <div>

@@ -92,57 +92,55 @@ class SurveysController {
     console.log("*** HIT SERVER UPDATE ANSWER ***");
     console.log("*** PARAMS ***", req.params);
     console.log("*** BODY ***", req.body);
-    Survey.findByIdAndUpdate(
-      { _id: req.params.id },
-      {
-        $push: {
-          "questions.$[].answer.$[]": { $each: req.body.answer }
+
+    Survey.findByIdAndUpdate(req.params.id,
+      { $push: { "questions.$[].answers": { answer: req.body.answer } } },
+      { safe: true, upsert: true, new: true },
+      function (err, survey) {
+        if(err){
+          console.log("___ ANSWER SURVEY ERROR ___", err);
+          return res.json(err);
+        } else {
+          console.log("___ ANSWER SURVEY ___", survey);
+          return res.json(survey);
         }
-      },
-      {
-        "new": true,
-      } )
-      .then(data => {
-        console.log("Updated survey", data)
-        res.json(data)
       })
-      .catch(err => res.json(err))
+    }
+  
+
+  update(req, res) {
+    console.log("*** HIT SERVER UPDATE ***");
+
+    Survey.findByIdAndUpdate(req.params.id, req.body, (err, survey) => {
+      if (err) {
+        console.log("___ CREATE SURVEY ERROR ___", err);
+        return res.json(err);
+      } else {
+        console.log("___ CREATE SURVEY ___", survey);
+        return res.json(survey);
+      }
+    })
   }
 
   // update(req, res) {
   //   console.log("*** HIT SERVER UPDATE ***");
+  //   console.log("*** BODY ***", req.body);
 
-  //   Survey.findOneAndUpdate(
-  //     { "_id": req.params.id },
-  //     {
-  //       "$push": {
-  //         "questions.$[].": { "$each":  }
-  //       }
-  //     },
-  //     {
-  //       "new": true,
-  //     }
-  //   );
+  //   Survey.findByIdAndUpdate(
+  //   { _id: req.params.id },
+  //   {
+  //     $set: {
+  //       questions: {
+  //         $each: [{ question: req.body.question }]
+  //      }
+  //    }
+  //     })
+  //     .then(data => {
+  //       console.log("Updated survey", data)
+  //       res.json(data)
+  //     })
+  //     .catch(err => res.json(err))
   // }
-  update(req, res) {
-    console.log("*** HIT SERVER UPDATE ***");
-    console.log("*** BODY ***", req.body);
-
-    Survey.findByIdAndUpdate(
-    { _id: req.params.id },
-    {
-      $set: {
-        questions: {
-          $each: [{ question: req.body.question }]
-       }
-     }
-      })
-      .then(data => {
-        console.log("Updated survey", data)
-        res.json(data)
-      })
-      .catch(err => res.json(err))
-  }
   
 
   delete(req, res) {
