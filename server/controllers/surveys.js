@@ -5,7 +5,10 @@ const Client = mongoose.model('Client');
 
 class SurveysController {
   index(req, res) {
-    Survey.find({}).populate('connections.item').exec((err, surveys) => {
+    Survey.find({}).lean().populate(
+      { path: "category", select: 'name', model: Category }).populate(
+      { path: "creator", model: Client }
+  ).exec((err, surveys) => {
       if (err) {
         console.log("*** ERROR: FINDING SURVEYS=", err);
         return res.json(err);
@@ -14,19 +17,6 @@ class SurveysController {
       return res.json(surveys);
     });
   }
-  // index(req, res) {
-  //   Survey.find({}).populate(
-  //     { path: "category", select: 'name', model: Category },
-  //     { path: "owner", model: Client },
-  // ).exec((err, surveys) => {
-  //     if (err) {
-  //       console.log("*** ERROR: FINDING SURVEYS=", err);
-  //       return res.json(err);
-  //     }
-  //     console.log("*** FOUND SURVEYS ***", surveys);
-  //     return res.json(surveys);
-  //   });
-  // }
 
   create(req, res) {
     console.log("______ SERVER HIT CREATE SURVEY ______");

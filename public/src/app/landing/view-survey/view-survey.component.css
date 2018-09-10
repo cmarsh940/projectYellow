@@ -1,3 +1,11 @@
+#header {
+    width: 100%;
+}
+
+#header h5{
+    text-align: center;
+}
+
 form {
     margin: auto;
     padding: 1em;

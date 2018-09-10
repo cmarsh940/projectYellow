@@ -1,0 +1,29 @@
+<div id="header">
+  <h2 class="mat-title">Surveys</h2>
+</div>
+
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Owner Column -->
+  <ng-container matColumnDef="owner">
+    <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.creator.firstName + " " + element.creator.lastName }} </mat-cell>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.name }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <mat-header-cell *matHeaderCellDef>
+      <span> Action </span>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <button mat-button [routerLink]="['/takeSurvey', element._id]">v</button>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

@@ -66,7 +66,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.updateAnswer(this.survey._id, form).toPromise()
       .then(() => {
         this.errorMessage = null;
-        this._router.navigate(["/survey"])
+        this._router.navigate(["/list_of_surveys"])
       })
       .catch((error) => {
           this.errorMessage = error;

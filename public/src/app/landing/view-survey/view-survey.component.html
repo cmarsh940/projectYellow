@@ -1,21 +1,15 @@
-<h5>Taking {{ survey?.name | titlecase }}</h5>
-<!-- <form [formGroup]="formGroup">
-    <mat-horizontal-stepper formArrayName="questions" linear>
-        <div *ngFor="let i = idx">
-            <mat-step formGroupName="i" [stepControl]="questions.get([i])">
-                <mat-form-field>
-                    <input matInput type="text">
-                </mat-form-field>
-                <div>
-                    <button mat-button matStepperNext type="button">Next</button>
-                </div>
-            </mat-step>
-        </div>
-        
-    </mat-horizontal-stepper>
-</form> -->
+<div id="header">
+    <h5>Taking {{ survey?.name | titlecase }}</h5>
+</div>
 <form (submit)="updateSurvey(formData.value)" #formData="ngForm" class="form">
     <div *ngFor="let question of questions; let i = idx">
+        <div *ngIf="question.questionType === 'boolean'">
+            <p>{{ question.question }}</p>
+            <mat-radio-group [(ngModel)]="question.answer" name="answer">
+                <mat-radio-button [value]="true">Yes</mat-radio-button>
+                <mat-radio-button [value]="false">No</mat-radio-button>
+            </mat-radio-group>
+        </div>
         <mat-form-field>
             <p>{{ question.question }}</p>
             <input matInput type="text" [(ngModel)]="question.answer" name="answer" >
