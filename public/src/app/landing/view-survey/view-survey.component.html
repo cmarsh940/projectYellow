@@ -3,17 +3,39 @@
 </div>
 <form (submit)="updateSurvey(formData.value)" #formData="ngForm" class="form">
     <div *ngFor="let question of questions; let i = idx">
+        
+        <!-- BOOLEAN -->
         <div *ngIf="question.questionType === 'boolean'">
+            <!-- use a ng-container to group multiple root nodes -->
             <p>{{ question.question }}</p>
             <mat-radio-group [(ngModel)]="question.answer" name="answer">
                 <mat-radio-button [value]="true">Yes</mat-radio-button>
                 <mat-radio-button [value]="false">No</mat-radio-button>
             </mat-radio-group>
         </div>
-        <mat-form-field>
+
+        <!-- MULTI CHOICE -->
+        <div *ngIf="question.questionType === 'mutiplechoice'">
             <p>{{ question.question }}</p>
-            <input matInput type="text" [(ngModel)]="question.answer" name="answer" >
-        </mat-form-field>
+            <h6>MULTI CHOICE</h6>
+        </div>
+
+        <!-- SINGLE INPUT -->
+        <div *ngIf="question.questionType === 'text'">
+            <mat-form-field>
+                <p>{{ question.question }}</p>
+                <input matInput type="text" [(ngModel)]="question.answer" name="answer">
+            </mat-form-field>
+        </div>
+
+        <!-- PARAGRAPH -->
+        <div *ngIf="question.questionType === 'paragraph'">
+            <mat-form-field>
+                <p>{{ question.question }}</p>
+                <textarea matInput type="text" [(ngModel)]="question.answer" name="answer">
+            </mat-form-field>
+        </div>
+
     </div>
     <div class="text-center" id="button-group">
         <button mat-stroked-button type='submit' [disabled]=!formData.valid>Submit</button>
