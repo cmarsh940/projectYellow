@@ -62,8 +62,26 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
 
   updateSurvey(form: any) {
     this.errors = [];
-    console.log("___ THE FORM ___", form);
-    this._surveyService.updateAnswer(this.survey._id, form).toPromise()
+    
+    const formModel = form.value;
+
+    const questionsDeepCopy: Question[] = formModel.questions.map(
+      (question: Question) => Object.assign({}, question)
+    );
+
+    const savedSurvey: Survey = {
+      _id: this.survey._id,
+      category: this.survey.category,
+      name: this.survey.name,
+      questions: questionsDeepCopy,
+      user: this.survey.user,
+      creator: this.survey.creator,
+      createdAt: this.survey.createdAt,
+      updatedAt: this.survey.updatedAt
+    };
+
+    console.log("___ THE FORM ___", savedSurvey);
+    this._surveyService.updateAnswer(this.survey._id, savedSurvey).toPromise()
       .then(() => {
         this.errorMessage = null;
         this._router.navigate(["/list_of_surveys"])
@@ -73,5 +91,4 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       }
     )
   }
-
 }
