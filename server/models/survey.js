@@ -44,10 +44,9 @@ const SurveySchema = new mongoose.Schema({
     }
   ],
 }, {
-    timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at'
-    }
+    timestamps: true
   });
+
+SurveySchema.set('validateBeforeSave', false);
 
 const Survey = mongoose.model('Survey', SurveySchema); 
