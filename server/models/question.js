@@ -1,17 +1,23 @@
 const mongoose = require('mongoose');
 
-const QuestionSchema = new mongoose.Schema(
-    {
-        questionType: {
-            type: String
-        },
-        question: {
-            type: String,
-            required: [true, "Question cannot be blank"],
-            trim: true
-        }
+const QuestionSchema = new mongoose.Schema({
+    answers: {
+        type: [
+            {
+                answer: {
+                    type: String
+                }
+            }
+        ]
     },
-    { timestamps: true }
-);
+    question: {
+        type: String,
+    },
+    questionType: {
+        type: String
+    }
+}, {
+    timestamps: true
+});
 
 const Question = mongoose.model('Question', QuestionSchema);

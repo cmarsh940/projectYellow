@@ -99,7 +99,14 @@ const ClientSchema = new mongoose.Schema({
     get: v => `${root}${v}`
   },
 
-  used:[String],
+  role: {
+    type: String,
+    enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
+    required: true,
+    uppercase: true,
+    trim: true,
+    default: "CLIENT"
+  },
   
   subscription: {
     type: String,
@@ -108,15 +115,6 @@ const ClientSchema = new mongoose.Schema({
     uppercase: true,
     trim: true,
     default: "FREE"
-  },
-
-  role: {
-    type: String,
-    enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
-    required: true,
-    uppercase: true,
-    trim: true,
-    default: "CLIENT"
   },
 
   surveys: {
@@ -128,6 +126,8 @@ const ClientSchema = new mongoose.Schema({
     ],
     default: []
   },
+  
+  used: [String],
 
   users: {
     type: [

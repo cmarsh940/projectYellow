@@ -3,7 +3,7 @@ export class Question {
     type: any;
     qustion: string;
     options: any;
-    answer: any;
+    answers: any;
     createdAt: any;
     updatedAt: any;
 }
