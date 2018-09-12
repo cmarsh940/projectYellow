@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Survey = mongoose.model("Survey");
 const Category = mongoose.model('Category');
 const Client = mongoose.model('Client');
+const Question = mongoose.model('Question');
 
 class SurveysController {
   index(req, res) {
@@ -25,24 +26,41 @@ class SurveysController {
       if (err) {
         console.log("___ CREATE SURVEY ERROR ___", err);
         return res.json(err);
-      } else {
+      }
+      var array = req.body.questions;
+      for (let index = 0; index < array.length; index++) {
+        array[index]._survey = survey._id;
+      }
+      Question.create(array, function (err, questions) {
+        if (err) {
+          console.log("___ CREATE Question ERROR ___", err);
+          return res.json(err);
+        }
+        console.log("___ UPDATED QUESTIONS W? SURVEYID", questions);
         Client.findByIdAndUpdate(req.body.creator, { $push: { surveys: survey._id } }, { new: true }, (err, client) => {
           if (err) {
             console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
             return res.json(err);
-          } else {
-            Category.findByIdAndUpdate(req.body.category._id, { $push: { surveys: survey._id } }, { new: true }, (err, category) => {
+          } 
+          Category.findByIdAndUpdate(req.body.category._id, { $push: { surveys: survey._id } }, { new: true }, (err, category) => {
+            if (err) {
+              console.log("___ CREATE SURVEY  CATEGORY ERROR ___", err);
+              return res.json(err);
+            }
+            for (let index = 0; index < questions.length; index++) {
+              survey.questions.push(questions[index]._id);
+            }
+            survey.save((err, survey) => {
               if (err) {
-                console.log("___ CREATE SURVEY  CATEGORY ERROR ___", err);
+                console.log("___ CREATE SURVEY PUSH QUESTIONS ERROR ___", err);
                 return res.json(err);
-              } else {
-                console.log("___ CREATE SURVEY ___", survey);
-                return res.json(survey);
               }
+              console.log("___ CREATE SURVEY ___", survey);
+              return res.json(survey);
             })
-          }
+          })
         })
-      }
+      })
     })
   }
 

@@ -1,14 +1,10 @@
 const mongoose = require('mongoose');
 
 const QuestionSchema = new mongoose.Schema({
-    answers: {
-        type: [
-            {
-                answer: {
-                    type: String
-                }
-            }
-        ]
+    answers: [String],
+    _survey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Survey"
     },
     question: {
         type: String,
