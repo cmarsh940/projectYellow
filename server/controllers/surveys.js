@@ -6,47 +6,55 @@ const Question = mongoose.model('Question');
 
 class SurveysController {
   index(req, res) {
-    Survey.find({}).lean().populate(
-      { path: "category", select: 'name', model: Category }).populate(
-      { path: "creator", model: Client }
-  ).exec((err, surveys) => {
+    Survey.find({}).lean()
+    .populate({ path: "category", select: 'name', model: Category })
+    .populate({ path: "creator", model: Client })
+    .populate("questions")
+    .exec((err, surveys) => {
       if (err) {
         console.log("*** ERROR: FINDING SURVEYS=", err);
         return res.json(err);
       }
       console.log("*** FOUND SURVEYS ***", surveys);
       return res.json(surveys);
-    });
+    })
   }
 
   create(req, res) {
-    console.log("______ SERVER HIT CREATE SURVEY ______");
-    console.log("______ req.body ______", req.body);
     Survey.create(req.body, (err, survey) => {
       if (err) {
         console.log("___ CREATE SURVEY ERROR ___", err);
         return res.json(err);
       }
+
+      // PUSH SURVEY ID LINKING QUESTION TO THE SURVEY
       var array = req.body.questions;
       for (let index = 0; index < array.length; index++) {
         array[index]._survey = survey._id;
       }
+
+      // CREATE QUESTIONS
       Question.create(array, function (err, questions) {
         if (err) {
-          console.log("___ CREATE Question ERROR ___", err);
+          console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
           return res.json(err);
         }
-        console.log("___ UPDATED QUESTIONS W? SURVEYID", questions);
+
+        // PUSH SURVEY ID INTO CLIENTS SURVEY ARRAY
         Client.findByIdAndUpdate(req.body.creator, { $push: { surveys: survey._id } }, { new: true }, (err, client) => {
           if (err) {
             console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
             return res.json(err);
           } 
+
+          // PUSH SURVEY ID INTO SAME SURVEY CATEGORY ARRAY
           Category.findByIdAndUpdate(req.body.category._id, { $push: { surveys: survey._id } }, { new: true }, (err, category) => {
             if (err) {
-              console.log("___ CREATE SURVEY  CATEGORY ERROR ___", err);
+              console.log("___ CREATE SURVEY CATEGORY ERROR ___", err);
               return res.json(err);
             }
+
+            // PUSH QUESTIONS INTO SURVEY
             for (let index = 0; index < questions.length; index++) {
               survey.questions.push(questions[index]._id);
             }
@@ -55,7 +63,7 @@ class SurveysController {
                 console.log("___ CREATE SURVEY PUSH QUESTIONS ERROR ___", err);
                 return res.json(err);
               }
-              console.log("___ CREATE SURVEY ___", survey);
+              console.log("___ CREATED SURVEY ___", survey);
               return res.json(survey);
             })
           })
@@ -65,7 +73,10 @@ class SurveysController {
   }
 
   show(req, res) {
-    Survey.findById({ _id: req.params.id }).lean().populate({ path: 'creator', select: 'firstName', model: Client }).exec((err, survey) => {
+    Survey.findById({ _id: req.params.id }).lean()
+      .populate({ path: 'creator', select: 'firstName', model: Client })
+      .populate("questions")
+      .exec((err, survey) => {
         if (err) {
           console.log("*** ERROR: FINDING SURVEY ***", err);
           return res.json(err);

@@ -21,7 +21,7 @@
   </mat-form-field>
 
   <div formArrayName="questions">
-    <div *ngFor="let question of surveyForm.controls['questions']['controls']; let i=index" formGroupName="{{i}}">
+    <div *ngFor="let question of surveyForm.controls['questions']['controls']; let i = index" [formGroupName]="i">
       <!-- The repeated address template -->
       <mat-card>
         <mat-card-header>

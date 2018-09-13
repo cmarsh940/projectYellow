@@ -16,8 +16,9 @@
     </mat-error>
   </mat-form-field>
 
-  <div formArrayName="questions">
-    <div *ngFor="let question of surveyForm.controls['questions']['controls']; let i=index" formGroupName="{{i}}">
+  <div formArrayName="questions" *ngFor="let question of questions.controls; let i=index">
+  
+    <div [formGroupName]="i">
       <!-- The repeated address template -->
       <mat-card>
         <mat-card-header>
@@ -49,3 +50,5 @@
 <div>
   <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
 </div>
+
+{{ surveyForm.value | json }}

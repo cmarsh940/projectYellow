@@ -54,13 +54,26 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._routeSubscription.unsubscribe();
   }
+  
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(res => {
         this.survey = res;
+        if (this.surveyForm) {
+          this.surveyForm.reset();
+        }
         this.surveyForm.patchValue(this.survey);
+        this.surveyForm.setControl('questions', this.fb.array(this.survey.questions || []));
+        console.log("Survey form values", this.surveyForm.value);
+        console.log("Survey", this.survey);
       })
+  }
+
+  setupQuestions() {
+    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
+    console.log("questionsControl",questionsControl);
+      questionsControl.push(this.questions());
   }
 
   loadCategories(): Promise<any> {
@@ -90,7 +103,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-  questions() {
+  questions(): FormGroup {
     return this.fb.group({
       questionType: "",
       question: ["", Validators.required]

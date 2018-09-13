@@ -1,6 +1,7 @@
 export class Question {
     _id: any;
-    type: any;
+    _survey: any;
+    questionType: any;
     qustion: string;
     options: any;
     answers: any;
