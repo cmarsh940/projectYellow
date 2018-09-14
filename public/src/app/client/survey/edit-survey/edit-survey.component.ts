@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { SurveyService } from '../survey.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 
 import { Subscription } from 'rxjs';
@@ -9,25 +9,44 @@ import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { SurveyCategory } from '../../../global/models/survey-category';
+import { ErrorStateMatcher } from '@angular/material';
 
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
+
+export interface questionType {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-edit-survey',
   templateUrl: './edit-survey.component.html',
   styleUrls: ['./edit-survey.component.css']
 })
+
+
 export class EditSurveyComponent implements OnInit, OnDestroy {
   selectedValue: string;
   surveyForm: FormGroup;
   surveyId: string = "";
   nameChangeLog: string[] = [];
   categories: SurveyCategory[];
+  type = "";
   errors = [];
   _routeSubscription: Subscription;
 
   questionTypes: any[] = [
     { value: "boolean", viewValue: "YES / NO" },
+    { value: "boolean", viewValue: "True / False" },
     { value: "mutiplechoice", viewValue: "Multiple Choice" },
-    { value: "text", viewValue: "User Feedback" }
+    { value: "text", viewValue: "Single Answer" },
+    { value: "paragraph", viewValue: "User Feedback" }
   ];
 
   @Input() survey: Survey;
@@ -66,7 +85,6 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
         this.surveyForm.patchValue(this.survey);
         this.surveyForm.setControl('questions', this.fb.array(this.survey.questions || []));
         console.log("Survey form values", this.surveyForm.value);
-        console.log("Survey", this.survey);
       })
   }
 
@@ -122,7 +140,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   }
 
   get question(): FormArray {
-    return this.surveyForm.get("question") as FormArray;
+    return this.surveyForm.get("questions") as FormArray;
   }
 
   setQuestions(questions: Question[]) {
