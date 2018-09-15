@@ -9,6 +9,7 @@ import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { GenericValidator } from '../../../global/generic-validator';
 import { Survey } from '../../../global/models/survey';
+import { Question } from '../../../global/models/question';
 
 
 @Component({
@@ -104,6 +105,11 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
     this.questions.push(this.buildQuestion());
   }
 
+  removeQuestion(i) {
+    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
+    questionsControl.removeAt(i);
+  }
+
   buildQuestion(): FormGroup {
     return this.fb.group({
       questionType: '',
@@ -127,9 +133,9 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
       this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
   }
 
-  // ngOnChanges() {
-  //   this.rebuildForm();
-  // }
+  ngOnChanges() {
+    this.rebuildForm();
+  }
 
   ngOnDestroy() {
     this._routeSubscription.unsubscribe();
@@ -170,13 +176,13 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  // rebuildForm() {
-  //   this.surveyForm.reset({
-  //     name: this.survey.name,
-  //     category: this.survey.category,
-  //   });
-  //   this.setQuestions(this.survey.questions);
-  // }
+  rebuildForm() {
+    this.surveyForm.reset({
+      name: this.survey.name,
+      category: this.survey.category,
+    });
+    this.setQuestions(this.survey.questions);
+  }
 
 
   setQuestions(questions: Question[]) {
@@ -186,7 +192,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 
-  saveSurvey(): void {
+  submitForm(): void {
       this.errors = [];
       this.survey = this.prepareSaveSurvey();
       this._surveyService.updateAsset(this.survey._id, this.survey).subscribe(
@@ -229,14 +235,4 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
       return saveSurvey;
     }
 
-}
-export class Question {
-  _id: any;
-  _survey: any;
-  questionType: string;
-  qustion: string;
-  options: any;
-  answers: any;
-  createdAt: any;
-  updatedAt: any;
 }
