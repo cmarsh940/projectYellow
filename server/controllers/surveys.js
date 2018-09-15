@@ -127,40 +127,69 @@ class SurveysController {
     }
   
 
+  // update(req, res) {
+  //   console.log("*** HIT SERVER UPDATE ***");
+
+  //   Survey.findById(req.params.id, req.body, (err, survey) => {
+  //     if (err) {
+  //       console.log("___ CREATE SURVEY ERROR ___", err);
+  //       return res.json(err);
+  //     } 
+  //     var array = req.body.questions;
+
+  //     Question.findByIdAndUpdate(array, function (err, questions) {
+  //       if (err) {
+  //         console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
+  //         return res.json(err);
+  //       }
+  //       console.log("___ CREATE SURVEY ___", survey);
+  //       return res.json(survey);
+  //     })
+  //   })
+  // }
+
   update(req, res) {
     console.log("*** HIT SERVER UPDATE ***");
+    console.log("*** BODY ***", req.body);
 
-    Survey.findByIdAndUpdate(req.params.id, req.body, (err, survey) => {
+    Survey.findById(req.params.id, (err, survey) => {
       if (err) {
-        console.log("___ CREATE SURVEY ERROR ___", err);
+        console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);
       } else {
-        console.log("___ CREATE SURVEY ___", survey);
-        return res.json(survey);
+        var arr = req.body.questions;
+        console.log("___ ARRAY OF QUESTIONS TO UPDATE ___", arr);
+
+        for (let i = 0; i < arr.length; i++) {
+          Question.findById(arr[i]._id, (err, question) => {
+            if (err) {
+              console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
+              return res.json(err);
+            }
+            question.question = arr[i].question;
+            question.questionType = arr[i].questionType;
+            question.save((err, question) => {
+              if (err) {
+                console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+                return res.json(err);
+              }
+              console.log(`___ UPDATED QUESTION[${i}] ___`, question);
+            });
+          })
+        }
+        survey.name = req.body.name;
+        survey.category = req.body.category;
+        survey.save((err, updatedSurvey) => {
+          if (err) {
+            console.log("___  SURVEY ERROR ___", err);
+            return res.json(err);
+          }
+          console.log("___  UPDATED SURVEY ___", updatedSurvey);
+          return res.json(updatedSurvey);
+        })
       }
     })
   }
-
-  // update(req, res) {
-  //   console.log("*** HIT SERVER UPDATE ***");
-  //   console.log("*** BODY ***", req.body);
-
-  //   Survey.findByIdAndUpdate(
-  //   { _id: req.params.id },
-  //   {
-  //     $set: {
-  //       questions: {
-  //         $each: [{ question: req.body.question }]
-  //      }
-  //    }
-  //     })
-  //     .then(data => {
-  //       console.log("Updated survey", data)
-  //       res.json(data)
-  //     })
-  //     .catch(err => res.json(err))
-  // }
-  
 
   delete(req, res) {
     Survey.findByIdAndRemove(req.params.id, (err, survey) => {
