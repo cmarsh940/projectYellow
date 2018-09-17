@@ -1,19 +1,20 @@
-const express = require('express');
-const session = require('express-session');
 const bodyParser = require('body-parser');
-const http = require('http');
-const morgan = require('morgan');
 const busboy = require("connect-busboy");
 const busboyBodyParser = require("busboy-body-parser");
 const cors = require("cors");
+const express = require('express');
+const fs = require('fs');
+const helmet = require('helmet');
+const http = require('http');
+const morgan = require('morgan');
 const path = require("path");
 const port = 8000;
-const fs = require('fs')
+const session = require('express-session');
 
 const app = express();
 
 
-
+app.use(helmet());
 app.use(cors());
 app.use(express.static(path.join(__dirname + '/public/dist')));
 app.use(busboy());

@@ -8,6 +8,7 @@ mongoose.connect('mongodb://localhost:27017/MESurveys', { useNewUrlParser: true 
     }).catch((e) => { 
         console.log("error is: " + e); 
     });
+mongoose.set('useCreateIndex', true);
 
 mongoose.Promise = global.Promise;
 

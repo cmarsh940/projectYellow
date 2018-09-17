@@ -31,12 +31,9 @@ export class DashboardComponent {
 
   isLoggedIn() {
     let verify = this._authService.verify();
-    console.log("VERIFY:", verify);
     if (!verify) {
       this.openSnackBar();
       this._router.navigateByUrl('/login');
-    } else {
-      console.log("YOU ARE VERIFIED");
     }
   }
 

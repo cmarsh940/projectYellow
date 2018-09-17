@@ -159,6 +159,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.updateAnswer(this.survey._id, this.survey).subscribe(
       result => {
         console.log("___RESULTS___:", result);
+        alert("Thank you for taking our survey!");
         this._router.navigate(["/list_of_surveys"]);
       },
       error => {

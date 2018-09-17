@@ -40,21 +40,21 @@ export class DataService<Type> {
       );
   }
 
-  public getSingle(ns: string, id: string): Observable<Type> {
+  public getSingle(ns: string, id: string): Observable<any> {
     console.log('GetSingle ' + ns);
     console.log("*** GET ***");
-    return this.http.get<Type>(this.actionUrl + ns + '/' + id + this.resolveSuffix).pipe(
+    return this.http.get<any>(this.actionUrl + ns + '/' + id + this.resolveSuffix).pipe(
       map(this.extractData),
       catchError(this.handleError('getSingle', []))
     );
   }
 
-  public add(ns: string, asset: Type): Observable<Type> {
+  public add(ns: string, asset: any): Observable<any> {
     console.log('Entered DataService add');
     console.log('Add ' + ns);
     console.log('asset', asset);
     console.log("*** POST ***");
-    return this.http.post<Type>(this.actionUrl + ns, asset).pipe(
+    return this.http.post<any>(this.actionUrl + ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('Add', []))
     );

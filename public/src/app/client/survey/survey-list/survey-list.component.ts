@@ -1,10 +1,13 @@
+import { Location } from '@angular/common';
 import { ProfileService } from './../../profile/profile.service';
 import { Component, OnInit, ViewChild} from '@angular/core';
 
 import { Survey } from './../../../global/models/survey';
 import { Client } from '../../../global/models/client';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator, MatSort } from '@angular/material';
 import { SurveyService } from '../survey.service';
+import { merge } from 'rxjs';
+import { startWith, switchMap, map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'survey-list',
@@ -15,9 +18,12 @@ export class SurveyListComponent implements OnInit {
   dataSource: Survey[];
   currentClient: Client;
   errorMessage;
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'action'];
+  displayedColumns = ['created', 'name', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -28,6 +34,7 @@ export class SurveyListComponent implements OnInit {
 
   ngOnInit() {
     this.getSurveys();
+
   }
 
   getSurveys() {
@@ -46,6 +53,7 @@ export class SurveyListComponent implements OnInit {
       console.log("DESTROY SURVEY", res);
       if(true) {
         this.getSurveys();
+        location.reload();
       }
     });
   }

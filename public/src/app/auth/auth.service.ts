@@ -38,11 +38,11 @@ export class AuthService {
     );
   }
   
-  addParticipant(asset: Client): Observable<Client> {
+  addParticipant(asset: any): Observable<any> {
     console.log('Entered AuthService Create');
     console.log('newClient', asset);
     console.log("*** POST ***");
-    return this._httpClient.post<Client>(this.actionUrl + this.ns, asset).pipe(
+    return this._httpClient.post<any>(this.actionUrl + this.ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('createClient', []))
     );
@@ -68,17 +68,13 @@ export class AuthService {
 
   verify() {
     let data = sessionStorage.getItem('currentClient');
-    console.log("VERIFY DATA", data);
-    if (data == undefined) {
-      return false;
-    } else if(data == null) {
-      return false;
-    } else if(data == '') {
+    if (data == undefined || data == null || data == '' ) {
       return false;
     } else {
     return true;
     }
   }
+  
   private extractData(res: Response): any {
     console.log("*** extractData: ***", res);
     if (!sessionStorage.getItem('currentClient')) {

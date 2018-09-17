@@ -49,7 +49,7 @@ module.exports = function (app) {
     app.delete('/api/users/:id', Users.delete);
     app.get('/api/users/:id', Users.show);
     app.put('/api/users/:id', Users.update);
-
+    
     app.all('*', (req, res, next) => {
         res.sendFile(path.resolve('./public/dist/index.html'));
     })

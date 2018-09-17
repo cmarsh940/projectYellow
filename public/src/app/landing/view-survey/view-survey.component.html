@@ -3,69 +3,76 @@
 </div>
 
 <form [formGroup]="surveyForm" (ngSubmit)="submitForm()" class="form">
-
-    <div formArrayName="questions">
-        <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i">
-            <!-- The repeated question template -->
-            <mat-card>
-                <mat-card-header>
-                    <span>#{{i + 1}}</span>
-                </mat-card-header>
-                <mat-card-content>
-                    <div class="card-question">
-                        <b>
-                            <input matInput readonly="true" formControlName="question" />
-                        </b>
-                    </div>
-                    <!-- BOOLEAN -->
-                    <div class="card-answer">
-                        <div *ngIf="survey.questions[i].questionType === 'boolean'">
-                            <mat-radio-group formControlName="answers">
-                                <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                <mat-radio-button [value]="false">No</mat-radio-button>
-                            </mat-radio-group>
+    <mat-horizontal-stepper formArrayName="questions" linear>
+        <div *ngFor="let question of questions.controls; let i = index">
+            <mat-step [formGroupName]="i" [stepControl]="questions.get([i])">
+                <mat-card>
+                    <mat-card-header>
+                        <span>#{{i + 1}}</span>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="card-question">
+                            <b>
+                                <input matInput readonly="true" formControlName="question" />
+                            </b>
                         </div>
-                        <!-- YES NO -->
-                        <div *ngIf="survey.questions[i].questionType === 'yesno'">
-                            <mat-radio-group formControlName="answers">
-                                <mat-radio-button [value]="true">Yes</mat-radio-button>
-                                <mat-radio-button [value]="false">No</mat-radio-button>
-                            </mat-radio-group>
+                        <!-- BOOLEAN -->
+                        <div class="card-answer">
+                            <div *ngIf="survey?.questions[i]?.questionType === 'boolean'">
+                                <mat-radio-group formControlName="answers" required>
+                                    <mat-radio-button [value]="true">True</mat-radio-button>
+                                    <mat-radio-button [value]="false">False</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <!-- YES NO -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'yesno'">
+                                <mat-radio-group formControlName="answers" required>
+                                    <mat-radio-button [value]="true">Yes</mat-radio-button>
+                                    <mat-radio-button [value]="false">No</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            <!-- TEXT -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'text'">
+                                <mat-form-field>
+                                    <mat-label>Answer:</mat-label>
+                                    <input matInput formControlName="answers" required />
+                                </mat-form-field>
+                            </div>
+
+                            <!-- MULTI CHOICE -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'mutiplechoice'">
+                                <mat-form-field>
+                                    <mat-label>Answer:</mat-label>
+                                    <input matInput formControlName="answers" required />
+                                </mat-form-field>
+                            </div>
+
+                            <!-- PARAGRAPH -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'paragraph'">
+                                <mat-form-field>
+                                    <mat-label>Answer:</mat-label>
+                                    <textarea matInput formControlName="answers" required></textarea>
+                                </mat-form-field>
+                            </div>
                         </div>
 
-                        <!-- TEXT -->
-                        <div *ngIf="survey.questions[i].questionType === 'text'">
-                            <mat-form-field>
-                                <mat-label>Answer:</mat-label>
-                                <input matInput formControlName="answers" />
-                            </mat-form-field>
+                        <div *ngIf="i === 0" class="button-group">
+                            <button mat-button matStepperNext type="button">Next</button>
                         </div>
-
-                        <!-- MULTI CHOICE -->
-                        <div *ngIf="survey.questions[i].questionType === 'mutiplechoice'">
-                            <mat-form-field>
-                                <mat-label>Answer:</mat-label>
-                                <input matInput formControlName="answers" />
-                            </mat-form-field>
+                        <div *ngIf="i >= 1 && i < survey?.questions?.length - 1" class="button-group">
+                            <button mat-button matStepperPrevious type="button">Back</button>
+                            <button mat-button matStepperNext type="button">Next</button>
                         </div>
-
-                        <!-- PARAGRAPH -->
-                        <div *ngIf="survey.questions[i].questionType === 'paragraph'">
-                            <mat-form-field>
-                                <mat-label>Answer:</mat-label>
-                                <textarea matInput formControlName="answers"></textarea>
-                            </mat-form-field>
+                        <div *ngIf="i === survey?.questions?.length - 1" class="button-group">
+                            <button mat-button matStepperPrevious type="button">Back</button>
+                            <button mat-stroked-button type="submit" [disabled]=!surveyForm.valid>Submit</button>
                         </div>
-
-                    </div>
-                </mat-card-content>
-            </mat-card>
+                    </mat-card-content>
+                </mat-card>
+            </mat-step>
         </div>
-        <!-- Submit Button -->
-        <div id="button-group">
-            <button mat-stroked-button type="submit" [disabled]=!surveyForm.valid>Submit</button>
-        </div>
-    </div>
+    </mat-horizontal-stepper>
 </form>
 <div>
     <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>

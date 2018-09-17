@@ -13,7 +13,6 @@ class ClientsController {
 
   create(req, res) {
     console.log("*** SERVER HIT CREATE CLIENT");
-    console.log("______IP:______", req.connection.remoteAddress);
     if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {
