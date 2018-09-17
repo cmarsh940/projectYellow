@@ -6,7 +6,7 @@
 
     <div formArrayName="questions">
         <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i">
-            <!-- The repeated address template -->
+            <!-- The repeated question template -->
             <mat-card>
                 <mat-card-header>
                     <span>#{{i + 1}}</span>
@@ -17,10 +17,47 @@
                             <input matInput readonly="true" formControlName="question" />
                         </b>
                     </div>
-                    <mat-form-field>
-                        <mat-label>Answer:</mat-label>
-                        <input matInput formControlName="answers" />
-                    </mat-form-field>
+                    <!-- BOOLEAN -->
+                    <div class="card-answer">
+                        <div *ngIf="survey.questions[i].questionType === 'boolean'">
+                            <mat-radio-group formControlName="answers">
+                                <mat-radio-button [value]="true">Yes</mat-radio-button>
+                                <mat-radio-button [value]="false">No</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <!-- YES NO -->
+                        <div *ngIf="survey.questions[i].questionType === 'yesno'">
+                            <mat-radio-group formControlName="answers">
+                                <mat-radio-button [value]="true">Yes</mat-radio-button>
+                                <mat-radio-button [value]="false">No</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <!-- TEXT -->
+                        <div *ngIf="survey.questions[i].questionType === 'text'">
+                            <mat-form-field>
+                                <mat-label>Answer:</mat-label>
+                                <input matInput formControlName="answers" />
+                            </mat-form-field>
+                        </div>
+
+                        <!-- MULTI CHOICE -->
+                        <div *ngIf="survey.questions[i].questionType === 'mutiplechoice'">
+                            <mat-form-field>
+                                <mat-label>Answer:</mat-label>
+                                <input matInput formControlName="answers" />
+                            </mat-form-field>
+                        </div>
+
+                        <!-- PARAGRAPH -->
+                        <div *ngIf="survey.questions[i].questionType === 'paragraph'">
+                            <mat-form-field>
+                                <mat-label>Answer:</mat-label>
+                                <textarea matInput formControlName="answers"></textarea>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
                 </mat-card-content>
             </mat-card>
         </div>

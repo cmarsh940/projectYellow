@@ -23,8 +23,15 @@ form {
     width: 100%;
     text-align: center;
     text-decoration: black;
-    font-size: large;
-    
+    font-size: large;   
+}
+.card-answer {
+    width: 100%;
+    text-align: center;
+}
+
+.mat-radio-button {
+    margin: 2em;
 }
 
 #button-group {
