@@ -88,65 +88,54 @@ class SurveysController {
 
 
   // answerSurvey(req, res) {
-  //   console.log("___ HIT SERVER UPDATE ANSWER ___");
-  //   console.log("___ BODY ___", req.body);
-  //   Survey.findById(req.params.id, function (err, survey) {
-  //     if (err) {
-  //       console.log("*** ERROR UPDATING SURVEY  ***", err);
-  //       return res.json(err);
-  //     }
+  //   console.log("*** HIT SERVER UPDATE ANSWER ***");
+  //   console.log("*** PARAMS ***", req.params);
+  //   console.log("*** BODY ***", req.body);
 
-  //     survey.questions.set({ answer: req.body.answer.value });
-  //     survey.save(function (err, updatedSurvey) {
-  //       if (err) {
-  //         console.log("*** ERROR UPDATING SURVEY  ***", err);
+  //   Survey.findByIdAndUpdate(req.params.id,
+  //     { $push: { "questions.$[].answers": { answer: req.body.answer } } },
+  //     { safe: true, upsert: true, new: true },
+  //     function (err, survey) {
+  //       if(err){
+  //         console.log("___ ANSWER SURVEY ERROR ___", err);
   //         return res.json(err);
+  //       } else {
+  //         console.log("___ ANSWER SURVEY ___", survey);
+  //         return res.json(survey);
   //       }
-  //       console.log("*** UPDATED SURVEY ***", updatedSurvey);
-  //       return res.send(updatedSurvey);
-  //     });
-  //   });
-  // }
+  //     })
+  //   }
   answerSurvey(req, res) {
     console.log("*** HIT SERVER UPDATE ANSWER ***");
     console.log("*** PARAMS ***", req.params);
     console.log("*** BODY ***", req.body);
 
-    Survey.findByIdAndUpdate(req.params.id,
-      { $push: { "questions.$[].answers": { answer: req.body.answer } } },
-      { safe: true, upsert: true, new: true },
-      function (err, survey) {
-        if(err){
-          console.log("___ ANSWER SURVEY ERROR ___", err);
-          return res.json(err);
-        } else {
-          console.log("___ ANSWER SURVEY ___", survey);
-          return res.json(survey);
+    Survey.findById(req.params.id, (err, survey) => {
+      if (err) {
+        console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
+        return res.json(err);
+      } else {
+        var arr = req.body.questions;
+        for (let i = 0; i < arr.length; i++) {
+          Question.findById(arr[i]._id, (err, question) => {
+            if (err) {
+              console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
+              return res.json(err);
+            }
+            question.answers.push(arr[i].answers)
+            question.save((err, question) => {
+              if (err) {
+                console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+                return res.json(err);
+              }
+              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`, question);
+            });
+          })
         }
-      })
-    }
-  
-
-  // update(req, res) {
-  //   console.log("*** HIT SERVER UPDATE ***");
-
-  //   Survey.findById(req.params.id, req.body, (err, survey) => {
-  //     if (err) {
-  //       console.log("___ CREATE SURVEY ERROR ___", err);
-  //       return res.json(err);
-  //     } 
-  //     var array = req.body.questions;
-
-  //     Question.findByIdAndUpdate(array, function (err, questions) {
-  //       if (err) {
-  //         console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
-  //         return res.json(err);
-  //       }
-  //       console.log("___ CREATE SURVEY ___", survey);
-  //       return res.json(survey);
-  //     })
-  //   })
-  // }
+        return res.json(survey);
+      }
+    })
+  }
 
   update(req, res) {
     console.log("*** HIT SERVER UPDATE ***");

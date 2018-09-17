@@ -1,3 +1,7 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
 #header {
     width: 100%;
 }
@@ -15,12 +19,24 @@ form {
     display: block;
 }
 
-.spacer {
-  flex: 1 1 auto;
+.card-question {
+    width: 100%;
+    text-align: center;
+    text-decoration: black;
+    font-size: large;
+    
 }
 
-button {
-    width:100%;
+#button-group {
+    width: 100%;
+    margin: 2em 0;
 }
 
+#button-group button {
+    width: 100%;
+}
+
+.mat-card {
+    margin: 1em 0;
+}
 
