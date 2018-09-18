@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -21,6 +22,7 @@ export class DashboardComponent {
   constructor(
     private _authService: AuthService,
     private _router: Router,
+    private location: Location,
     public snackBar: MatSnackBar
   ) { }
 
@@ -44,5 +46,9 @@ export class DashboardComponent {
     config.duration = 2500;
     config.panelClass = ['logout-snackbar']
     this.snackBar.open("You are not logged in!", '', config);
+  }
+
+  back() {
+    this.location.back();
   }
 }

@@ -6,12 +6,12 @@
     display: block;
     position: fixed!important;
     bottom: 0!important;
+    width: 100%;
 }
 
 
-.mat-button {
-    min-width: 64px;
-    padding: 0 10px;
+button {
+    padding: 5px;
 }
 
 .mat-header-cell span {

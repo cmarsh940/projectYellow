@@ -1,3 +1,4 @@
+import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analytics.component';
 import { EditClientComponent } from './profile/edit-client/edit-client.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -47,6 +48,11 @@ const routes: Routes = [
         path: "survey/edit/:id",
         pathMatch: "full",
         component: EditSurveyComponent
+      },
+      {
+        path: "survey/analytics/:id",
+        pathMatch: "full",
+        component: SurveyAnalyticsComponent
       },
       {
         path: "user",

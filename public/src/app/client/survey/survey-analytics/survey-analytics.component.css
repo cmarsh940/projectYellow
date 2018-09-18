@@ -1,0 +1,23 @@
+#header {
+    width: 100%;
+}
+
+#header h5{
+    text-align: center;
+}
+
+#survey {
+    width: 100%;
+    padding: 1em;
+}
+
+p {
+    margin: 0;
+}
+
+#button-group {
+    margin: 2em;
+}
+button {
+    width:100%;
+}

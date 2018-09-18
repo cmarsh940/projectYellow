@@ -1,3 +1,5 @@
+'use strict';
+
 const bodyParser = require('body-parser');
 const busboy = require("connect-busboy");
 const busboyBodyParser = require("busboy-body-parser");

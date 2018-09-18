@@ -1,0 +1,15 @@
+<div id="header">
+  <h5>{{ survey.name | titlecase }}</h5>
+</div>
+<div id="survey" *ngFor="let question of questions; let i = index">
+  <h6><b>{{ question.question }}</b></h6>
+  <div class="answers" *ngFor="let answer of question.answers; let j = index">
+    <p>{{ j + 1 }} |  {{ answer }}</p>
+  </div>
+  <mat-divider>
+  </mat-divider>
+</div>
+
+<div id="button-group">
+  <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
+</div>

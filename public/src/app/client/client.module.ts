@@ -17,6 +17,7 @@ import { SurveyListComponent } from './survey/survey-list/survey-list.component'
 import { UsersListComponent } from './user/users-list/users-list.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditClientComponent } from './profile/edit-client/edit-client.component';
+import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analytics.component';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import { EditClientComponent } from './profile/edit-client/edit-client.component
     SurveyListComponent,
     UsersListComponent,
     ProfileComponent,
-    EditClientComponent
+    EditClientComponent,
+    SurveyAnalyticsComponent
   ]
 })
 export class ClientModule {}

@@ -7,7 +7,7 @@
   <!-- Owner Column -->
   <ng-container matColumnDef="owner">
     <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.creator}} </mat-cell>
+    <mat-cell *matCellDef="let element"> {{element.creator.firstName}} </mat-cell>
   </ng-container>
   
   <!-- Name Column -->
