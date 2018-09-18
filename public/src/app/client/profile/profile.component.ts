@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from './../../auth/auth.service';
@@ -14,25 +14,29 @@ import { ProfileService } from './profile.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  currentUser= new Client();
-  subscription: Subscription;
+  currentClient= new Client();
+  clientId = '';
+  _routeSubscription: Subscription;
   id: String;
+  errors = [];
 
   constructor(
-    private _authService: AuthService,
-    private _profileService: ProfileService,
     public dialog: MatDialog,
-    private _router: Router
+    private _profileService: ProfileService,
+    private _activatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.getUserInformation();
+    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+      this.clientId = params['id'];
+      this.getClient();
+    });
   }
 
 
   openDialog() {
     const dialogRef = this.dialog.open(EditClientComponent, {
-      data: this.currentUser,
+      data: this.currentClient,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -41,12 +45,20 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  getUserInformation() {
-    let id = JSON.parse(sessionStorage.getItem('currentClient'));
-    this._profileService.getparticipant(id)
-      .subscribe(res => {
-        console.log("User", res);
-        this.currentUser = res
-      });
-  }
+  getClient() {
+    this._profileService.getparticipant(this.clientId)
+      .subscribe(
+        (client: Client) => {
+          this.currentClient = client;
+        },
+        (error: any) => {
+          if (error) {
+            for (const key of Object.keys(error)) {
+              const errors = error[key];
+              this.errors.push(errors.message);
+            }
+          }
+        }
+      );
+    }
 }

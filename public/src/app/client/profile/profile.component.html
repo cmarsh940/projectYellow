@@ -5,31 +5,31 @@
         <img src="assets/missing.jpg" alt="profile image">
       </div>
       <div class="header-text">
-        <mat-card-title>{{currentUser.firstName}} {{currentUser.lastName}}</mat-card-title>
+        <mat-card-title>{{currentClient.firstName}} {{currentClient.lastName}}</mat-card-title>
         <mat-card-subtitle>Testing</mat-card-subtitle>
       </div>
     </mat-card-header>
     <mat-card-content>
       <div class="content-box">
         <p class="content-top">Surveys</p>
-        <p class="content-bottom">{{ currentUser.surveys }}</p>
+        <p class="content-bottom">{{ currentClient.surveys }}</p>
       </div>
       <div class="content-box">
         <p class="content-top">Users</p>
-        <p class="content-bottom">{{ currentUser.users }}</p>
+        <p class="content-bottom">{{ currentClient.users }}</p>
       </div>
       <div class="content-body">
-        <p>Email: {{currentUser.email}}</p>
-        <p>Phone: {{currentUser.phone}}</p>
-        <p>Address: {{ currentUser.address }}</p>
-        <p>City: {{ currentUser.city }}</p>
-        <p>State: {{ currentUser.state }}</p>
-        <p>Zip: {{ currentUser.zip }}</p>
-        <p>Subscription: {{ currentUser.subscription }}</p>
+        <p>Email: {{currentClient.email}}</p>
+        <p>Phone: {{currentClient.phone}}</p>
+        <p>Address: {{ currentClient.address }}</p>
+        <p>City: {{ currentClient.city }}</p>
+        <p>State: {{ currentClient.state }}</p>
+        <p>Zip: {{ currentClient.zip }}</p>
+        <p>Subscription: {{ currentClient.subscription }}</p>
       </div>
     </mat-card-content>
     <mat-card-actions>
-      <!-- <button mat-button [routerLink]="['/profile', currentUser._id]">EDIT</button> -->
+      <!-- <button mat-button [routerLink]="['/profile', currentClient._id]">EDIT</button> -->
       <button mat-button (click)="openDialog()">EDIT</button>
     </mat-card-actions>
   </mat-card>

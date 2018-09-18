@@ -19,6 +19,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   surveyId = '';
   _routeSubscription: Subscription;
   errors = [];
+  url: string;
 
 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -30,6 +31,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _router: Router,
     private location: Location,
+    private navigator: Navigator,
     public snackBar: MatSnackBar
   ) { }
 
@@ -57,7 +59,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       .subscribe(res => {
           this.survey = res;
           this.questions = this.survey.questions;
-          console.log("*** QUESTIONS ***", this.questions);
+          this.url = `www.surveysbyme.com/takeSurvey/${this.surveyId}`;
         },
         (error: any) => {
           if (error) {

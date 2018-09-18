@@ -1,9 +1,14 @@
 #header {
     width: 100%;
+    text-align: center;
 }
 
-#header h5{
+/* #header h5 {
     text-align: center;
+} */
+
+#header a {
+    font-size: x-small;
 }
 
 #survey {
