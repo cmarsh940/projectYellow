@@ -24,22 +24,22 @@
        <span> Action </span>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> 
-        <mat-icon [routerLink]="['/takeSurvey', element._id]" color="primary">
+        <mat-icon [routerLink]="['/takeSurvey', element._id]" matTooltip="Take Survey" color="primary">
           <i class="material-icons">
             visibility
           </i>
         </mat-icon> 
-        <mat-icon [routerLink]="['edit', element._id]" color="accent">
+        <mat-icon [routerLink]="['edit', element._id]" matTooltip="Edit" color="accent">
           <i class="material-icons">
             edit
           </i>
         </mat-icon> 
-        <mat-icon [routerLink]="['analytics', element._id]" color="primary">
+        <mat-icon [routerLink]="['analytics', element._id]" matTooltip="Results" color="primary">
           <i class="material-icons">
             assessment
           </i>
         </mat-icon>
-        <mat-icon (click)="destroySurvey(element._id)" color="warn">
+        <mat-icon (click)="destroySurvey(element._id)" matTooltip="Delete"  color="warn">
           <i class="material-icons">
             delete_forever
           </i>

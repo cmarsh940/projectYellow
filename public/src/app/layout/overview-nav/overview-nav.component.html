@@ -15,35 +15,29 @@
       </a>
       <mat-divider></mat-divider>
       <a mat-list-item routerLink="/overview">
-        <i class="material-icons">
-          dashboard
-        </i> Overview
+        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <h4 mat-line>Overview</h4>
       </a>
       <a mat-list-item routerLink="/surveyReport">
-        <i class="material-icons">
-          assignment
-        </i> Surveys
+        <mat-icon mat-list-icon>assignment</mat-icon>
+        <h4 mat-line>Surveys</h4>
       </a>
       <a mat-list-item routerLink="/surveyCategoriesReport">
-        <i class="material-icons">
-          category
-        </i> Survey Categories
+        <mat-icon mat-list-icon>category</mat-icon>
+        <h4 mat-line>Survey Categories</h4>
       </a>
-      <a mat-list-item routerLink="/userReport">
-        <i class="material-icons">
-          group
-        </i> Users
+      <button mat-button mat-list-item routerLink="/userReport" disabled>
+        <mat-icon mat-list-icon>group</mat-icon>
+        <h4 mat-line>Users (SOON)</h4>
+      </button>
+      <a mat-list-item routerLink="/clientReport"> 
+        <mat-icon mat-list-icon>group</mat-icon>
+        <h4 mat-line>Clients</h4>
       </a>
-      <a mat-list-item routerLink="/clientReport">
-        <i class="material-icons">
-          group
-        </i> Clients
-      </a>
-      <a mat-list-item routerLink="/subscriptionReport">
-        <i class="material-icons">
-          group
-        </i> Subscriptions
-      </a>
+      <button mat-button mat-list-item routerLink="/subscriptionReport" disabled>
+        <mat-icon mat-list-icon>group</mat-icon>
+        <h4 mat-line>Subscriptions (SOON)</h4>
+      </button>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -56,7 +50,12 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Overview</span>
+      
+      <span class="spacer">Overview</span>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="logout()" matTooltip="Logout" aria-label="logout button">
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
     </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>

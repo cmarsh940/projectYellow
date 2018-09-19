@@ -1,3 +1,24 @@
-<p>
-  client-report works!
-</p>
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.firstName }} {{ element.lastName }} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="surveys">
+    <mat-header-cell *matHeaderCellDef> Surveys </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.surveys.length }} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="sub">
+    <mat-header-cell *matHeaderCellDef> Subscription </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.subscription }} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="created">
+    <mat-header-cell *matHeaderCellDef> Signed up </mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{ element.createdAt | date }} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
