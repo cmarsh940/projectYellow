@@ -51,6 +51,7 @@ export class AuthService {
     setCurrentClient(client) {
       console.log("*** SERVICE SET CURRENT CLIENT ***", client)
       sessionStorage.setItem('currentClient', JSON.stringify(client._id));
+      localStorage.setItem('t940', JSON.stringify(client._id));
     }
 
     logout(callback) {
@@ -60,6 +61,7 @@ export class AuthService {
         res => {
           this.currentClient = null;
           sessionStorage.removeItem('currentClient');
+          localStorage.removeItem('t940');
           callback(res.json());
         },
         err => console.error(err)
