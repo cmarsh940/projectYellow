@@ -34,7 +34,9 @@ class ClientsController {
   }
 
   authenticate(req, res) {
-    console.log("SERVER HIT AUTHENTICATE");
+    console.log("___ SERVER HIT AUTHENTICATE ___");
+    console.log("___ SENT TO SERVER ___", req.body);
+
     Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).populate('surveys').exec((err, client) => {
       if (err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
@@ -51,6 +53,7 @@ class ClientsController {
         };
         return res.json(req.session.client);
       }
+      return res.json(err);
     })
   }
 

@@ -16,7 +16,7 @@ export class DashboardComponent {
   currentClient: Client = new Client;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  data = JSON.parse(sessionStorage.getItem('currentClient'));
+  // data = JSON.parse(sessionStorage.getItem('currentClient'));
 
 
   constructor(
@@ -27,7 +27,6 @@ export class DashboardComponent {
   ) { }
 
   ngOnInit() { 
-    console.log(this.data);
     this.isLoggedIn();
   }
 

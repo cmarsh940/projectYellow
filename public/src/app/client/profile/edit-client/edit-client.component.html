@@ -27,7 +27,9 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput name='state' [(ngModel)]="data.state" #state='ngModel' placeholder="State" required>
+      <mat-select name='state' [(ngModel)]="data.state" #state='ngModel' required autocomplete="state" placeholder="Select a State">
+        <mat-option *ngFor="let state of states" [value]="state.abbreviation">{{state.name}}</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field>
@@ -35,8 +37,8 @@
     </mat-form-field>
 
     <mat-dialog-actions>
-      <button mat-raised-button (click)="cancel()">Cancel</button>
-      <button mat-raised-button type='submit' [disabled]=!formData.valid>Save</button>
+      <button mat-raised-button (click)="cancel()" color='warn'>Cancel</button>
+      <button mat-raised-button type='submit' [disabled]=!formData.valid  color='accent'>Save</button>
     </mat-dialog-actions>
   </form>
 </mat-dialog-content>

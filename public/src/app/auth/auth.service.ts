@@ -50,7 +50,7 @@ export class AuthService {
 
     setCurrentClient(client) {
       console.log("*** SERVICE SET CURRENT CLIENT ***", client)
-      sessionStorage.setItem('currentClient', JSON.stringify(client._id));
+      sessionStorage.setItem('currentClient', JSON.stringify(client));
       localStorage.setItem('t940', JSON.stringify(client._id));
     }
 
@@ -79,14 +79,18 @@ export class AuthService {
   
   private extractData(res: Response): any {
     console.log("*** extractData: ***", res);
-    if (!sessionStorage.getItem('currentClient')) {
-      console.log("*** CLIENT NOT IN SESSION ***");
-      sessionStorage.setItem('currentClient', JSON.stringify(res));
-      return res;
-    } else {
-      console.log("*** CLIENT IN SESSION ***");
-      return res;
+    if (!Error) {
+      if (!sessionStorage.getItem('currentClient')) {
+        console.log("*** CLIENT NOT IN SESSION ***");
+        sessionStorage.setItem('currentClient', JSON.stringify(res));
+        return res;
+      } else {
+        console.log("*** CLIENT IN SESSION ***");
+        return res;
+      }
     }
+    console.log("*** ERROR ***");
+    return res;
   }
 
   private log(message: string) {

@@ -3,10 +3,6 @@
     width: 100%;
 }
 
-.example-card {
-  max-width: 400px;
-}
-
 .header-image {
   background-size: cover;
 }
@@ -22,10 +18,6 @@ img {
     align-items: center;
 }
 
-mat-card-header {
-    margin-bottom: 1em;
-}
-
 .content-box {
     display: inline-block;
     margin: 1em 3em;
@@ -37,4 +29,12 @@ mat-card-header {
 
 .content-body p {
     margin: 0!important;
+}
+
+.action {
+    width: 100%;
+}
+.action button {
+    width: 80%;
+    margin: auto;
 }

@@ -3,6 +3,7 @@ import { Component, Inject } from '@angular/core';
 import { ClientService } from '../../client.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { states } from '../../../global/models/states';
 
 @Component({
   selector: 'app-edit-client',
@@ -16,6 +17,8 @@ export class EditClientComponent {
   clientId: string = "";
   errors = [];
 
+  states = states;
+
 
   constructor(
     private _clientService: ClientService,
@@ -26,16 +29,18 @@ export class EditClientComponent {
 
   updateClient(): void {
     this.errors = [];
-    this._clientService.updateParticipant(this.data, res => {
-      if (res.errors) {
-        for (const key of Object.keys(res.errors)) {
-          const errors = res.errors[key];
-          this.errors.push(errors.message);
+    this._clientService.updateParticipant(this.data._id, this.data).subscribe((data: any) => {
+      if (data.errors) {
+        console.log("*** ERROR ***", data.errors)
+        for (const key of Object.keys(data.errors)) {
+          const error = data.errors[key];
+          this.errors.push(error.message);
         }
-      }
+      } else {
       this.dialogRef.close();
-    });
-  }
+    }
+  });
+}
 
   cancel(): void {
     this.dialogRef.close();

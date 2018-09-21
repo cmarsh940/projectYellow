@@ -10,6 +10,11 @@ const SurveySchema = new mongoose.Schema({
     required: [true, "Survey name cannot be blank"],
     trim: true,
   },
+  private: {
+    type: Boolean,
+    required: [true, "Survey privacy cannot be blank"],
+    default: false
+  },
   questions: {
     type: [
       {

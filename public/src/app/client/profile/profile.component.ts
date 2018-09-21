@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { AuthService } from './../../auth/auth.service';
 import { Client } from './../../global/models/client';
 import { MatDialog } from '@angular/material';
 import { EditClientComponent } from './edit-client/edit-client.component';

@@ -18,20 +18,20 @@
       <div class="input-container">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>First Name</mat-label>
-          <input matInput type="text" formControlName="firstName" required autocomplete="given-name" placeholder="First Name">
+          <input matInput type="text" formControlName="firstName" required autocomplete="given-name">
         </mat-form-field>
 
         <!-- LAST NAME -->
         <mat-form-field appearance="outline">
           <mat-label>Last Name</mat-label>
-          <input matInput type="text" formControlName="lastName" required autocomplete="family-name" placeholder="Last Name">
+          <input matInput type="text" formControlName="lastName" required autocomplete="family-name">
         </mat-form-field>
       </div>
 
       <!-- BUSINESS NAME -->
       <mat-form-field appearance="outline">
         <mat-label>Business Name <span>- optional</span></mat-label>
-        <input matInput type="text" formControlName="businessName" placeholder="Business Name">
+        <input matInput type="text" formControlName="businessName">
       </mat-form-field>
 
       <div class="label">
@@ -41,21 +41,20 @@
       <!-- EMAIL -->
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput required formControlName="email" autocomplete="email" placeholder="Email">
-        <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+        <input matInput required formControlName="email" autocomplete="email">
       </mat-form-field>
         
         <!-- PASSWORD -->
         <div class="input-container">
           <mat-form-field appearance="outline" hintLabel="( Atleast 8 charactors, 1 uppercase, 1 number )">
             <mat-label>Password</mat-label>
-            <input matInput type="password" formControlName="password" required autocomplete="new-password" placeholder="Password">
+            <input matInput type="password" formControlName="password" required autocomplete="new-password">
           </mat-form-field>
         
           <!-- CONFIRM PASSWORD -->
           <mat-form-field appearance="outline">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" formControlName="confirm_pass" required autocomplete="new-password-confirmation"  placeholder="Confirm Password">
+            <input matInput type="password" formControlName="confirm_pass" required autocomplete="new-password-confirmation" >
           </mat-form-field>
         </div>
 
@@ -66,27 +65,27 @@
         <!-- PHONE -->
         <mat-form-field appearance="outline">
           <mat-label>Phone #</mat-label>
-          <input matInput type="tel" formControlName="phone" autocomplete='tel-national' placeholder="Phone #">
+          <input matInput type="tel" formControlName="phone" autocomplete='tel-national'>
         </mat-form-field>
     
       <!-- ADDRESS -->
       <div class="input-container">
         <mat-form-field appearance="outline">
           <mat-label>Address</mat-label>
-          <input matInput type="text" formControlName="address"  required  autocomplete="street-address" placeholder="Address">
+          <input matInput type="text" formControlName="address"  required  autocomplete="street-address">
         </mat-form-field>
 
         <!-- CITY -->
         <mat-form-field appearance="outline">
           <mat-label>City</mat-label>
-          <input matInput type="text" formControlName="city" required autocomplete="address-level2" placeholder="City">
+          <input matInput type="text" formControlName="city" required autocomplete="address-level2">
         </mat-form-field>
       </div>
 
       <!-- STATE -->
       <div class="input-container">
         <mat-form-field appearance="outline">
-          <mat-select placeholder="State*" formControlName="state" required autocomplete="state">
+          <mat-select formControlName="state" required autocomplete="state" placeholder="Select a State">
             <mat-option *ngFor="let state of states" [value]="state.abbreviation">{{state.name}}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -94,7 +93,7 @@
         <!-- ZIP CODE -->
         <mat-form-field appearance="outline">
           <mat-label>Zip Code</mat-label>
-          <input matInput type="text" formControlName="zip" required autocomplete="postal-code" placeholder="Zip Code">
+          <input matInput type="text" formControlName="zip" required autocomplete="postal-code">
         </mat-form-field>
       </div>
 
@@ -107,10 +106,9 @@
     </form>
   </div>
 
-  <div>
-    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngIf="errorMessage">{{ errorMessage }}</p>
+  <div class="errors" *ngIf="errors">
+    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
   </div>
-</div>
 
 <mat-toolbar id="footer" color="primary">
   <div class="text-center">

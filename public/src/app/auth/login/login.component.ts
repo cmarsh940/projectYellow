@@ -41,56 +41,66 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() { }
 
-  loginParticipant(form: any): Promise<any> {
+  // loginParticipant(form: any): Promise<any> {
+  //   this.participant = {
+  //     'email': this.email.value,
+  //     'password': this.password.value,
+  //     'used': this.password.value
+  //   };
+
+  //   this.myForm.setValue({
+  //     'email': null,
+  //     'password': null
+  //   });
+
+  //   return this._authService.authenticate(this.participant)
+  //     .toPromise()
+  //     .then(() => {
+  //       this.errorMessage = null;
+  //       this.myForm.setValue({
+  //         'email': null,
+  //         'password': null
+  //       });
+  //       this._router.navigateByUrl("/dashboard");
+  //     })
+  //     .catch((error) => {
+  //       if (error === 'Server error') {
+  //         this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
+  //       } else {
+  //         this.errorMessage = error;
+  //       }
+  //     });
+  // }
+
+
+  loginParticipant(form: any) {
+    console.log("*** STARTING LOGIN ***")
     this.participant = {
       'email': this.email.value,
       'password': this.password.value,
       'used': this.password.value
     };
 
-    this.myForm.setValue({
-      'email': null,
-      'password': null
-    });
-
-    return this._authService.authenticate(this.participant)
-      .toPromise()
-      .then(() => {
-        this.errorMessage = null;
-        this.myForm.setValue({
-          'email': null,
-          'password': null
-        });
-        this._router.navigateByUrl("/dashboard");
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else {
-          this.errorMessage = error;
+    this._authService.authenticate(this.participant).subscribe((data: any) => {
+      if (data.errors) {
+        console.log("*** ERROR ***", data.errors)
+        for (const key of Object.keys(data.errors)) {
+          const error = data.errors[key];
+          this.errors.push(error.message);
         }
+      }
+      console.log("___ LOGIN DATA RETURNED ___:", data);
+      this.myForm.setValue({
+        'email': null,
+        'password': null
       });
+      if (data.a8o1 === "CAPTAIN") {
+        this._authService.setCurrentClient(data);
+        this._router.navigateByUrl("/overview");
+      } else {
+        this._authService.setCurrentClient(data); 
+        this._router.navigateByUrl("/dashboard");
+      }
+    });
   }
-  // loginClient() {
-  //   console.log("*** STARTING LOGIN ***")
-  //   let tempUsed = "";
-  //   this.errors = [];
-  //   tempUsed = this.currentClient.password;
-  //   this.currentClient.used = tempUsed;
-  //   this._authService.authenticate(this.currentClient).subscribe((data: any) => {
-  //     if (data.errors) {
-  //       console.log("*** ERROR ***", data.errors)
-  //       for (const key of Object.keys(data.errors)) {
-  //         const error = data.errors[key];
-  //         this.errors.push(error.message);
-  //       }
-  //     }
-  //     console.log("___DATA RETURNED___:", data);
-  //     this._authService.setCurrentClient(data);
-  //     if (data.role === 'CAPTAIN') {
-  //         this._router.navigateByUrl("/overview");
-  //       }
-  //       this._router.navigateByUrl("/dashboard");
-  //   });
-  // }
 }

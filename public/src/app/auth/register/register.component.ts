@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Client } from '../../global/models/client';
 import { states } from '../../global/models/states';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig } from '@angular/material';
 
 
 @Component({
@@ -11,13 +12,16 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
   templateUrl: "./register.component.html",
   styleUrls: ["./register.component.css"]
 })
+
 export class RegisterComponent implements OnInit {
   myForm: FormGroup;
   newClient: Client = new Client();
-  errors: string[] = [];
+  errors = [];
   password_confirmation: string;
   currentClient: Client;
-  errorMessage;
+
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
   states = states;
 
@@ -26,7 +30,7 @@ export class RegisterComponent implements OnInit {
   firstName = new FormControl('', Validators.required);
   lastName = new FormControl('', Validators.required);
   businessName = new FormControl('');
-  email = new FormControl('', [Validators.required, Validators.email]);
+  email = new FormControl('', Validators.required);
   password = new FormControl('', Validators.required);
   confirm_pass = new FormControl('', Validators.required);
   phone = new FormControl('');
@@ -39,6 +43,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private _authService: AuthService, 
     private _router: Router,
+    public snackBar: MatSnackBar,
     fb: FormBuilder
   ) {
     this.myForm = fb.group({
@@ -58,13 +63,10 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {}
 
-  getErrorMessage() {
-    return this.email.hasError('required') ? 'You must enter a value' :
-      this.email.hasError('email') ? 'Not a valid email' :
-        '';
-  }
 
-  addParticipant(form: any): Promise<any> {
+  addParticipant(form: any) {
+    this.errors = [];
+
     this.participant = {
       'firstName': this.firstName.value,
       'lastName': this.lastName.value,
@@ -80,24 +82,16 @@ export class RegisterComponent implements OnInit {
       'zip': this.zip.value,
     };
 
-    this.myForm.setValue({
-      'firstName': null,
-      'lastName': null,
-      'businessName': null,
-      'email': null,
-      'password': null,
-      'confirm_pass': null,
-      'phone': null,
-      'address': null,
-      'city': null,
-      'state': null,
-      'zip': null
-    });
-
-    return this._authService.addParticipant(this.participant)
-      .toPromise()
-      .then(() => {
-        this.errorMessage = null;
+    this._authService.addParticipant(this.participant).subscribe((data: any) => {
+      if (data.errors) {
+        console.log("*** ERROR ***", data.errors)
+        for (const key of Object.keys(data.errors)) {
+          const error = data.errors[key];
+          this.errors.push(error.message);
+        }
+      } else {
+        console.log("___DATA RETURNED___:", data);
+        this.errors = null;
         this.myForm.setValue({
           'firstName': null,
           'lastName': null,
@@ -109,28 +103,21 @@ export class RegisterComponent implements OnInit {
           'address': null,
           'city': null,
           'state': null,
-          'zip': null
+          'zip': null,
         });
-        this._router.navigateByUrl("/dashboard");
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else {
-          this.errorMessage = error;
-        }
-      });
+        this.openSnackBar();
+        this._router.navigateByUrl("/login");
+      }
+    });
   }
-  // createClient() {
-  //   let tempUsed = "";
-  //   this.errors = [];
-  //   tempUsed = this.newClient.password;
-  //   this.newClient.used = tempUsed;
-  //   return this._authService.createClient(this.newClient).subscribe(client => {
-  //     this.currentClient = client;
-  //     console.log(this.currentClient);
-  //     this._router.navigate(["/dashboard"]);
-  //   });
-        
-  // }
+
+  openSnackBar() {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 2500;
+    config.panelClass = ['logout-snackbar']
+    this.snackBar.open("Thank you for registering", '', config);
+  }
+  
 }

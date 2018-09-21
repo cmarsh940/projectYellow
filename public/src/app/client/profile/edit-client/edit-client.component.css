@@ -6,3 +6,12 @@
 .mat-dialog-actions {
     width: 100%;
 }
+.mat-dialog-actions button {
+    width: 80%;
+    margin: 0.4em auto;
+}
+
+.mat-form-field {
+    width: 90%;
+    margin: auto;
+}

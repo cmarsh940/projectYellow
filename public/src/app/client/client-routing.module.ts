@@ -25,12 +25,12 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: "profile",
+        path: "profile/:id",
         pathMatch: "full",
         component: ProfileComponent
       },
       {
-        path: "profile/:id",
+        path: "profile/edit/:id",
         pathMatch: "full",
         component: EditClientComponent
       },

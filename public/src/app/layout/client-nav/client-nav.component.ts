@@ -14,7 +14,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 
 export class ClientNavComponent {
-  currentClient: Client = null;
+  currentClient = JSON.parse(localStorage.getItem('t940')); 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
