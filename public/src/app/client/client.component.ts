@@ -18,7 +18,7 @@ export class ClientComponent implements OnInit {
         private _authService: AuthService,
         private _router: Router,
         public snackBar: MatSnackBar
-        ) { }
+    ) { }
 
     ngOnInit() {
         this.isLoggedIn();

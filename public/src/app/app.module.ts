@@ -1,3 +1,4 @@
+import { UploadService } from './global/services/upload.service';
 import { SurveyCategoryService } from './overview/survey-category-report/survey-category.service';
 import { SubscriptionService } from './overview/subscription-report/subscription.service';
 import { OverviewService } from './overview/overview.service';
@@ -67,6 +68,7 @@ import { SurveyService } from './client/survey/survey.service';
     SurveyService,
     SurveyCategoryService,
     UserService,
+    UploadService,
     OverviewService,
     SubscriptionService,
     { provide: RequestCache, useClass: RequestCacheWithMap },

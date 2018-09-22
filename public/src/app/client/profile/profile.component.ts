@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { UploadService } from './../../global/services/upload.service';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Client } from './../../global/models/client';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { EditClientComponent } from './edit-client/edit-client.component';
 import { ProfileService } from './profile.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -19,10 +21,21 @@ export class ProfileComponent implements OnInit {
   id: String;
   errors = [];
 
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
+
+  @ViewChild('file') file;
+  public files: Set<File> = new Set();
+
   constructor(
     public dialog: MatDialog,
     private _profileService: ProfileService,
+    private _authService: AuthService,
+    private _uploadService: UploadService,
+    private _router: Router,
     private _activatedRoute: ActivatedRoute,
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -45,19 +58,75 @@ export class ProfileComponent implements OnInit {
 
 
   getClient() {
-    this._profileService.getparticipant(this.clientId)
-      .subscribe(
-        (client: Client) => {
-          this.currentClient = client;
-        },
-        (error: any) => {
-          if (error) {
-            for (const key of Object.keys(error)) {
-              const errors = error[key];
-              this.errors.push(errors.message);
-            }
+    this._profileService.getparticipant(this.clientId).subscribe((client: Client) => {
+        this.currentClient = client;
+      },
+      (error: any) => {
+        if (error) {
+          for (const key of Object.keys(error)) {
+            const errors = error[key];
+            this.errors.push(errors.message);
           }
         }
-      );
+      });
+  }
+
+  addFiles() {
+    this.file.nativeElement.click();
+  }
+
+  onFilesAdded() {
+    const files: { [key: string]: File } = this.file.nativeElement.files;
+    console.log("FILES", files);
+    for (let key in files) {
+      if (!isNaN(parseInt(key))) {
+        this.files.add(files[key]);
+        console.log("NEW FILE ADDED", files);
+      }
     }
+  }
+
+
+  uploadPortfolio() {
+    this.errors = [];
+    // this.isLoggedIn();
+    const files: { [key: string]: File } = this.file.nativeElement.files;
+    console.log("FILES", files);
+    for (let key in files) {
+      if (!isNaN(parseInt(key))) {
+        this.files.add(files[key]);
+        console.log("NEW FILE ADDED", files);
+      }
+    }
+    this._uploadService.postPortfolio(files, this.currentClient._id).subscribe( res => {
+      if (res.errors) {
+        for (let key in res.errors) {
+          let errors = res.errors[key];
+          this.errors.push(errors.message);
+        }
+      } else {
+        console.log("SUCCESS", res);
+      }
+    });
+  }
+
+  isLoggedIn() {
+    let verify = this._authService.verify();
+    console.log("VERIFY:", verify);
+    if (!verify) {
+      this.openSnackBar();
+      this._router.navigateByUrl('/login');
+    } else {
+      console.log("YOU ARE VERIFIED");
+    }
+  }
+
+  openSnackBar() {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 2500;
+    config.panelClass = ['logout-snackbar']
+    this.snackBar.open("You are not logged in!", '', config);
+  }
 }

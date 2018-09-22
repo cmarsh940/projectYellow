@@ -1,6 +1,68 @@
 const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
 
+const config = require("../config/config");
+
+const BUCKET_NAME = "surveysbyme";
+const IAM_USER_KEY = config.iamUser;
+const IAM_USER_SECRET = config.iamSecret;
+
+const path = require("path");
+const AWS = require("aws-sdk");
+const Busboy = require("busboy");
+
+
+// James wagner's example(signed url)
+// function uploadToS3(file, client) {
+//   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
+//   console.log("*** S3 FILE:", file)
+//   var aws2 = new AWS.S3({
+//     accessKeyId: IAM_USER_KEY,
+//     secretAccessKey: IAM_USER_SECRET,
+//     Bucket: BUCKET_NAME
+//   });
+
+//   aws2.getSignedUrl(
+//     "putObject",
+//     {
+//       Bucket: "surveysbyme",
+//       Key: `Profile / ${ file.name }`,
+//       ContentType: file.type
+//     },
+//     (err, url) => {
+//       if (err) {
+//         console.log("PUT ERR ON GETSINGNED URL",err);
+//       }
+//       console.log(url);
+//     }
+//   );
+// }
+
+function uploadToS3(file, client) {
+  console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
+  console.log("*** S3 FILE:", file)
+  console.log("*** S3 Client", )
+  let s3bucket = new AWS.S3({
+    accessKeyId: IAM_USER_KEY,
+    secretAccessKey: IAM_USER_SECRET,
+    Bucket: BUCKET_NAME
+  });
+  s3bucket.createBucket(function () {
+    var params = {
+      Bucket: BUCKET_NAME,
+      Key: `Profile/${file.name}`,
+      Body: file.data,
+      ACL: 'public-read'
+    };
+    s3bucket.upload(params, function (err, data) {
+      if (err) {
+        console.log("*** Error in callback: ", err);
+        console.log("*** UPLOAD PARAMS: ", params);
+      }
+      console.log("**** SUCCESS", data);
+    });
+  });
+}
 class ClientsController {
   index(req, res) {
     Client.find({}).populate('connections.item').exec((err, clients) => {
@@ -110,6 +172,37 @@ class ClientsController {
       }
     })
   }
+
+  //Clients Images
+  upload(req, res) {
+    console.log("___ SERVER HIT UPLOAD___",req.body);
+    let new_client = new Client(req.body);
+    let busboy = new Busboy({ headers: req.headers });
+    if (req.files.picture) {
+      let file = req.files.picture;
+      let file_type = file.mimetype.match(/image\/(\w+)/);
+      let new_file_name = '';
+      if (file_type) {
+        new_file_name = `${new Date().getTime()}.${file_type[1]}`;
+        new_client.picture = new_file_name;
+        busboy.on("finish", function () {
+          const file = req.files.picture;
+          uploadToS3(file);
+        });
+        req.pipe(busboy);
+      }
+    }
+    Client.update(
+      { _id: req.params.id },
+      { $set: { picture: new_client.picture } }
+    ).exec((err, new_client) => {
+      if (err) {
+        return res.status(204).json(err);
+      }
+      return res.json(new_client);
+    });
+  }
+
 }
 
 module.exports = new ClientsController();

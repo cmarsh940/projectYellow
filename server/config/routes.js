@@ -16,6 +16,9 @@ module.exports = function (app) {
     app.delete('/api/clients/:id', Clients.delete);
     app.get('/api/clients/:id', Clients.show);
     app.put('/api/clients/:id', Clients.update);
+
+    app.post('/api/upload/portfolio/:id', Clients.upload);
+
     app.get('/sessions', Clients.session);
 
     app.get('/api/questions', Questions.index);

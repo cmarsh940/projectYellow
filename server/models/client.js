@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
 const unique = require('mongoose-unique-validator');
 
-const root = 'https://s3.amazonaws.com/mybucket';
+const root = 'https://s3.amazonaws.com/surveysbyme';
 
 const ClientSchema = new mongoose.Schema({
   firstName: {

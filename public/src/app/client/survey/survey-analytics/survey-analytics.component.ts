@@ -31,7 +31,6 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _router: Router,
     private location: Location,
-    private navigator: Navigator,
     public snackBar: MatSnackBar
   ) { }
 
