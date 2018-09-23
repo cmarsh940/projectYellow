@@ -2,8 +2,8 @@
   <div class="info">
     <div class="header">
       <div class="header-image">
-        <form (change)="uploadPortfolio()" encType="multipart/form-data">
-          <input type="file" #file style="display: none"  multiple />
+        <form (change)="uploadPortfolio()" #form encType="multipart/form-data">
+          <input type="file" #file name="picture" style="display: none"  multiple />
           <button mat-raised-button color="primary" (click)="addFiles()">
             Add Picture
           </button>

@@ -26,6 +26,8 @@ export class ProfileComponent implements OnInit {
 
 
   @ViewChild('file') file;
+  @ViewChild('form') form;
+
   public files: Set<File> = new Set();
 
   constructor(
@@ -89,24 +91,16 @@ export class ProfileComponent implements OnInit {
 
   uploadPortfolio() {
     this.errors = [];
-    // this.isLoggedIn();
-    const files: { [key: string]: File } = this.file.nativeElement.files;
-    console.log("FILES", files);
-    for (let key in files) {
-      if (!isNaN(parseInt(key))) {
-        this.files.add(files[key]);
-        console.log("NEW FILE ADDED", files);
-      }
+    const files: FileList = this.file.nativeElement.files;
+    if (files.length === 0) {
+      console.log("No File Was Selected");
+      return;
     }
-    this._uploadService.postPortfolio(files, this.currentClient._id).subscribe( res => {
-      if (res.errors) {
-        for (let key in res.errors) {
-          let errors = res.errors[key];
-          this.errors.push(errors.message);
-        }
-      } else {
+    const formData = new FormData(this.form.nativeElement);
+    formData.append(files[0].name, files[0]);
+    console.log("FORMDATA", formData);
+    this._uploadService.postPortfolio(formData, this.currentClient._id).subscribe( res => {  
         console.log("SUCCESS", res);
-      }
     });
   }
 

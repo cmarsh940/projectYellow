@@ -38,10 +38,9 @@ const Busboy = require("busboy");
 //   );
 // }
 
-function uploadToS3(file, client) {
+function uploadToS3(file) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
   console.log("*** S3 FILE:", file)
-  console.log("*** S3 Client", )
   let s3bucket = new AWS.S3({
     accessKeyId: IAM_USER_KEY,
     secretAccessKey: IAM_USER_SECRET,
@@ -175,8 +174,7 @@ class ClientsController {
 
   //Clients Images
   upload(req, res) {
-    console.log("___ SERVER HIT UPLOAD___",req.body);
-    let new_client = new Client(req.body);
+    console.log("___ SERVER HIT UPLOAD___");
     let busboy = new Busboy({ headers: req.headers });
     if (req.files.picture) {
       let file = req.files.picture;
@@ -184,23 +182,25 @@ class ClientsController {
       let new_file_name = '';
       if (file_type) {
         new_file_name = `${new Date().getTime()}.${file_type[1]}`;
-        new_client.picture = new_file_name;
+        file.name = new_file_name;
         busboy.on("finish", function () {
           const file = req.files.picture;
           uploadToS3(file);
         });
         req.pipe(busboy);
       }
+
+      Client.findOneAndUpdate(req.params.id,
+        { $set: { picture: file.name } }
+      ).exec((err, client) => {
+        if (err) {
+          return res.status(204).json(err);
+        }
+        return res.json(client);
+      });
+    } else {
+      console.log("___ ERROR NO PICTURE ___");
     }
-    Client.update(
-      { _id: req.params.id },
-      { $set: { picture: new_client.picture } }
-    ).exec((err, new_client) => {
-      if (err) {
-        return res.status(204).json(err);
-      }
-      return res.json(new_client);
-    });
   }
 
 }

@@ -24,14 +24,13 @@ export class UploadService {
     httpOptions;
   }
 
-  postPortfolio(formData, id: string): Observable<any> {
+  postPortfolio(formData, id: string) {
     console.log("**** HIT SERVICE");
     console.log("**** FORMDATA", formData);
     console.log("**** ID", id);
-    var URL = this.actionUrl + "upload/portfolio" + "/" + id;
-    return this.http.put<any>(URL, formData).pipe(
-      map(this.extractData),
-      catchError(this.handleError('Add', []))
+    var URL = this.actionUrl + "upload/portfolio/" + id;
+    return this.http.post(URL, formData).pipe(
+      catchError(this.handleError('POST', []))
     );
   }
 
