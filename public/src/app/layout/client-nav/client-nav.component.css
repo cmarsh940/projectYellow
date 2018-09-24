@@ -15,3 +15,8 @@
   overflow-x: hidden;
   overflow-y: scroll;
 }
+
+img {
+  height: auto;
+  width: 2em;
+}

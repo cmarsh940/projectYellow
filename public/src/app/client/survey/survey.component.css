@@ -1,0 +1,11 @@
+.header {
+  width: 100%;
+}
+
+.header h1 {
+  text-align: center;
+}
+
+button {
+    margin: 1em;
+}
