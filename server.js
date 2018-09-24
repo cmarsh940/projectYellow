@@ -29,6 +29,7 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
 app.use(morgan('combined', { stream: accessLogStream }))
 
 app.set('trust proxy', 1) // trust first proxy
+
 app.use(session({
     secret: 'sad9#cdSsjdi-Ajion38*3lL-43*sdfs',
     resave: false,

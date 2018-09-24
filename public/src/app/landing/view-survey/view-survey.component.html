@@ -57,16 +57,26 @@
                             </div>
                         </div>
 
-                        <div *ngIf="i === 0" class="button-group">
-                            <button mat-button matStepperNext type="button">Next</button>
+                        <div *ngIf="i === 0" class="single-button">
+                            <button mat-stroked-button matStepperNext type="button" color="primary">
+                                Next <img src="/assets/icons/arrow_forward.svg" alt="navigate forward icon">
+                            </button>
                         </div>
                         <div *ngIf="i >= 1 && i < survey?.questions?.length - 1" class="button-group">
-                            <button mat-button matStepperPrevious type="button">Back</button>
-                            <button mat-button matStepperNext type="button">Next</button>
+                            <button mat-stroked-button matStepperPrevious type="button" color="back">
+                               <img src="/assets/icons/arrow_back.svg" alt="navigate back icon"> Back
+                            </button>
+                            <span class="spacer"></span>
+                            <button mat-stroked-button matStepperNext type="button" color="primary">
+                                Next <img src="/assets/icons/arrow_forward.svg" alt="navigate forward icon">
+                            </button>
                         </div>
                         <div *ngIf="i === survey?.questions?.length - 1" class="button-group">
-                            <button mat-button matStepperPrevious type="button">Back</button>
-                            <button mat-stroked-button type="submit" [disabled]=!surveyForm.valid>Submit</button>
+                            <button mat-stroked-button matStepperPrevious type="button" color="back">
+                                <img src="/assets/icons/arrow_back.svg" alt="navigate back icon"> Back
+                            </button>
+                            <span class="spacer"></span>
+                            <button mat-raised-button type="submit" [disabled]=!surveyForm.valid color="accent">Submit</button>
                         </div>
                     </mat-card-content>
                 </mat-card>

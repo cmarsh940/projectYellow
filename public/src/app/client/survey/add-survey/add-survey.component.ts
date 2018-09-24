@@ -28,7 +28,7 @@ export interface Type {
   styleUrls: ["./add-survey.component.css"]
 })
 export class AddSurveyComponent implements OnInit {
-  selectedValue: string;
+  selectedQType: any;
   surveyForm: FormGroup;
   nameChangeLog: string[] = [];
   categories: SurveyCategory[];
@@ -77,6 +77,11 @@ export class AddSurveyComponent implements OnInit {
     });
   }
 
+  choice(qType) {
+    console.log("CHANGED QUESTION TYPE", qType);
+    this.selectedQType = qType;
+  }
+
   createForm() {
     this.surveyForm = this.fb.group({
       category: ["", Validators.required],
@@ -86,7 +91,7 @@ export class AddSurveyComponent implements OnInit {
   }
   initQuestion() {
     return this.fb.group({
-      questionType: "",
+      questionType: ["", Validators.required],
       question: ["", Validators.required]
     });
   }
