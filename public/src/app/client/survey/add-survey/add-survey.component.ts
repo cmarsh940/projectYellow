@@ -36,11 +36,12 @@ export class AddSurveyComponent implements OnInit {
   errors = [];
 
   questionTypes: any[] = [
-    { value: "boolean", viewValue: "YES / NO" },
     { value: "boolean", viewValue: "True / False" },
     { value: "mutiplechoice", viewValue: "Multiple Choice" },
     { value: "text", viewValue: "Single Answer" },
-    { value: "paragraph", viewValue: "User Feedback" }
+    { value: "paragraph", viewValue: "User Feedback" },
+    { value: "smilieFaces", viewValue: "Satisfaction (images)" },
+    { value: "yesno", viewValue: "YES / NO" }
   ];
 
   @Input() survey: Survey;

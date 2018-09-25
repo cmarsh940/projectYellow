@@ -1,3 +1,15 @@
 table {
   width: 100%;
 }
+
+.header {
+  width: 100%;
+}
+
+.header h1 {
+  text-align: center;
+}
+
+#add-button {
+  margin: 1em;
+}

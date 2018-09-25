@@ -10,13 +10,11 @@ import { SurveyCategoryService } from './survey-category.service';
   styleUrls: ['./survey-category-report.component.css']
 })
 export class SurveyCategoryReportComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'action'];
+  displayedColumns: string[] = ['name', 'surveys', 'action'];
   dataSource: SurveyCategory[];
   errorMessage;
 
   constructor(
-    private _authService: AuthService,
-    private _router: Router,
     private _surveyCategory: SurveyCategoryService
   ) { }
 
@@ -47,4 +45,13 @@ export class SurveyCategoryReportComponent implements OnInit {
       });
   }
 
+  destroy(id: string) {
+    this._surveyCategory.deleteAsset(id).subscribe(res => {
+      console.log("DESTROY SURVEY", res);
+      if (true) {
+        this.loadAll();
+        location.reload();
+      }
+    });
+  }
 }

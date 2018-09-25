@@ -19,11 +19,19 @@ form {
     display: block;
 }
 
+.mat-card-header {
+    margin: 1em 0;
+}
+
 .card-question {
     width: 100%;
     text-align: center;
     text-decoration: black;
     font-size: large;   
+}
+
+.mat-input-element {
+    text-align: center;
 }
 .card-answer {
     width: 100%;
@@ -50,4 +58,11 @@ form {
 .button-group {
     width: 100%;
     display: flex;
+}
+
+.smilieFaces {
+    display: inline-flex;
+}
+.smilieFaces .mat-radio-button {
+    margin: 1em;
 }

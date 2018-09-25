@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition } from '@angular/material';
-import { Client } from '../../global/models/client';
 
 @Component({
   selector: 'overview-nav',
@@ -13,7 +12,7 @@ import { Client } from '../../global/models/client';
   styleUrls: ['./overview-nav.component.css']
 })
 export class OverviewNavComponent {
-  currentClient: Client = null;
+  currentClient = JSON.parse(localStorage.getItem('t940')); 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
@@ -44,4 +43,4 @@ export class OverviewNavComponent {
     config.panelClass = ['logout-snackbar']
     this.snackBar.open("You are logged out", '', config);
   }
-  }
+}

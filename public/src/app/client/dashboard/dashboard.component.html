@@ -30,7 +30,6 @@
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
-            Surveys
             <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu" disabled>
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -41,8 +40,14 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          <div>{{data.s.length}}</div>
+          <h5>Total Surveys</h5>
+          <b>{{ data.s.length }}</b>
         </mat-card-content>
+        <mat-card-actions>
+          <button mat-stroked-button aria-label="View all surveys" routerLink="/survey" color="primary">
+            View Surveys
+          </button>
+        </mat-card-actions>
       </mat-card>
     </mat-grid-tile> 
 

@@ -8,14 +8,13 @@
             <mat-step [formGroupName]="i" [stepControl]="questions.get([i])">
                 <mat-card>
                     <mat-card-header>
-                        <span>#{{i + 1}}</span>
-                    </mat-card-header>
-                    <mat-card-content>
                         <div class="card-question">
                             <b>
                                 <input matInput readonly="true" formControlName="question" />
                             </b>
                         </div>
+                    </mat-card-header>
+                    <mat-card-content>
                         <!-- BOOLEAN -->
                         <div class="card-answer">
                             <div *ngIf="survey?.questions[i]?.questionType === 'boolean'">
@@ -54,6 +53,24 @@
                                     <mat-label>Answer:</mat-label>
                                     <textarea matInput formControlName="answers" required></textarea>
                                 </mat-form-field>
+                            </div>
+
+                            <!-- SMILIEFACES -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'smilieFaces'">
+                                <mat-button-toggle-group formControlName="answers" class="smilieFaces">
+                                    <mat-button-toggle value="bad">
+                                        <mat-icon>sentiment_very_dissatisfied</mat-icon>
+                                    </mat-button-toggle>
+                                    <mat-button-toggle value="ok">
+                                        <mat-icon>sentiment_dissatisfied</mat-icon>
+                                    </mat-button-toggle>
+                                    <mat-button-toggle value="good">
+                                        <mat-icon>sentiment_satisfied</mat-icon>
+                                    </mat-button-toggle>
+                                    <mat-button-toggle value="great">
+                                        <mat-icon>sentiment_very_satisfied</mat-icon>
+                                    </mat-button-toggle>
+                                </mat-button-toggle-group>
                             </div>
                         </div>
 
