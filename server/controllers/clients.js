@@ -38,7 +38,7 @@ const Busboy = require("busboy");
 //   );
 // }
 
-function uploadToS3(file) {
+function uploadToS3(file, client) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
   console.log("*** S3 FILE:", file)
   let s3bucket = new AWS.S3({
@@ -184,18 +184,22 @@ class ClientsController {
         new_file_name = `${new Date().getTime()}.${file_type[1]}`;
         file.name = new_file_name;
         busboy.on("finish", function () {
+          const client = req.params.id;
           const file = req.files.picture;
-          uploadToS3(file);
+          uploadToS3(file, client);
         });
         req.pipe(busboy);
       }
-
-      Client.findOneAndUpdate(req.params.id,
+      console.log("__ UPLOADED AND ABOUT TO SAVE CLIENT");
+      Client.update(
+      { _id: req.params.id },
         { $set: { picture: file.name } }
       ).exec((err, client) => {
         if (err) {
-          return res.status(204).json(err);
+          console.log("___ UPDATE CLIENT ERROR ___",err);
+          return res.json(err);
         }
+        console.log("___ UPDATED CLIENT ___", client);
         return res.json(client);
       });
     } else {

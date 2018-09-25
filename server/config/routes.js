@@ -1,6 +1,7 @@
 const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
 const path = require('path');
+const Payments = require('../controllers/payments');
 const Subscriptions = require('../controllers/subscriptions');
 const Surveys = require('../controllers/surveys');
 const Users = require('../controllers/users');
@@ -8,7 +9,7 @@ const Questions = require('../controllers/questions');
 
 
 module.exports = function (app) {
-
+    // CLIENT
     app.get('/api/clients', Clients.index);
     app.post('/api/clients', Clients.create);
     app.delete('/api/clients', Clients.logout);
@@ -16,10 +17,12 @@ module.exports = function (app) {
     app.delete('/api/clients/:id', Clients.delete);
     app.get('/api/clients/:id', Clients.show);
     app.put('/api/clients/:id', Clients.update);
-
-    app.post('/api/upload/portfolio/:id', Clients.upload);
-
     app.get('/sessions', Clients.session);
+    // IMAGES
+    app.post('/api/upload/portfolio/:id', Clients.upload);
+    // PAYMENTS
+    app.post('/api/stripe/account/setup', Payments.create);
+    app.get('/api/subscriptions', Payments.show);
 
     app.get('/api/questions', Questions.index);
     app.post("/api/questions/:id", Questions.create);

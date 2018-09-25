@@ -21,12 +21,19 @@
 }
 
 img {
-    width: 5em;
-    height: 5em;
+    width: 7em;
+    height: 7em;
     border-radius: 50%;
+    -ms-flex-align: center;
     align-items: center;
+    position: absolute;
+    top: 10%;
 }
 
+
+.content {
+    margin: 1em 0;
+}
 .content-box {
     display: inline-block;
     margin: 1em 3em;
@@ -46,4 +53,8 @@ img {
 .action button {
     width: 100%;
     margin: 2em auto;
+}
+
+.mat-button {
+    margin: 0 7px!important;
 }

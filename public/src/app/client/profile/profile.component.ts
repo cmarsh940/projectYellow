@@ -101,6 +101,7 @@ export class ProfileComponent implements OnInit {
     console.log("FORMDATA", formData);
     this._uploadService.postPortfolio(formData, this.currentClient._id).subscribe( res => {  
         console.log("SUCCESS", res);
+        this.getClient();
     });
   }
 

@@ -2,12 +2,27 @@
   <div class="info">
     <div class="header">
       <div class="header-image">
-        <form (change)="uploadPortfolio()" #form encType="multipart/form-data">
-          <input type="file" #file name="picture" style="display: none"  multiple />
-          <button mat-raised-button color="primary" (click)="addFiles()">
-            Add Picture
-          </button>
-        </form>
+        <ng-container *ngIf="!currentClient.picture">
+          <img src="/assets/missing.jpg" alt="Missing profile picture" class="profile-picture">
+          <form (change)="uploadPortfolio()" #form encType="multipart/form-data" class="upload-form">
+            <input type="file" #file name="picture" style="display: none"  multiple />
+            <button mat-button color="primary" (click)="addFiles()">
+              Add Picture
+            </button>
+          </form>
+        </ng-container>
+        <ng-container *ngIf="currentClient.picture">
+
+          {{ currentClient.picture }}
+
+          <!-- <img src="/assets/missing.jpg" alt="Missing profile picture" class="profile-picture">
+          <form (change)="uploadPortfolio()" #form encType="multipart/form-data">
+            <input type="file" #file name="picture" style="display: none"  multiple />
+            <button mat-raised-button color="primary" (click)="addFiles()">
+              Add Picture
+            </button>
+          </form> -->
+        </ng-container>
       </div>
       <div class="header-text">
         <h6>{{currentClient.firstName}} {{currentClient.lastName}}</h6>
