@@ -1,0 +1,17 @@
+.container{
+    border: 1px solid #000;
+}
+
+.hf-container {
+    border: none;
+    height: 50px;
+    padding: 4px;
+}
+
+.header {
+  width: 100%;
+}
+
+.header h2 {
+  text-align: center;
+}

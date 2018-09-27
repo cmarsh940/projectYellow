@@ -2,9 +2,15 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
+import { CheckoutComponent } from "./checkout/checkout.component";
 
 
 const routes: Routes = [
+  {
+    path: "checkout",
+    pathMatch: "full",
+    component: CheckoutComponent
+  },
   {
     path: "login",
     component: LoginComponent
