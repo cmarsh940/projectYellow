@@ -17,13 +17,18 @@
     <input matInput formControlName="name" />
   </mat-form-field>
 
+  <!-- ARRAY OF QUESTIONS -->
   <div formArrayName="questions">
     <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i">
-      <!-- The repeated address template -->
+      <!-- QUESTION CARD -->
       <mat-card>
         <mat-card-header> 
           <h6>#{{i + 1}}</h6>
           <span class="spacer"></span>
+          <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- QUESTION TYPE -->
           <mat-form-field>
             <mat-select placeholder="Question type" formControlName="questionType">
               <mat-option *ngFor="let qType of questionTypes" [value]="qType.value">
@@ -31,13 +36,43 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-form-field>
-            <mat-label>Question:</mat-label>
-            <input matInput formControlName="question">
-            <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
-          </mat-form-field>
+
+          <!-- QUESTION -->
+          <ng-container [ngSwitch]="surveyForm.value.questions[i]?.questionType">
+            <ng-container *ngSwitchCase="'boolean'">
+              <mat-form-field>
+                <mat-label>Question:</mat-label>
+                <input matInput formControlName="question">
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchCase="'text'">
+              <mat-form-field>
+                <mat-label>Question:</mat-label>
+                <input matInput formControlName="question">
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchCase="'mutiplechoice'">
+              <mat-form-field>
+                <mat-label>Question:</mat-label>
+                <input matInput formControlName="question">
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchCase="'paragraph'">
+              <mat-form-field>
+                <mat-label>Question:</mat-label>
+                <input matInput formControlName="question">
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchCase="'smilieFaces'">
+              <mat-form-field>
+                <mat-label>Question:</mat-label>
+                <input matInput formControlName="question">
+              </mat-form-field>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <b>Select Question Type</b>
+            </ng-container>
+          </ng-container>
         </mat-card-content>
       </mat-card>
     </div>

@@ -1,15 +1,15 @@
-import { SurveyCategory } from '../../../global/models/survey-category';
-import { Component, OnInit, OnDestroy, ElementRef, ViewChildren, AfterViewInit, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray, FormControlName } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
-import { SurveyService } from '../survey.service';
+import { SurveyCategory } from './../../../global/models/survey-category';
+import { Component, OnInit, OnDestroy, Input, AfterViewInit, ViewChildren, ElementRef } from '@angular/core';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
+import { Location } from '@angular/common';
 import { debounceTime } from 'rxjs/operators';
 import { GenericValidator } from '../../../global/generic-validator';
+import { SurveyService } from '../survey.service';
 import { Survey } from '../../../global/models/survey';
 import { Question } from '../../../global/models/question';
+import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 
 
 @Component({
@@ -19,21 +19,22 @@ import { Question } from '../../../global/models/question';
 })
 
 
-export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
+export class EditSurveyComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
   surveyId: string = "";
-  categories: SurveyCategory[];
   errors = [];
   _routeSubscription: Subscription;
+  categories: SurveyCategory[];
 
 
   questionTypes: any[] = [
-    { value: "boolean", viewValue: "YES / NO" },
     { value: "boolean", viewValue: "True / False" },
     { value: "mutiplechoice", viewValue: "Multiple Choice" },
     { value: "text", viewValue: "Single Answer" },
-    { value: "paragraph", viewValue: "User Feedback" }
+    { value: "paragraph", viewValue: "User Feedback" },
+    { value: "smilieFaces", viewValue: "Satisfaction (images)" },
+    { value: "yesno", viewValue: "YES / NO" }
   ];
 
   @Input() survey: any;
@@ -47,11 +48,11 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
     return <FormArray>this.surveyForm.get('questions');
   }
 
-  
+
   constructor(
     private fb: FormBuilder,
-    private _surveyService: SurveyService,
     private _categoryService: SurveyCategoryService,
+    private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router
   ) {
@@ -60,12 +61,11 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
       name: {
-        required: 'Survey name is required.',
-        maxlength: 'Survey name cannot exceed 350 characters.'
+        required: 'Survey name is required.'
       },
-      category: {
-        required: 'Survey Category is required.'
-      }
+      question: {
+        required: 'A question is required.'
+      },
     };
 
     // Define an instance of the validator for use with this form,
@@ -75,11 +75,10 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.surveyForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(350)]],
+      name: ['', Validators.required],
       category: ['', Validators.required],
       questions: this.fb.array([this.buildQuestion()])
     });
-
 
     this.loadCategories();
 
@@ -89,7 +88,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  ngAfterViewInit()  {
+  ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
     const controlBlurs: Observable<any>[] = this.formInputElements
       .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
@@ -99,62 +98,6 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(debounceTime(800)).subscribe(value => {
         this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
       });
-  }
-
-  addQuestion(): void {
-    this.questions.push(this.buildQuestion());
-  }
-
-  removeQuestion(i) {
-    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
-    questionsControl.removeAt(i);
-  }
-
-  buildQuestion(): FormGroup {
-    return this.fb.group({
-      questionType: '',
-      question: ['', Validators.required],
-    });
-  }
-
-
-  onSurveyRetrieved(survey: Survey): void {
-    if (this.surveyForm) {
-      this.surveyForm.reset();
-    }
-    this.survey = survey;
-
-    // Update the data on the form
-    this.surveyForm.patchValue({
-      name: this.survey.name,
-      category: this.survey.category,
-    });
-    this.surveyForm.setControl('questions',
-      this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
-  }
-
-  ngOnChanges() {
-    this.rebuildForm();
-  }
-
-  ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
-  }
-  
-
-  getSurvey() {
-    this._surveyService.getAsset(this.surveyId)
-      .subscribe(
-        (survey: Survey) => this.onSurveyRetrieved(survey),
-        (error: any) => {
-          if (error) {
-            for (const key of Object.keys(error)) {
-              const errors = error[key];
-              this.errors.push(errors.message);
-            }
-          }
-        }
-      );
   }
 
   loadCategories() {
@@ -176,11 +119,65 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  rebuildForm() {
-    this.surveyForm.reset({
-      name: this.survey.name,
-      category: this.survey.category,
+  addQuestion(): void {
+    this.questions.push(this.buildQuestion());
+  }
+
+
+  buildQuestion(): FormGroup {
+    return this.fb.group({
+      questionType: ['', Validators.required],
+      question: ['', Validators.required]
     });
+  }
+
+
+  onSurveyRetrieved(survey: Survey): void {
+    if (this.surveyForm) {
+      this.surveyForm.reset();
+    }
+    this.survey = survey;
+
+    // Update the data on the form
+    this.surveyForm.patchValue({
+      name: this.survey.name,
+      category: this.survey.category
+    });
+    this.surveyForm.setControl('questions',
+      this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
+  }
+
+  ngOnChanges() {
+    this.rebuildForm();
+  }
+
+  ngOnDestroy() {
+    this._routeSubscription.unsubscribe();
+  }
+
+
+  getSurvey() {
+    this._surveyService.getAsset(this.surveyId)
+      .subscribe(
+        (survey: Survey) => {
+          for (let i = 0; i < survey.questions.length; i++) {
+            survey.questions[i].answers = [];
+          }
+          this.onSurveyRetrieved(survey)
+        },
+        (error: any) => {
+          if (error) {
+            for (const key of Object.keys(error)) {
+              const errors = error[key];
+              this.errors.push(errors.message);
+            }
+          }
+        }
+      );
+  }
+
+  rebuildForm() {
+    this.surveyForm.reset();
     this.setQuestions(this.survey.questions);
   }
 
@@ -191,48 +188,48 @@ export class EditSurveyComponent implements OnInit, OnDestroy, AfterViewInit {
     this.surveyForm.setControl('questions', questionFormArray);
   }
 
+  // PREPARE SURVEY FORM FOR SUBMITTING
+  prepareSaveSurvey(): Survey {
+    const formModel = this.surveyForm.value;
 
+    // deep copy of form model questions
+    const questionsDeepCopy: Question[] = formModel.questions.map(
+      (question: Question) => Object.assign({}, question)
+    );
+
+    // return new `Survey` object containing a combination of original survey value(s)
+    // and deep copies of changed form model values
+    const saveSurvey: Survey = {
+      _id: this.survey._id,
+      category: formModel.category as string,
+      name: formModel.name as string,
+      questions: questionsDeepCopy,
+      user: this.survey.user,
+      creator: this.survey.creator,
+      createdAt: this.survey.createdAt,
+      updatedAt: Date.now()
+    };
+    return saveSurvey;
+  }
+
+  // SUBMIT FORM TO DATABASE
   submitForm(): void {
-      this.errors = [];
-      this.survey = this.prepareSaveSurvey();
-      this._surveyService.updateAsset(this.survey._id, this.survey).subscribe(
-        result => {
-          console.log("___RESULTS___:", result);
-          this._router.navigate(["/survey"]);
-        },
-        error => {
-          console.log("___ERROR___:", error);
-          for (const key of Object.keys(error)) {
-            const errors = error[key];
-            this.errors.push(errors.message);
-          }
-        });
-      if (!this.errors) {
+    this.errors = [];
+    this.survey = this.prepareSaveSurvey();
+    this._surveyService.updateAsset(this.survey._id, this.survey).subscribe(
+      result => {
+        console.log("___RESULTS___:", result);
         this._router.navigate(["/survey"]);
-      }
+      },
+      error => {
+        console.log("___ERROR___:", error);
+        for (const key of Object.keys(error)) {
+          const errors = error[key];
+          this.errors.push(errors.message);
+        }
+      });
+    if (!this.errors) {
+      this._router.navigate(["/survey"]);
     }
-
-    prepareSaveSurvey(): Survey {
-      const formModel = this.surveyForm.value;
-
-      // deep copy of form model questions
-      const questionsDeepCopy: Question[] = formModel.questions.map(
-        (question: Question) => Object.assign({}, question)
-      );
-
-      // return new `Survey` object containing a combination of original survey value(s)
-      // and deep copies of changed form model values
-      const saveSurvey: Survey = {
-        _id: this.survey._id,
-        category: formModel.category as string,
-        name: formModel.name as string,
-        questions: questionsDeepCopy,
-        user: this.survey.user,
-        creator: this.survey.creator,
-        createdAt: this.survey.createdAt,
-        updatedAt: Date.now()
-      };
-      return saveSurvey;
-    }
-
+  }
 }
