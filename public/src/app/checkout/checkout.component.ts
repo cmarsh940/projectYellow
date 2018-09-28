@@ -4,6 +4,17 @@ import braintreeClient from 'braintree-web/client';
 import braintreeHostedFields from 'braintree-web/hosted-fields';
 
 
+const paymentDetails = {
+  total: {
+    label: 'Total',
+    amount: {
+      currency: 'USD',
+      value: '10.00',
+    }
+  }
+};
+
+
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
@@ -72,8 +83,11 @@ export class CheckoutComponent implements OnInit  {
 
       button.addEventListener('click', function (event) {
         event.preventDefault();
-
-        hostedFieldsInstance.tokenize().then(function (payload) {
+        console.log("PAYMENT DETAILS", paymentDetails);
+        hostedFieldsInstance.tokenize({
+          details: paymentDetails
+          }).then(function (payload) {
+          console.log("PAYLOAD",payload);
           alert('nonce: ' + payload.nonce);
         }).catch(function (err) {
           console.log('tokenization error:', err);

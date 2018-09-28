@@ -16,6 +16,7 @@ export class Client {
     subscription: string;
     password: string;
     confirm_pass: any;
+    picture: any;
     createdAt: any;
     updatedAt: any;
 }

@@ -12,8 +12,13 @@
           </form>
         </ng-container>
         <ng-container *ngIf="currentClient.picture">
-
-          {{ currentClient.picture }}
+        <img src="https://surveysbyme.s3.us-west-2.amazonaws.com/Profile/{{currentClient.picture}}" alt="profile image" class="profile-picture">
+        <form (change)="uploadPortfolio()" #form encType="multipart/form-data" class="upload-form">
+          <input type="file" #file name="picture" style="display: none" multiple />
+          <button mat-button color="accent" (click)="addFiles()" id="hide-me">
+            Edit
+          </button>
+        </form>
 
           <!-- <img src="/assets/missing.jpg" alt="Missing profile picture" class="profile-picture">
           <form (change)="uploadPortfolio()" #form encType="multipart/form-data">

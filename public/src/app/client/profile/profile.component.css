@@ -18,6 +18,7 @@
 
 .header-image, .header-text {
     display: flex;
+    align-self: center;
 }
 
 img {
@@ -26,9 +27,25 @@ img {
     border-radius: 50%;
     -ms-flex-align: center;
     align-items: center;
-    position: absolute;
-    top: 10%;
+    image-rendering: -webkit-optimize-contrast;
+    object-fit: cover;
+    object-position: top;
 }
+
+.upload-form {
+    position: absolute;
+    align-self: center;
+}
+
+#hide-me {
+    opacity: 0.0;
+}
+#hide-me:hover {
+    opacity: 0.9;
+}
+
+
+
 
 
 .content {

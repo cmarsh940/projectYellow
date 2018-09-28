@@ -15,9 +15,6 @@
   <mat-form-field appearance="outline">
     <mat-label>Survey Name:</mat-label>
     <input matInput formControlName="name" />
-    <mat-error>
-      <span *ngIf="!surveyForm.get('name').valid && surveyForm.get('name').touched">Please enter Survey Name</span>
-    </mat-error>
   </mat-form-field>
 
   <div formArrayName="questions">

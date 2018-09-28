@@ -191,10 +191,14 @@ class ClientsController {
         req.pipe(busboy);
       }
       console.log("__ UPLOADED AND ABOUT TO SAVE CLIENT");
-      Client.update(
-      { _id: req.params.id },
-        { $set: { picture: file.name } }
-      ).exec((err, client) => {
+      Client.updateOne({
+         _id: req.params.id 
+        }, 
+        { 
+          $set: { 
+            picture: file.name 
+          } 
+        }).exec((err, client) => {
         if (err) {
           console.log("___ UPDATE CLIENT ERROR ___",err);
           return res.json(err);
