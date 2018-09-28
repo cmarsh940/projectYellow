@@ -9,7 +9,12 @@ const QuestionSchema = new mongoose.Schema({
     question: {
         type: String,
     },
-    options: [String],
+    options:[
+        {
+            _id: false,
+            optionName: String
+        }
+    ],
     questionType: {
         type: String
     }

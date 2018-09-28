@@ -56,6 +56,20 @@
                   <mat-label>Question:</mat-label>
                   <input matInput formControlName="question">
                 </mat-form-field>
+                <div formArrayName="options">
+                  <div *ngFor="let option of question.get('options').controls; let j=index">
+                    <p>{{j+1}}</p>
+                    <div [formGroupName]="j">
+                      <mat-form-field>
+                        <mat-label>option:</mat-label>
+                        <input matInput formControlName="optionName" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <button type="button" (click)="addNewOption(question.controls.options)">
+                    Add new Option
+                  </button>
+                </div>
               </ng-container>
               <ng-container *ngSwitchCase="'paragraph'">
                 <mat-form-field>

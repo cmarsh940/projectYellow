@@ -93,7 +93,8 @@ export class AddSurveyComponent implements OnInit {
   initQuestion() {
     return this.fb.group({
       questionType: ["", Validators.required],
-      question: ["", Validators.required]
+      question: ["", Validators.required],
+      options: this.fb.array([])
     });
   }
 
@@ -121,6 +122,13 @@ export class AddSurveyComponent implements OnInit {
   addQuestion() {
     const questionsControl = <FormArray>this.surveyForm.controls["questions"];
     questionsControl.push(this.initQuestion());
+  }
+  
+  addNewOption(control) {
+    control.push(
+      this.fb.group({
+        optionName: ['']
+      }))
   }
 
   removeQuestion(i) {
