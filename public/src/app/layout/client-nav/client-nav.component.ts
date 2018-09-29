@@ -17,6 +17,7 @@ export class ClientNavComponent {
   currentClient = JSON.parse(localStorage.getItem('t940')); 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  opened: boolean;
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe(Breakpoints.Handset)

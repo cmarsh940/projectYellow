@@ -29,15 +29,20 @@ export class ListSurveysComponent implements OnInit {
       .then((result) => {
         this.errorMessage = null;
         result.forEach(asset => {
-          tempList.push(asset);
+          if(!asset.private) {
+            tempList.push(asset);
+          }
         });
         this.dataSource = tempList;
-        console.log("*** SURVEYS RETURNED ***:", this.dataSource);
       })
       .catch((error) => {
         if (error) {
           this.errorMessage = error;
         }
       });
+  }
+
+  TrackById(index: number, survey: Survey) {
+    return survey._id;
   }
 }

@@ -1,5 +1,5 @@
 <div>
-  <mat-table [dataSource]="dataSource">
+  <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
 
     <!-- Created Column -->
     <ng-container matColumnDef="created">
@@ -50,5 +50,7 @@
     <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true" [length]="totalSize"
+    [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+  </mat-paginator>
 </div>

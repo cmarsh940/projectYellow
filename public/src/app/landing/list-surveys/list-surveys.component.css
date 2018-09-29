@@ -5,3 +5,14 @@
 #header h2 {
     text-align: center;
 }
+
+.mat-header-cell span {
+    width: 100%;
+    text-align: center;
+}
+
+.view {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}

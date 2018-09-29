@@ -2,7 +2,7 @@
   <h2 class="mat-title">Surveys</h2>
 </div>
 
-<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<mat-table [dataSource]="dataSource" [trackBy]="TrackById" class="mat-elevation-z8">
 
   <!-- Owner Column -->
   <ng-container matColumnDef="owner">
@@ -17,11 +17,13 @@
   </ng-container>
 
   <ng-container matColumnDef="action">
-    <mat-header-cell *matHeaderCellDef>
-      <span> Action </span>
+    <mat-header-cell *matHeaderCellDef >
+      <span> Take Survey </span>
     </mat-header-cell>
-    <mat-cell *matCellDef="let element">
-      <button mat-button [routerLink]="['/takeSurvey', element._id]">v</button>
+    <mat-cell *matCellDef="let element" class="view">
+      <mat-icon [routerLink]="['/takeSurvey', element._id]" color="accent">
+        <i class="material-icons">visibility</i>
+      </mat-icon>
     </mat-cell>
   </ng-container>
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
