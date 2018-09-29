@@ -5,13 +5,13 @@
     fixedInViewport="true"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="!(isHandset$ | async)">
+    [(opened)]="opened">
     <mat-toolbar color="primary">Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/about">About Us</a>
-      <a mat-list-item routerLink="/pricing">Pricing</a>
-      <a mat-list-item routerLink="/register">Sign Up</a>
-      <a mat-list-item routerLink="/list_of_surveys">View Surveys</a>
+      <a mat-list-item routerLink="/about" (tap)="drawer.toggle()">About Us</a>
+      <a mat-list-item routerLink="/pricing" (tap)="drawer.toggle()">Pricing</a>
+      <a mat-list-item routerLink="/register" (tap)="drawer.toggle()">Sign Up</a>
+      <a mat-list-item routerLink="/list_of_surveys" (tap)="drawer.toggle()">View Surveys</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -20,8 +20,7 @@
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
+        (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span class="spacer"></span>

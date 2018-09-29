@@ -77,6 +77,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this.surveyForm = this.fb.group({
       name: ['', Validators.required],
       category: ['', Validators.required],
+      private: [""],
       questions: this.fb.array([this.buildQuestion()])
     });
 
@@ -203,6 +204,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       _id: this.survey._id,
       category: formModel.category as string,
       name: formModel.name as string,
+      private: formModel.private,
       questions: questionsDeepCopy,
       user: this.survey.user,
       creator: this.survey.creator,

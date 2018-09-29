@@ -5,19 +5,19 @@
     fixedInViewport="true"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    [opened]="!(isHandset$ | async)">
+    [(opened)]="opened">
     <mat-toolbar color="primary">Account</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item [routerLink]="['/profile', currentClient]">
+      <a mat-list-item [routerLink]="['/profile', currentClient]" (tap)="drawer.toggle()">
         <mat-icon mat-list-icon>account_circle</mat-icon>
         <h4 mat-line>Profile</h4>
       </a>
       <mat-divider></mat-divider>
-      <a mat-list-item routerLink="/dashboard">
+      <a mat-list-item routerLink="/dashboard" (tap)="drawer.toggle()">
         <mat-icon mat-list-icon>dashboard</mat-icon>  
         <h4 mat-line>Dashboard</h4>
       </a>
-      <a mat-list-item routerLink="/survey">
+      <a mat-list-item routerLink="/survey" (tap)="drawer.toggle()">
         <mat-icon mat-list-icon>assignment</mat-icon> 
         <h4 mat-line>Surveys</h4>
       </a>
@@ -33,8 +33,7 @@
         type="button"
         aria-label="Toggle sidenav"
         mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
+        (click)="drawer.toggle()">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span class="spacer"></span>

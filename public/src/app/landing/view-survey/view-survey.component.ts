@@ -189,6 +189,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       _id: this.survey._id,
       category: this.survey.category,
       name: this.survey.name,
+      private: this.survey.private,
       questions: questionsDeepCopy,
       user: this.survey.user,
       creator: this.survey.creator,

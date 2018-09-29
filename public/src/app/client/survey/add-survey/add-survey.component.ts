@@ -87,6 +87,7 @@ export class AddSurveyComponent implements OnInit {
     this.surveyForm = this.fb.group({
       category: ["", Validators.required],
       name: ["", Validators.required],
+      private: [""],
       questions: this.fb.array([this.initQuestion()])
     });
   }
@@ -171,6 +172,7 @@ export class AddSurveyComponent implements OnInit {
       _id: Number,
       category: formModel.category._id,
       name: formModel.name as string,
+      private: formModel.private,
       questions: questionsDeepCopy,
       user: "",
       creator: JSON.parse(sessionStorage.getItem('currentClient')),
