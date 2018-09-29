@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SurveyService } from '../../client/survey/survey.service';
 import { Survey } from '../../global/models/survey';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-list-surveys',
@@ -8,11 +9,18 @@ import { Survey } from '../../global/models/survey';
   styleUrls: ['./list-surveys.component.css']
 })
 export class ListSurveysComponent implements OnInit {
-  dataSource: Survey[];
   errorMessage;
+  dataSource: any;
+  array: any;
+  resultsLength = 0;
+  pageSize = 10;
+  currentPage = 0;
+  totalSize = 0;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['owner', 'name', 'action'];
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private _surveyService: SurveyService
@@ -33,7 +41,11 @@ export class ListSurveysComponent implements OnInit {
             tempList.push(asset);
           }
         });
-        this.dataSource = tempList;
+        this.dataSource = new MatTableDataSource<Element>(tempList);
+        this.dataSource.paginator = this.paginator;
+        this.array = tempList;
+        this.totalSize = this.array.length;
+        this.iterator();
       })
       .catch((error) => {
         if (error) {
@@ -44,5 +56,18 @@ export class ListSurveysComponent implements OnInit {
 
   TrackById(index: number, survey: Survey) {
     return survey._id;
+  }
+
+  handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
+
+  private iterator() {
+    const end = (this.currentPage + 1) * this.pageSize;
+    const start = this.currentPage * this.pageSize;
+    const part = this.array.slice(start, end);
+    this.dataSource = part;
   }
 }

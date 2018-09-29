@@ -1,13 +1,10 @@
-import { Location } from '@angular/common';
-import { ProfileService } from './../../profile/profile.service';
 import { Component, OnInit, ViewChild} from '@angular/core';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 
-import { Survey } from './../../../global/models/survey';
 import { Client } from '../../../global/models/client';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ProfileService } from './../../profile/profile.service';
+import { Survey } from './../../../global/models/survey';
 import { SurveyService } from '../survey.service';
-import { merge } from 'rxjs';
-import { startWith, switchMap, map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'survey-list',
@@ -15,14 +12,13 @@ import { startWith, switchMap, map, catchError } from 'rxjs/operators';
   styleUrls: ['./survey-list.component.css']
 })
 export class SurveyListComponent implements OnInit {
-  dataSource: any; 
   currentClient: Client;
   errorMessage;
-  resultsLength = 0;
-  isLoadingResults = true;
-  isRateLimitReached = false;
-  array: any;
 
+  // PAGINATE
+  dataSource: any;
+  array: any;
+  resultsLength = 0; 
   pageSize = 10;
   currentPage = 0;
   totalSize = 0;
@@ -39,13 +35,11 @@ export class SurveyListComponent implements OnInit {
 
   ngOnInit() {
     this.getSurveys();
-
   }
 
   getSurveys() {
     let surveyOwner = JSON.parse(sessionStorage.getItem('currentClient'));
-    let id = surveyOwner._id
-    console.log("__ID__:", id);
+    let id = surveyOwner._id;
     this._profileService.getparticipant(id)
       .subscribe((response) => {
         this.dataSource = new MatTableDataSource<Element>(response.surveys);
