@@ -28,7 +28,6 @@
     "braintree-web-drop-in": "^1.13.0",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
-    "ngx-braintree": "^6.1.2",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

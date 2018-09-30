@@ -22,6 +22,7 @@ export class SurveyListComponent implements OnInit {
   pageSize = 10;
   currentPage = 0;
   totalSize = 0;
+  pageEvent;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['created', 'name', 'action'];

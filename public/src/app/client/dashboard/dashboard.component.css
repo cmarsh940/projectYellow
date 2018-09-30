@@ -26,6 +26,7 @@
 
 .dashboard-card-content {
   text-align: center;
+  height: 100%;
 }
 
 .mat-card-actions button {
