@@ -45,6 +45,12 @@
                   <input matInput formControlName="question">
                 </mat-form-field>
               </ng-container>
+              <ng-container *ngSwitchCase="'yesno'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
               <ng-container *ngSwitchCase="'text'">
                 <mat-form-field>
                   <mat-label>Question:</mat-label>

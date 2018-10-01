@@ -23,19 +23,18 @@ form {
     margin: 1em 0;
 }
 
-.card-question {
+#question-input {
     width: 100%;
     text-align: center;
     text-decoration: black;
     font-size: large;   
+    height: auto;
 }
 
-.mat-input-element {
-    text-align: center;
-}
 .card-answer {
     width: 100%;
     text-align: center;
+    margin: 2em 0;
 }
 
 .mat-radio-button {

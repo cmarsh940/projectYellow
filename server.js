@@ -1,8 +1,8 @@
 const bodyParser = require('body-parser');
 const busboy = require("connect-busboy");
 const busboyBodyParser = require("busboy-body-parser");
+const config = require("./server/config/config");
 const cors = require("cors");
-const debug = require('debug')
 const express = require('express');
 const fs = require('fs');
 const helmet = require('helmet');
@@ -11,7 +11,6 @@ const morgan = require('morgan');
 const path = require("path");
 const port = normalizePort(process.env.PORT || '8000');
 const session = require('express-session');
-
 
 const app = express();
 
@@ -33,7 +32,7 @@ app.use(morgan('combined', { stream: accessLogStream }))
 app.set('trust proxy', true) // trust first proxy
 
 app.use(session({
-    secret: 'sad9#cdSsjdi-Ajion38*3lL-43*sdfs',
+    secret: config.secret,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 60000 }

@@ -137,6 +137,16 @@ const ClientSchema = new mongoose.Schema({
       }
     ],
     default: []
+  },
+
+  grt:{
+    type: String
+  },
+
+  verified: {
+    type: Boolean,
+    required: true,
+    default: true
   }
 
 }, {
@@ -146,31 +156,29 @@ const ClientSchema = new mongoose.Schema({
 // Uniqueness
 ClientSchema.plugin(unique, { message: "Email'{VALUE}' already exists." });
 
-ClientSchema.methods = {
-  fullName: () => {
-    return `${this.firstName} ${this.lastName}`;
-  },
-  encrypt: function (next) {
-    let client = this;
-
-    bcrypt.hash(client.password, 10)
-      .then((hashPW) => {
-        client.password = hashPW;
-
-        next();
-      })
-  }
-}
-
 ClientSchema.pre('save', function (next) {
   let client = this;
 
-  client.encrypt(next);
+  if (client.isNew) {
+    client.password = bcrypt.hashSync(client.password, bcrypt.genSaltSync());
+  }
+
+  next();
 });
 
 
 ClientSchema.methods.authenticate = function (password) {
   return bcrypt.compareSync(password, this.password);
+}
+
+ClientSchema.methods.setValidate = function (next) {
+  let client = this;
+
+  if (client.isNew) {
+    client.grt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
+
+  next();
 }
 
 const Client = mongoose.model('Client', ClientSchema);

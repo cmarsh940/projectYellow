@@ -8,11 +8,7 @@
             <mat-step [formGroupName]="i" [stepControl]="questions.get([i])">
                 <mat-card>
                     <mat-card-header>
-                        <div class="card-question">
-                            <b>
-                                <input matInput readonly="true" formControlName="question" />
-                            </b>
-                        </div>
+                        <textarea matInput readonly="true" formControlName="question" id="question-input"></textarea>
                     </mat-card-header>
                     <mat-card-content>
                         <!-- BOOLEAN -->

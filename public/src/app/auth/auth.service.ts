@@ -48,25 +48,25 @@ export class AuthService {
     );
   }
 
-    setCurrentClient(client) {
-      console.log("*** SERVICE SET CURRENT CLIENT ***", client)
-      sessionStorage.setItem('currentClient', JSON.stringify(client));
-      localStorage.setItem('t940', JSON.stringify(client._id));
-    }
+  setCurrentClient(client) {
+    console.log("*** SERVICE SET CURRENT CLIENT ***", client)
+    sessionStorage.setItem('currentClient', JSON.stringify(client));
+    localStorage.setItem('t940', JSON.stringify(client._id));
+  }
 
-    logout(callback) {
-      console.log("*** SERVICE CLIENT LOGOUT ***");
-      console.log("*** DELETE ***");
-      return this._http.delete('/api/clients').subscribe(
-        res => {
-          this.currentClient = null;
-          sessionStorage.removeItem('currentClient');
-          localStorage.removeItem('t940');
-          callback(res.json());
-        },
-        err => console.error(err)
-      );
-    }
+  logout(callback) {
+    console.log("*** SERVICE CLIENT LOGOUT ***");
+    console.log("*** DELETE ***");
+    return this._http.delete('/api/clients').subscribe(
+      res => {
+        this.currentClient = null;
+        sessionStorage.removeItem('currentClient');
+        localStorage.removeItem('t940');
+        callback(res.json());
+      },
+      err => console.error(err)
+    );
+  }
 
   verify() {
     let data = sessionStorage.getItem('currentClient');
@@ -74,6 +74,15 @@ export class AuthService {
       return false;
     } else {
     return true;
+    }
+  }
+
+  emailVerified() {
+    let data = JSON.parse(sessionStorage.getItem('currentClient'));
+    if (!data.v) {
+      return false;
+    } else {
+      return true;
     }
   }
   

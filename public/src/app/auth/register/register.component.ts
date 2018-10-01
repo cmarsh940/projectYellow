@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
     this.myForm = fb.group({
       firstName: this.firstName,
       lastName: this.lastName,
-      businessName: this.lastName,
+      businessName: this.businessName,
       email: this.email,
       password: this.password,
       confirm_pass: this.confirm_pass,
@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
     this.participant = {
       'firstName': this.firstName.value,
       'lastName': this.lastName.value,
-      'businessName': this.lastName.value,
+      'businessName': this.businessName.value,
       'email': this.email.value,
       'password': this.password.value,
       'confirm_pass': this.confirm_pass.value,

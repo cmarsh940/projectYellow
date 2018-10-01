@@ -110,10 +110,15 @@ class ClientsController {
           n: client.firstName + " " + client.lastName,
           a8o1: client.role,
           b801: client.subscription,
-          s: client.surveys
+          s: client.surveys,
+          v: client.verified
         };
+        if(err) {
+          console.log("ERROR INSIDE", err);
+        }
         return res.json(req.session.client);
       }
+      console.log("ERROR", err);
       return res.json(err);
     })
   }

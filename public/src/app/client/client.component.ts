@@ -22,6 +22,7 @@ export class ClientComponent implements OnInit {
 
     ngOnInit() {
         this.isLoggedIn();
+        this.isValidated();
     }
 
     isLoggedIn() {
@@ -35,6 +36,17 @@ export class ClientComponent implements OnInit {
         }
     }
 
+    isValidated() {
+        let verified = this._authService.emailVerified();
+        if (!verified) {
+            this.notValidatedSnackBar();
+            this._router.navigateByUrl('/login');
+        } else {
+            console.log("YOU ARE VERIFIED");
+        }
+
+    }
+
     openSnackBar() {
         const config = new MatSnackBarConfig();
         config.verticalPosition = this.verticalPosition;
@@ -42,6 +54,15 @@ export class ClientComponent implements OnInit {
         config.duration = 2500;
         config.panelClass = ['logout-snackbar']
         this.snackBar.open("You are not logged in!", '', config);
+    }
+
+    notValidatedSnackBar() {
+        const config = new MatSnackBarConfig();
+        config.verticalPosition = this.verticalPosition;
+        config.horizontalPosition = this.horizontalPosition;
+        config.duration = 2500;
+        config.panelClass = ['logout-snackbar']
+        this.snackBar.open("Please verify email", '', config);
     }
 
 }

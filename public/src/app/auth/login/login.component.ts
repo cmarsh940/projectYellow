@@ -41,38 +41,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() { }
 
-  // loginParticipant(form: any): Promise<any> {
-  //   this.participant = {
-  //     'email': this.email.value,
-  //     'password': this.password.value,
-  //     'used': this.password.value
-  //   };
-
-  //   this.myForm.setValue({
-  //     'email': null,
-  //     'password': null
-  //   });
-
-  //   return this._authService.authenticate(this.participant)
-  //     .toPromise()
-  //     .then(() => {
-  //       this.errorMessage = null;
-  //       this.myForm.setValue({
-  //         'email': null,
-  //         'password': null
-  //       });
-  //       this._router.navigateByUrl("/dashboard");
-  //     })
-  //     .catch((error) => {
-  //       if (error === 'Server error') {
-  //         this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-  //       } else {
-  //         this.errorMessage = error;
-  //       }
-  //     });
-  // }
-
-
   loginParticipant(form: any) {
     console.log("*** STARTING LOGIN ***")
     this.participant = {
@@ -82,19 +50,12 @@ export class LoginComponent implements OnInit {
     };
 
     this._authService.authenticate(this.participant).subscribe((data: any) => {
-      if (data.errors) {
-        console.log("*** ERROR ***", data.errors)
-        for (const key of Object.keys(data.errors)) {
-          const error = data.errors[key];
-          this.errors.push(error.message);
-        }
-      }
       console.log("___ LOGIN DATA RETURNED ___:", data);
-      this.myForm.setValue({
-        'email': null,
-        'password': null
-      });
-      if (data.a8o1 === "CAPTAIN") {
+      // this.myForm.setValue({
+      //   'email': null,
+      //   'password': null
+      // });
+      if (data.a8o1 !== "CLIENT") {
         this._authService.setCurrentClient(data);
         this._router.navigateByUrl("/overview");
       } else {
