@@ -100,18 +100,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   }
 
 
-  onSurveyRetrieved(survey: Survey): void {
-    if (this.surveyForm) {
-      this.surveyForm.reset();
-    }
-    this.survey = survey;
-
-    // Update the data on the form
-    this.surveyForm.patchValue({});
-    this.surveyForm.setControl('questions',
-      this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
-  }
-
   ngOnChanges() {
     this.rebuildForm();
   }
@@ -139,6 +127,18 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  onSurveyRetrieved(survey: Survey): void {
+    if (this.surveyForm) {
+      this.surveyForm.reset();
+    }
+    this.survey = survey;
+
+    // Update the data on the form
+    this.surveyForm.patchValue({});
+    this.surveyForm.setControl('questions',
+      this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
   }
 
   rebuildForm() {

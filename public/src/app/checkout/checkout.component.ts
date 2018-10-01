@@ -42,7 +42,7 @@ export class CheckoutComponent implements OnInit  {
             'font-size': '16px',
             'transition': 'color 0.1s',
             'line-height': '3',
-            'border': '.1px solid',
+            'border': '.1px solid #000000',
             'padding': '5px'
           },
           // Style the text of an invalid input
