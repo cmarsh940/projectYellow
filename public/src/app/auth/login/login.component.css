@@ -1,3 +1,10 @@
+.errors {
+    width: 100%;
+    text-align: center;
+    color: red;
+    height: 10em;
+}
+
 img {
     padding-top: 2.5em;
 }

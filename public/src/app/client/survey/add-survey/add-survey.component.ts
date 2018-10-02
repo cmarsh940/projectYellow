@@ -1,3 +1,4 @@
+import { AuthService } from './../../../auth/auth.service';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
@@ -39,10 +40,15 @@ export class AddSurveyComponent implements OnInit {
 
   questionTypes = questionTypes;
 
+  checked = false;
+
   @Input() survey: Survey;
+
+  pc: boolean;
 
   constructor(
     private fb: FormBuilder,
+    private _authService: AuthService,
     private _surveyService: SurveyService,
     private _categoryService: SurveyCategoryService,
     private _router: Router
@@ -52,6 +58,7 @@ export class AddSurveyComponent implements OnInit {
 
   ngOnInit() {
     this.loadCategories();
+    this.checkPC();
   }
 
   loadCategories(): Promise<any> {
@@ -73,6 +80,16 @@ export class AddSurveyComponent implements OnInit {
     });
   }
 
+  checkPC(){
+    this.pc = false;
+    let checked = this._authService.checkPC();
+    if (checked) {
+      this.pc = true
+    } else {
+      this.pc = false;
+    }
+  }
+
   choice(qType) {
     console.log("CHANGED QUESTION TYPE", qType);
     this.selectedQType = qType;
@@ -88,6 +105,7 @@ export class AddSurveyComponent implements OnInit {
   }
   initQuestion() {
     return this.fb.group({
+      isRequired: [""],
       questionType: ["", Validators.required],
       question: ["", Validators.required],
       options: this.fb.array([])

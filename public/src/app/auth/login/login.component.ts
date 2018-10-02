@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() { }
 
   loginParticipant(form: any) {
+    this.errors = [];
     console.log("*** STARTING LOGIN ***")
     this.participant = {
       'email': this.email.value,
@@ -49,18 +50,23 @@ export class LoginComponent implements OnInit {
       'used': this.password.value
     };
 
-    this._authService.authenticate(this.participant).subscribe((data: any) => {
+    this._authService.authenticate(this.participant).subscribe((data) => {
       console.log("___ LOGIN DATA RETURNED ___:", data);
-      // this.myForm.setValue({
-      //   'email': null,
-      //   'password': null
-      // });
-      if (data.a8o1 !== "CLIENT") {
-        this._authService.setCurrentClient(data);
-        this._router.navigateByUrl("/overview");
+      if(data) {
+        if (data.errors) {
+          console.log("___ LOGIN ERROR ___:", data.errors);
+          this.errors.push(data.errors);
+        } else {
+          if (data.a8o1 !== "CLIENT") {
+            this._authService.setCurrentClient(data);
+            this._router.navigateByUrl("/overview");
+          } else {
+            this._authService.setCurrentClient(data); 
+            this._router.navigateByUrl("/dashboard");
+          }
+        }
       } else {
-        this._authService.setCurrentClient(data); 
-        this._router.navigateByUrl("/dashboard");
+        this.errors = data;
       }
     });
   }

@@ -109,7 +109,7 @@ class ClientsController {
           _id: client._id,
           n: client.firstName + " " + client.lastName,
           a8o1: client.role,
-          b801: client.subscription,
+          b8o1: client.subscription,
           s: client.surveys,
           v: client.verified
         };

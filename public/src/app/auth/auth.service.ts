@@ -44,7 +44,7 @@ export class AuthService {
     console.log("*** POST ***");
     return this._httpClient.post<any>(this.actionUrl + this.ns, asset).pipe(
       map(this.extractData),
-      catchError(this.handleError('createClient', []))
+      catchError(this.handleError('addParticipant', []))
     );
   }
 
@@ -85,6 +85,16 @@ export class AuthService {
       return true;
     }
   }
+
+  checkPC() {
+    let data = JSON.parse(sessionStorage.getItem('currentClient'));
+    if (data.b8o1 === 'FREE') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   
   private extractData(res: Response): any {
     console.log("*** extractData: ***", res);

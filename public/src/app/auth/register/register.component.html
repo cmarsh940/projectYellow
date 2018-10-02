@@ -6,8 +6,10 @@
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="container" id="header">
-  <h2 class="mat-title">Create Your Account</h2>
+<div class="container">
+  <div class="header">
+    <h2 class="mat-title">Create Your Account</h2>
+  </div>
   <div class="form-container">
     <form [formGroup]="myForm">
       <div class="label">
@@ -18,13 +20,31 @@
       <div class="input-container">
         <mat-form-field appearance="outline" color="primary">
           <mat-label>First Name</mat-label>
-          <input matInput type="text" formControlName="firstName" required autocomplete="given-name">
+          <input matInput type="text" [formControl]="firstNameFormControl" [errorStateMatcher]="matcher" required autocomplete="given-name">
+          <mat-error *ngIf="firstNameFormControl.hasError('required')">
+            First name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="firstNameFormControl.errors?.pattern">
+            First name cannot have numbers or symbols
+          </mat-error>
+          <mat-error *ngIf="firstNameFormControl.errors?.forbiddenName">
+            First name cannot be admin
+          </mat-error>
         </mat-form-field>
 
         <!-- LAST NAME -->
         <mat-form-field appearance="outline">
           <mat-label>Last Name</mat-label>
-          <input matInput type="text" formControlName="lastName" required autocomplete="family-name">
+          <input matInput type="text" [formControl]="lastNameFormControl" [errorStateMatcher]="matcher" required autocomplete="family-name">
+          <mat-error *ngIf="lastNameFormControl.hasError('required')">
+            Last name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="lastNameFormControl.errors?.pattern">
+            Last name cannot have numbers or symbols
+          </mat-error>
+          <mat-error *ngIf="lastNameFormControl.errors?.forbiddenName">
+            last name cannot be admin
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -40,15 +60,27 @@
       
       <!-- EMAIL -->
       <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput required formControlName="email" autocomplete="email">
+        <input matInput placeholder="Email" autocomplete="email" [formControl]="emailFormControl" [errorStateMatcher]="matcher">
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
       </mat-form-field>
         
         <!-- PASSWORD -->
         <div class="input-container">
-          <mat-form-field appearance="outline" hintLabel="( Atleast 8 charactors, 1 uppercase, 1 number )">
+          <mat-hint align="start"><strong>8+ charactors, 1 uppercase, 1 number</strong> </mat-hint>
+          <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
-            <input matInput type="password" formControlName="password" required autocomplete="new-password">
+            <input matInput type="password" [formControl]="passwordFormControl" [errorStateMatcher]="matcher" required autocomplete="new-password">
+            <mat-error *ngIf="passwordFormControl.hasError('required')">
+              Password is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="passwordFormControl.errors?.minlength">
+              Password is to short
+            </mat-error>
           </mat-form-field>
         
           <!-- CONFIRM PASSWORD -->
@@ -65,35 +97,53 @@
         <!-- PHONE -->
         <mat-form-field appearance="outline">
           <mat-label>Phone #</mat-label>
-          <input matInput type="tel" formControlName="phone" autocomplete='tel-national'>
+          <input matInput type="tel" [formControl]="phoneFormControl"  [errorStateMatcher]="matcher" autocomplete='tel-national'>
+          <mat-error *ngIf="phoneFormControl.hasError('required')">
+            Phone number is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="phoneFormControl.hasError.minlength">
+            Please enter a valid phone number
+          </mat-error>
         </mat-form-field>
     
       <!-- ADDRESS -->
       <div class="input-container">
         <mat-form-field appearance="outline">
           <mat-label>Address</mat-label>
-          <input matInput type="text" formControlName="address"  required  autocomplete="street-address">
+          <input matInput type="text" [formControl]="addressFormControl" [errorStateMatcher]="matcher"  required  autocomplete="street-address">
+          <mat-error *ngIf="addressFormControl.hasError('required')">
+            Address is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
 
         <!-- CITY -->
         <mat-form-field appearance="outline">
           <mat-label>City</mat-label>
-          <input matInput type="text" formControlName="city" required autocomplete="address-level2">
+          <input matInput type="text" [formControl]="cityFormControl" [errorStateMatcher]="matcher" required autocomplete="address-level2">
+          <mat-error *ngIf="cityFormControl.hasError('required')">
+            City is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
       </div>
 
       <!-- STATE -->
       <div class="input-container">
         <mat-form-field appearance="outline">
-          <mat-select formControlName="state" required autocomplete="state" placeholder="Select a State">
+          <mat-select [formControl]="stateFormControl" [errorStateMatcher]="matcher" required autocomplete="state" placeholder="Select a State">
             <mat-option *ngFor="let state of states" [value]="state.abbreviation">{{state.name}}</mat-option>
           </mat-select>
+          <mat-error *ngIf="stateFormControl.hasError('required')">
+            State is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
 
         <!-- ZIP CODE -->
         <mat-form-field appearance="outline">
           <mat-label>Zip Code</mat-label>
-          <input matInput type="text" formControlName="zip" required autocomplete="postal-code">
+          <input matInput type="text" [formControl]="zipFormControl" [errorStateMatcher]="matcher" required autocomplete="postal-code">
+          <mat-error *ngIf="zipFormControl.hasError('required')">
+            Zip code is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -105,10 +155,11 @@
       </div>
     </form>
   </div>
-
-  <div class="errors" *ngIf="errors">
-    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+  <div *ngIf="errors.length > 0" class="errors">
+    {{ errors }}
   </div>
+
+
 
 <mat-toolbar id="footer" color="primary">
   <div class="text-center">

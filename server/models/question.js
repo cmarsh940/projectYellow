@@ -6,6 +6,10 @@ const QuestionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Survey"
     },
+    isRequired: {
+        type: Boolean,
+        default: true
+    },
     question: {
         type: String,
     },

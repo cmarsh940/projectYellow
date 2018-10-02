@@ -3,9 +3,19 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Client } from '../../global/models/client';
 import { states } from '../../global/models/states';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig } from '@angular/material';
+import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
+import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, ErrorStateMatcher } from '@angular/material';
+import { forbiddenNameValidator } from '../../global/validators/forbidden-name.directive';
 
+
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: "app-register",
@@ -16,28 +26,62 @@ import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition
 export class RegisterComponent implements OnInit {
   myForm: FormGroup;
   newClient: Client = new Client();
-  errors = [];
   password_confirmation: string;
   currentClient: Client;
-
+  matcher = new MyErrorStateMatcher();
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-
   states = states;
+
+  errors = [];
 
   private participant;
 
-  firstName = new FormControl('', Validators.required);
-  lastName = new FormControl('', Validators.required);
+  firstNameFormControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern('[a-zA-Z ]*'),
+    forbiddenNameValidator(/admin/i)
+  ]);
+  lastNameFormControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern('[a-zA-Z ]*'),
+    forbiddenNameValidator(/admin/i)
+  ]);
   businessName = new FormControl('');
-  email = new FormControl('', Validators.required);
-  password = new FormControl('', Validators.required);
-  confirm_pass = new FormControl('', Validators.required);
-  phone = new FormControl('');
-  address = new FormControl('', Validators.required);
-  city = new FormControl('', Validators.required);
-  state = new FormControl('', Validators.required);
-  zip = new FormControl('', Validators.required);
+  emailFormControl = new FormControl('', [
+    Validators.required, 
+    Validators.email
+  ]);
+  passwordFormControl = new FormControl('', [
+    Validators.required, 
+    Validators.minLength(8),
+  ]);
+  confirm_pass = new FormControl('', [
+    Validators.required, 
+    Validators.minLength(8),
+  ]);
+  phoneFormControl = new FormControl('', [
+    Validators.required, 
+    Validators.minLength(10),
+  ]);
+  addressFormControl = new FormControl('', [
+    Validators.required, 
+    Validators.minLength(2),
+  ]);
+  cityFormControl = new FormControl('', [
+    Validators.required, 
+    Validators.pattern('[a-zA-Z ]*'),
+    Validators.minLength(2),
+  ]);
+  stateFormControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern('[a-zA-Z ]*'), 
+    Validators.minLength(2),
+  ]);
+  zipFormControl = new FormControl('', [
+    Validators.required, 
+    Validators.minLength(5),
+  ]);
 
 
   constructor(
@@ -47,68 +91,65 @@ export class RegisterComponent implements OnInit {
     fb: FormBuilder
   ) {
     this.myForm = fb.group({
-      firstName: this.firstName,
-      lastName: this.lastName,
+      firstName: this.firstNameFormControl,
+      lastName: this.lastNameFormControl,
       businessName: this.businessName,
-      email: this.email,
-      password: this.password,
+      email: this.emailFormControl,
+      password: this.passwordFormControl,
       confirm_pass: this.confirm_pass,
-      phone: this.phone,
-      address: this.address,
-      city: this.city,
-      state: this.state,
-      zip: this.zip,
-    });
+      phone: this.phoneFormControl,
+      address: this.addressFormControl,
+      city: this.cityFormControl,
+      state: this.stateFormControl,
+      zip: this.zipFormControl,
+    },{ updateOn: 'blur' });
   }
 
   ngOnInit() {}
 
 
   addParticipant(form: any) {
-    this.errors = [];
-
     this.participant = {
-      'firstName': this.firstName.value,
-      'lastName': this.lastName.value,
+      'firstName': this.firstNameFormControl.value,
+      'lastName': this.lastNameFormControl.value,
       'businessName': this.businessName.value,
-      'email': this.email.value,
-      'password': this.password.value,
+      'email': this.emailFormControl.value,
+      'password': this.passwordFormControl.value,
       'confirm_pass': this.confirm_pass.value,
       'used': this.confirm_pass.value,
-      'phone': this.phone.value,
-      'address': this.address.value,
-      'city': this.city.value,
-      'state': this.state.value,
-      'zip': this.zip.value,
+      'phone': this.phoneFormControl.value,
+      'address': this.addressFormControl.value,
+      'city': this.cityFormControl.value,
+      'state': this.stateFormControl.value,
+      'zip': this.zipFormControl.value,
     };
 
-    this._authService.addParticipant(this.participant).subscribe((data: any) => {
-      if (data.errors) {
-        console.log("*** ERROR ***", data.errors)
-        for (const key of Object.keys(data.errors)) {
-          const error = data.errors[key];
-          this.errors.push(error.message);
+    this._authService.addParticipant(this.participant).subscribe((data) => {
+      if(data) {
+        if (data.errors.password.message) {
+          console.log("___ Passwords dont match ___:", data.errors.password.message);
+          this.errors.push(data.errors.password.message);
+        } else {
+          console.log("___DATA RETURNED___:", data);
+          this.errors = null;
+          this.myForm.setValue({
+            'firstName': null,
+            'lastName': null,
+            'businessName': null,
+            'email': null,
+            'password': null,
+            'confirm_pass': null,
+            'phone': null,
+            'address': null,
+            'city': null,
+            'state': null,
+            'zip': null,
+          });
+          this.openSnackBar();
+          this._router.navigateByUrl("/login");
         }
-      } else {
-        console.log("___DATA RETURNED___:", data);
-        this.errors = null;
-        this.myForm.setValue({
-          'firstName': null,
-          'lastName': null,
-          'businessName': null,
-          'email': null,
-          'password': null,
-          'confirm_pass': null,
-          'phone': null,
-          'address': null,
-          'city': null,
-          'state': null,
-          'zip': null,
-        });
-        this.openSnackBar();
-        this._router.navigateByUrl("/login");
       }
-    });
+    })
   }
 
   openSnackBar() {

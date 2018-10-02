@@ -1,4 +1,4 @@
-<div id="header">
+<div class="header">
     <h5 class="mat-title">Taking {{ survey?.name | titlecase }}</h5>
 </div>
 
@@ -14,14 +14,15 @@
                         <!-- BOOLEAN -->
                         <div class="card-answer">
                             <div *ngIf="survey?.questions[i]?.questionType === 'boolean'">
-                                <mat-radio-group formControlName="answers" required>
+                                <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
                                     <mat-radio-button [value]="true">True</mat-radio-button>
                                     <mat-radio-button [value]="false">False</mat-radio-button>
                                 </mat-radio-group>
                             </div>
+
                             <!-- YES NO -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'yesno'">
-                                <mat-radio-group formControlName="answers" required>
+                                <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
                                     <mat-radio-button [value]="true">Yes</mat-radio-button>
                                     <mat-radio-button [value]="false">No</mat-radio-button>
                                 </mat-radio-group>
@@ -31,13 +32,13 @@
                             <div *ngIf="survey?.questions[i]?.questionType === 'text'">
                                 <mat-form-field>
                                     <mat-label>Answer:</mat-label>
-                                    <input matInput formControlName="answers" required />
+                                    <input matInput formControlName="answers" [required]="survey?.questions[i]?.isRequired" />
                                 </mat-form-field>
                             </div>
 
                             <!-- MULTI CHOICE -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'mutiplechoice'">
-                                <mat-radio-group formControlName="answers" required>
+                                <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
                                     <mat-radio-button *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
                                         {{option.optionName}}
                                     </mat-radio-button>
@@ -47,7 +48,7 @@
                             <!-- MULTI CHOICE -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'date'">
                                 <mat-form-field>
-                                    <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="answers">
+                                    <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="answers" [required]="survey?.questions[i]?.isRequired">
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker touchUi #picker></mat-datepicker>
                                 </mat-form-field>
@@ -57,18 +58,18 @@
                             <div *ngIf="survey?.questions[i]?.questionType === 'paragraph'">
                                 <mat-form-field>
                                     <mat-label>Answer:</mat-label>
-                                    <textarea matInput formControlName="answers" required></textarea>
+                                    <textarea matInput formControlName="answers" [required]="survey?.questions[i]?.isRequired"></textarea>
                                 </mat-form-field>
                             </div>
 
                             <!-- SLIDE SCALE -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'slide'">
-                                <mat-slider min="1" max="100" tickInterval="25" thumbLabel formControlName="answers"></mat-slider>
+                                <mat-slider min="1" max="100" tickInterval="25" thumbLabel formControlName="answers" [required]="survey?.questions[i]?.isRequired"></mat-slider>
                             </div>
 
                             <!-- SMILIEFACES -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'smilieFaces'">
-                                <mat-button-toggle-group formControlName="answers" class="smilieFaces">
+                                <mat-button-toggle-group formControlName="answers" class="smilieFaces" [required]="survey?.questions[i]?.isRequired">
                                     <mat-button-toggle value="bad">
                                         <mat-icon>sentiment_very_dissatisfied</mat-icon>
                                     </mat-button-toggle>
@@ -86,7 +87,7 @@
 
                             <!-- RATING -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'rate'">
-                                <mat-slider thumbLabel tickInterval="1" min="1" max="5" formControlName="answers"></mat-slider>
+                                <mat-slider thumbLabel tickInterval="1" min="1" max="5" formControlName="answers" [required]="survey?.questions[i]?.isRequired"></mat-slider>
                             </div>
                         </div>
 

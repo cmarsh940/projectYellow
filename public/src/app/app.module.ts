@@ -38,6 +38,7 @@ import { RequestCache, RequestCacheWithMap } from './global/services/cache.servi
 import { UserService } from './client/user/user.service';
 import { SurveyService } from './client/survey/survey.service';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.directive';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
     LoginComponent,
     RegisterComponent,
     CheckoutComponent,
+    ForbiddenValidatorDirective,
   ],
   imports: [
     BrowserModule,

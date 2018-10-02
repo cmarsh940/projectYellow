@@ -87,6 +87,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   buildQuestion(): FormGroup {
     return this.fb.group({
       answers: ['',  Validators.required],
+      isRequired: [''],
       question: ['', { disabled: true }, Validators.required],
       options: this.fb.array([])
     });

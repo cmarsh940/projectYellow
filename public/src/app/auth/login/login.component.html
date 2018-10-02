@@ -7,6 +7,12 @@
 </mat-toolbar>
 
 <div class="container">
+  <div *ngIf="errors === null" class="errors">
+    <b>** Password or email is not correct **</b>
+  </div>
+  <div *ngIf="errors?.length > 0 " class="errors">
+    {{ errors }}
+  </div>
   <form [formGroup]="myForm">
     <!-- ** EMAIL ** -->
     <mat-form-field appearance="outline">
