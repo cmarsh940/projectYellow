@@ -30,7 +30,9 @@ import {
   MatStepperModule,
   MAT_CHECKBOX_CLICK_ACTION,
   MatPaginatorModule,
-  MAT_SNACK_BAR_DEFAULT_OPTIONS
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 import { ObserversModule } from '@angular/cdk/observers';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
@@ -43,6 +45,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
     MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
+    MatDatepickerModule,
     MatDialogModule,
     MatExpansionModule,
     MatGridListModule,
@@ -50,6 +53,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatNativeDateModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatRadioModule,
@@ -75,6 +79,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
     MatCardModule,
     MatCheckboxModule,
     MatChipsModule,
+    MatDatepickerModule,
     MatDialogModule,
     MatExpansionModule,
     MatGridListModule,
@@ -82,6 +87,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
     MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatNativeDateModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatRadioModule,

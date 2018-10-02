@@ -1,5 +1,9 @@
-h2 {
-    color: #000;
+#header {
+    width: 100%;
+}
+
+#header h2 {
+    text-align: center;
 }
 
 form {
@@ -9,6 +13,7 @@ form {
 .form-container {
   display: flex;
   flex-direction: column;
+  padding: 0 2em;
 }
 
 .form-container > * {

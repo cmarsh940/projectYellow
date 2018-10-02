@@ -1,13 +1,15 @@
-
-import { SurveyCategory } from '../../../global/models/survey-category';
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+
+
 import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
+import { SurveyCategory } from '../../../global/models/survey-category';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { SurveyService } from '../survey.service';
+import { questionTypes } from './../../../global/models/question-type';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -35,14 +37,7 @@ export class AddSurveyComponent implements OnInit {
   type = "";
   errors = [];
 
-  questionTypes: any[] = [
-    { value: "boolean", viewValue: "True / False" },
-    { value: "mutiplechoice", viewValue: "Multiple Choice" },
-    { value: "text", viewValue: "Single Answer" },
-    { value: "paragraph", viewValue: "User Feedback" },
-    { value: "smilieFaces", viewValue: "Satisfaction (images)" },
-    { value: "yesno", viewValue: "YES / NO" }
-  ];
+  questionTypes = questionTypes;
 
   @Input() survey: Survey;
 

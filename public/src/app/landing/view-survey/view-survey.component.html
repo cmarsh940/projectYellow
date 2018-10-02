@@ -8,7 +8,7 @@
             <mat-step [formGroupName]="i" [stepControl]="questions.get([i])">
                 <mat-card>
                     <mat-card-header>
-                        <textarea matInput readonly="true" formControlName="question" id="question-input"></textarea>
+                        <textarea matInput readonly="true" matTextareaAutosize="true" formControlName="question" id="question-input"></textarea>
                     </mat-card-header>
                     <mat-card-content>
                         <!-- BOOLEAN -->
@@ -37,9 +37,19 @@
 
                             <!-- MULTI CHOICE -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'mutiplechoice'">
+                                <mat-radio-group formControlName="answers" required>
+                                    <mat-radio-button *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                                        {{option.optionName}}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            <!-- MULTI CHOICE -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'date'">
                                 <mat-form-field>
-                                    <mat-label>Answer:</mat-label>
-                                    <input matInput formControlName="answers" required />
+                                    <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="answers">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker touchUi #picker></mat-datepicker>
                                 </mat-form-field>
                             </div>
 
@@ -49,6 +59,11 @@
                                     <mat-label>Answer:</mat-label>
                                     <textarea matInput formControlName="answers" required></textarea>
                                 </mat-form-field>
+                            </div>
+
+                            <!-- SLIDE SCALE -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'slide'">
+                                <mat-slider min="1" max="100" tickInterval="25" thumbLabel formControlName="answers"></mat-slider>
                             </div>
 
                             <!-- SMILIEFACES -->
@@ -67,6 +82,11 @@
                                         <mat-icon>sentiment_very_satisfied</mat-icon>
                                     </mat-button-toggle>
                                 </mat-button-toggle-group>
+                            </div>
+
+                            <!-- RATING -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'rate'">
+                                <mat-slider thumbLabel tickInterval="1" min="1" max="5" formControlName="answers"></mat-slider>
                             </div>
                         </div>
 
@@ -100,3 +120,5 @@
 <div>
     <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
 </div>
+
+{{surveyForm.value | json}}

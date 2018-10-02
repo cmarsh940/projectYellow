@@ -8,8 +8,10 @@ import { debounceTime } from 'rxjs/operators';
 import { GenericValidator } from '../../../global/generic-validator';
 import { SurveyService } from '../survey.service';
 import { Survey } from '../../../global/models/survey';
-import { Question } from '../../../global/models/question';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
+import { Question } from '../../../global/models/question';
+import { questionTypes } from './../../../global/models/question-type';
+
 
 
 @Component({
@@ -28,14 +30,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   categories: SurveyCategory[];
 
 
-  questionTypes: any[] = [
-    { value: "boolean", viewValue: "True / False" },
-    { value: "mutiplechoice", viewValue: "Multiple Choice" },
-    { value: "text", viewValue: "Single Answer" },
-    { value: "paragraph", viewValue: "User Feedback" },
-    { value: "smilieFaces", viewValue: "Satisfaction (images)" },
-    { value: "yesno", viewValue: "YES / NO" }
-  ];
+  questionTypes = questionTypes;
 
   @Input() survey: any;
 

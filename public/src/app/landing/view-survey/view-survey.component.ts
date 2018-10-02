@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy, Input, AfterViewInit, ViewChildren, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
+import { GenericValidator } from '../../global/generic-validator';
+import { debounceTime } from 'rxjs/operators';
 
 import { SurveyService } from '../../client/survey/survey.service';
 import { Survey } from '../../global/models/survey';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { Question } from '../../global/models/question';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
-import { Location } from '@angular/common';
-import { GenericValidator } from '../../global/generic-validator';
-import { debounceTime } from 'rxjs/operators';
+import { questionTypes } from './../../global/models/question-type';
+
 
 @Component({
   selector: 'app-view-survey',
@@ -21,16 +22,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   surveyId: string = "";
   errors = [];
   _routeSubscription: Subscription;
-
-
-  questionTypes: any[] = [
-    { value: "boolean", viewValue: "True / False" },
-    { value: "mutiplechoice", viewValue: "Multiple Choice" },
-    { value: "text", viewValue: "Single Answer" },
-    { value: "paragraph", viewValue: "User Feedback" },
-    { value: "smilieFaces", viewValue: "Satisfaction (images)" },
-    { value: "yesno", viewValue: "YES / NO" }
-  ];
+  questionTypes = questionTypes;
 
   @Input() survey: any;
 
@@ -95,7 +87,8 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   buildQuestion(): FormGroup {
     return this.fb.group({
       answers: ['',  Validators.required],
-      question: ['', { disabled: true }, Validators.required]
+      question: ['', { disabled: true }, Validators.required],
+      options: this.fb.array([])
     });
   }
 
@@ -134,6 +127,8 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       this.surveyForm.reset();
     }
     this.survey = survey;
+
+    console.log("SURVEY", this.survey);
 
     // Update the data on the form
     this.surveyForm.patchValue({});
