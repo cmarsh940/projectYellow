@@ -126,9 +126,9 @@ export class RegisterComponent implements OnInit {
 
     this._authService.addParticipant(this.participant).subscribe((data) => {
       if(data) {
-        if (data.errors.password.message) {
-          console.log("___ Passwords dont match ___:", data.errors.password.message);
-          this.errors.push(data.errors.password.message);
+        if (data.errors) {
+          console.log("___ DATA ERROR ___:", data.errors);
+          this.errors.push(data.errors);
         } else {
           console.log("___DATA RETURNED___:", data);
           this.errors = null;

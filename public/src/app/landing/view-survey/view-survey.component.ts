@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, AfterViewInit, ViewChildren, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
-import { GenericValidator } from '../../global/generic-validator';
+import { GenericValidator } from '../../global/validators/generic-validator';
 import { debounceTime } from 'rxjs/operators';
 
 import { SurveyService } from '../../client/survey/survey.service';

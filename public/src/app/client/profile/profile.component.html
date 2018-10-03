@@ -12,25 +12,18 @@
           </form>
         </ng-container>
         <ng-container *ngIf="currentClient.picture">
-        <img src="https://surveysbyme.s3.us-west-2.amazonaws.com/Profile/{{currentClient.picture}}" alt="profile image" class="profile-picture">
-        <form (change)="uploadPortfolio()" #form encType="multipart/form-data" class="upload-form">
-          <input type="file" #file name="picture" style="display: none" multiple />
-          <button mat-button color="accent" (click)="addFiles()" id="hide-me">
-            Edit
-          </button>
-        </form>
-
-          <!-- <img src="/assets/missing.jpg" alt="Missing profile picture" class="profile-picture">
-          <form (change)="uploadPortfolio()" #form encType="multipart/form-data">
-            <input type="file" #file name="picture" style="display: none"  multiple />
-            <button mat-raised-button color="primary" (click)="addFiles()">
-              Add Picture
+          <img src="https://surveysbyme.s3.us-west-2.amazonaws.com/Profile/{{currentClient.picture}}" alt="profile image" class="profile-picture">
+          <form (change)="uploadPortfolio()" #form encType="multipart/form-data" class="upload-form">
+            <input type="file" #file name="picture" style="display: none" multiple />
+            <button mat-button color="accent" (click)="addFiles()" id="hide-me">
+              Edit
             </button>
-          </form> -->
+          </form>
         </ng-container>
       </div>
       <div class="header-text">
-        <h6>{{currentClient.firstName}} {{currentClient.lastName}}</h6>
+        <h3>{{currentClient.firstName}} {{currentClient.lastName}}</h3>
+        <h5>{{currentClient.businessName}}</h5>
       </div>
     </div>
     <div class="content">
@@ -43,13 +36,13 @@
         <p class="content-bottom">{{ currentClient.users?.length }}</p>
       </div>
       <div class="content-body">
-        <p>Email: {{currentClient.email}}</p>
-        <p>Phone: {{currentClient.phone}}</p>
-        <p>Address: {{ currentClient.address }}</p>
-        <p>City: {{ currentClient.city }}</p>
-        <p>State: {{ currentClient.state }}</p>
-        <p>Zip: {{ currentClient.zip }}</p>
-        <p>Subscription: {{ currentClient.subscription }}</p>
+        <h5>Email: {{currentClient.email}}</h5>
+        <h5>Phone: {{currentClient.phone}}</h5>
+        <h5>Address: {{ currentClient.address }}</h5>
+        <h5>City: {{ currentClient.city }}</h5>
+        <h5>State: {{ currentClient.state }}</h5>
+        <h5>Zip: {{ currentClient.zip }}</h5>
+        <h5>Subscription: {{ currentClient.subscription }}</h5>
       </div>
     </div>
     <div class="action">

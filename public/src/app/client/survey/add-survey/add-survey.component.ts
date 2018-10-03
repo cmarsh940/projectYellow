@@ -105,7 +105,7 @@ export class AddSurveyComponent implements OnInit {
   }
   initQuestion() {
     return this.fb.group({
-      isRequired: [""],
+      isRequired: false,
       questionType: ["", Validators.required],
       question: ["", Validators.required],
       options: this.fb.array([])

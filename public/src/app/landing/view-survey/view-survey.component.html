@@ -28,6 +28,15 @@
                                 </mat-radio-group>
                             </div>
 
+                            <!-- GOOD BAD -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'goodbad'">
+                                <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
+                                    <mat-radio-button [value]="good">Good</mat-radio-button>
+                                    <mat-radio-button [value]="bad">Bad</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+
                             <!-- TEXT -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'text'">
                                 <mat-form-field>
@@ -83,6 +92,16 @@
                                         <mat-icon>sentiment_very_satisfied</mat-icon>
                                     </mat-button-toggle>
                                 </mat-button-toggle-group>
+                            </div>
+
+                            <!-- SATISFACTION -->
+                            <div *ngIf="survey?.questions[i]?.questionType === 'satisfaction'">
+                                <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
+                                    <mat-radio-button [value]="bad">Bad</mat-radio-button>
+                                    <mat-radio-button [value]="ok">Ok</mat-radio-button>
+                                    <mat-radio-button [value]="good">Good</mat-radio-button>
+                                    <mat-radio-button [value]="great">Great</mat-radio-button>
+                                </mat-radio-group>
                             </div>
 
                             <!-- RATING -->

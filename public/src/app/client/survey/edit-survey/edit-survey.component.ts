@@ -5,7 +5,7 @@ import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
 import { Location } from '@angular/common';
 import { debounceTime } from 'rxjs/operators';
-import { GenericValidator } from '../../../global/generic-validator';
+import { GenericValidator } from '../../../global/validators/generic-validator';
 import { SurveyService } from '../survey.service';
 import { Survey } from '../../../global/models/survey';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';

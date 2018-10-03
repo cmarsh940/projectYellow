@@ -2,12 +2,18 @@
   <h2 class="mat-title">Surveys</h2>
 </div>
 
+<button mat-stroked-button routerLink="/survey">View your surveys</button>
 <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
 
   <!-- Owner Column -->
   <ng-container matColumnDef="owner">
     <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element.creator.firstName + " " + element.creator.lastName }} </mat-cell>
+    <mat-cell *matCellDef="let element"> 
+        {{ element.creator.businessName }}
+      <div *ngIf="!element.creator.businessName">
+        {{ element.creator.firstName + " " + element.creator.lastName }} 
+      </div>
+    </mat-cell>
   </ng-container>
 
   <!-- Name Column -->

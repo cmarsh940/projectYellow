@@ -11,6 +11,10 @@
 
 
     <mat-form-field>
+      <input matInput name='businessName' [(ngModel)]="data.businessName" #businessName='ngModel' placeholder="Business Name (Optional)">
+    </mat-form-field>
+
+    <mat-form-field>
       <input matInput name='email' [(ngModel)]="data.email" #email='ngModel' placeholder="Email" required>
     </mat-form-field>
 
