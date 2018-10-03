@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
           console.log("___ LOGIN ERROR ___:", data.errors);
           this.errors.push(data.errors);
         } else {
-          if (data.a8o1 !== "CLIENT") {
+          if (data.a8o1 === "CAPTAIN") {
             this._authService.setCurrentClient(data);
             this._router.navigateByUrl("/overview");
           } else {

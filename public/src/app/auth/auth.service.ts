@@ -118,7 +118,7 @@ export class AuthService {
 
   
   private extractData(res: Response): any {
-    console.log("*** extractData: ***", res);
+    console.log("*** extractData: ***");
     if (!Error) {
       if (!sessionStorage.getItem('currentClient')) {
         console.log("*** CLIENT NOT IN SESSION ***");

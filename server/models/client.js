@@ -105,7 +105,7 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "CLIENT"
+    default: "CAPTAIN"
   },
   
   subscription: {
@@ -114,7 +114,7 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "FREE"
+    default: "ELITE"
   },
 
   surveys: {
