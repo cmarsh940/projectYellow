@@ -129,8 +129,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     }
     this.survey = survey;
 
-    console.log("SURVEY", this.survey);
-
     // Update the data on the form
     this.surveyForm.patchValue({});
     this.surveyForm.setControl('questions',
@@ -155,7 +153,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updateAnswer(this.survey._id, this.survey).subscribe(
       result => {
-        console.log("___RESULTS___:", result);
         alert("Thank you for taking our survey!");
         this._router.navigate(["/list_of_surveys"]);
       },

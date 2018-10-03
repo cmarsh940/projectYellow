@@ -155,7 +155,6 @@ export class AddSurveyComponent implements OnInit {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.addAsset(this.survey).subscribe(
       result => {
-        console.log("___RESULTS___:",result);
         this._router.navigate(["/survey"]);
       },
       error => {

@@ -134,7 +134,6 @@ export class RegisterComponent implements OnInit {
             this.errors.push(data.errors);
           }
         } else {
-          console.log("___DATA RETURNED___:", data);
           this.errors = null;
           this.myForm.setValue({
             'firstName': null,

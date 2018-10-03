@@ -32,7 +32,6 @@ export class ClientReportComponent implements OnInit {
           tempList.push(participent);
         });
         this.dataSource = tempList;
-        console.log("*** CLIENTS RETURNED ***:", this.dataSource);
       })
       .catch((error) => {
         if (error === 'Server error') {

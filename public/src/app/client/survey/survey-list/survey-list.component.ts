@@ -55,7 +55,7 @@ export class SurveyListComponent implements OnInit {
     let r = window.confirm("Delete Survey?");
     if (r == true) {
       this._surveyService.deleteAsset(id).subscribe(res => {
-        console.log("DESTROY SURVEY", res);
+        console.log("DESTROY SURVEY");
         if (true) {
           this.getSurveys();
           location.reload();

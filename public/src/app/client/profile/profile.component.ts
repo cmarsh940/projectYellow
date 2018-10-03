@@ -98,16 +98,14 @@ export class ProfileComponent implements OnInit {
     }
     const formData = new FormData(this.form.nativeElement);
     formData.append(files[0].name, files[0]);
-    console.log("FORMDATA", formData);
     this._uploadService.postPortfolio(formData, this.currentClient._id).subscribe( res => {  
-        console.log("SUCCESS", res);
+        console.log("SUCCESS");
         this.getClient();
     });
   }
 
   isLoggedIn() {
     let verify = this._authService.verify();
-    console.log("VERIFY:", verify);
     if (!verify) {
       this.openSnackBar();
       this._router.navigateByUrl('/login');

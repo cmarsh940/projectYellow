@@ -3,6 +3,7 @@ import { FormControl, Validators, FormGroup, FormBuilder } from "@angular/forms"
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Client } from "../../global/models/client";
+import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,8 @@ export class LoginComponent implements OnInit {
   email = new FormControl('', Validators.required);
   password = new FormControl('', Validators.required);
 
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
   getErrorMessage() {
     return this.email.hasError("required")
@@ -31,7 +34,11 @@ export class LoginComponent implements OnInit {
       : this.email.hasError("email") ? "Not a valid email" : "";
   }
 
-  constructor(private _authService: AuthService, private _router: Router, fb: FormBuilder
+  constructor(
+    private _authService: AuthService, 
+    private _router: Router,
+    public snackBar: MatSnackBar, 
+    fb: FormBuilder
   ) {
     this.myForm = fb.group({
       email: this.email,
@@ -39,7 +46,9 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.alreadyLoggedIn();
+   }
 
   loginParticipant(form: any) {
     this.errors = [];
@@ -51,7 +60,6 @@ export class LoginComponent implements OnInit {
     };
 
     this._authService.authenticate(this.participant).subscribe((data) => {
-      console.log("___ LOGIN DATA RETURNED ___:", data);
       if(data) {
         if (data.errors) {
           console.log("___ LOGIN ERROR ___:", data.errors);
@@ -69,5 +77,22 @@ export class LoginComponent implements OnInit {
         this.errors = data;
       }
     });
+  }
+
+  alreadyLoggedIn() {
+    let data = this._authService.checkLoggedIn();
+      if (data) {
+        this.openSnackBar();
+        this._router.navigateByUrl("/dashboard");
+      }
+  }
+
+  openSnackBar() {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 2500;
+    config.panelClass = ['logout-snackbar']
+    this.snackBar.open("You are already logged in!", '', config);
   }
 }

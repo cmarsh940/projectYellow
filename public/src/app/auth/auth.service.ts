@@ -95,6 +95,27 @@ export class AuthService {
     }
   }
 
+  authorize() {
+    let data = JSON.parse(sessionStorage.getItem('currentClient'));
+    if (data.a8o1 === 'CAPTAIN') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkLoggedIn() {
+    let data = JSON.parse(sessionStorage.getItem('currentClient'));
+    let check = JSON.parse(localStorage.getItem('t940'));
+    if(!data) {
+      return false;
+    }
+    if (data._id === check) {
+      return true;
+    } 
+    return false;
+  }
+
   
   private extractData(res: Response): any {
     console.log("*** extractData: ***", res);

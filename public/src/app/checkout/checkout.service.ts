@@ -34,7 +34,7 @@ export class CheckoutService {
   }
 
   private extractData(res: Response): any {
-    console.log("*** extractData: ***", res);
+    console.log("*** extractData: ***");
     return res;
   }
 }

@@ -26,3 +26,8 @@ button {
 .mat-divider {
     margin: 1em 0;
 }
+
+a {
+    color: black;
+    text-decoration: none;
+}

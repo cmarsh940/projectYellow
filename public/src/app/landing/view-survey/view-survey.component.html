@@ -10,6 +10,7 @@
                     <mat-card-header>
                         <textarea matInput readonly="true" matTextareaAutosize="true" formControlName="question" id="question-input"></textarea>
                     </mat-card-header>
+                    <mat-divider></mat-divider>
                     <mat-card-content>
                         <!-- BOOLEAN -->
                         <div class="card-answer">
@@ -47,7 +48,7 @@
 
                             <!-- MULTI CHOICE -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'mutiplechoice'">
-                                <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
+                                <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired" id="multichoice">
                                     <mat-radio-button *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
                                         {{option.optionName}}
                                     </mat-radio-button>
@@ -60,6 +61,7 @@
                                     <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="answers" [required]="survey?.questions[i]?.isRequired">
                                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                     <mat-datepicker touchUi #picker></mat-datepicker>
+                                    <mat-hint align="start"><strong>MM/DD/YYYY</strong> </mat-hint>
                                 </mat-form-field>
                             </div>
 
@@ -96,7 +98,7 @@
 
                             <!-- LIKE UNLIKE -->
                             <div *ngIf="survey?.questions[i]?.questionType === 'likeunlike'">
-                                <mat-button-toggle-group formControlName="answers" class="likeunlike" [required]="survey?.questions[i]?.isRequired">
+                                <mat-button-toggle-group formControlName="answers" class="likeunlike" [required]="survey?.questions[i]?.isRequired" id="thumbs">
                                     <mat-button-toggle value="like">
                                         <mat-icon>thumb_up</mat-icon>
                                     </mat-button-toggle>

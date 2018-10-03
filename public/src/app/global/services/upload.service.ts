@@ -26,7 +26,6 @@ export class UploadService {
 
   postPortfolio(formData, id: string) {
     console.log("**** HIT SERVICE");
-    console.log("**** FORMDATA", formData);
     console.log("**** ID", id);
     var URL = this.actionUrl + "upload/portfolio/" + id;
     return this.http.post(URL, formData).pipe(
@@ -42,7 +41,6 @@ export class UploadService {
   }
 
   private extractData(res: Response): any {
-    console.log("*** extractData: ***", res);
     return res;
   }
 }

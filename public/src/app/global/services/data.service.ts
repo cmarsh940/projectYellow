@@ -31,7 +31,6 @@ export class DataService<Type> {
   }
 
   public getAll(ns: string): Observable<Type[]> {
-    console.log('GetAll ' + ns + ' from ' + this.actionUrl + ns);
     console.log("*** GET ***");
     return this.http.get<Type[]>(`${this.actionUrl}${ns}`)
       .pipe(
@@ -41,7 +40,6 @@ export class DataService<Type> {
   }
 
   public getSingle(ns: string, id: string): Observable<any> {
-    console.log('GetSingle ' + ns);
     console.log("*** GET ***");
     return this.http.get<any>(this.actionUrl + ns + '/' + id + this.resolveSuffix).pipe(
       map(this.extractData),
@@ -51,7 +49,6 @@ export class DataService<Type> {
 
   public add(ns: string, asset: any): Observable<any> {
     console.log('Entered DataService add');
-    console.log('Add ' + ns);
     console.log('asset', asset);
     console.log("*** POST ***");
     return this.http.post<any>(this.actionUrl + ns, asset).pipe(
@@ -61,7 +58,6 @@ export class DataService<Type> {
   }
 
   public update(ns: string, id: string, itemToUpdate: Type): Observable<any> {
-    console.log('Update ' + ns);
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
     console.log("*** PUT ***");
@@ -73,7 +69,6 @@ export class DataService<Type> {
   }
 
   public delete(ns: string, id: string): Observable<any> {
-    console.log('Delete ' + ns);
     console.log('what is the id to delete?', id);
     console.log("*** DELETE ***");
     return this.http.delete<any>(this.actionUrl + ns + '/' + id).pipe(
@@ -82,7 +77,6 @@ export class DataService<Type> {
   }
 
   private extractData(res: Response): any {
-    console.log("*** extractData: ***", res);
     return res;
   }
 

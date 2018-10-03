@@ -1,6 +1,6 @@
 <div class="header">
   <h3>{{ survey?.name | titlecase }}</h3>
-  <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
+  <h6><a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a></h6>
 </div>
 <div id="survey" *ngFor="let question of questions; let i = index">
   <h4><b>#{{ i + 1 }}  {{ question.question }}</b></h4>

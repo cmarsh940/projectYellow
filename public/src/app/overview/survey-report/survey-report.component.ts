@@ -38,7 +38,6 @@ export class SurveyReportComponent implements OnInit {
           tempList.push(asset);
         });
         this.dataSource = tempList;
-        console.log("*** SURVEYS RETURNED ***:", this.dataSource);
       })
       .catch((error) => {
         if (error === 'Server error') {

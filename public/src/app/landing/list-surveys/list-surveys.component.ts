@@ -45,7 +45,6 @@ export class ListSurveysComponent implements OnInit {
         this.dataSource = new MatTableDataSource<Element>(tempList);
         this.dataSource.paginator = this.paginator;
         this.array = tempList;
-        console.table(tempList);
         this.totalSize = this.array.length;
         this.iterator();
       })

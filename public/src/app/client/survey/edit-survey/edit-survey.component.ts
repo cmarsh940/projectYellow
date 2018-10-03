@@ -215,7 +215,6 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updateAsset(this.survey._id, this.survey).subscribe(
       result => {
-        console.log("___RESULTS___:", result);
         this._router.navigate(["/survey"]);
       },
       error => {

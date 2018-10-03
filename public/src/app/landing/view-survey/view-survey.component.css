@@ -53,6 +53,7 @@ form {
 
 .smilieFaces {
     display: inline-flex;
+    margin: 2em 0;
 }
 .smilieFaces .mat-radio-button {
     margin: 1em;
@@ -60,4 +61,19 @@ form {
 
 .mat-slider-horizontal {
     min-width: 100%!important;
+    margin-top: 2em;
+}
+
+#multichoice {
+    display: flex;
+    flex-direction: column;
+    text-align: -webkit-auto;
+}
+
+#multichoice .mat-radio-button {
+    margin: 1em;
+}
+
+#thumbs {
+    margin: 2em 0;
 }
