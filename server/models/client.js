@@ -105,7 +105,7 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "CAPTAIN"
+    default: "SKIPPER"
   },
   
   subscription: {

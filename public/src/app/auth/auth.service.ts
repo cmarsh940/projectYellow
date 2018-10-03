@@ -40,7 +40,6 @@ export class AuthService {
   
   addParticipant(asset: any): Observable<any> {
     console.log('Entered AuthService Create');
-    console.log('newClient', asset);
     console.log("*** POST ***");
     return this._httpClient.post<any>(this.actionUrl + this.ns, asset).pipe(
       map(this.extractData),
@@ -49,7 +48,7 @@ export class AuthService {
   }
 
   setCurrentClient(client) {
-    console.log("*** SERVICE SET CURRENT CLIENT ***", client)
+    console.log("*** SERVICE SET CURRENT CLIENT ***")
     sessionStorage.setItem('currentClient', JSON.stringify(client));
     localStorage.setItem('t940', JSON.stringify(client._id));
   }
