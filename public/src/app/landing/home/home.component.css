@@ -50,7 +50,17 @@
 
 .mat-card {
   min-width: 50%;
+  min-height: 15rem;
   margin: 1em;
+  text-align: center;
+}
+
+.row {
+  margin-top: 5em;
+}
+
+.row-header {
+  width: 100%;
   text-align: center;
 }
 

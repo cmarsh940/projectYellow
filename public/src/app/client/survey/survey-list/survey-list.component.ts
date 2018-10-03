@@ -52,14 +52,20 @@ export class SurveyListComponent implements OnInit {
   }
 
   destroySurvey(id: string) {
-    this._surveyService.deleteAsset(id).subscribe(res => {
-      console.log("DESTROY SURVEY", res);
-      if(true) {
-        this.getSurveys();
-        location.reload();
-      }
-    });
+    let r = window.confirm("Delete Survey?");
+    if (r == true) {
+      this._surveyService.deleteAsset(id).subscribe(res => {
+        console.log("DESTROY SURVEY", res);
+        if (true) {
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
   }
+
   
   TrackById(index: number, survey: Survey) {
     return survey._id;

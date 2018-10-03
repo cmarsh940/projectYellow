@@ -1,11 +1,16 @@
 <div class="header">
-  <h5>{{ survey?.name | titlecase }}</h5>
+  <h3>{{ survey?.name | titlecase }}</h3>
   <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
 </div>
 <div id="survey" *ngFor="let question of questions; let i = index">
-  <p><b>#{{ i + 1 }}  {{ question.question }}</b></p>
+  <h4><b>#{{ i + 1 }}  {{ question.question }}</b></h4>
   <div class="answers" *ngFor="let answer of question.answers; let j = index">
-    <h6>{{ j + 1 }} |  {{ answer }}</h6>
+    <div *ngIf="question.questionType !== 'date'">
+      <h5>{{ j + 1 }} |  {{ answer }}</h5>
+    </div>
+    <div *ngIf="question.questionType === 'date'">
+      <h5>{{ j + 1 }} | {{ answer | date }}</h5>
+    </div>
   </div>
   <mat-divider>
   </mat-divider>

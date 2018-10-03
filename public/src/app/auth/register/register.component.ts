@@ -128,7 +128,11 @@ export class RegisterComponent implements OnInit {
       if(data) {
         if (data.errors) {
           console.log("___ DATA ERROR ___:", data.errors);
-          this.errors.push(data.errors);
+          if (data.errors.pizza) {
+            this.errors.push(data.errors.pizza.message);
+          } else {
+            this.errors.push(data.errors);
+          }
         } else {
           console.log("___DATA RETURNED___:", data);
           this.errors = null;

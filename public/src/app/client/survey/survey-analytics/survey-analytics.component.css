@@ -3,10 +3,6 @@
     text-align: center;
 }
 
-/* #header h5 {
-    text-align: center;
-} */
-
 #header a {
     font-size: x-small;
 }
@@ -16,7 +12,7 @@
     padding: 1em;
 }
 
-h6 {
+h5 {
     margin: 0;
 }
 
@@ -25,4 +21,8 @@ h6 {
 }
 button {
     width:100%;
+}
+
+.mat-divider {
+    margin: 1em 0;
 }

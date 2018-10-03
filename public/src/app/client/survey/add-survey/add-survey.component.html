@@ -89,7 +89,7 @@
                       </mat-form-field>
                     </div>
                   </div>
-                  <button mat-button type="button" (click)="addNewOption(question.controls.options)" color="accent">
+                  <button mat-raised-button type="button" (click)="addNewOption(question.controls.options)" color="primary">
                     Add new Option
                   </button>
                 </div>
@@ -111,6 +111,14 @@
                 </mat-form-field>
               </ng-container>
 
+              <!-- SATISFACTION -->
+              <ng-container *ngSwitchCase="'satisfaction'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+
               <!-- SLIDE -->
               <ng-container *ngSwitchCase="'slide'">
                 <mat-form-field>
@@ -119,8 +127,24 @@
                 </mat-form-field>
               </ng-container>
 
-              <!-- STAR -->
+              <!-- SLIDE RATE -->
               <ng-container *ngSwitchCase="'rate'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+
+              <!-- LIKE UNLIKE -->
+              <ng-container *ngSwitchCase="'likeunlike'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+
+              <!-- GOOD BAD -->
+              <ng-container *ngSwitchCase="'goodbad'">
                 <mat-form-field>
                   <mat-label>Question:</mat-label>
                   <input matInput formControlName="question">

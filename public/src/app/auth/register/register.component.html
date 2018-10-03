@@ -78,7 +78,7 @@
             <mat-error *ngIf="passwordFormControl.hasError('required')">
               Password is <strong>required</strong>
             </mat-error>
-            <mat-error *ngIf="passwordFormControl.errors?.minlength">
+            <mat-error *ngIf="passwordFormControl.hasError('minlength')">
               Password is to short
             </mat-error>
           </mat-form-field>
@@ -101,7 +101,7 @@
           <mat-error *ngIf="phoneFormControl.hasError('required')">
             Phone number is <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="phoneFormControl.hasError.minlength">
+          <mat-error *ngIf="phoneFormControl.hasError('minlength')">
             Please enter a valid phone number
           </mat-error>
         </mat-form-field>
