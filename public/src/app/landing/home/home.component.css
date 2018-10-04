@@ -18,8 +18,8 @@
   background-size: cover;
   min-height: 300px;
   max-height: 300px;
-  -webkit-clip-path: polygon(100% 0, 100% 67%, 70% 78%, 75% 72%, 0 100%, 0 0);
-  clip-path: polygon(100% 0, 100% 80%, 70% 87%, 74% 83%, 0 100%, 0 0);
+  -webkit-clip-path: polygon(100% 0, 100% 85%, 72% 90%, 74% 87%, 0 100%, 0 0);
+  clip-path: polygon(100% 0, 100% 85%, 72% 90%, 74% 87%, 0 100%, 0 0);
   margin-bottom: 1em;
   padding-bottom: 1em;
 }
