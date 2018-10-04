@@ -1,3 +1,4 @@
+import { BarChartComponent } from './../global/d3/bar-chart/bar-chart.component';
 import { ClientNavComponent } from '../layout/client-nav/client-nav.component';
 import { ClientComponent } from './client.component';
 import { NgModule } from '@angular/core';
@@ -41,7 +42,8 @@ import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analy
     UsersListComponent,
     ProfileComponent,
     EditClientComponent,
-    SurveyAnalyticsComponent
+    SurveyAnalyticsComponent,
+    BarChartComponent
   ]
 })
 export class ClientModule {}

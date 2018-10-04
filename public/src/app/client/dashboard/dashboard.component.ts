@@ -16,8 +16,9 @@ export class DashboardComponent {
   currentClient: Client = new Client;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  data = JSON.parse(sessionStorage.getItem('currentClient'));
+  client = JSON.parse(sessionStorage.getItem('currentClient'));
 
+  private chartData: Array<any>;
 
   constructor(
     private _authService: AuthService,
@@ -28,6 +29,13 @@ export class DashboardComponent {
 
   ngOnInit() { 
     this.isLoggedIn();
+
+    setTimeout(() => {
+      this.generateData();
+
+      // change the data periodically
+      setInterval(() => this.generateData(), 3000);
+    }, 1000);
   }
 
   isLoggedIn() {
@@ -35,6 +43,16 @@ export class DashboardComponent {
     if (!verify) {
       this.openSnackBar();
       this._router.navigateByUrl('/login');
+    }
+  }
+
+  generateData() {
+    this.chartData = [];
+    for (let i = 0; i < (8 + Math.floor(Math.random() * 10)); i++) {
+      this.chartData.push([
+        `Index ${i}`,
+        Math.floor(Math.random() * 100)
+      ]);
     }
   }
 
