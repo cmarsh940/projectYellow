@@ -19,7 +19,6 @@ import { UsersListComponent } from './user/users-list/users-list.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditClientComponent } from './profile/edit-client/edit-client.component';
 import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analytics.component';
-
 @NgModule({
   imports: [
     CommonModule,

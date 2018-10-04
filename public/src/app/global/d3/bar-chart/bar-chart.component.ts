@@ -7,10 +7,10 @@ import * as d3 from 'd3';
   styleUrls: ['./bar-chart.component.css']
 })
 export class BarChartComponent implements OnInit, OnChanges {
-  @ViewChild('chart') private chartContainer: ElementRef;
+  @ViewChild('barChart') private chartContainer: ElementRef;
   @Input() data: Array<any>;
   private margin: any = { top: 20, bottom: 20, left: 20, right: 20 };
-  private chart: any;
+  private barChart: any;
   private width: number;
   private height: number;
   private xScale: any;
@@ -29,7 +29,7 @@ export class BarChartComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.chart) {
+    if (this.barChart) {
       this.updateChart();
     }
   }
@@ -43,7 +43,7 @@ export class BarChartComponent implements OnInit, OnChanges {
       .attr('height', element.offsetHeight);
 
     // chart plot area
-    this.chart = svg.append('g')
+    this.barChart = svg.append('g')
       .attr('class', 'bars')
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
 
@@ -77,14 +77,14 @@ export class BarChartComponent implements OnInit, OnChanges {
     this.xAxis.transition().call(d3.axisBottom(this.xScale));
     this.yAxis.transition().call(d3.axisLeft(this.yScale));
 
-    const update = this.chart.selectAll('.bar')
+    const update = this.barChart.selectAll('.bar')
       .data(this.data);
 
     // remove exiting bars
     update.exit().remove();
 
     // update existing bars
-    this.chart.selectAll('.bar').transition()
+    this.barChart.selectAll('.bar').transition()
       .attr('x', d => this.xScale(d[0]))
       .attr('y', d => this.yScale(d[1]))
       .attr('width', d => this.xScale.bandwidth())

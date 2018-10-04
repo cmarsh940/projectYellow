@@ -41,6 +41,11 @@ import { CheckoutComponent } from './checkout/checkout.component';
 
 import { D3Service, D3_DIRECTIVES } from './global/d3';
 import { BarChartComponent } from './global/d3/bar-chart/bar-chart.component';
+import { PieChartComponent } from './global/d3/pie-chart/pie-chart.component';
+import { LineChartComponent } from './global/d3/line-chart/line-chart.component';
+import { AreaChartComponent } from './global/d3/area-chart/area-chart.component';
+import { MainFooterComponent } from './layout/main-footer/main-footer.component';
+import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.directive';
 
 @NgModule({
   declarations: [
@@ -48,7 +53,12 @@ import { BarChartComponent } from './global/d3/bar-chart/bar-chart.component';
     LoginComponent,
     RegisterComponent,
     CheckoutComponent,
-    ...D3_DIRECTIVES
+    ForbiddenValidatorDirective,
+    ...D3_DIRECTIVES,
+    PieChartComponent,
+    LineChartComponent,
+    MainFooterComponent,
+    AreaChartComponent
   ],
   imports: [
     BrowserModule,

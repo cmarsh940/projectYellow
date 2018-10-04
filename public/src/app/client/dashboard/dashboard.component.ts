@@ -18,7 +18,7 @@ export class DashboardComponent {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   client = JSON.parse(sessionStorage.getItem('currentClient'));
 
-  private chartData: Array<any>;
+  chartData: Array<any>;
 
   constructor(
     private _authService: AuthService,

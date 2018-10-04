@@ -153,15 +153,15 @@
       <div class="text-center">
         <button mat-stroked-button type="submit" color="primary" (click)="addParticipant(myForm)" [disabled]="!myForm.valid">Create Account</button>
       </div>
+      <div *ngIf="errors.length > 0" class="errors">
+        {{ errors }}
+      </div>
     </form>
   </div>
-  <div *ngIf="errors.length > 0" class="errors">
-    {{ errors }}
-  </div>
 
 
 
-<mat-toolbar id="footer" color="primary">
+<mat-toolbar id="bottom" color="primary">
   <div class="text-center">
     <p class="mat-h5">Already have a account?
       <a routerLink="/login" color="accent">Login</a>
