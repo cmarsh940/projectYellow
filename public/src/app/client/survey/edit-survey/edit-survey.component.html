@@ -3,87 +3,174 @@
 </div>
 
 <form [formGroup]="surveyForm" (ngSubmit)="submitForm()" class="form">
-
-  <mat-form-field>
-    <mat-select placeholder="Survey Category" formControlName="category">
-      <mat-option *ngFor="let category of categories" [value]="category._id">
-        {{category.name}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <!-- SURVEY NAME -->
-  <mat-form-field appearance="outline">
-    <mat-label>Survey Name:</mat-label>
-    <input matInput formControlName="name" />
-  </mat-form-field>
-
-  <!-- ARRAY OF QUESTIONS -->
-  <div formArrayName="questions">
-    <div *ngFor="let question of questions.controls; let i = index" [formGroupName]="i">
-      <!-- QUESTION CARD -->
-      <mat-card>
-        <mat-card-header> 
-          <h6>#{{i + 1}}</h6>
-          <span class="spacer"></span>
-          <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
-        </mat-card-header>
-        <mat-card-content>
-          <!-- QUESTION TYPE -->
-          <mat-form-field>
-            <mat-select placeholder="Question type" formControlName="questionType">
-              <mat-option *ngFor="let qType of questionTypes" [value]="qType.value">
-                {{qType.viewValue}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <!-- QUESTION -->
-          <ng-container [ngSwitch]="surveyForm.value.questions[i]?.questionType">
-            <ng-container *ngSwitchCase="'boolean'">
-              <mat-form-field>
-                <mat-label>Question:</mat-label>
-                <input matInput formControlName="question">
-              </mat-form-field>
+  
+    <mat-form-field>
+      <mat-select placeholder="Survey Category" formControlName="category">
+        <mat-option *ngFor="let category of categories" [value]="category._id">
+          {{category.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <!-- SURVEY NAME -->
+    <mat-form-field appearance="outline">
+      <mat-label>Survey Name:</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error>
+        <span *ngIf="!surveyForm.get('name').valid && surveyForm.get('name').touched">Please enter Survey Name</span>
+      </mat-error>
+    </mat-form-field>
+  
+    <div formArrayName="questions">
+      <div *ngFor="let question of surveyForm.controls['questions']['controls']; let i = index" [formGroupName]="i">
+        <!-- The repeated question template -->
+        <mat-card>
+          <mat-card-header>
+            <h6>Question #{{i + 1}}</h6>
+            <span class="spacer"></span>
+            <mat-slide-toggle formControlName="isRequired" [checked]="checked">required</mat-slide-toggle>
+            <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-form-field>
+              <mat-select formControlName="questionType" placeholder="Select Question Type">
+                <mat-optgroup *ngFor="let group of questionGroups" [label]="group.name">
+                  <mat-option *ngFor="let question of group.group" [value]="question.value">
+                    {{question.viewValue}}
+                  </mat-option>
+                </mat-optgroup>
+              </mat-select>
+            </mat-form-field>
+            <ng-container [ngSwitch]="surveyForm.value.questions[i]?.questionType">
+  
+              <!-- BOOLEAN -->
+              <ng-container *ngSwitchCase="'boolean'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- DATE -->
+              <ng-container *ngSwitchCase="'date'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- YES NO -->
+              <ng-container *ngSwitchCase="'yesno'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- TEXT -->
+              <ng-container *ngSwitchCase="'text'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- MULTI CHOICE -->
+              <ng-container *ngSwitchCase="'mutiplechoice'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+  
+                <mat-divider></mat-divider>
+  
+                <div formArrayName="options">
+                  <div *ngFor="let option of question.get('options').controls; let j=index">
+                    <div [formGroupName]="j">
+                      <mat-form-field>
+                        <mat-label>option #{{j+1}}</mat-label>
+                        <input matInput formControlName="optionName" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <button mat-raised-button type="button" (click)="addNewOption(question.controls.options)" color="primary">
+                    Add new Option
+                  </button>
+                </div>
+              </ng-container>
+  
+              <!-- PARAGRAPH -->
+              <ng-container *ngSwitchCase="'paragraph'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- FACES -->
+              <ng-container *ngSwitchCase="'smilieFaces'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- SATISFACTION -->
+              <ng-container *ngSwitchCase="'satisfaction'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- SLIDE -->
+              <ng-container *ngSwitchCase="'slide'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- SLIDE RATE -->
+              <ng-container *ngSwitchCase="'rate'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- LIKE UNLIKE -->
+              <ng-container *ngSwitchCase="'likeunlike'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- GOOD BAD -->
+              <ng-container *ngSwitchCase="'goodbad'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+  
+              <!-- DEFAULT -->
+              <ng-container *ngSwitchDefault>
+              </ng-container>
             </ng-container>
-            <ng-container *ngSwitchCase="'text'">
-              <mat-form-field>
-                <mat-label>Question:</mat-label>
-                <input matInput formControlName="question">
-              </mat-form-field>
-            </ng-container>
-            <ng-container *ngSwitchCase="'mutiplechoice'">
-              <mat-form-field>
-                <mat-label>Question:</mat-label>
-                <input matInput formControlName="question">
-              </mat-form-field>
-            </ng-container>
-            <ng-container *ngSwitchCase="'paragraph'">
-              <mat-form-field>
-                <mat-label>Question:</mat-label>
-                <input matInput formControlName="question">
-              </mat-form-field>
-            </ng-container>
-            <ng-container *ngSwitchCase="'smilieFaces'">
-              <mat-form-field>
-                <mat-label>Question:</mat-label>
-                <input matInput formControlName="question">
-              </mat-form-field>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <b>Select Question Type</b>
-            </ng-container>
-          </ng-container>
-        </mat-card-content>
-      </mat-card>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
+    <div class="private-toggle" *ngIf="pc">
+      <mat-slide-toggle formControlName="private">Private Survey</mat-slide-toggle>
+    </div>
+    <!-- Submit Button -->
+    <div class="text-center" id="button-group">
+      <button mat-raised-button type="button" (click)="addQuestion()" color="accent">Add Question</button>
+      <button mat-stroked-button type="submit" [disabled]=!surveyForm.valid>Submit</button>
+    </div>
+  </form>
+  <div>
+    <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
   </div>
-  <mat-slide-toggle formControlName="private">Private</mat-slide-toggle>
-  <!-- Submit Button -->
-  <div class="text-center" id="button-group">
-    <button mat-raised-button type="button" (click)="addQuestion()" color="accent">Add Question</button>
-    <button mat-stroked-button type="submit" [disabled]=!surveyForm.valid>Submit</button>
-  </div>
-</form>
-<div>
-  <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
-</div>

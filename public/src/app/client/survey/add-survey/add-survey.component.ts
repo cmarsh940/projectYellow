@@ -10,7 +10,7 @@ import { Survey } from '../../../global/models/survey';
 import { SurveyCategory } from '../../../global/models/survey-category';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { SurveyService } from '../survey.service';
-import { questionTypes } from './../../../global/models/question-type';
+import { questionGroups } from '../../../global/models/question-group';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -38,7 +38,7 @@ export class AddSurveyComponent implements OnInit {
   type = "";
   errors = [];
 
-  questionTypes = questionTypes;
+  questionGroups = questionGroups;
 
   checked = false;
 

@@ -8,7 +8,7 @@ import { SurveyService } from '../../client/survey/survey.service';
 import { Survey } from '../../global/models/survey';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { Question } from '../../global/models/question';
-import { questionTypes } from './../../global/models/question-type';
+import { questionGroups } from '../../global/models/question-group';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   surveyId: string = "";
   errors = [];
   _routeSubscription: Subscription;
-  questionTypes = questionTypes;
+  questionGroup = questionGroups;
 
   @Input() survey: any;
 

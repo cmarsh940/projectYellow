@@ -1,3 +1,4 @@
+import { BarChartComponent } from './../global/d3/bar-chart/bar-chart.component';
 import { ClientNavComponent } from '../layout/client-nav/client-nav.component';
 import { ClientComponent } from './client.component';
 import { NgModule } from '@angular/core';
@@ -18,7 +19,10 @@ import { UsersListComponent } from './user/users-list/users-list.component';
 import { ProfileComponent } from './profile/profile.component';
 import { EditClientComponent } from './profile/edit-client/edit-client.component';
 import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analytics.component';
-
+import { DonutChartComponent } from '../global/d3/donut-chart/donut-chart.component';
+import { PieChartComponent } from '../global/d3/pie-chart/pie-chart.component';
+import { LineChartComponent } from '../global/d3/line-chart/line-chart.component';
+import { AreaChartComponent } from '../global/d3/area-chart/area-chart.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -41,7 +45,12 @@ import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analy
     UsersListComponent,
     ProfileComponent,
     EditClientComponent,
-    SurveyAnalyticsComponent
+    SurveyAnalyticsComponent,
+    BarChartComponent,
+    DonutChartComponent,
+    PieChartComponent,
+    LineChartComponent,
+    AreaChartComponent,
   ]
 })
 export class ClientModule {}

@@ -109,6 +109,7 @@ export class RegisterComponent implements OnInit {
 
 
   addParticipant(form: any) {
+    this.errors = [];
     this.participant = {
       'firstName': this.firstNameFormControl.value,
       'lastName': this.lastNameFormControl.value,
@@ -128,8 +129,8 @@ export class RegisterComponent implements OnInit {
       if(data) {
         if (data.errors) {
           console.log("___ DATA ERROR ___:", data.errors);
-          if (data.errors.pizza) {
-            this.errors.push(data.errors.pizza.message);
+          if (data.errors.password) {
+            this.errors.push(data.errors.password.message);
           } else {
             this.errors.push(data.errors);
           }

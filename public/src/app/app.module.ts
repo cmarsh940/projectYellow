@@ -38,6 +38,8 @@ import { RequestCache, RequestCacheWithMap } from './global/services/cache.servi
 import { UserService } from './client/user/user.service';
 import { SurveyService } from './client/survey/survey.service';
 import { CheckoutComponent } from './checkout/checkout.component';
+
+import { D3Service, D3_DIRECTIVES } from './global/d3';
 import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.directive';
 
 @NgModule({
@@ -47,7 +49,9 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
     RegisterComponent,
     CheckoutComponent,
     ForbiddenValidatorDirective,
+    ...D3_DIRECTIVES,
   ],
+
   imports: [
     BrowserModule,
     LandingModule,
@@ -69,6 +73,7 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
     AuthService,
     MessagesService,
     ClientService,
+    D3Service,
     SurveyService,
     SurveyCategoryService,
     UserService,

@@ -1,4 +1,3 @@
-import { MainFooterComponent } from '../layout/main-footer/main-footer.component';
 import { MainNavComponent } from '../layout/main-nav/main-nav.component';
 import { MaterialModule } from '../material/material.module';
 import { NgModule } from '@angular/core';
@@ -13,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
+import { MainFooterComponent } from '../layout/main-footer/main-footer.component';
 
 @NgModule({
   imports: [
@@ -24,10 +24,10 @@ import { ListSurveysComponent } from './list-surveys/list-surveys.component';
   ],
   declarations: [
     MainNavComponent,
-    MainFooterComponent,
     LandingComponent,
     RightsComponent, 
-    AboutComponent, 
+    AboutComponent,
+    MainFooterComponent, 
     PricingComponent, HomeComponent, ViewSurveyComponent, ListSurveysComponent
   ]
 })

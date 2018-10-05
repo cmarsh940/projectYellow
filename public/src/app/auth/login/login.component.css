@@ -26,9 +26,12 @@ button {
     width:100%;
 }
 
-#footer {
+#bottom {
     position: fixed;
-    bottom: 0;
+    bottom: 0!important;
+    left: 0;
+    width: 100%;
+    z-index: 10!important; 
 }
 
 a {
