@@ -1,3 +1,4 @@
+import { questionGroups } from './../../../global/models/question-group';
 import { SurveyCategory } from './../../../global/models/survey-category';
 import { Component, OnInit, OnDestroy, Input, AfterViewInit, ViewChildren, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
@@ -10,7 +11,6 @@ import { SurveyService } from '../survey.service';
 import { Survey } from '../../../global/models/survey';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { Question } from '../../../global/models/question';
-import { questionTypes } from './../../../global/models/question-type';
 
 
 
@@ -30,7 +30,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   categories: SurveyCategory[];
 
 
-  questionTypes = questionTypes;
+  questionGroups = questionGroups;
 
   @Input() survey: any;
 
@@ -72,8 +72,8 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this.surveyForm = this.fb.group({
       name: ['', Validators.required],
       category: ['', Validators.required],
-      private: [""],
-      questions: this.fb.array([this.buildQuestion()])
+      private: [''],
+      questions: this.fb.array([this.initQuestion()])
     });
 
     this.loadCategories();
@@ -115,15 +115,14 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-  addQuestion(): void {
-    this.questions.push(this.buildQuestion());
-  }
 
 
-  buildQuestion(): FormGroup {
+  initQuestion() {
     return this.fb.group({
-      questionType: ['', Validators.required],
-      question: ['', Validators.required]
+      isRequired: false,
+      questionType: ["", Validators.required],
+      question: ["", Validators.required],
+      options: this.fb.array([])
     });
   }
 
@@ -137,7 +136,8 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     // Update the data on the form
     this.surveyForm.patchValue({
       name: this.survey.name,
-      category: this.survey.category
+      category: this.survey.category,
+      private: this.survey.private
     });
     this.surveyForm.setControl('questions',
       this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
@@ -178,10 +178,26 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   }
 
 
+  get question(): FormArray {
+    return this.surveyForm.get("question") as FormArray;
+  }
+
   setQuestions(questions: Question[]) {
     const questionFGs = questions.map(question => this.fb.group(question));
     const questionFormArray = this.fb.array(questionFGs);
-    this.surveyForm.setControl('questions', questionFormArray);
+    this.surveyForm.setControl("questions", questionFormArray);
+  }
+
+  addQuestion() {
+    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
+    questionsControl.push(this.initQuestion());
+  }
+
+  addNewOption(control) {
+    control.push(
+      this.fb.group({
+        optionName: ['']
+      }))
   }
 
   // PREPARE SURVEY FORM FOR SUBMITTING
