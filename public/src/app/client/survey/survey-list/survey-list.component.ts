@@ -6,6 +6,8 @@ import { ProfileService } from './../../profile/profile.service';
 import { Survey } from './../../../global/models/survey';
 import { SurveyService } from '../survey.service';
 
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'survey-list',
   templateUrl: './survey-list.component.html',
@@ -66,6 +68,10 @@ export class SurveyListComponent implements OnInit {
     }
   }
 
+  download() {
+    const blob = new Blob([JSON.stringify(this.dataSource)], { type: 'application/json' });
+    saveAs(blob, 'surveys.json');
+  }
   
   TrackById(index: number, survey: Survey) {
     return survey._id;
@@ -83,4 +89,5 @@ export class SurveyListComponent implements OnInit {
     const part = this.array.slice(start, end);
     this.dataSource = part;
   }
+  
 }

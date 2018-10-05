@@ -54,6 +54,8 @@
   </mat-grid-list>
 
   <h3>Bar Chart</h3>
-  <!-- <app-bar-chart *ngIf="chartData" ></app-bar-chart> -->
   <app-bar-chart *ngIf="chartData" [data]="chartData"></app-bar-chart>
+
+  <h3>Donut Chart</h3>
+  <app-donut-chart [data]="donutChartData"></app-donut-chart>
 </div>

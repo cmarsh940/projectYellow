@@ -40,10 +40,6 @@ import { SurveyService } from './client/survey/survey.service';
 import { CheckoutComponent } from './checkout/checkout.component';
 
 import { D3Service, D3_DIRECTIVES } from './global/d3';
-import { BarChartComponent } from './global/d3/bar-chart/bar-chart.component';
-import { PieChartComponent } from './global/d3/pie-chart/pie-chart.component';
-import { LineChartComponent } from './global/d3/line-chart/line-chart.component';
-import { AreaChartComponent } from './global/d3/area-chart/area-chart.component';
 import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.directive';
 
 @NgModule({
@@ -54,9 +50,6 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
     CheckoutComponent,
     ForbiddenValidatorDirective,
     ...D3_DIRECTIVES,
-    PieChartComponent,
-    LineChartComponent,
-    AreaChartComponent
   ],
 
   imports: [

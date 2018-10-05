@@ -23,6 +23,7 @@ export class BarChartComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.createChart();
+    console.table(this.data);
     if (this.data) {
       this.updateChart();
     }

@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Question } from '../../../global/models/question';
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar } from '@angular/material';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-survey-analytics',
   templateUrl: './survey-analytics.component.html',
@@ -69,6 +69,11 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  download() {
+    const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'application/json' });
+    saveAs(blob, 'survey.json');
   }
 
   openSnackBar() {
