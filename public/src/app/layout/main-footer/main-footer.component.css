@@ -10,9 +10,3 @@ a {
     width: 100%;
     display: flex;
 }
-
-#footer {
-    position: fixed;
-    bottom: 0;
-
-}

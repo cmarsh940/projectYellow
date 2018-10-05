@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
+import { MainFooterComponent } from '../layout/main-footer/main-footer.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { ListSurveysComponent } from './list-surveys/list-surveys.component';
     MainNavComponent,
     LandingComponent,
     RightsComponent, 
-    AboutComponent, 
+    AboutComponent,
+    MainFooterComponent, 
     PricingComponent, HomeComponent, ViewSurveyComponent, ListSurveysComponent
   ]
 })

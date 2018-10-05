@@ -44,7 +44,6 @@ import { BarChartComponent } from './global/d3/bar-chart/bar-chart.component';
 import { PieChartComponent } from './global/d3/pie-chart/pie-chart.component';
 import { LineChartComponent } from './global/d3/line-chart/line-chart.component';
 import { AreaChartComponent } from './global/d3/area-chart/area-chart.component';
-import { MainFooterComponent } from './layout/main-footer/main-footer.component';
 import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.directive';
 
 @NgModule({
@@ -57,9 +56,9 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
     ...D3_DIRECTIVES,
     PieChartComponent,
     LineChartComponent,
-    MainFooterComponent,
     AreaChartComponent
   ],
+
   imports: [
     BrowserModule,
     LandingModule,

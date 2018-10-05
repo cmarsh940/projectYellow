@@ -29,6 +29,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   _routeSubscription: Subscription;
   categories: SurveyCategory[];
 
+  pc: boolean;
 
   questionGroups = questionGroups;
 
