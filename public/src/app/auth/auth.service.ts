@@ -49,7 +49,10 @@ export class AuthService {
 
   setCurrentClient(client) {
     console.log("*** SERVICE SET CURRENT CLIENT ***")
+    let token = client.token;
+    delete client.token;
     sessionStorage.setItem('currentClient', JSON.stringify(client));
+    sessionStorage.setItem('token', JSON.stringify(token));
     localStorage.setItem('t940', JSON.stringify(client._id));
   }
 
@@ -60,6 +63,7 @@ export class AuthService {
       res => {
         this.currentClient = null;
         sessionStorage.removeItem('currentClient');
+        sessionStorage.removeItem('token');
         localStorage.removeItem('t940');
         callback(res.json());
       },

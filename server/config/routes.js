@@ -7,6 +7,14 @@ const Surveys = require('../controllers/surveys');
 const Users = require('../controllers/users');
 const Questions = require('../controllers/questions');
 
+const PermissionMiddleware = require('../config/middleware/auth.permission.middleware');
+const ValidationMiddleware = require('../config/middleware/auth.validation.middleware');
+const config = require('./config');
+
+const ADMIN = config.permissionLevels.ADMIN;
+const PAID = config.permissionLevels.PAID_USER;
+const FREE = config.permissionLevels.NORMAL_USER;
+
 
 module.exports = function (app) {
     // CLIENT
@@ -14,13 +22,33 @@ module.exports = function (app) {
     app.post('/api/clients', Clients.create);
     app.delete('/api/clients', Clients.logout);
     app.post('/api/clients/login', Clients.authenticate);
-    app.delete('/api/clients/:id', Clients.delete);
-    app.get('/api/clients/:id', Clients.show);
-    app.put('/api/clients/:id', Clients.update);
+    app.delete('/api/clients/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+        Clients.delete
+    ]);
+    app.get('/api/clients/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+        Clients.show
+    ]);
+    app.put('/api/clients/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+        Clients.update
+    ]);
     app.get('/sessions', Clients.session);
 
     // IMAGES
-    app.post('/api/upload/portfolio/:id', Clients.upload);
+    app.post('/api/upload/portfolio/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
+        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
+        Clients.upload
+    ]);
 
     // PAYMENTS
     app.get('/api/braintree/getclienttoken', Payments.getClientToken);
@@ -34,11 +62,31 @@ module.exports = function (app) {
     app.put('/api/questions/:id', Questions.update);
 
     // SUBSCRIPTIONS
-    app.get('/api/subscriptions', Subscriptions.index);
-    app.post('/api/subscriptions', Subscriptions.create);
-    app.delete('/api/subscriptions/:id', Subscriptions.delete);
-    app.get('/api/subscriptions/:id', Subscriptions.show);
-    app.put('/api/subscriptions/:id', Subscriptions.update);
+    app.get('/api/subscriptions', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Subscriptions.index
+    ]);
+    app.post('/api/subscriptions', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Subscriptions.create
+    ]);
+    app.delete('/api/subscriptions/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Subscriptions.delete
+    ]);
+    app.get('/api/subscriptions/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Subscriptions.show
+    ]);
+    app.put('/api/subscriptions/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Subscriptions.update
+    ]);
     
     // SURVEYS
     app.get('/api/surveys', Surveys.index);
@@ -50,10 +98,25 @@ module.exports = function (app) {
 
     // SURVEY CATEGORIES
     app.get('/api/survey-categories', Categories.index);
-    app.post('/api/survey-categories', Categories.create);
-    app.delete('/api/survey-categories/:id', Categories.delete);
-    app.get('/api/survey-categories/:id', Categories.show);
-    app.put('/api/survey-categories/:id', Categories.update);
+    app.post('/api/survey-categories', [
+        ValidationMiddleware.validJWTNeeded,
+        Categories.create
+    ]);
+    app.delete('/api/survey-categories/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Categories.delete
+    ]);
+    app.get('/api/survey-categories/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Categories.show
+    ]);
+    app.put('/api/survey-categories/:id', [
+        ValidationMiddleware.validJWTNeeded,
+        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
+        Categories.update
+    ]);
 
     // USERS
     app.get('/api/users', Users.index);

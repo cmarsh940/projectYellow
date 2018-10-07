@@ -5,9 +5,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 import { MessagesService } from './messages.service';
 
+let data = JSON.parse(sessionStorage.getItem('token'));
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 
+    'Content-Type': 'application/json',
+    'authorization': data
+  })
 };
 
 
@@ -51,7 +55,9 @@ export class DataService<Type> {
     console.log('Entered DataService add');
     console.log('asset', asset);
     console.log("*** POST ***");
-    return this.http.post<any>(this.actionUrl + ns, asset).pipe(
+    console.log("*** HEADERS ***", httpOptions);
+    
+    return this.http.post<any>(this.actionUrl + ns, asset, httpOptions).pipe(
       map(this.extractData),
       catchError(this.handleError('Add', []))
     );
@@ -71,7 +77,7 @@ export class DataService<Type> {
   public delete(ns: string, id: string): Observable<any> {
     console.log('what is the id to delete?', id);
     console.log("*** DELETE ***");
-    return this.http.delete<any>(this.actionUrl + ns + '/' + id).pipe(
+    return this.http.delete<any>(this.actionUrl + ns + '/' + id, httpOptions).pipe(
       catchError(this.handleError('Delete', []))
     );
   }

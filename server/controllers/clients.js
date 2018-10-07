@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
 
 const config = require("../config/config");
+const secret = require('../config/config').jwt_secret;
 
 const BUCKET_NAME = "surveysbyme";
 const IAM_USER_KEY = config.iamUser;
@@ -10,6 +11,7 @@ const IAM_USER_SECRET = config.iamSecret;
 const path = require("path");
 const AWS = require("aws-sdk");
 const Busboy = require("busboy");
+const jwt = require('jsonwebtoken');
 
 
 // James wagner's example(signed url)
@@ -105,12 +107,14 @@ class ClientsController {
       }
       if (client && client.authenticate(req.body.password)) {
         console.log("_____CLIENT LOGGING IN_____", client);
+        var token = jwt.sign({client}, secret);
         req.session.client = {
           _id: client._id,
           n: client.firstName + " " + client.lastName,
           a8o1: client.role,
           b8o1: client.subscription,
           s: client.surveys,
+          token: `Bearer ${token}`,
           v: client.verified
         };
         if(err) {

@@ -105,9 +105,14 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "SKIPPER"
+    default: "CAPTAIN"
   },
   
+  permissionLevel: {
+    type: Number,
+    default: 4
+  },
+
   subscription: {
     type: String,
     enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
