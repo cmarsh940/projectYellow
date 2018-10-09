@@ -75,10 +75,8 @@ export class AddCategoryComponent implements OnInit {
         this._router.navigate(["/surveyCategoriesReport"]);
       })
       .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else {
-          this.errorMessage = error;
+        if (error) {
+          this.errorMessage = error
         }
       });
   }

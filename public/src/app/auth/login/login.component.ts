@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.alreadyLoggedIn();
+    // this.alreadyLoggedIn();
    }
 
   loginParticipant(form: any) {

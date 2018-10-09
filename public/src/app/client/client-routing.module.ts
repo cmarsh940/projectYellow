@@ -1,3 +1,4 @@
+import { AuthGuard } from './../global/guards/auth.guard';
 import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analytics.component';
 import { EditClientComponent } from './profile/edit-client/edit-client.component';
 import { NgModule } from '@angular/core';
@@ -27,7 +28,7 @@ const routes: Routes = [
       {
         path: "profile/:id",
         pathMatch: "full",
-        component: ProfileComponent
+        component: ProfileComponent,
       },
       {
         path: "profile/edit/:id",

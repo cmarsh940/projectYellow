@@ -5,12 +5,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 import { MessagesService } from './messages.service';
 
-let data = JSON.parse(sessionStorage.getItem('token'));
+function getToken() {
+  if (sessionStorage.getItem('token') === null) {
+    const data = JSON.parse(sessionStorage.getItem('token'));
+    return data
+  }
+}
 
 const httpOptions = {
   headers: new HttpHeaders({ 
     'Content-Type': 'application/json',
-    'authorization': data
+    'Authorization': getToken()
   })
 };
 
@@ -45,7 +50,7 @@ export class DataService<Type> {
 
   public getSingle(ns: string, id: string): Observable<any> {
     console.log("*** GET ***");
-    return this.http.get<any>(this.actionUrl + ns + '/' + id + this.resolveSuffix).pipe(
+    return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
       map(this.extractData),
       catchError(this.handleError('getSingle', []))
     );
@@ -55,9 +60,8 @@ export class DataService<Type> {
     console.log('Entered DataService add');
     console.log('asset', asset);
     console.log("*** POST ***");
-    console.log("*** HEADERS ***", httpOptions);
     
-    return this.http.post<any>(this.actionUrl + ns, asset, httpOptions).pipe(
+    return this.http.post<any>(this.actionUrl + ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('Add', []))
     );
@@ -68,7 +72,7 @@ export class DataService<Type> {
     console.log('what is the updated item?', itemToUpdate);
     console.log("*** PUT ***");
     console.log(`${this.actionUrl}${ns}/${id}`)
-    return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate, httpOptions)
+    return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate)
     .pipe(
       catchError(this.handleError('Update', []))
     );
@@ -77,7 +81,7 @@ export class DataService<Type> {
   public delete(ns: string, id: string): Observable<any> {
     console.log('what is the id to delete?', id);
     console.log("*** DELETE ***");
-    return this.http.delete<any>(this.actionUrl + ns + '/' + id, httpOptions).pipe(
+    return this.http.delete<any>(this.actionUrl + ns + '/' + id).pipe(
       catchError(this.handleError('Delete', []))
     );
   }

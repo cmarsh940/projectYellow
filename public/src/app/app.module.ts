@@ -1,7 +1,4 @@
-import { UploadService } from './global/services/upload.service';
-import { SurveyCategoryService } from './overview/survey-category-report/survey-category.service';
-import { SubscriptionService } from './overview/subscription-report/subscription.service';
-import { OverviewService } from './overview/overview.service';
+
 // MODULES
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -18,6 +15,7 @@ import { OverviewModule } from './overview/overview.module';
 
 // COMPONENTS
 import { AppComponent } from './app.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 import { EditClientComponent } from './client/profile/edit-client/edit-client.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -32,15 +30,23 @@ import { httpInterceptorProviders } from './global/interceptors';
 // SERVICES
 import { AuthService } from './auth/auth.service';
 import { ClientService } from './client/client.service';
+import { D3Service, D3_DIRECTIVES } from './global/d3';
 import { HttpErrorHandler } from './global/services/http-error-handler.service';
 import { MessagesService } from './global/services/messages.service';
+import { OverviewService } from './overview/overview.service';
 import { RequestCache, RequestCacheWithMap } from './global/services/cache.service';
-import { UserService } from './client/user/user.service';
+import { SubscriptionService } from './overview/subscription-report/subscription.service';
 import { SurveyService } from './client/survey/survey.service';
-import { CheckoutComponent } from './checkout/checkout.component';
+import { SurveyCategoryService } from './overview/survey-category-report/survey-category.service';
+import { UploadService } from './global/services/upload.service';
+import { UserService } from './client/user/user.service';
 
-import { D3Service, D3_DIRECTIVES } from './global/d3';
+
+// VALIDATORS
 import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.directive';
+
+// GUARDS
+import { AuthGuard } from './global/guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -69,6 +75,7 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
     })
   ],
   providers: [
+    AuthGuard,
     HttpErrorHandler,
     AuthService,
     MessagesService,

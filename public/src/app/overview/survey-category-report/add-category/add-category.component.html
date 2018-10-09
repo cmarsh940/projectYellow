@@ -6,5 +6,7 @@
   <mat-form-field>
     <input matInput formControlName="name" type="text" required>
   </mat-form-field>
-  <button mat-button-raised (click)="addAsset(myForm)" [disabled]=!myForm.valid>Confirm</button>
+  <button mat-button-raised type="submit" (click)="addAsset(myForm)" [disabled]=!myForm.valid>Confirm</button>
 </form>
+
+{{errorMessage}}

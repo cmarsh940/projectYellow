@@ -64,6 +64,7 @@ function uploadToS3(file, client) {
     });
   });
 }
+
 class ClientsController {
   index(req, res) {
     Client.find({}).populate('connections.item').exec((err, clients) => {
@@ -107,7 +108,7 @@ class ClientsController {
       }
       if (client && client.authenticate(req.body.password)) {
         console.log("_____CLIENT LOGGING IN_____", client);
-        var token = jwt.sign({client}, secret);
+        var token = jwt.sign({ client }, secret, { expiresIn: '1h'});
         req.session.client = {
           _id: client._id,
           n: client.firstName + " " + client.lastName,
@@ -127,7 +128,7 @@ class ClientsController {
     })
   }
 
-  show(req, res) {
+  show(req, res, next) {
     Client.findById({ _id: req.params.id }).lean()
       .populate('surveys')
       .populate('category')

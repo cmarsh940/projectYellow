@@ -30,12 +30,13 @@ export class CachingInterceptor implements HttpInterceptor {
 
         const cachedResponse = this.cache.get(req);
         // cache-then-refresh
-        if (req.headers.get('x-refresh')) {
-            const results$ = sendRequest(req, next, this.cache);
-            return cachedResponse ?
-                results$.pipe(startWith(cachedResponse)) :
-                results$;
-        }
+        // console.log("CACHE HEADERS", req.headers.get);
+        // if (req.headers.get('authorization')) {
+        //     const results$ = sendRequest(req, next, this.cache);
+        //     return cachedResponse ?
+        //         results$.pipe(startWith(cachedResponse)) :
+        //         results$;
+        // }
         // cache-or-fetch
         return cachedResponse ?
             of(cachedResponse) : sendRequest(req, next, this.cache);

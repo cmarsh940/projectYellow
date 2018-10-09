@@ -24,20 +24,14 @@ module.exports = function (app) {
     app.post('/api/clients/login', Clients.authenticate);
     app.delete('/api/clients/:id', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
-        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
         Clients.delete
     ]);
     app.get('/api/clients/:id', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
-        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
         Clients.show
     ]);
     app.put('/api/clients/:id', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
-        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
         Clients.update
     ]);
     app.get('/sessions', Clients.session);
@@ -45,8 +39,6 @@ module.exports = function (app) {
     // IMAGES
     app.post('/api/upload/portfolio/:id', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(FREE),
-        PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
         Clients.upload
     ]);
 
@@ -64,7 +56,6 @@ module.exports = function (app) {
     // SUBSCRIPTIONS
     app.get('/api/subscriptions', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Subscriptions.index
     ]);
     app.post('/api/subscriptions', [
@@ -104,17 +95,14 @@ module.exports = function (app) {
     ]);
     app.delete('/api/survey-categories/:id', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Categories.delete
     ]);
     app.get('/api/survey-categories/:id', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Categories.show
     ]);
     app.put('/api/survey-categories/:id', [
         ValidationMiddleware.validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Categories.update
     ]);
 

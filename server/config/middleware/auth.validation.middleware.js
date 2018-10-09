@@ -25,21 +25,34 @@ exports.validRefreshNeeded = (req, res, next) => {
 
 
 exports.validJWTNeeded = (req, res, next) => {
+    console.log("HIT VALIDATE TOKEN");
     console.log("HEADERS", req.headers)
     if (req.headers['authorization']) {
+        console.log("RECIEVED HEADER WITH AUTHORIZATION IN IT");
         try {
-            let authorization = req.headers['authorization'].split(' ');
-            if (authorization[0] !== 'Bearer') {
+            console.log("TRYING");
+            let Authorization = req.headers['authorization'].split(' ');
+            if (Authorization[0] !== 'Bearer') {
+                console.log("is bearer there", Authorization[0]);
                 return res.status(401).send();
             } else {
-                req.jwt = jwt.verify(authorization[1], secret);
+                req.jwt = jwt.verify(Authorization[1], secret);
+                console.log("req.jwt", req.jwt);
+                console.log("NEXT");
                 return next();
             }
 
         } catch (err) {
+            console.log("ERROR",err)
             return res.status(403).send();
         }
     } else {
-        return res.status(401).send();
+        if(req.method === 'GET') {
+            console.log("ITS A GET");
+            return next();
+        } else{
+            console.log("RETURNING EVERYTHING ELSE", res);
+            return res.status(401).send();
+        }
     }
 };

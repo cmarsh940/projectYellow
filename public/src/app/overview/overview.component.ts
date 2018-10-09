@@ -21,7 +21,7 @@ export class OverviewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.Authorized();
+        // this.Authorized();
     }
 
     Authorized() {

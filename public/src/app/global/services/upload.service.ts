@@ -4,8 +4,17 @@ import { map, catchError } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from './http-error-handler.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
+function getToken() {
+  if (sessionStorage.getItem('token') === null) {
+    const data = JSON.parse(sessionStorage.getItem('token'));
+    return data
+  }
+}
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'multipart/form-data' })
+  headers: new HttpHeaders({
+    'Content-Type': 'multipart/form-data',
+    'Authorization': getToken()
+  })
 };
 
 @Injectable({
@@ -24,12 +33,15 @@ export class UploadService {
     httpOptions;
   }
 
-  postPortfolio(formData, id: string) {
+  postPortfolio(formData, id: string): Observable<any> {
     console.log("**** HIT SERVICE");
     console.log("**** ID", id);
+
     var URL = this.actionUrl + "upload/portfolio/" + id;
-    return this.http.post(URL, formData).pipe(
-      catchError(this.handleError('POST', []))
+    console.log("**** url", URL);
+    return this.http.post<any>(URL, formData).pipe(
+      map(this.extractData),
+      catchError(this.handleError('Upload', []))
     );
   }
 

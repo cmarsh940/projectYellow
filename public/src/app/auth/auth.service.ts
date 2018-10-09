@@ -32,6 +32,7 @@ export class AuthService {
 
   authenticate(asset: Client): Observable<any> {
     console.log("*** POST AUTHENTICATE ***");
+    console.log("*** CLIENT ***", asset);
     return this._httpClient.post<any>(this.actionUrl + this.ns + '/login', asset).pipe(
       map(this.extractData),
       catchError(this.handleError('Authenticate', []))
@@ -41,6 +42,7 @@ export class AuthService {
   addParticipant(asset: any): Observable<any> {
     console.log('Entered AuthService Create');
     console.log("*** POST ***");
+    console.log("*** ASSET ***", asset);
     return this._httpClient.post<any>(this.actionUrl + this.ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('addParticipant', []))
@@ -119,6 +121,17 @@ export class AuthService {
     return false;
   }
 
+  getAuthorizationToken() {
+    console.log("HIT GET AUTH TOKEN FROM AUTH SERVICE")
+    if (sessionStorage.getItem('token') === null) {
+      return false;
+    }
+    else {
+      const data = JSON.parse(sessionStorage.getItem('token'));
+      return data
+    }
+  }
+
   
   private extractData(res: Response): any {
     console.log("*** extractData: ***");
@@ -132,7 +145,6 @@ export class AuthService {
         return res;
       }
     }
-    console.log("*** ERROR ***");
     return res;
   }
 
