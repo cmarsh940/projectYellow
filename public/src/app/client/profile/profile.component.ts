@@ -45,6 +45,7 @@ export class ProfileComponent implements OnInit {
       this.clientId = params['id'];
       this.getClient();
     });
+    console.table(this.currentClient);
   }
 
 

@@ -1,13 +1,15 @@
-import { AuthService } from './../../../auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { Survey } from '../../../global/models/survey';
-import { SurveyService } from '../survey.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Question } from '../../../global/models/question';
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
+
+import { AuthService } from './../../../auth/auth.service';
+import { Question } from '../../../global/models/question';
+import { SurveyService } from '../survey.service';
+import { Survey } from '../../../global/models/survey';
+
 @Component({
   selector: 'app-survey-analytics',
   templateUrl: './survey-analytics.component.html',
@@ -71,9 +73,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       );
   }
 
-  download() {
+
+  downloadJson() {
     const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'application/json' });
     saveAs(blob, 'survey.json');
+  }
+  downloadText() {
+    const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, 'survey.txt');
   }
 
   openSnackBar() {

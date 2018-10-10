@@ -30,12 +30,12 @@
       </mat-card>
     </mat-grid-tile> 
 
-    <!-- ACTIVITY CARD -->
+    <!-- PIE CHART CARD -->
     <mat-grid-tile>
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
-            Activity
+            <h3>Pie Chart</h3>
             <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu" disabled>
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -46,7 +46,8 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          <div>COMING SOON!</div>
+          <app-pie-chart [MAXLEVEL]="2" [defaultFilterOptions]="['Benedescription', 'BeneCategory', 'BeneSubcategory']" [width]="600"
+            [height]="500"></app-pie-chart>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
@@ -56,6 +57,8 @@
   <h3>Bar Chart</h3>
   <app-bar-chart *ngIf="chartData" [data]="chartData"></app-bar-chart>
 
-  <h3>Donut Chart</h3>
-  <app-donut-chart [data]="donutChartData"></app-donut-chart>
+  <!-- <h3>Donut Chart</h3>
+  <app-donut-chart [data]="donutChartData"></app-donut-chart> -->
+
+  
 </div>
