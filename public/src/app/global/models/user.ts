@@ -10,6 +10,7 @@ export class User {
     role: string;
     surveyOwner: any;
     surveys: any;
+    submissionDate: any;
     createdAt: any;
     updatedAt: any;
 }

@@ -1,19 +1,12 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    firstName: {
+    name: {
         type: String,
-        required: [true, "First Name cannot be blank"],
         maxlength: [200, "First name cannot be greater then 200 characters"]
-    },
-    LastName: {
-        type: String,
-        required: [true, "Last name cannot be blank"],
-        maxlength: [200, "Last name cannot be greater then 200 characters"]
     },
     email: {
         type: String,
-        required: [true, "Email cannot be blank"],
         minlength: [5, "Email did not meat the requirments"],
         maxlength: [200, "Email cannot be greater then 200 characters"],
         trim: true,
@@ -27,8 +20,7 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: Number,
-        required: [true, "Phone number cannot be blank"],
-        unique: true,
+        unique: true
     },
     _survey: { type: mongoose.Schema.Types.ObjectId, ref: "Survey" },
     answers: {

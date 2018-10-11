@@ -6,6 +6,7 @@ export class Survey {
     questions: any;
     user: any;
     creator: any;
+    lastSubmission: any;
     createdAt: any;
     updatedAt: any;
 }

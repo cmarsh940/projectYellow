@@ -110,7 +110,9 @@ class SurveysController {
     console.log("*** PARAMS ***", req.params);
     console.log("*** BODY ***", req.body);
 
-    Survey.findById(req.params.id, (err, survey) => {
+    Survey.findByIdAndUpdate(req.params.id, { 
+      $push: { submissionDates: Date.now() },
+      $set: { lastSubmission: Date.now() } }, { new: true }, (err, survey) => {
       if (err) {
         console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);
@@ -123,6 +125,7 @@ class SurveysController {
               return res.json(err);
             }
             question.answers.push(arr[i].answers)
+            question.lastAnswered = Date.now();
             question.save((err, question) => {
               if (err) {
                 console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
