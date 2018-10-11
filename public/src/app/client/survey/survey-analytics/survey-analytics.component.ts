@@ -17,12 +17,12 @@ import { Survey } from '../../../global/models/survey';
 })
 export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   survey: Survey = new Survey();
-  questions: Question[];
+  questions: Question[] = [];
   surveyId = '';
   _routeSubscription: Subscription;
   errors = [];
   url: string;
-
+  pieData = [];
 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -58,8 +58,16 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   getSurvey() {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(res => {
-          this.survey = res;
-          this.questions = this.survey.questions;
+          this.survey = res.questions;
+          console.log("SURVEY", this.survey);
+        for (let i = 0; i < (<any>this.survey).length; i++) {
+            console.log("QUESTION TYPE", this.survey[i].questionType);
+            if (this.survey[i].questionType === 'yesno') {
+              this.pieData.push(this.survey[i]);
+            } else {
+              this.questions.push(this.survey[i]);
+            }
+          }
           this.url = `www.surveysbyme.com/takeSurvey/${this.surveyId}`;
         },
         (error: any) => {

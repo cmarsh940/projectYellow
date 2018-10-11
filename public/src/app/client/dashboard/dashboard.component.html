@@ -33,22 +33,7 @@
     <!-- PIE CHART CARD -->
     <mat-grid-tile>
       <mat-card class="dashboard-card">
-        <mat-card-header>
-          <mat-card-title>
-            <h3>Pie Chart</h3>
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu" disabled>
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item disabled>Expand</button>
-              <button mat-menu-item disabled>Remove</button>
-            </mat-menu>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="dashboard-card-content">
-          <app-pie-chart [MAXLEVEL]="2" [defaultFilterOptions]="['Benedescription', 'BeneCategory', 'BeneSubcategory']" [width]="600"
-            [height]="500"></app-pie-chart>
-        </mat-card-content>
+          <app-pie-chart [width]="600" [height]="500"></app-pie-chart>
       </mat-card>
     </mat-grid-tile>
 

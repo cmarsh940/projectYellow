@@ -42,8 +42,7 @@ i{
 .svg-container {
     display: inline-block;
     position: relative;
-    width: 70%;
-    padding-bottom: 100%; /* aspect ratio */
+    width: 100%;
     vertical-align: top;
     overflow: hidden;
 }
