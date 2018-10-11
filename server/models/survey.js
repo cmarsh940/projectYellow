@@ -34,6 +34,14 @@ const SurveySchema = new mongoose.Schema({
       ref: "User"
     }
   ],
+  submissionDates: [Date],
+  lastSubmission: {
+    type: Date,
+  },
+  active: {
+    type: Boolean,
+    default: true
+  }
 }, {
     timestamps: true
   });

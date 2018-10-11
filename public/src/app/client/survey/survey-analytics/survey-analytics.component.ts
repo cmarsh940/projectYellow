@@ -1,13 +1,15 @@
-import { AuthService } from './../../../auth/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { Survey } from '../../../global/models/survey';
-import { SurveyService } from '../survey.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { Question } from '../../../global/models/question';
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs';
 import { saveAs } from 'file-saver';
+
+import { AuthService } from './../../../auth/auth.service';
+import { Question } from '../../../global/models/question';
+import { SurveyService } from '../survey.service';
+import { Survey } from '../../../global/models/survey';
+
 @Component({
   selector: 'app-survey-analytics',
   templateUrl: './survey-analytics.component.html',
@@ -15,12 +17,12 @@ import { saveAs } from 'file-saver';
 })
 export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   survey: Survey = new Survey();
-  questions: Question[];
+  questions: Question[] = [];
   surveyId = '';
   _routeSubscription: Subscription;
   errors = [];
   url: string;
-
+  pieData = [];
 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -56,8 +58,16 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   getSurvey() {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(res => {
-          this.survey = res;
-          this.questions = this.survey.questions;
+          this.survey = res.questions;
+          console.log("SURVEY", this.survey);
+        for (let i = 0; i < (<any>this.survey).length; i++) {
+            console.log("QUESTION TYPE", this.survey[i].questionType);
+            if (this.survey[i].questionType === 'yesno') {
+              this.pieData.push(this.survey[i]);
+            } else {
+              this.questions.push(this.survey[i]);
+            }
+          }
           this.url = `www.surveysbyme.com/takeSurvey/${this.surveyId}`;
         },
         (error: any) => {
@@ -71,9 +81,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       );
   }
 
-  download() {
+
+  downloadJson() {
     const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'application/json' });
     saveAs(blob, 'survey.json');
+  }
+  downloadText() {
+    const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'text/plain;charset=utf-8' });
+    saveAs(blob, 'survey.txt');
   }
 
   openSnackBar() {

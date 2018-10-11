@@ -21,6 +21,9 @@ const QuestionSchema = new mongoose.Schema({
     ],
     questionType: {
         type: String
+    },
+    lastAnswered: {
+        type: Date
     }
 }, {
     timestamps: true

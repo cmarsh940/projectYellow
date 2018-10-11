@@ -1,11 +1,17 @@
 <div class="header">
   <h3 class="mat-subheading-2" id="title">{{ survey?.name | titlecase }}</h3>
   <span class="spacer"></span>
-  <mat-icon  matTooltip="Download Survey" (click)="download()" color="primary" id="download-icon">
-    <i class="material-icons">
-      cloud_download
-    </i>
-  </mat-icon>
+  <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
+    <mat-icon>cloud_download</mat-icon>
+  </button>
+  <mat-menu #downloadMenu="matMenu">
+    <button mat-menu-item (click)="downloadJson()">
+      Json file
+    </button>
+    <button mat-menu-item (click)="downloadText()">
+      Text file
+    </button>
+  </mat-menu>
 
   <h6 class="mat-caption">
     <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
@@ -25,7 +31,6 @@
   <mat-divider>
   </mat-divider>
 </div>
-
 <div id="button-group">
   <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
 </div>
