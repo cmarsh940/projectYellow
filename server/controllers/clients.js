@@ -101,7 +101,7 @@ class ClientsController {
     console.log("___ SERVER HIT AUTHENTICATE ___");
     console.log("___ SENT TO SERVER ___", req.body);
 
-    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).populate('surveys').exec((err, client) => {
+    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).populate('_surveys').exec((err, client) => {
       if (err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
         return res.json("____ AUTHENTICATE ERROR ____" + err);
@@ -114,7 +114,7 @@ class ClientsController {
           n: client.firstName + " " + client.lastName,
           a8o1: client.role,
           b8o1: client.subscription,
-          s: client.surveys,
+          s: client._surveys,
           token: `Bearer ${token}`,
           v: client.verified
         };
@@ -130,7 +130,7 @@ class ClientsController {
 
   show(req, res, next) {
     Client.findById({ _id: req.params.id }).lean()
-      .populate('surveys')
+      .populate('_surveys')
       .populate('category')
       .exec(function (err, doc) {
         if (err) {
@@ -201,14 +201,7 @@ class ClientsController {
         req.pipe(busboy);
       }
       console.log("__ UPLOADED AND ABOUT TO SAVE CLIENT");
-      Client.updateOne({
-         _id: req.params.id 
-        }, 
-        { 
-          $set: { 
-            picture: file.name 
-          } 
-        }).exec((err, client) => {
+      Client.updateOne({ _id: req.params.id }, { $set: { picture: file.name } }).exec((err, client) => {
         if (err) {
           console.log("___ UPDATE CLIENT ERROR ___",err);
           return res.json(err);

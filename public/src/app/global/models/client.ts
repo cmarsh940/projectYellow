@@ -10,7 +10,7 @@ export class Client {
     state: string;
     zip: any;
     role: string;
-    surveys: any;
+    _surveys: any;
     users: any;
     used: any;
     subscription: string;

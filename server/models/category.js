@@ -5,7 +5,7 @@ const CategorySchema = new mongoose.Schema({
         type: String,
         required: [true, 'Name cannot be blank']
     },
-    surveys: {
+    _surveys: {
         type: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -13,7 +13,7 @@ const CategorySchema = new mongoose.Schema({
             }
         ],
         default: []
-    }
+    },
 }, { timestamps: true });
 
 const Category = mongoose.model('Category', CategorySchema);

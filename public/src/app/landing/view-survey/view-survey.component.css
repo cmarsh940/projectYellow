@@ -2,6 +2,15 @@
   flex: 1 1 auto;
 }
 
+.loaded {
+    width: 100%;
+    margin: auto;
+}
+
+.mat-spinner {
+    margin: 5em auto;
+}
+
 form {
     margin: auto;
     padding: 1em;
@@ -43,7 +52,7 @@ form {
 }
 
 .mat-card {
-    margin: 1em 0;
+    margin: 5em 0;
 }
 
 .button-group {

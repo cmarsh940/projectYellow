@@ -105,7 +105,7 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "CAPTAIN"
+    default: "CLIENT"
   },
   
   permissionLevel: {
@@ -119,10 +119,10 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "ELITE"
+    default: "FREE"
   },
 
-  surveys: {
+  _surveys: {
     type: [
       {
         type: mongoose.Schema.Types.ObjectId,

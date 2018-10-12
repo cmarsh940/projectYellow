@@ -32,7 +32,6 @@ export class AuthService {
 
   authenticate(asset: Client): Observable<any> {
     console.log("*** POST AUTHENTICATE ***");
-    console.log("*** CLIENT ***", asset);
     return this._httpClient.post<any>(this.actionUrl + this.ns + '/login', asset).pipe(
       map(this.extractData),
       catchError(this.handleError('Authenticate', []))
@@ -42,7 +41,6 @@ export class AuthService {
   addParticipant(asset: any): Observable<any> {
     console.log('Entered AuthService Create');
     console.log("*** POST ***");
-    console.log("*** ASSET ***", asset);
     return this._httpClient.post<any>(this.actionUrl + this.ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('addParticipant', []))
