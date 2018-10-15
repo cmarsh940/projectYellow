@@ -83,11 +83,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
 
   downloadJson() {
-    const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(this.survey)], { type: 'application/json' });
     saveAs(blob, 'survey.json');
   }
+
   downloadText() {
-    const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob([JSON.stringify(this.survey)], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, 'survey.txt');
   }
 

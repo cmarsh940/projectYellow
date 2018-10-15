@@ -31,6 +31,14 @@
   <mat-divider>
   </mat-divider>
 </div>
+
+<!-- PIE CHART CARD -->
+<mat-grid-tile>
+  <mat-card class="dashboard-card">
+    <app-pie-chart [width]="600" [height]="500" [data]="pieData"></app-pie-chart>
+  </mat-card>
+</mat-grid-tile>
+
 <div id="button-group">
   <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
 </div>

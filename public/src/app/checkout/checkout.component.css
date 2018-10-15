@@ -1,11 +1,14 @@
 .container{
     border: 1px solid #000;
+    padding: 1em!important;
+    margin: 0 3em;
 }
 
 .hf-container {
-    border: none;
+    border: 0.5px solid black;
     height: 50px;
-    padding: 4px;
+    padding: 0px;
+    margin: 1em 0;
 }
 
 .header {
@@ -14,4 +17,13 @@
 
 .header h2 {
   text-align: center;
+}
+
+#button-pay{
+    width: 100%;
+    background: black;
+    color: white;
+    font-size: x-large;
+    font-weight: 600;
+    font-variant-caps: petite-caps;
 }

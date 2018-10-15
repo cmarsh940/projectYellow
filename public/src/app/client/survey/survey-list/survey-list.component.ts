@@ -45,7 +45,6 @@ export class SurveyListComponent implements OnInit {
     let id = surveyOwner._id;
     this._profileService.getparticipant(id)
       .subscribe((response) => {
-        console.table(response);
         this.dataSource = new MatTableDataSource<Element>(response._surveys);
         this.dataSource.paginator = this.paginator;
         this.array = response._surveys;

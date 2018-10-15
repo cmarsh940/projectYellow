@@ -137,12 +137,15 @@
 
 
                             <!-- DIRECTIONAL ARROWS -->
-                            <div *ngIf="i === 0" class="single-button">
+                            <div *ngIf="i === 0 && survey?.questions?.length === 1" class="single-button">
+                                <button mat-raised-button type="submit" [disabled]=!surveyForm.valid color="accent">Submit</button>
+                            </div>
+                            <div *ngIf="i === 0 && survey?.questions?.length > 1" class="single-button">
                                 <button mat-stroked-button matStepperNext type="button" color="primary">
                                     Next <img src="/assets/icons/arrow_forward.svg" alt="navigate forward icon">
                                 </button>
                             </div>
-                            <div *ngIf="i >= 1 && i < survey?.questions?.length - 1" class="button-group">
+                            <div *ngIf="i > 0 && i < survey?.questions?.length - 1" class="button-group">
                                 <button mat-stroked-button matStepperPrevious type="button" color="back">
                                 <img src="/assets/icons/arrow_back.svg" alt="navigate back icon"> Back
                                 </button>
@@ -151,7 +154,7 @@
                                     Next <img src="/assets/icons/arrow_forward.svg" alt="navigate forward icon">
                                 </button>
                             </div>
-                            <div *ngIf="i === survey?.questions?.length - 1" class="button-group">
+                            <div *ngIf="i !== 0 && i === survey?.questions?.length - 1" class="button-group">
                                 <button mat-stroked-button matStepperPrevious type="button" color="back">
                                     <img src="/assets/icons/arrow_back.svg" alt="navigate back icon"> Back
                                 </button>

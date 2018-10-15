@@ -68,6 +68,9 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
 });
 
+const cpuCount = require('os').cpus().length;
+console.log('CPU nodes = ' + cpuCount);
+
 app.set('port', port);
 const server = http.createServer(app);
 
