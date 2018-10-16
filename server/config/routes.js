@@ -16,6 +16,39 @@ const PAID = config.permissionLevels.PAID_USER;
 const FREE = config.permissionLevels.NORMAL_USER;
 
 
+async function validJWTNeeded(req, res, next) {
+    console.log("HIT VALIDATE TOKEN");
+    console.log("HEADERS", req.headers)
+    if (req.headers['authorization']) {
+        console.log("RECIEVED HEADER WITH AUTHORIZATION IN IT");
+        try {
+            let Authorization = await req.headers['authorization'].split(' ');
+            if (Authorization[0] !== 'Bearer') {
+                console.log("Not Valid");
+                return res.status(401).send();
+            } else {
+                req.jwt = await jwt.verify(Authorization[1], secret);
+                console.log("req.jwt", req.jwt);
+                console.log("NEXT");
+                return next();
+            }
+
+        } catch (err) {
+            console.log("ERROR", err)
+            return res.status(403).send();
+        }
+    } else {
+        if (req.method === 'GET') {
+            console.log("ITS A GET");
+            return next();
+        } else {
+            console.log("RETURNING EVERYTHING ELSE", res);
+            return res.status(401).send();
+        }
+    }
+};
+
+
 module.exports = function (app) {
     // CLIENT
     app.get('/api/clients', Clients.index);
@@ -23,22 +56,22 @@ module.exports = function (app) {
     app.delete('/api/clients', Clients.logout);
     app.post('/api/clients/login', Clients.authenticate);
     app.delete('/api/clients/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Clients.delete
     ]);
     app.get('/api/clients/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Clients.show
     ]);
     app.put('/api/clients/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Clients.update
     ]);
     app.get('/sessions', Clients.session);
 
     // IMAGES
     app.post('/api/upload/portfolio/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Clients.upload
     ]);
 
@@ -55,26 +88,26 @@ module.exports = function (app) {
 
     // SUBSCRIPTIONS
     app.get('/api/subscriptions', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Subscriptions.index
     ]);
     app.post('/api/subscriptions', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Subscriptions.create
     ]);
     app.delete('/api/subscriptions/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Subscriptions.delete
     ]);
     app.get('/api/subscriptions/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Subscriptions.show
     ]);
     app.put('/api/subscriptions/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
         Subscriptions.update
     ]);
@@ -90,19 +123,19 @@ module.exports = function (app) {
     // SURVEY CATEGORIES
     app.get('/api/survey-categories', Categories.index);
     app.post('/api/survey-categories', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Categories.create
     ]);
     app.delete('/api/survey-categories/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Categories.delete
     ]);
     app.get('/api/survey-categories/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Categories.show
     ]);
     app.put('/api/survey-categories/:id', [
-        ValidationMiddleware.validJWTNeeded,
+        validJWTNeeded,
         Categories.update
     ]);
 

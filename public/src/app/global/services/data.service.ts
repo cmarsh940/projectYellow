@@ -12,6 +12,13 @@ function getToken() {
   }
 }
 
+function loadToken() {
+  if (sessionStorage.getItem('token') !== null) {
+    const data = JSON.parse(sessionStorage.getItem('token'));
+    return data
+  }
+}
+
 const httpOptions = {
   headers: new HttpHeaders({ 
     'Content-Type': 'application/json',

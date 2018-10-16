@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpErrorHandler, HandleError } from '../global/services/http-error-handler.service';
+
 import { catchError, map } from 'rxjs/operators';
+import { HttpErrorHandler, HandleError } from 'src/app/global/services/http-error-handler.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 

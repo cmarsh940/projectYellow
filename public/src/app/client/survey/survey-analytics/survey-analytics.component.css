@@ -2,6 +2,15 @@
   flex: 1 1 auto;
 }
 
+.loaded {
+    width: 100%;
+    margin: auto;
+}
+
+.mat-spinner {
+    margin: 5em auto;
+}
+
 #header {
     width: 100%;
     text-align: center;
@@ -12,7 +21,6 @@
 }
 
 #survey {
-    width: 100%;
     padding: 1em;
 }
 
@@ -45,4 +53,23 @@ a {
     padding: 0 1em;
     position: absolute;
     display: inline-flex;
+}
+
+table {
+    width: 100%;    
+}
+
+th {
+    display: table-header-group;
+}
+
+td, th {
+    width:100%;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
 }

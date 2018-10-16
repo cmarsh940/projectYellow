@@ -17,6 +17,10 @@
         <mat-icon mat-list-icon>dashboard</mat-icon>
         <h4 mat-line>Overview</h4>
       </a>
+      <a mat-list-item routerLink="/dashboard" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <h4 mat-line>Dashboard</h4>
+      </a>
       <a mat-list-item routerLink="/surveyReport" (click)="drawer.toggle()">
         <mat-icon mat-list-icon>assignment</mat-icon>
         <h4 mat-line>Surveys</h4>

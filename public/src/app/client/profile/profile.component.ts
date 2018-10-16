@@ -1,5 +1,5 @@
 import { UploadService } from './../../global/services/upload.service';
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -14,7 +14,8 @@ import { AuthService } from '../../auth/auth.service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+
+export class ProfileComponent implements OnInit, OnDestroy {
   currentClient= new Client();
   clientId = '';
   _routeSubscription: Subscription;
@@ -46,6 +47,10 @@ export class ProfileComponent implements OnInit {
       this.getClient();
     });
     console.table(this.currentClient);
+  }
+
+  ngOnDestroy() {
+    this._routeSubscription.unsubscribe();
   }
 
 

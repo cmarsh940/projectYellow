@@ -40,29 +40,36 @@ export class RegisterComponent implements OnInit {
   firstNameFormControl = new FormControl('', [
     Validators.required,
     Validators.pattern('[a-zA-Z ]*'),
-    forbiddenNameValidator(/admin/i)
+    forbiddenNameValidator(/admin/i),
+    Validators.maxLength(250),
   ]);
   lastNameFormControl = new FormControl('', [
     Validators.required,
     Validators.pattern('[a-zA-Z ]*'),
-    forbiddenNameValidator(/admin/i)
+    forbiddenNameValidator(/admin/i),
+    Validators.maxLength(250),
   ]);
   businessName = new FormControl('');
   emailFormControl = new FormControl('', [
     Validators.required, 
-    Validators.email
+    Validators.email,
+    Validators.maxLength(250),
   ]);
   passwordFormControl = new FormControl('', [
     Validators.required, 
     Validators.minLength(8),
+    Validators.maxLength(250),
   ]);
   confirm_pass = new FormControl('', [
     Validators.required, 
     Validators.minLength(8),
+    Validators.maxLength(250),
   ]);
   phoneFormControl = new FormControl('', [
     Validators.required, 
-    Validators.minLength(10),
+    Validators.pattern('[0-9]*'),
+    Validators.minLength(10), 
+    Validators.maxLength(12),
   ]);
   addressFormControl = new FormControl('', [
     Validators.required, 
@@ -72,15 +79,19 @@ export class RegisterComponent implements OnInit {
     Validators.required, 
     Validators.pattern('[a-zA-Z ]*'),
     Validators.minLength(2),
+    Validators.maxLength(150),
   ]);
   stateFormControl = new FormControl('', [
     Validators.required,
     Validators.pattern('[a-zA-Z ]*'), 
     Validators.minLength(2),
+    Validators.maxLength(5),
   ]);
   zipFormControl = new FormControl('', [
     Validators.required, 
+    Validators.pattern('[0-9]*'),
     Validators.minLength(5),
+    Validators.maxLength(18),
   ]);
 
 
