@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
+const Subscription = mongoose.model('Subscription');
 
 const config = require("../config/config");
 const secret = require('../config/config').jwt_secret;
@@ -77,6 +78,7 @@ class ClientsController {
 
   create(req, res) {
     console.log("*** SERVER HIT CREATE CLIENT");
+    console.log("*** REQ BODY", req.body);
     if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {

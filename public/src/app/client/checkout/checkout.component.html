@@ -1,15 +1,19 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <div class="header">
-            <h2 class="mat-title">Checkout</h2>
-        </div>
-    </mat-toolbar-row>
-</mat-toolbar>
+<div class="container" style="min-height: 500px; margin-top: 150px;">
 
+        <h2>Payment amount: ${{amount}}</h2>
 
-<div class="container">
-    <span class="card-text">Card #</span><div class="hf-container" id="card-number"></div>
-    <span class="card-text">CVV</span><div class="hf-container" id="cvv"></div>
-    <span class="card-text">Expriation Date</span><div class="hf-container" id="expiration-date"></div>
-    <button mat-raised-button id="button-pay">Pay Now</button>
+    <div class="card-container">
+        <form action="/" method="post" id="cardForm">
+            <label class="hf-label" for="card-number">Card Number</label>
+            <div class="hf-container" id="card-number"></div>
+
+            <label class="hf-label" for="expiration-date">Expiration Date</label>
+            <div class="hf-container" id="expiration-date"></div>
+
+            <label class="hf-label" for="cvv">CVV</label>
+            <div class="hf-container" id="cvv"></div>
+
+            <button type="submit" class="button button--small button--green" id="submit">Purchase</button>
+        </form>
+    </div>
 </div>

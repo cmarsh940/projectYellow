@@ -3,7 +3,7 @@ export class Countries {
     Code: string;
 }
     
-export const countriess: Countries[] = [
+export const countries: Countries[] = [
     {
         "Name": "Afghanistan",
         "Code": "AF"

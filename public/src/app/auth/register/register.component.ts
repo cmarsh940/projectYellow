@@ -121,6 +121,9 @@ export class RegisterComponent implements OnInit {
 
   addParticipant(form: any) {
     this.errors = [];
+    const subscription = {
+      "name": "FREE",
+    }
     this.participant = {
       'firstName': this.firstNameFormControl.value,
       'lastName': this.lastNameFormControl.value,
@@ -134,6 +137,7 @@ export class RegisterComponent implements OnInit {
       'city': this.cityFormControl.value,
       'state': this.stateFormControl.value,
       'zip': this.zipFormControl.value,
+      'subscription': subscription
     };
 
     this._authService.addParticipant(this.participant).subscribe((data) => {

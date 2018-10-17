@@ -8,6 +8,10 @@ const SubscriptionSchema = new mongoose.Schema(
                 ref: "Client"
             }
         ],
+        datesPaid: [Date],
+        lastPayment: {
+            type: Date,
+        },
         name: {
             type: String,
             enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
@@ -15,6 +19,11 @@ const SubscriptionSchema = new mongoose.Schema(
             uppercase: true,
             trim: true,
             default: "FREE"
+        },
+        renewPaymentDate: {
+            type: Date,
+            required: true,
+            default: Date.now()
         },
         responses: {
             type: Number,
@@ -31,7 +40,8 @@ const SubscriptionSchema = new mongoose.Schema(
         },
         surveyCount:{
             type: Number,
-            required: true
+            required: true,
+            default: 10
         },
         text: {
             type: Boolean,

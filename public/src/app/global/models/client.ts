@@ -13,7 +13,7 @@ export class Client {
     _surveys: any;
     users: any;
     used: any;
-    subscription: string;
+    _subscription: any;
     password: string;
     confirm_pass: any;
     picture: any;

@@ -52,6 +52,10 @@ const ClientSchema = new mongoose.Schema({
     }
   },
 
+  grt: {
+    type: String
+  },
+
   phone: {
     type: Number,
     required: [true, 'Phone number cannot be blank'],
@@ -105,7 +109,13 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "CLIENT"
+    default: "CAPTAIN"
+  },
+
+  paymentDate: {
+    type: Date,
+    required: true,
+    default: Date.now()
   },
   
   permissionLevel: {
@@ -113,15 +123,23 @@ const ClientSchema = new mongoose.Schema({
     default: 4
   },
 
-  subscription: {
-    type: String,
-    enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
-    required: true,
-    uppercase: true,
-    trim: true,
-    default: "FREE"
+  _subscription: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Subscription"
   },
+  // subscription: {
+  //   type: String,
+  //   enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
+  //   required: true,
+  //   uppercase: true,
+  //   trim: true,
+  //   default: "ELITE"
+  // },
 
+  surveyCount: {
+    type: Number,
+    default: 10
+  },
   _surveys: {
     type: [
       {
@@ -144,10 +162,6 @@ const ClientSchema = new mongoose.Schema({
     default: []
   },
 
-  grt:{
-    type: String
-  },
-
   verified: {
     type: Boolean,
     required: true,
@@ -166,6 +180,7 @@ ClientSchema.pre('save', function (next) {
 
   if (client.isNew) {
     client.password = bcrypt.hashSync(client.password, bcrypt.genSaltSync());
+    client.grt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
 
   next();
@@ -174,16 +189,6 @@ ClientSchema.pre('save', function (next) {
 
 ClientSchema.methods.authenticate = function (password) {
   return bcrypt.compareSync(password, this.password);
-}
-
-ClientSchema.methods.setValidate = function (next) {
-  let client = this;
-
-  if (client.isNew) {
-    client.grt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-  }
-
-  next();
 }
 
 const Client = mongoose.model('Client', ClientSchema);
