@@ -7,6 +7,7 @@ import { LandingComponent } from './landing.component';
 import { PricingComponent } from './pricing/pricing.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
+import { VerifiedComponent } from './verified/verified.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,11 @@ const routes: Routes = [
         path: "takeSurvey/:id",
         pathMatch: "full",
         component: ViewSurveyComponent
+      },
+      {
+        path: "verified/:id/:id",
+        pathMatch: "full",
+        component: VerifiedComponent
       },
     ]
   }

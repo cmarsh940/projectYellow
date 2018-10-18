@@ -14,6 +14,8 @@ const AWS = require("aws-sdk");
 const Busboy = require("busboy");
 const jwt = require('jsonwebtoken');
 
+const nodemailer = require('nodemailer');
+
 
 // James wagner's example(signed url)
 // function uploadToS3(file, client) {
@@ -66,6 +68,46 @@ function uploadToS3(file, client) {
   });
 }
 
+
+
+
+function sendVerificationEmail(email) {
+  const url = `http://localhost:8000/verified/${email.client}/${email.message}`
+  var output = ` 
+    <p>Please verify your account</p> 
+    <a href="${url}" target="_blank">Verify Email</a>`
+
+  nodemailer.createTestAccount((err, account) => {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: 'smtp.mail.us-west-2.awsapps.com',
+          port: 465,
+          secure: true,
+          auth: {
+            user: config.verificationEmail,
+            pass: config.verificationPass 
+          }
+      });
+
+      // setup email data with unicode symbols
+      let mailOptions = {
+          from: '"nodemailer contact" <noreply@surveysbyme.com>', // sender address
+          to: email.contact, // list of receivers
+          subject: 'Please verify your account', // Subject line
+          html: output // html body
+      };
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message sent: %s', info.messageId);
+          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      });
+  });
+}
+
 class ClientsController {
   index(req, res) {
     Client.find({}).populate('connections.item').exec((err, clients) => {
@@ -95,6 +137,12 @@ class ClientsController {
         return res.json(err);
       }
       console.log("*** SERVER CLIENT CREATED", client);
+      var email = {
+        client: client._id,
+        contact: client.email,
+        message: client.grt
+      }
+      sendVerificationEmail(email);
       return res.json(client)
     })
   }
@@ -142,6 +190,19 @@ class ClientsController {
       });
   }
 
+  updateVerifiedEmail(req, res) {
+    Client.findByIdAndUpdate(
+      req.params.id,
+      { $set: { verified: true } },
+      { new: true },
+      (err, client) => {
+        if (err) {
+          return res.json(err);
+        }
+        return res.json(client);
+      }
+    );
+  }
   update(req, res) {
     Client.findByIdAndUpdate(
       req.params.id,

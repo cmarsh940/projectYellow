@@ -67,6 +67,7 @@ module.exports = function (app) {
         validJWTNeeded,
         Clients.update
     ]);
+    app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
 
     // IMAGES

@@ -74,6 +74,16 @@ export class DataService<Type> {
     );
   }
 
+  updateVerification(ns: string, id: string, itemToUpdate: Type): Observable<any> {
+    console.log('what is the id?', id);
+    console.log('what is the updated item?', itemToUpdate);
+    console.log("*** PUT ***");
+    return this.http.put<Type>(`${this.actionUrl}${ns}/verifyemail/${id}`, itemToUpdate)
+      .pipe(
+        catchError(this.handleError('Update Verification', []))
+      );
+  }
+
   public update(ns: string, id: string, itemToUpdate: Type): Observable<any> {
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
