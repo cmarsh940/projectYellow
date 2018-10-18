@@ -43,7 +43,9 @@
         <h5>State: {{ currentClient.state }}</h5>
         <h5>Zip: {{ currentClient.zip }}</h5>
         <h5>Subscription: {{ currentClient._subscription }}</h5>
-        <button mat-stroked-button [routerLink]="['/checkout', currentClient._id]" matTooltip="Upgrade Subscription" color="primary">Upgrade Subscription</button>
+        <button mat-stroked-button [routerLink]="['/checkout', currentClient._id, '1']" matTooltip="Upgrade Subscription" color="primary">Upgrade Subscription</button>
+        <button mat-stroked-button [routerLink]="['/checkout', currentClient._id, '2']" matTooltip="Upgrade Subscription" color="primary">Upgrade Subscription</button>
+        <button mat-stroked-button [routerLink]="['/checkout', currentClient._id, '3']" matTooltip="Upgrade Subscription" color="primary">Upgrade Subscription</button>
       </div>
     </div>
     <div class="action">

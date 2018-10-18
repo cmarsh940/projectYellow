@@ -26,7 +26,7 @@ const routes: Routes = [
         component: DashboardComponent
       },
       {
-        path: "checkout/:id",
+        path: "checkout/:id/:id",
         pathMatch: "full",
         component: CheckoutComponent,
       },
