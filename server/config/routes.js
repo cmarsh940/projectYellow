@@ -15,6 +15,8 @@ const ADMIN = config.permissionLevels.ADMIN;
 const PAID = config.permissionLevels.PAID_USER;
 const FREE = config.permissionLevels.NORMAL_USER;
 
+const jwt = require('jsonwebtoken');
+const secret = require('./config').jwt_secret;
 
 async function validJWTNeeded(req, res, next) {
     console.log("HIT VALIDATE TOKEN");
@@ -27,7 +29,7 @@ async function validJWTNeeded(req, res, next) {
                 console.log("Not Valid");
                 return res.status(401).send();
             } else {
-                req.jwt = await jwt.verify(Authorization[1], secret);
+                req.jwt = jwt.verify(Authorization[1], secret);
                 console.log("req.jwt", req.jwt);
                 console.log("NEXT");
                 return next();

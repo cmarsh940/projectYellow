@@ -29,6 +29,7 @@ export const questionGroups: QuestionGroup[] = [
         name: 'Ratings',
         group: [
             { value: "rate", viewValue: "Slide Rating (1-5)" },
+            { value: "star", viewValue: "Star Rating" },
         ]
     },
     {

@@ -138,6 +138,14 @@
                 </mat-form-field>
               </ng-container>
 
+              <!-- STAR RATE -->
+              <ng-container *ngSwitchCase="'star'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              </ng-container>
+
               <!-- LIKE UNLIKE -->
               <ng-container *ngSwitchCase="'likeunlike'">
                 <mat-form-field>
