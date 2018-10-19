@@ -71,7 +71,6 @@
     html {
       height: 100%;
     }
-
     .app-loading {
       position: relative;
       display: flex;
@@ -82,25 +81,29 @@
       background-color: #000;
     }
 
-    .app-loading .spinner {
-      height: 300px;
-      width: 300px;
-      animation: rotate 1s linear infinite;
-      transform-origin: center center;
+    .pulse-loader {
+      height: 15rem;
+      width: 15rem;
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: auto;
     }
 
-    .app-loading .spinner .path {
-      stroke-dasharray: 1, 200;
-      stroke-dashoffset: 0;
-      animation: dash 1.5s ease-in-out infinite;
-      stroke-linecap: round;
-      stroke: #ffd600;
+
+    .pulse-loader:before, .pulse-loader:after {
+      content:  '';
+      animation: 1.5s infinite pulse;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      border: 4px solid #ffd600;;
+      display: block;
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      width: 100%;
+    }
+
+    .pulse-loader:after {
+      animation-delay: 3s;
     }
 
     .logo img {
@@ -108,45 +111,35 @@
       max-height: 15em;
     }
 
-    @keyframes rotate {
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    @keyframes dash {
+    @keyframes pulse {
       0% {
-        stroke-dasharray: 1, 200;
-        stroke-dashoffset: 0;
+        opacity: 0;
+        transform: scale(0.6);
       }
-      50% {
-        stroke-dasharray: 89, 200;
-        stroke-dashoffset: -35px;
+      70% {
+        opacity: 1;
+        transform: scale(1);
       }
       100% {
-        stroke-dasharray: 89, 200;
-        stroke-dashoffset: -124px;
+        opacity: 0;
+        transform: scale(0.6);
       }
     }
+  
   </style>
   <link rel="manifest" href="manifest.json">
 
 </head>
 
 <body>
-  <app-root>
-    <!-- selector from app.component.ts -->
 
-    <!-- loading layout replaced by app after startupp -->
+  <app-root>
     <div class="app-loading">
       <div class="logo">
         <img src="/assets/SurveysbyME.png" alt="ME icon">
       </div>
-      <svg class="spinner" viewBox="25 25 50 50">
-        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
-      </svg>
+      <div class="pulse-loader"></div>
     </div>
-
   </app-root>
 
 </body>
