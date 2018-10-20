@@ -1,3 +1,11 @@
+<div *ngIf="remaining !== 0">
+  <button mat-stroked-button routerLink="add" matTooltip="Create Survey" color="primary">New Survey</button>
+</div>
+
+<div *ngIf="remaining === 0">
+  <h5 id="out">You are out of surveys. Upgrade your subscription to get more.</h5>
+</div>
+
 <div>
   <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
 

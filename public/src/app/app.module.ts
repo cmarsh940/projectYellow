@@ -1,3 +1,4 @@
+import { SubscriptionOverlayComponent } from './client/profile/subscription-overlay/subscription-overlay.component';
 
 // MODULES
 import { NgModule } from '@angular/core';
@@ -90,6 +91,7 @@ import { AuthGuard } from './global/guards/auth.guard';
   ],
   entryComponents: [
     EditClientComponent,
+    SubscriptionOverlayComponent,
     RightsComponent
   ],
   bootstrap: [AppComponent]

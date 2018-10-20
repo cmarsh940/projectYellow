@@ -15,6 +15,7 @@ import { saveAs } from 'file-saver';
 })
 export class SurveyListComponent implements OnInit {
   currentClient: Client;
+  remaining: number;
   errorMessage;
 
   // PAGINATE
@@ -45,6 +46,8 @@ export class SurveyListComponent implements OnInit {
     let id = surveyOwner._id;
     this._profileService.getparticipant(id)
       .subscribe((response) => {
+        console.table(response);
+        this.remaining = response.surveyCount;
         this.dataSource = new MatTableDataSource<Element>(response._surveys);
         this.dataSource.paginator = this.paginator;
         this.array = response._surveys;

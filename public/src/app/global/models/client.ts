@@ -14,6 +14,7 @@ export class Client {
     users: any;
     used: any;
     _subscription: any;
+    surveyCount: number;
     password: string;
     confirm_pass: any;
     picture: any;

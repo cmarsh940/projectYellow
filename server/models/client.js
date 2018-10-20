@@ -137,6 +137,7 @@ const ClientSchema = new mongoose.Schema({
     type: Number,
     default: 10
   },
+  
   _surveys: {
     type: [
       {
@@ -147,12 +148,10 @@ const ClientSchema = new mongoose.Schema({
     default: []
   },
   
-  used: [
-    {
-      type: String,
+  used: {
+      type: [String],
       select: false
-    }
-  ],
+  },
 
   users: {
     type: [

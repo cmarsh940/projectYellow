@@ -8,6 +8,7 @@ import { MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, 
 import { EditClientComponent } from './edit-client/edit-client.component';
 import { ProfileService } from './profile.service';
 import { AuthService } from '../../auth/auth.service';
+import { SubscriptionOverlayComponent } from './subscription-overlay/subscription-overlay.component';
 
 @Component({
   selector: 'app-profile',
@@ -56,6 +57,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   openDialog() {
     const dialogRef = this.dialog.open(EditClientComponent, {
+      data: this.currentClient,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openSubscriptionDialog() {
+    const dialogRef = this.dialog.open(SubscriptionOverlayComponent, {
       data: this.currentClient,
     });
 
