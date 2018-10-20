@@ -19,8 +19,6 @@ const jwt = require('jsonwebtoken');
 const secret = require('./config').jwt_secret;
 
 async function validJWTNeeded(req, res, next) {
-    console.log("HIT VALIDATE TOKEN");
-    console.log("HEADERS", req.headers)
     if (req.headers['authorization']) {
         console.log("RECIEVED HEADER WITH AUTHORIZATION IN IT");
         try {
@@ -30,7 +28,6 @@ async function validJWTNeeded(req, res, next) {
                 return res.status(401).send();
             } else {
                 req.jwt = jwt.verify(Authorization[1], secret);
-                console.log("req.jwt", req.jwt);
                 console.log("NEXT");
                 return next();
             }

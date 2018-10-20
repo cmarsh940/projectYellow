@@ -89,7 +89,8 @@ const ClientSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password cannot be blank"],
     minlength: [8, "Password must be at least 8 characters"],
-    maxlength: [50, "Password cannot be greater then 50 characters"],
+    maxlength: [150, "Password cannot be greater then 150 characters"],
+    select: false,
     validate: {
       validator: function (value) {
         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d$@$!%*?&]{8,50}/.test(value);
@@ -109,7 +110,7 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "CAPTAIN"
+    default: "CLIENT"
   },
 
   paymentDate: {
@@ -120,21 +121,17 @@ const ClientSchema = new mongoose.Schema({
   
   permissionLevel: {
     type: Number,
-    default: 4
+    default: 1
   },
 
   _subscription: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Subscription"
+    type: String,
+    enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
+    required: true,
+    uppercase: true,
+    trim: true,
+    default: "FREE"
   },
-  // subscription: {
-  //   type: String,
-  //   enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
-  //   required: true,
-  //   uppercase: true,
-  //   trim: true,
-  //   default: "ELITE"
-  // },
 
   surveyCount: {
     type: Number,
@@ -150,7 +147,12 @@ const ClientSchema = new mongoose.Schema({
     default: []
   },
   
-  used: [String],
+  used: [
+    {
+      type: String,
+      select: false
+    }
+  ],
 
   users: {
     type: [

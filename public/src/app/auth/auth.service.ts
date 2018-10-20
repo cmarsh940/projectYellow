@@ -82,10 +82,13 @@ export class AuthService {
 
   emailVerified() {
     let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if (!data.v) {
+    if (!data || data.v === null) {
       return false;
-    } else {
+    }
+    if (data.v) {
       return true;
+    } else {
+      return false;
     }
   }
 

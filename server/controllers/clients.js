@@ -80,7 +80,7 @@ function sendVerificationEmail(email) {
   nodemailer.createTestAccount((err, account) => {
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
-        host: 'smtp.mail.us-west-2.awsapps.com',
+        host: config.host,
           port: 465,
           secure: true,
           auth: {
@@ -151,7 +151,7 @@ class ClientsController {
     console.log("___ SERVER HIT AUTHENTICATE ___");
     console.log("___ SENT TO SERVER ___", req.body);
 
-    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).populate('_surveys').exec((err, client) => {
+    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).select("+password").populate('_surveys').exec((err, client) => {
       if (err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
         return res.json("____ AUTHENTICATE ERROR ____" + err);

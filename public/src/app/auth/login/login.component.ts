@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.alreadyLoggedIn();
+    this.verified()
    }
 
   loginParticipant(form: any) {
@@ -77,6 +77,16 @@ export class LoginComponent implements OnInit {
         this.errors = data;
       }
     });
+  }
+
+  verified() {
+    let data = this._authService.emailVerified();
+    if (data) {
+      console.log("VERIFIED");
+      this.alreadyLoggedIn();
+    } else {
+      console.log("Need to verify email");
+    }
   }
 
   alreadyLoggedIn() {

@@ -41,7 +41,7 @@ class SurveysController {
         }
 
         // PUSH SURVEY ID INTO CLIENTS SURVEY ARRAY
-        Client.findByIdAndUpdate(req.body.creator, { $push: { _surveys: survey._id } }, { new: true }, (err, client) => {
+        Client.findByIdAndUpdate(req.body.creator, { $push: { _surveys: survey._id }, $inc: { surveyCount: -1 } }, { new: true }, (err, client) => {
           if (err) {
             console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
             return res.json(err);
