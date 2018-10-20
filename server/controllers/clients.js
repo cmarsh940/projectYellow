@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
+const Subscription = mongoose.model('Subscription');
 
 const config = require("../config/config");
 const secret = require('../config/config').jwt_secret;
@@ -12,6 +13,8 @@ const path = require("path");
 const AWS = require("aws-sdk");
 const Busboy = require("busboy");
 const jwt = require('jsonwebtoken');
+
+const nodemailer = require('nodemailer');
 
 
 // James wagner's example(signed url)
@@ -65,6 +68,46 @@ function uploadToS3(file, client) {
   });
 }
 
+
+
+
+function sendVerificationEmail(email) {
+  const url = `http://localhost:8000/verified/${email.client}/${email.message}`
+  var output = ` 
+    <p>Please verify your account</p> 
+    <a href="${url}" target="_blank">Verify Email</a>`
+
+  nodemailer.createTestAccount((err, account) => {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: config.host,
+          port: 465,
+          secure: true,
+          auth: {
+            user: config.verificationEmail,
+            pass: config.verificationPass 
+          }
+      });
+
+      // setup email data with unicode symbols
+      let mailOptions = {
+          from: '"nodemailer contact" <noreply@surveysbyme.com>', // sender address
+          to: email.contact, // list of receivers
+          subject: 'Please verify your account', // Subject line
+          html: output // html body
+      };
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message sent: %s', info.messageId);
+          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      });
+  });
+}
+
 class ClientsController {
   index(req, res) {
     Client.find({}).populate('connections.item').exec((err, clients) => {
@@ -77,6 +120,7 @@ class ClientsController {
 
   create(req, res) {
     console.log("*** SERVER HIT CREATE CLIENT");
+    console.log("*** REQ BODY", req.body);
     if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {
@@ -93,6 +137,12 @@ class ClientsController {
         return res.json(err);
       }
       console.log("*** SERVER CLIENT CREATED", client);
+      var email = {
+        client: client._id,
+        contact: client.email,
+        message: client.grt
+      }
+      sendVerificationEmail(email);
       return res.json(client)
     })
   }
@@ -101,7 +151,7 @@ class ClientsController {
     console.log("___ SERVER HIT AUTHENTICATE ___");
     console.log("___ SENT TO SERVER ___", req.body);
 
-    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).populate('surveys').exec((err, client) => {
+    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).select("+password").populate('_surveys').exec((err, client) => {
       if (err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
         return res.json("____ AUTHENTICATE ERROR ____" + err);
@@ -114,7 +164,7 @@ class ClientsController {
           n: client.firstName + " " + client.lastName,
           a8o1: client.role,
           b8o1: client.subscription,
-          s: client.surveys,
+          s: client._surveys,
           token: `Bearer ${token}`,
           v: client.verified
         };
@@ -130,7 +180,7 @@ class ClientsController {
 
   show(req, res, next) {
     Client.findById({ _id: req.params.id }).lean()
-      .populate('surveys')
+      .populate('_surveys')
       .populate('category')
       .exec(function (err, doc) {
         if (err) {
@@ -140,6 +190,19 @@ class ClientsController {
       });
   }
 
+  updateVerifiedEmail(req, res) {
+    Client.findByIdAndUpdate(
+      req.params.id,
+      { $set: { verified: true } },
+      { new: true },
+      (err, client) => {
+        if (err) {
+          return res.json(err);
+        }
+        return res.json(client);
+      }
+    );
+  }
   update(req, res) {
     Client.findByIdAndUpdate(
       req.params.id,
@@ -201,14 +264,7 @@ class ClientsController {
         req.pipe(busboy);
       }
       console.log("__ UPLOADED AND ABOUT TO SAVE CLIENT");
-      Client.updateOne({
-         _id: req.params.id 
-        }, 
-        { 
-          $set: { 
-            picture: file.name 
-          } 
-        }).exec((err, client) => {
+      Client.updateOne({ _id: req.params.id }, { $set: { picture: file.name } }).exec((err, client) => {
         if (err) {
           console.log("___ UPDATE CLIENT ERROR ___",err);
           return res.json(err);

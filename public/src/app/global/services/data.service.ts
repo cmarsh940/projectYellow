@@ -12,6 +12,13 @@ function getToken() {
   }
 }
 
+function loadToken() {
+  if (sessionStorage.getItem('token') !== null) {
+    const data = JSON.parse(sessionStorage.getItem('token'));
+    return data
+  }
+}
+
 const httpOptions = {
   headers: new HttpHeaders({ 
     'Content-Type': 'application/json',
@@ -65,6 +72,16 @@ export class DataService<Type> {
       map(this.extractData),
       catchError(this.handleError('Add', []))
     );
+  }
+
+  updateVerification(ns: string, id: string, itemToUpdate: Type): Observable<any> {
+    console.log('what is the id?', id);
+    console.log('what is the updated item?', itemToUpdate);
+    console.log("*** PUT ***");
+    return this.http.put<Type>(`${this.actionUrl}${ns}/verifyemail/${id}`, itemToUpdate)
+      .pipe(
+        catchError(this.handleError('Update Verification', []))
+      );
   }
 
   public update(ns: string, id: string, itemToUpdate: Type): Observable<any> {

@@ -23,6 +23,8 @@ import { DonutChartComponent } from '../global/d3/donut-chart/donut-chart.compon
 import { PieChartComponent } from '../global/d3/pie-chart/pie-chart.component';
 import { LineChartComponent } from '../global/d3/line-chart/line-chart.component';
 import { AreaChartComponent } from '../global/d3/area-chart/area-chart.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { SubscriptionOverlayComponent } from './profile/subscription-overlay/subscription-overlay.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -34,6 +36,7 @@ import { AreaChartComponent } from '../global/d3/area-chart/area-chart.component
   declarations: [
     ClientComponent,
     ClientNavComponent,
+    CheckoutComponent,
     UserComponent,
     AddUserComponent,
     EditUserComponent,
@@ -51,6 +54,7 @@ import { AreaChartComponent } from '../global/d3/area-chart/area-chart.component
     PieChartComponent,
     LineChartComponent,
     AreaChartComponent,
+    SubscriptionOverlayComponent
   ]
 })
 export class ClientModule {}

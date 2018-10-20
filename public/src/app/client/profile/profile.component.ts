@@ -1,5 +1,5 @@
 import { UploadService } from './../../global/services/upload.service';
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -8,13 +8,15 @@ import { MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, 
 import { EditClientComponent } from './edit-client/edit-client.component';
 import { ProfileService } from './profile.service';
 import { AuthService } from '../../auth/auth.service';
+import { SubscriptionOverlayComponent } from './subscription-overlay/subscription-overlay.component';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
+
+export class ProfileComponent implements OnInit, OnDestroy {
   currentClient= new Client();
   clientId = '';
   _routeSubscription: Subscription;
@@ -48,9 +50,23 @@ export class ProfileComponent implements OnInit {
     console.table(this.currentClient);
   }
 
+  ngOnDestroy() {
+    this._routeSubscription.unsubscribe();
+  }
+
 
   openDialog() {
     const dialogRef = this.dialog.open(EditClientComponent, {
+      data: this.currentClient,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openSubscriptionDialog() {
+    const dialogRef = this.dialog.open(SubscriptionOverlayComponent, {
       data: this.currentClient,
     });
 

@@ -30,6 +30,9 @@
           <mat-error *ngIf="firstNameFormControl.errors?.forbiddenName">
             First name cannot be admin
           </mat-error>
+          <mat-error *ngIf="firstNameFormControl.hasError('maxlength')">
+            First Name cannot be longer then 250 charactors
+          </mat-error>
         </mat-form-field>
 
         <!-- LAST NAME -->
@@ -44,6 +47,9 @@
           </mat-error>
           <mat-error *ngIf="lastNameFormControl.errors?.forbiddenName">
             last name cannot be admin
+          </mat-error>
+          <mat-error *ngIf="lastNameFormControl.hasError('maxlength')">
+            Last Name cannot be longer then 250 charactors
           </mat-error>
         </mat-form-field>
       </div>
@@ -67,6 +73,9 @@
         <mat-error *ngIf="emailFormControl.hasError('required')">
           Email is <strong>required</strong>
         </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('maxlength')">
+          Email cannot be longer then 250 charactors
+        </mat-error>
       </mat-form-field>
         
         <!-- PASSWORD -->
@@ -80,6 +89,9 @@
             </mat-error>
             <mat-error *ngIf="passwordFormControl.hasError('minlength')">
               Password is to short
+            </mat-error>
+            <mat-error *ngIf="passwordFormControl.hasError('maxlength')">
+              Password cannot be longer then 250 charactors
             </mat-error>
           </mat-form-field>
         
@@ -101,7 +113,13 @@
           <mat-error *ngIf="phoneFormControl.hasError('required')">
             Phone number is <strong>required</strong>
           </mat-error>
+          <mat-error *ngIf="phoneFormControl.errors?.pattern">
+            Phone number cannot have letters or symbols in it.
+          </mat-error>
           <mat-error *ngIf="phoneFormControl.hasError('minlength')">
+            Please enter a valid phone number
+          </mat-error>
+          <mat-error *ngIf="phoneFormControl.hasError('maxlength')">
             Please enter a valid phone number
           </mat-error>
         </mat-form-field>
@@ -123,6 +141,12 @@
           <mat-error *ngIf="cityFormControl.hasError('required')">
             City is <strong>required</strong>
           </mat-error>
+          <mat-error *ngIf="cityFormControl.errors?.pattern">
+            City name cannot have numbers or symbols in it.
+          </mat-error>
+          <mat-error *ngIf="cityFormControl.hasError('maxlength')">
+            Please enter a valid city name
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -135,6 +159,12 @@
           <mat-error *ngIf="stateFormControl.hasError('required')">
             State is <strong>required</strong>
           </mat-error>
+          <mat-error *ngIf="stateFormControl.errors?.pattern">
+            State name cannot have numbers or symbols in it.
+          </mat-error>
+          <mat-error *ngIf="stateFormControl.hasError('maxlength')">
+            Please enter a valid state name
+          </mat-error>
         </mat-form-field>
 
         <!-- ZIP CODE -->
@@ -143,6 +173,12 @@
           <input matInput type="text" [formControl]="zipFormControl" [errorStateMatcher]="matcher" required autocomplete="postal-code">
           <mat-error *ngIf="zipFormControl.hasError('required')">
             Zip code is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="zipFormControl.errors?.pattern">
+            Zip code cannot have letters or symbols in it.
+          </mat-error>
+          <mat-error *ngIf="zipFormControl.hasError('maxlength')">
+            Please enter a valid zip code
           </mat-error>
         </mat-form-field>
       </div>

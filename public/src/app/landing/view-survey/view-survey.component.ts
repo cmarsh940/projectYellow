@@ -23,6 +23,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   errors = [];
   _routeSubscription: Subscription;
   questionGroup = questionGroups;
+  loaded: Boolean;
 
   @Input() survey: any;
 
@@ -57,6 +58,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loaded = false;
     this.surveyForm = this.fb.group({
       questions: this.fb.array([this.buildQuestion()])
     });
@@ -65,6 +67,10 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       this.surveyId = params['id'];
       this.getSurvey();
     });
+
+    setTimeout(() => {
+      this.loaded = true;
+    }, 1000);
   }
 
   ngAfterViewInit() {

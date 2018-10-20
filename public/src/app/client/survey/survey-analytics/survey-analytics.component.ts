@@ -23,6 +23,8 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   errors = [];
   url: string;
   pieData = [];
+  average: number;
+  loaded: Boolean;
 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -37,10 +39,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.loaded = false;
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.surveyId = params['id'];
       this.getSurvey();
     });
+    setTimeout(() => {
+      this.loaded = true;
+    }, 1000);
   }
 
   ngOnDestroy() {
@@ -64,7 +70,22 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
             console.log("QUESTION TYPE", this.survey[i].questionType);
             if (this.survey[i].questionType === 'yesno') {
               this.pieData.push(this.survey[i]);
-            } else {
+            }
+            // GENERATING AVERAGE
+            if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate') {
+              this.questions.push(this.survey[i]);
+              let c = this.survey[i].answers.map(parseFloat);
+              let b = 0
+              let d = 0
+              for (let a = 0; a < this.survey[i].answers.length; a++) {
+                b += c[a];
+              }
+              this.average = b / this.survey[i].answers.length;
+              this.survey[i].answers = [];
+              let avg = this.average.toString();
+              this.survey[i].answers.push(avg);
+            }
+            else {
               this.questions.push(this.survey[i]);
             }
           }
@@ -83,11 +104,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
 
   downloadJson() {
-    const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(this.survey)], { type: 'application/json' });
     saveAs(blob, 'survey.json');
   }
+
   downloadText() {
-    const blob = new Blob([JSON.stringify(this.survey.questions)], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob([JSON.stringify(this.survey)], { type: 'text/plain;charset=utf-8' });
     saveAs(blob, 'survey.txt');
   }
 

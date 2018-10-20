@@ -1,36 +1,123 @@
-<div class="header">
-  <h3 class="mat-subheading-2" id="title">{{ survey?.name | titlecase }}</h3>
-  <span class="spacer"></span>
-  <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
-    <mat-icon>cloud_download</mat-icon>
-  </button>
-  <mat-menu #downloadMenu="matMenu">
-    <button mat-menu-item (click)="downloadJson()">
-      Json file
-    </button>
-    <button mat-menu-item (click)="downloadText()">
-      Text file
-    </button>
-  </mat-menu>
-
-  <h6 class="mat-caption">
-    <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
-  </h6>
-</div>
-
-<div id="survey" *ngFor="let question of questions; let i = index">
-  <h4 class="subheading-1">#{{ i + 1 }}  {{ question.question }}</h4>
-  <div class="answers" *ngFor="let answer of question.answers; let j = index">
-    <div *ngIf="question.questionType !== 'date'">
-      <h5>{{ j + 1 }} |  {{ answer }}</h5>
-    </div>
-    <div *ngIf="question.questionType === 'date'">
-      <h5>{{ j + 1 }} | {{ answer | date }}</h5>
-    </div>
+<div *ngIf="!loaded; else mainTemplate">
+  <div class="loading">
+    <mat-spinner color="accent"></mat-spinner>
   </div>
-  <mat-divider>
-  </mat-divider>
 </div>
-<div id="button-group">
-  <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
-</div>
+<ng-template #mainTemplate>
+  <div class="header">
+    <h3 class="mat-subheading-2" id="title">{{ survey?.name | titlecase }}</h3>
+    <span class="spacer"></span>
+    <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
+      <mat-icon>cloud_download</mat-icon>
+    </button>
+    <mat-menu #downloadMenu="matMenu">
+      <button mat-menu-item (click)="downloadJson()">
+        Json file
+      </button>
+      <button mat-menu-item (click)="downloadText()">
+        Text file
+      </button>
+    </mat-menu>
+
+    <h6 class="mat-caption">
+      <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
+    </h6>
+  </div>
+
+  <div id="survey" *ngFor="let question of questions; let i = index">
+    <mat-card>
+      <table>
+        <tr>
+          <th>#{{ i + 1 }} {{ question.question }}</th>
+        </tr>
+        <tr>
+          <div class="answers" *ngFor="let answer of question.answers; let j = index">
+
+            <ng-container [ngSwitch]="question?.questionType">
+            
+              <!-- BOOLEAN -->
+              <ng-container *ngSwitchCase="'boolean'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- DATE -->
+              <ng-container *ngSwitchCase="'date'">
+                <td>{{ j + 1 }} ) {{ answer | date }}</td>
+              </ng-container>
+            
+              <!-- YES NO -->
+              <ng-container *ngSwitchCase="'yesno'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- TEXT -->
+              <ng-container *ngSwitchCase="'text'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- MULTI CHOICE -->
+              <ng-container *ngSwitchCase="'mutiplechoice'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- PARAGRAPH -->
+              <ng-container *ngSwitchCase="'paragraph'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- FACES -->
+              <ng-container *ngSwitchCase="'smilieFaces'">
+                <td>Average {{ answer | number }}</td>
+              </ng-container>
+            
+              <!-- SATISFACTION -->
+              <ng-container *ngSwitchCase="'satisfaction'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- SLIDE -->
+              <ng-container *ngSwitchCase="'slide'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- SLIDE RATE -->
+              <ng-container *ngSwitchCase="'rate'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+
+              <!-- STAR RATING -->
+              <ng-container *ngSwitchCase="'star'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- LIKE UNLIKE -->
+              <ng-container *ngSwitchCase="'likeunlike'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- GOOD BAD -->
+              <ng-container *ngSwitchCase="'goodbad'">
+                <td>{{ j + 1 }} ) {{ answer }}</td>
+              </ng-container>
+            
+              <!-- DEFAULT -->
+              <ng-container *ngSwitchDefault>
+              </ng-container>
+            </ng-container>
+          </div>
+        </tr>
+      </table>
+    </mat-card>
+  </div>
+
+  <!-- PIE CHART CARD -->
+  <!-- <mat-grid-tile>
+    <mat-card class="dashboard-card">
+      <app-pie-chart [width]="600" [height]="500" [data]="pieData"></app-pie-chart>
+    </mat-card>
+  </mat-grid-tile> -->
+
+  <div id="button-group">
+    <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
+  </div>
+</ng-template>

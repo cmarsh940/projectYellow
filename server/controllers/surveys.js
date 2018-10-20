@@ -41,18 +41,18 @@ class SurveysController {
         }
 
         // PUSH SURVEY ID INTO CLIENTS SURVEY ARRAY
-        Client.findByIdAndUpdate(req.body.creator, { $push: { surveys: survey._id } }, { new: true }, (err, client) => {
+        Client.findByIdAndUpdate(req.body.creator, { $push: { _surveys: survey._id }, $inc: { surveyCount: -1 } }, { new: true }, (err, client) => {
           if (err) {
             console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
             return res.json(err);
           } 
 
           // PUSH SURVEY ID INTO SAME SURVEY CATEGORY ARRAY
-          Category.findByIdAndUpdate(req.body.category._id, { $push: { surveys: survey._id } }, { new: true }, (err, category) => {
+          Category.findByIdAndUpdate(req.body.category, { $push: { _surveys: survey._id } }, { new: true }, (err, category) => {
             if (err) {
               console.log("___ CREATE SURVEY CATEGORY ERROR ___", err);
               return res.json(err);
-            }
+            } 
 
             // PUSH QUESTIONS INTO SURVEY
             for (let index = 0; index < questions.length; index++) {

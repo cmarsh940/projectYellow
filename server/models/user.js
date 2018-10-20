@@ -23,15 +23,7 @@ const UserSchema = new mongoose.Schema({
         unique: true
     },
     _survey: { type: mongoose.Schema.Types.ObjectId, ref: "Survey" },
-    answers: {
-        type: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Answer"
-            }
-        ],
-        default: []
-    }
+    answers: [String],
 }, {
     timestamps: true
 });

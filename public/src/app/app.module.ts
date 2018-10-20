@@ -1,3 +1,4 @@
+import { SubscriptionOverlayComponent } from './client/profile/subscription-overlay/subscription-overlay.component';
 
 // MODULES
 import { NgModule } from '@angular/core';
@@ -15,7 +16,6 @@ import { OverviewModule } from './overview/overview.module';
 
 // COMPONENTS
 import { AppComponent } from './app.component';
-import { CheckoutComponent } from './checkout/checkout.component';
 import { EditClientComponent } from './client/profile/edit-client/edit-client.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -53,7 +53,6 @@ import { AuthGuard } from './global/guards/auth.guard';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    CheckoutComponent,
     ForbiddenValidatorDirective,
     ...D3_DIRECTIVES,
   ],
@@ -92,6 +91,7 @@ import { AuthGuard } from './global/guards/auth.guard';
   ],
   entryComponents: [
     EditClientComponent,
+    SubscriptionOverlayComponent,
     RightsComponent
   ],
   bootstrap: [AppComponent]

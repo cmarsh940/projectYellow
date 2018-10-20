@@ -13,6 +13,7 @@ import { HomeComponent } from './home/home.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 import { MainFooterComponent } from '../layout/main-footer/main-footer.component';
+import { VerifiedComponent } from './verified/verified.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,7 @@ import { MainFooterComponent } from '../layout/main-footer/main-footer.component
     RightsComponent, 
     AboutComponent,
     MainFooterComponent, 
-    PricingComponent, HomeComponent, ViewSurveyComponent, ListSurveysComponent
+    PricingComponent, HomeComponent, ViewSurveyComponent, ListSurveysComponent, VerifiedComponent
   ]
 })
 export class LandingModule { }

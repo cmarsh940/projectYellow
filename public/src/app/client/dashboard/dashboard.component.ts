@@ -35,9 +35,11 @@ export class DashboardComponent {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   client = JSON.parse(sessionStorage.getItem('currentClient'));
+  length = 0;
 
   chartData: Array<any>;
   donutChartData: Array<any>;
+
 
   constructor(
     private _authService: AuthService,
@@ -50,6 +52,11 @@ export class DashboardComponent {
     this.isLoggedIn();
     this.generateData();
     this.generateDonutData();
+    if (this.client.s.length !== 0) {
+      this.length = this.client.s.length;
+    } else {
+      this.length = 0;
+    }
   }
 
   isLoggedIn() {

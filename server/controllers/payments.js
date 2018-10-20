@@ -25,11 +25,13 @@ class PaymentsController {
 
     
             console.log("TOKEN",token);
-            return token;
+            return res.json(token);
         });
     }
 
     checkout(req, res) {
+        console.log("___ HIT SERVER CHECKOUT ___");
+        console.log("___ req ___", req.body);
         var gateway = braintree.connect({
             environment: braintree.Environment.Sandbox,
             merchantId: config.merchantId,
@@ -38,10 +40,31 @@ class PaymentsController {
         });
 
         // Use the payment method nonce here
-        var nonceFromTheClient = req.body.paymentMethodNonce;
+        var nonceFromTheClient = req.body.payment_method_nonce;
         // Create a new transaction for $10
-        var newTransaction = gateway.transaction.sale({
-            amount: req.body.chargeAmount,
+        var subscription_id = req.body.subscription_id;
+        console.log("SERVER SUBSCRIPTION ID", subscription_id);
+        if (req.body.subscription_id) {
+            if (req.body.subscription_id == '1') {
+                var paymentAmount = "30.00"
+                console.log("PAYMENT AMOUNT", paymentAmount);
+            }
+            if(req.body.subscription_id == '2') {
+                var paymentAmount = "35.00"
+                console.log("PAYMENT AMOUNT", paymentAmount);
+            }
+            if(req.body.subscription_id == '3') {
+                var paymentAmount = "99.00"
+                console.log("PAYMENT AMOUNT", paymentAmount);
+            }
+        }
+        else {
+            console.log("NO SUBSCRIPTION FOUND");
+            return res.json("NO SUBSCRIPTION");
+        }
+        console.log("AMOUNT", paymentAmount);
+        newTransaction = gateway.transaction.sale({
+            amount: paymentAmount,
             paymentMethodNonce: nonceFromTheClient,
             options: {
                 // This option requests the funds from the transaction
@@ -50,8 +73,10 @@ class PaymentsController {
             }
         }, function (err, result) {
             if (result) {
+                console.log("RESULT", result);
                 return res.json(result);
             } else {
+                console.log("PAYMENT ERROR", err);
                 return res.json(err);
             }
         });

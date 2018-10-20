@@ -1,4 +1,3 @@
-import { AuthGuard } from './../global/guards/auth.guard';
 import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analytics.component';
 import { EditClientComponent } from './profile/edit-client/edit-client.component';
 import { NgModule } from '@angular/core';
@@ -14,6 +13,7 @@ import { EditSurveyComponent } from './survey/edit-survey/edit-survey.component'
 import { UserComponent } from './user/user.component';
 import { EditUserComponent } from './user/edit-user/edit-user.component';
 import { AddUserComponent } from './user/add-user/add-user.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 const routes: Routes = [
   {
@@ -24,6 +24,11 @@ const routes: Routes = [
         path: "dashboard",
         pathMatch: "full",
         component: DashboardComponent
+      },
+      {
+        path: "checkout/:id/:id",
+        pathMatch: "full",
+        component: CheckoutComponent,
       },
       {
         path: "profile/:id",

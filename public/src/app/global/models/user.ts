@@ -9,7 +9,7 @@ export class User {
     zip: any;
     role: string;
     surveyOwner: any;
-    surveys: any;
+    _surveys: any;
     submissionDate: any;
     createdAt: any;
     updatedAt: any;

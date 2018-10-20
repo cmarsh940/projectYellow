@@ -21,8 +21,8 @@ export class ClientComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // this.isLoggedIn();
-        // this.isValidated();
+        this.isLoggedIn();
+        this.isValidated();
     }
 
     isLoggedIn() {
@@ -61,7 +61,7 @@ export class ClientComponent implements OnInit {
         config.horizontalPosition = this.horizontalPosition;
         config.duration = 2500;
         config.panelClass = ['logout-snackbar']
-        this.snackBar.open("Please verify email", '', config);
+        this.snackBar.open("Please verify your email", '', config);
     }
 
 }

@@ -1,0 +1,7 @@
+<mat-dialog-content class="container-fluid">
+  <button mat-stroked-button [routerLink]="['/checkout', data._id, '1']" (click)='click()' matTooltip="Basic Subscription" color="primary">Basic Subscription  $30</button>
+  <button mat-stroked-button [routerLink]="['/checkout', data._id, '2']" (click)='click()' matTooltip="Pro Subscription" color="primary">Pro Subscription  $35</button>
+  <button mat-stroked-button [routerLink]="['/checkout', data._id, '3']" (click)='click()' matTooltip="Elite Subscription" color="primary">Elite Subscription  $99</button>
+
+  <button mat-raised-button (click)="cancel()" color="warn">Cancel</button>
+</mat-dialog-content>

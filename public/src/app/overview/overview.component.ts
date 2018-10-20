@@ -21,16 +21,27 @@ export class OverviewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        // this.Authorized();
+        this.Authorized();
+        this.isValidated();
     }
 
     Authorized() {
         let authorized = this._authService.authorize();
         if (!authorized) {
             this.openSnackBar();
-            this._router.navigateByUrl('/dashboard');
+            this._router.navigate(['/dashboard']);
         } else {
             console.log("YOU ARE Authorized");
+        }
+    }
+
+    isValidated() {
+        let verified = this._authService.emailVerified();
+        if (!verified) {
+            this.notValidatedSnackBar();
+            this._router.navigate(['/login']);
+        } else {
+            console.log("YOU ARE VALIDATED");
         }
     }
 
@@ -41,6 +52,15 @@ export class OverviewComponent implements OnInit {
         config.duration = 2500;
         config.panelClass = ['logout-snackbar']
         this.snackBar.open("You are not authorized", '', config);
+    }
+
+    notValidatedSnackBar() {
+        const config = new MatSnackBarConfig();
+        config.verticalPosition = this.verticalPosition;
+        config.horizontalPosition = this.horizontalPosition;
+        config.duration = 2500;
+        config.panelClass = ['logout-snackbar']
+        this.snackBar.open("Please verify your email", '', config);
     }
 
 }

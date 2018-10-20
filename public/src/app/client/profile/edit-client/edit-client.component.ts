@@ -16,9 +16,7 @@ export class EditClientComponent {
   subscription: Subscription;
   clientId: string = "";
   errors = [];
-
   states = states;
-
 
   constructor(
     private _clientService: ClientService,

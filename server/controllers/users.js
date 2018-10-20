@@ -12,22 +12,12 @@ class UsersController {
     }
 
     create(req, res) {
-        if (req.body.password != req.body.password_confirmation) {
-            return res.json({
-                errors: {
-                    password: {
-                        message: 'Your passwords do not match'
-                    }
-                }
-            })
-        }
         User.create(req.body, (err, user) => {
             console.log("*** SERVER CREATING USER")
             if (err) {
                 console.log("*** SERVER CREATING ERROR", err);
                 return res.json(err);
             }
-            req.session.user_id = user._id;
             return res.json(user)
         })
     }
