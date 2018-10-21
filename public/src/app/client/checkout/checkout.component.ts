@@ -162,5 +162,17 @@ export class CheckoutComponent implements OnInit {
     if (id == 3) {
       this.amount = 99;
     }
+    if (id == 4) {
+      this.amount = 360;
+    }
+    if (id == 5) {
+      this.amount = 420;
+    }
+    if (id == 6) {
+      this.amount = 1188;
+    }
+    if (id > 6) {
+      this.amount = 123456789;
+    }
   }
 }
