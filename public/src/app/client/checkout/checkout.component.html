@@ -1,4 +1,4 @@
-<div class="container" style="min-height: 500px; margin-top: 150px;">
+<div class="container">
 
         <h2>Payment amount: ${{amount}}</h2>
 
@@ -14,6 +14,7 @@
             <div class="hf-container" id="cvv"></div>
 
             <button type="submit" class="button button--small button--green" id="submit">Purchase</button>
+            <button mat-button type="button" (click)="cancel()" color="warn">Cancel</button>
         </form>
     </div>
 </div>

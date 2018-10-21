@@ -100,6 +100,14 @@ export class AuthService {
       return true;
     }
   }
+  checkCount() {
+    let data = JSON.parse(sessionStorage.getItem('currentClient'));
+    if (data.c8o1 === 0) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   authorize() {
     let data = JSON.parse(sessionStorage.getItem('currentClient'));

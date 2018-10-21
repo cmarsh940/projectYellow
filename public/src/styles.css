@@ -17,3 +17,7 @@ body { margin: 0; font-family: 'Roboto', sans-serif; }
     width: 100%;
     text-align: center;
 }
+
+.mat-tab-label {
+    min-width: 49%!important;
+}

@@ -171,6 +171,7 @@ class ClientsController {
           n: client.firstName + " " + client.lastName,
           a8o1: client.role,
           b8o1: client.subscription,
+          c8o1: client.surveyCount,
           s: client._surveys,
           token: `Bearer ${token}`,
           v: client.verified
