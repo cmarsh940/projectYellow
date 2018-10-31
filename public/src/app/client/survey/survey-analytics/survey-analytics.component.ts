@@ -72,7 +72,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
               this.pieData.push(this.survey[i]);
             }
             // GENERATING AVERAGE
-            if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate') {
+            if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
               this.questions.push(this.survey[i]);
               let c = this.survey[i].answers.map(parseFloat);
               let b = 0

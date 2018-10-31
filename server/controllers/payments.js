@@ -67,17 +67,15 @@ class PaymentsController {
             amount: paymentAmount,
             paymentMethodNonce: nonceFromTheClient,
             options: {
-                // This option requests the funds from the transaction
-                // once it has been authorized successfully
                 submitForSettlement: true
             }
         }, function (err, result) {
-            if (result) {
-                console.log("RESULT", result);
-                return res.json(result);
-            } else {
+            if (err) {
                 console.log("PAYMENT ERROR", err);
                 return res.json(err);
+            } else {
+                console.log("PAYMENT", result);
+                return res.json(result);
             }
         });
     }

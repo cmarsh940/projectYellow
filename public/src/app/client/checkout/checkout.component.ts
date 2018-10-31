@@ -3,6 +3,7 @@ import { CheckoutService } from './checkout.service';
 
 
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from "@angular/common";
 
 import { client } from 'braintree-web';
 import { hostedFields } from 'braintree-web';
@@ -23,17 +24,23 @@ export class CheckoutComponent implements OnInit {
   amount: any;
   private clientToken: string;
   subscriptions = subscription;
+  clientId: any;
+
 
 
   constructor(
     private paymentService: CheckoutService,
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private location: Location
+    ) { }
 
   ngOnInit() {
     this.subscriptionId = this.route.snapshot.params['id'];
+    console.log("snapshot", this.route.snapshot)
     console.log("SUBSCRIPTION ID", this.subscriptionId);
+    this.clientId = this.route.snapshot.url[1].path;
     this.getAmount(this.subscriptionId);
     this.paymentService.getClientToken(this.paymentTokenURL).subscribe({
       next: res => {
@@ -139,8 +146,11 @@ export class CheckoutComponent implements OnInit {
           console.log('URL: ' + checkoutURL);
           self.paymentService.checkout(checkoutURL, payload.nonce, self.subscriptionId.toString()).subscribe({
             next: res => {
+              console.log("Response", res)
+              // this._clientService.updateParticipant(this.client, this.data).subscribe();
+
               alert("Thank you very much for your purchase");
-              console.log(res);
+
             },
             error: err => {
               alert("Your payment was declined")
@@ -162,5 +172,21 @@ export class CheckoutComponent implements OnInit {
     if (id == 3) {
       this.amount = 99;
     }
+    if (id == 4) {
+      this.amount = 360;
+    }
+    if (id == 5) {
+      this.amount = 420;
+    }
+    if (id == 6) {
+      this.amount = 1188;
+    }
+    if (id > 6) {
+      this.amount = 123456789;
+    }
+  }
+
+  cancel() {
+    this.location.back();
   }
 }

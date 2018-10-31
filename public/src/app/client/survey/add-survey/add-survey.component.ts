@@ -3,7 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-
+import { Location } from "@angular/common";
 
 import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
@@ -11,6 +11,7 @@ import { SurveyCategory } from '../../../global/models/survey-category';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { SurveyService } from '../survey.service';
 import { questionGroups } from '../../../global/models/question-group';
+
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -51,12 +52,14 @@ export class AddSurveyComponent implements OnInit {
     private _authService: AuthService,
     private _surveyService: SurveyService,
     private _categoryService: SurveyCategoryService,
-    private _router: Router
+    private _router: Router,
+    private location: Location
   ) {
     this.createForm();
   }
 
   ngOnInit() {
+    this.checkCount();
     this.loadCategories();
     this.checkPC();
   }
@@ -78,6 +81,16 @@ export class AddSurveyComponent implements OnInit {
         }
       }
     });
+  }
+
+  checkCount() {
+    let count = this._authService.checkCount();
+    if (!count) {
+      console.log("reported");
+      this.location.back();
+    } else {
+      console.log("COUNT");
+    }
   }
 
   checkPC(){

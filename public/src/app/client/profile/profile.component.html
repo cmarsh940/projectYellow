@@ -29,10 +29,17 @@
     <div class="content">
       <div class="content-box">
         <h5 class="content-top">Surveys</h5>
-        <p class="content-bottom">{{ currentClient._surveys?.length }}</p>
+        <div class="content-bottom">
+          <div *ngIf="currentClient._subscription === 'FREE' || currentClient._subscription === 'BASIC'">
+            {{ currentClient._surveys?.length }} / {{ currentClient.surveyCount }}
+          </div>
+          <div *ngIf="currentClient._subscription === 'PRO' || currentClient._subscription === 'ELITE'">
+            {{ currentClient._surveys?.length }}
+          </div>
+        </div>
       </div>
       <div class="content-box">
-        <h5 class="content-top">Users</h5>
+        <!-- <h5 class="content-top">Users</h5> -->
         <!-- <p class="content-bottom">{{ currentClient.users?.length }}</p> -->
       </div>
       <div class="content-body">

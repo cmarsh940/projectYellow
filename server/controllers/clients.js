@@ -74,9 +74,15 @@ function uploadToS3(file, client) {
 function sendVerificationEmail(email) {
   const url = `http://localhost:8000/verified/${email.client}/${email.message}`
   var output = ` 
-    <p>Please verify your account</p> 
-    <a href="${url}" target="_blank">Verify Email</a>`
-
+    <h3>Hi ${email.name}!</h3>
+    <br>
+    <h5>To get started with creating your surveys, Please verify your emial by clicking the link below.</h5> 
+    <br>
+    <a href="${url}" style="margin:auto;background:#21ce99;border-radius:6px;color:#ffffff;text-align:center;display:block;font-family:Open Sans,Helvetica;font-size:14px;font-weight:regular;padding:15px;text-decoration:none;width:240px"  target="_blank">Verify Email</a>
+    <br>
+    <br>
+    <p>If you feel like you recieved this email as a mistake please let us know by emailing us a <a href='mailto:support@surveysbyme.com' target='_top'>support@surveysbyme.com</a></p>
+  `
   nodemailer.createTestAccount((err, account) => {
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
@@ -140,6 +146,7 @@ class ClientsController {
       var email = {
         client: client._id,
         contact: client.email,
+        name: client.firstName,
         message: client.grt
       }
       sendVerificationEmail(email);
@@ -164,6 +171,7 @@ class ClientsController {
           n: client.firstName + " " + client.lastName,
           a8o1: client.role,
           b8o1: client.subscription,
+          c8o1: client.surveyCount,
           s: client._surveys,
           token: `Bearer ${token}`,
           v: client.verified
@@ -276,7 +284,6 @@ class ClientsController {
       console.log("___ ERROR NO PICTURE ___");
     }
   }
-
 }
 
 module.exports = new ClientsController();

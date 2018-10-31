@@ -4,6 +4,10 @@
 
 }
 
+.mat-tab-label {
+    min-width: 49%!important;
+}
+
 button {
     width: 100%;
     margin: 0.4em auto;
