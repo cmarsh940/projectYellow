@@ -284,7 +284,6 @@ class ClientsController {
       console.log("___ ERROR NO PICTURE ___");
     }
   }
-
 }
 
 module.exports = new ClientsController();

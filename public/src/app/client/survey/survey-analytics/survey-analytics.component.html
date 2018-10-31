@@ -72,7 +72,7 @@
             
               <!-- SATISFACTION -->
               <ng-container *ngSwitchCase="'satisfaction'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
+                <td>Average {{ answer | number}}</td>
               </ng-container>
             
               <!-- SLIDE -->
@@ -82,12 +82,12 @@
             
               <!-- SLIDE RATE -->
               <ng-container *ngSwitchCase="'rate'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
+                <td>Average {{ answer | number}}</td>
               </ng-container>
 
               <!-- STAR RATING -->
               <ng-container *ngSwitchCase="'star'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
+                <td>Average {{ answer | number }}</td>
               </ng-container>
             
               <!-- LIKE UNLIKE -->

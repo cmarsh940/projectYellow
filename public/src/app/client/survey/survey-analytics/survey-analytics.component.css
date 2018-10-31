@@ -65,11 +65,10 @@ th {
 
 td, th {
     width:100%;
-    border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
+.answers {
+    border-bottom: 1px solid #dddddd;
 }
