@@ -6,6 +6,7 @@
   text-align: center;
 }
 
+
 .grid-container {
   margin: 20px;
 }
@@ -16,6 +17,11 @@
   left: 15px;
   right: 15px;
   bottom: 15px;
+}
+
+.dashboard-card h4 {
+  width: 100%;
+  text-align: center;
 }
 
 .more-button {
@@ -29,9 +35,29 @@
   height: 100%;
 }
 
+.total {
+  width: 75%;
+  height: 65%;
+  border-radius: 50%;
+  background-image: radial-gradient(#ffd600 5%, #ffd600d9 13%, #ffd60029 70%);
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
+
+.total b {
+  margin: 25% 0 0 0;
+  font-size: larger;
+  font-weight: 400;
+}
+
 .mat-card-actions button {
   width:100%;
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+.mat-card-content {
+  font-size: 30px;
 }
