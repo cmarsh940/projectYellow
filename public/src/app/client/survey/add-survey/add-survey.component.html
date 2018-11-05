@@ -20,8 +20,8 @@
     </mat-error>
   </mat-form-field>
 
-  <div formArrayName="questions">
-    <div *ngFor="let question of surveyForm.controls['questions']['controls']; let i = index" [formGroupName]="i">
+  <div formArrayName="questions" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let question of surveyForm.controls['questions']['controls']; let i = index" [formGroupName]="i" cdkDrag>
       <!-- The repeated question template -->
       <mat-card>
         <mat-card-header>

@@ -87,24 +87,6 @@ class SurveysController {
   }
 
 
-  // answerSurvey(req, res) {
-  //   console.log("*** HIT SERVER UPDATE ANSWER ***");
-  //   console.log("*** PARAMS ***", req.params);
-  //   console.log("*** BODY ***", req.body);
-
-  //   Survey.findByIdAndUpdate(req.params.id,
-  //     { $push: { "questions.$[].answers": { answer: req.body.answer } } },
-  //     { safe: true, upsert: true, new: true },
-  //     function (err, survey) {
-  //       if(err){
-  //         console.log("___ ANSWER SURVEY ERROR ___", err);
-  //         return res.json(err);
-  //       } else {
-  //         console.log("___ ANSWER SURVEY ___", survey);
-  //         return res.json(survey);
-  //       }
-  //     })
-  //   }
   answerSurvey(req, res) {
     console.log("*** HIT SERVER UPDATE ANSWER ***");
     console.log("*** PARAMS ***", req.params);
@@ -158,15 +140,32 @@ class SurveysController {
               console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
               return res.json(err);
             }
-            question.question = arr[i].question;
-            question.questionType = arr[i].questionType;
-            question.save((err, question) => {
-              if (err) {
-                console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
-                return res.json(err);
-              }
-              console.log(`___ UPDATED QUESTION[${i}] ___`, question);
-            });
+            if (arr[i]._id == null) {
+              Question.create(arr[i], function (err, newQuestion) {
+                if (err) {
+                  console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
+                  return res.json(err);
+                }
+
+                // PUSH SURVEY ID INTO CLIENTS SURVEY ARRAY
+                Survey.findByIdAndUpdate(req.body._id, { $push: { questions: newQuestion._id } }, { new: true }, (err, survey) => {
+                  if (err) {
+                    console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
+                    return res.json(err);
+                  }
+                })
+              })
+            } else {
+              question.question = arr[i].question;
+              question.questionType = arr[i].questionType;
+              question.save((err, question) => {
+                if (err) {
+                  console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+                  return res.json(err);
+                }
+                console.log(`___ UPDATED QUESTION[${i}] ___`, question);
+              });
+            }
           })
         }
         survey.name = req.body.name;

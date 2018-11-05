@@ -46,7 +46,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     });
     setTimeout(() => {
       this.loaded = true;
-    }, 1000);
+    }, 3000);
   }
 
   ngOnDestroy() {
