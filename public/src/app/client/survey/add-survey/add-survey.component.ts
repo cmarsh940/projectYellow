@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Location } from "@angular/common";
-import { CdkDragDrop, moveItemInArray, transferArrayItem  } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray  } from '@angular/cdk/drag-drop';
 
 import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';
@@ -211,17 +211,5 @@ export class AddSurveyComponent implements OnInit {
 
   revert() {
     this.rebuildForm();
-  }
-
-  drop(event: CdkDragDrop<string[]>) {
-    console.log("EVENT", event);
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
   }
 }
