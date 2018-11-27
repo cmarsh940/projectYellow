@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Location } from "@angular/common";
+import { CdkDragDrop, moveItemInArray  } from '@angular/cdk/drag-drop';
 
 import { Question } from '../../../global/models/question';
 import { Survey } from '../../../global/models/survey';

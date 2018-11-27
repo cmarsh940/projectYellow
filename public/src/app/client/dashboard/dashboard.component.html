@@ -8,19 +8,14 @@
     <mat-grid-tile>
       <mat-card class="dashboard-card">
         <mat-card-header>
-          <mat-card-title>
-            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu" disabled>
-              <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" xPosition="before">
-              <button mat-menu-item disabled>Expand</button>
-              <button mat-menu-item disabled>Remove</button>
-            </mat-menu>
-          </mat-card-title>
+          <h4>
+            Total Surveys
+          </h4> 
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          <h5>Total Surveys</h5>
-          <b>{{ length }}</b>
+          <div class="total">
+            <b>{{ length }}</b>
+          </div>
         </mat-card-content>
         <mat-card-actions>
           <button mat-raised-button aria-label="View all surveys" routerLink="/survey" color="primary">

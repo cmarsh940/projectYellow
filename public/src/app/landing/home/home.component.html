@@ -4,97 +4,127 @@
 </div>
 
 <div class="container-fluid" id="container-middle">
-  <div id="cards">
-    <mat-card>
-      <h5>Real Time Data</h5>
-    </mat-card>
-    <mat-card>
-      <h5>Safe & Secure</h5>
-    </mat-card>
-    <mat-card>
-      <h5>"YOUR" Data</h5>
-    </mat-card>
-    <mat-card>
-      <h5>User friendly</h5>
-    </mat-card>
-  </div>
-
   <!-- expansion -->
   <div class="row">
     <div class="row-header">
-      <h3>Why create a survey?</h3>
+      <h3>Why create professional surveys?</h3>
     </div>
     <mat-accordion class="accordion">
       <!-- WHY -->
       <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-           Know what your customer really think?
+            <h4 mat-subheader>Know what your customer really think?</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
+          <mat-list>
+            <mat-list-item>
+              <img mat-list-icon src="/assets/icons/baseline.svg">
+              <h4 mat-line>Employer Engagement</h4>
+              </mat-list-item>
+            <mat-list-item>
+              <img mat-list-icon src="/assets/icons/baseline.svg">
+              <h4 mat-line>Education & Schools</h4>
+            </mat-list-item>
+            <mat-list-item>
+              <img mat-list-icon src="/assets/icons/baseline.svg">
+              <h4 mat-line>Market Research</h4>
+            </mat-list-item>
+            <mat-list-item>
+              <img mat-list-icon src="/assets/icons/baseline.svg">
+              <h4 mat-line>Customer Satisfaction</h4>
+            </mat-list-item>
+            <mat-list-item>
+              <img mat-list-icon src="/assets/icons/baseline.svg">
+              <h4 mat-line>Event Planning</h4>
+            </mat-list-item>
+          </mat-list>
+          <div class="center-button">
+            <button mat-raised-button routerLink="/register" color="primary">Sign up for free</button>
+          </div>
         <mat-action-row>
           <button mat-button color="primary" (click)="nextStep()">NEXT</button>
         </mat-action-row>
       </mat-expansion-panel>
-
+  
       <!-- WHO -->
       <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Give your employees a voice!
+            <h4 mat-subheader>Give your employees a voice!</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
-
+  
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" (click)="nextStep()">NEXT</button>
         </mat-action-row>
       </mat-expansion-panel>
-
+  
       <!-- PRICE -->
       <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Learn what people think of you!
+            <h4 mat-subheader>Learn what people think of your business/service!</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
-
-
+  
+  
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" (click)="nextStep()">NEXT</button>
         </mat-action-row>
       </mat-expansion-panel>
-      
+  
       <!-- MORE -->
       <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Meet your working #goals!
+            <h4 mat-subheader>Meet your working #goals!</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
-
-
+  
+  
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" (click)="nextStep()">NEXT</button>
         </mat-action-row>
       </mat-expansion-panel>
-
+  
       <!-- PRICE -->
       <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-          Simplify your marketing direction!
+            <h4 mat-subheader>Simplify your marketing direction!</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
-      
-      
+  
+  
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
         </mat-action-row>
       </mat-expansion-panel>
-
+  
     </mat-accordion>
   </div>
+
+  <div id="cards">
+    <mat-card id="realTime">
+      <h3>Real Time Data</h3>
+    </mat-card>
+    <mat-card id="secure">
+      <h3>Safe & Secure</h3>
+    </mat-card>
+    <mat-card id="userFriendly">
+      <h3>User Friendly</h3>
+    </mat-card>
+    <mat-card id="mobileFriendly">
+      <h3>Mobile Friendly</h3>
+    </mat-card>
+  </div>
+
+  <div class="signup">
+    <button mat-raised-button routerLink="/register" color="accent">Get started for FREE!</button>
+  </div>
+
 </div>

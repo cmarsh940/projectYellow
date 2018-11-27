@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
 import { Location } from '@angular/common';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { debounceTime } from 'rxjs/operators';
 import { GenericValidator } from '../../../global/validators/generic-validator';
 import { SurveyService } from '../survey.service';
@@ -246,4 +247,16 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       this._router.navigate(["/survey"]);
     }
   }
+
+  // drop(event: CdkDragDrop<string[]>) {
+  //   console.log("EVENT", event);
+  //   if (event.previousContainer === event.container) {
+  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  //   } else {
+  //     transferArrayItem(event.previousContainer.data,
+  //       event.container.data,
+  //       event.previousIndex,
+  //       event.currentIndex);
+  //   }
+  // }
 }

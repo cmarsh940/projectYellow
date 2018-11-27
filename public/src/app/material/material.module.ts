@@ -36,9 +36,11 @@ import {
 } from '@angular/material';
 import { ObserversModule } from '@angular/cdk/observers';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
+    DragDropModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -73,6 +75,7 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
     ScrollDispatchModule
   ],
   exports: [
+    DragDropModule,
     MatAutocompleteModule,
     MatButtonModule,
     MatButtonToggleModule,

@@ -42,3 +42,9 @@ a {
     padding: 0;
     width: 2em;
 }
+
+.login-text {
+    width: 100%;
+    text-align: center;
+    margin: 25% 0;
+}
