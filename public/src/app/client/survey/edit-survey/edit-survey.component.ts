@@ -216,6 +216,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     const saveSurvey: Survey = {
       _id: this.survey._id,
       category: formModel.category as string,
+      submissionDates: this.survey.submissionDates,
       lastSubmission: this.survey.lastSubmission,
       name: formModel.name as string,
       private: formModel.private,

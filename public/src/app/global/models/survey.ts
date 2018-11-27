@@ -7,6 +7,7 @@ export class Survey {
     user: any;
     creator: any;
     lastSubmission: any;
+    submissionDates: any;
     createdAt: any;
     updatedAt: any;
 }

@@ -198,6 +198,7 @@ export class AddSurveyComponent implements OnInit {
       _id: Number,
       category: formModel.category._id,
       name: formModel.name as string,
+      submissionDates: [],
       lastSubmission: Date.now(),
       private: formModel.private,
       questions: questionsDeepCopy,
