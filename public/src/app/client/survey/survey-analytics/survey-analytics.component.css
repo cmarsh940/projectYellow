@@ -90,3 +90,8 @@ td, th {
     width:100%;
     display: flex;
 }
+
+.mat-card {
+    max-height: 300px;
+    overflow-y: scroll;
+}

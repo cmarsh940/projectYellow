@@ -16,10 +16,16 @@
   <h6 class="mat-caption">
     <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
   </h6>
-</div>
+  <h6>last submision was: {{ timeSinceLastSubmission | number:'1.0-0' }} hours ago.</h6>
 
-<div class="chart-container">
-  <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
+  <mat-card>
+    <mat-card-title>Submission dates</mat-card-title>
+    <mat-card-content>
+      <div class="chart-container">
+        <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
 <div id="survey" *ngFor="let question of questions; let i = index">
@@ -104,6 +110,7 @@
             <ng-container *ngSwitchCase="'star'">
               <td>
                 <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
                   <h1>{{answer | number }}</h1>
                   <h3>Average</h3>
                 </div>

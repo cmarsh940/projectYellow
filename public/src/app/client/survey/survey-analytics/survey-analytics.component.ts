@@ -19,7 +19,7 @@ import * as moment from 'moment';
   templateUrl: './survey-analytics.component.html',
   styleUrls: ['./survey-analytics.component.css']
 })
-export class SurveyAnalyticsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   survey: Survey = new Survey();
   questions: Question[] = [];
   surveyId = '';
@@ -30,6 +30,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy, AfterViewIni
   average: number;
   loaded: Boolean;
   booleanAnswers: any[];
+  countAvgAnswers: number;
+
+  timeSinceLastSubmission: any;
 
   chart: any;
   barChart: any;
@@ -67,10 +70,6 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy, AfterViewIni
     this._routeSubscription.unsubscribe();
   }
 
-  ngAfterViewInit(): void {
-    
-  }
-
   isLoggedIn() {
     let verify = this._authService.verify();
     if (!verify) {
@@ -84,37 +83,77 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy, AfterViewIni
     this._surveyService.getAsset(this.surveyId).subscribe(res => {
 
       let alldates = res.submissionDates;
-      let answeredDates = [];
+      let answeredTempDates = {};
+      let tempDates = [];
 
       alldates.forEach((res) => {
-        let jsdate = new Date(res)
-        console.log("JSDATE", jsdate);
-        answeredDates.push(jsdate.toLocaleTimeString('en', { month: 'short', day: 'numeric', year: 'numeric' }))
-      })
-      console.log("ANSWERED DATES", answeredDates);
+        let date = moment(res).format('l');
+        console.log("DATE", date);
+        tempDates.push(date);
+      });
+      console.log("ALL DATES", alldates);
 
+      tempDates.forEach(function (x) { 
+        answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
+      });
+      console.log("TempDates", tempDates);
+      console.log("answeredTempDates", answeredTempDates);
+
+      let dateValues = Object.values(answeredTempDates);
+      let dateNames = Object.keys(answeredTempDates);
+      
+
+
+
+      // TODAYS DATE
+      let todaysDate = Date.now();
+
+
+      let submissionTimeResults = moment(todaysDate).diff(moment(res.lastSubmission))
+
+      // LAST SUBMISSION IN HOURS
+      this.timeSinceLastSubmission = moment.duration(submissionTimeResults).as("hours");
+
+      // INITIALIZE CHART FROM HTML
       this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
 
+      // GENERATE CHART AND COMPONENTS
       this.chart = new Chart(this.context, {
         type: 'line',
         data: {
-          labels: answeredDates,
+          labels: dateNames,
           datasets: [
             {
-              data: answeredDates,
+              data: dateValues,
               borderColor: '#3cba9f',
               fill: true
             },
           ]
         },
         options: {
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 0, // general animation time
+          },
+          hover: {
+            animationDuration: 0, // duration of animations when hovering an item
+          },
+          responsiveAnimationDuration: 0, // animation duration after a resize
           scales: {
             xAxes: [{
               type: 'time',
+              distribution: 'linear',
               time: {
                 displayFormats: {
                   day: 'MMM DD'
                 }
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                source: 'auto'
               }
             }]
           }
@@ -123,11 +162,11 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy, AfterViewIni
 
       // SET QUESTIONS
       this.survey = res.questions;
-      console.log("SURVEY", this.survey);
       
       // SET URL FOR CLIENT
       this.url = `www.surveysbyme.com/takeSurvey/${this.surveyId}`;
 
+      // LOOP THROUGH QUESTIONS
       this.loopThroughQuestions();
       
     })
@@ -136,14 +175,16 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy, AfterViewIni
 
   loopThroughQuestions() {
     for (let i = 0; i < (<any>this.survey).length; i++) {
-      console.log("QUESTION TYPE", this.survey[i].questionType);
-
       // GENERATING AVERAGE
       if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
         this.questions.push(this.survey[i]);
         let b = 0
         let c = this.survey[i].answers.map(parseFloat);
         let d = 0
+
+        // TOTAL NUMBER OF ANSWERS TO CALCULATE
+        this.countAvgAnswers = this.survey[i].answers.length;
+
         for (let a = 0; a < this.survey[i].answers.length; a++) {
           b += c[a];
         }
@@ -162,15 +203,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy, AfterViewIni
         for (let a = 0; a < this.survey[i].answers.length; a++) {
           if (g[a] === 1) {
             e++;
-            console.log("1", e);
           } else {
             f++;
-            console.log("0", f);
           }
         }
         this.survey[i].answers = [];
         this.survey[i].answers.push([e,f]);
-        console.log("BOOLEAN ANSWER", this.survey[i].answers);
         this.booleanAnswers = this.survey[i].answers;
 
         this.barChart = new Chart('bar', {
