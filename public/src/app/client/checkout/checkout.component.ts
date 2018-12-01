@@ -147,9 +147,7 @@ export class CheckoutComponent implements OnInit {
           self.paymentService.checkout(checkoutURL, payload.nonce, self.subscriptionId.toString()).subscribe({
             next: res => {
               console.log("Response", res)
-              // this._clientService.updateParticipant(this.client, this.data).subscribe();
-
-              alert("Thank you very much for your purchase");
+              alert("Thank you for your purchase");
 
             },
             error: err => {
