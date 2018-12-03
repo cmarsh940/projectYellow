@@ -103,8 +103,9 @@ export class DataService<Type> {
     );
   }
 
-  private extractData(res: Response): any {
-    return res;
+  private extractData(res: Response) {
+    let body = res;
+    return body || {};
   }
 
   /** Log a DataService message with the MessageService */

@@ -35,7 +35,7 @@ import {
   MatNativeDateModule
 } from '@angular/material';
 import { ObserversModule } from '@angular/cdk/observers';
-import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { ScrollingModule, ScrollDispatchModule } from '@angular/cdk/scrolling';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
@@ -72,6 +72,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatToolbarModule,
     MatTooltipModule,
     ObserversModule,
+    ScrollingModule,
     ScrollDispatchModule
   ],
   exports: [
@@ -107,6 +108,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatToolbarModule,
     MatTooltipModule,
     ObserversModule,
+    ScrollingModule,
     ScrollDispatchModule
   ],
   providers: [

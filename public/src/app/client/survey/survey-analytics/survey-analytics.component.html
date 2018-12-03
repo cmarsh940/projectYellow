@@ -30,111 +30,109 @@
 
 <div id="survey" *ngFor="let question of questions; let i = index">
   <mat-card>
-    <table>
-      <tr>
-        <th>#{{ i + 1 }} {{ question.question }}</th>
-      </tr>
-      <tr>
+    <mat-card-header>
+      <mat-card-title>#{{ i + 1 }} {{ question.question }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
         <div class="answers" *ngFor="let answer of question.answers; let j = index">
 
           <ng-container [ngSwitch]="question?.questionType">
           
             <!-- BOOLEAN -->
             <ng-container *ngSwitchCase="'boolean'">
-              <td class="booleanData">True = {{ answer[0] }}</td>
-              <td class="booleanData">False = {{ answer[1] }}</td>
+              <h4 class="booleanData">True = {{ answer[0] }}</h4>
+              <h4 class="booleanData">False = {{ answer[1] }}</h4>
             </ng-container>
           
             <!-- DATE -->
             <ng-container *ngSwitchCase="'date'">
-              <td>{{ j + 1 }} ) {{ answer | date }}</td>
+              <h4>{{ j + 1 }} ) {{ answer | date }}</h4>
             </ng-container>
           
             <!-- YES NO -->
             <ng-container *ngSwitchCase="'yesno'">
-              <td class="booleanData">Yes = {{ answer[0] }}</td>
-              <td class="booleanData">No = {{ answer[1] }}</td>
+              <h4 class="booleanData">Yes = {{ answer[0] }}</h4>
+              <h4 class="booleanData">No = {{ answer[1] }}</h4>
             </ng-container>
           
             <!-- TEXT -->
             <ng-container *ngSwitchCase="'text'">
-              <td>{{ j + 1 }} ) {{ answer }}</td>
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
             </ng-container>
           
             <!-- MULTI CHOICE -->
             <ng-container *ngSwitchCase="'mutiplechoice'">
-              <td>{{ j + 1 }} ) {{ answer }}</td>
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
             </ng-container>
           
             <!-- PARAGRAPH -->
             <ng-container *ngSwitchCase="'paragraph'">
-              <td>{{ j + 1 }} ) {{ answer }}</td>
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
             </ng-container>
           
             <!-- FACES -->
             <ng-container *ngSwitchCase="'smilieFaces'">
-              <td>
+              <h4>
                 <div class="average">
                   <h1>{{answer | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </td>
+              </h4>
             </ng-container>
           
             <!-- SATISFACTION -->
             <ng-container *ngSwitchCase="'satisfaction'">
-              <td>
+              <h4>
                 <div class="average">
                   <h1>{{answer | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </td>
+              </h4>
             </ng-container>
           
             <!-- SLIDE -->
             <ng-container *ngSwitchCase="'slide'">
-              <td>{{ j + 1 }} ) {{ answer }}</td>
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
             </ng-container>
           
             <!-- SLIDE RATE -->
             <ng-container *ngSwitchCase="'rate'">
-              <td>
+              <h4>
                 <div class="average">
                   <h1>{{answer | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </td>
+              </h4>
             </ng-container>
 
             <!-- STAR RATING -->
             <ng-container *ngSwitchCase="'star'">
-              <td>
+              <h4>
                 <div class="average">
                   <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
                   <h1>{{answer | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </td>
+              </h4>
             </ng-container>
           
             <!-- LIKE UNLIKE -->
             <ng-container *ngSwitchCase="'likeunlike'">
-              <td class="booleanData">Like = {{ answer[0] }}</td>
-              <td class="booleanData">Unlike = {{ answer[1] }}</td>
+              <h4 class="booleanData">Like = {{ answer[0] }}</h4>
+              <h4 class="booleanData">Unlike = {{ answer[1] }}</h4>
             </ng-container>
           
             <!-- GOOD BAD -->
             <ng-container *ngSwitchCase="'goodbad'">
-              <td class="booleanData">Good = {{ answer[0] }}</td>
-              <td class="booleanData">Bad = {{ answer[1] }}</td>
+              <h4 class="booleanData">Good = {{ answer[0] }}</h4>
+              <h4 class="booleanData">Bad = {{ answer[1] }}</h4>
             </ng-container>
           
             <!-- DEFAULT -->
             <ng-container *ngSwitchDefault></ng-container>
           </ng-container>
         </div>
-      </tr>
-    </table>
+      </mat-card-content>
   </mat-card>
 </div>
 
