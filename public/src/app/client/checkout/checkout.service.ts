@@ -38,9 +38,9 @@ export class CheckoutService {
       );
   }
 
-  checkout(checkoutURL: string, nonce: string, subscriptionId: string): Observable<any> {
-    console.log('ok');
-    let params = { 'payment_method_nonce': nonce, 'subscription_id': subscriptionId };
+  checkout(checkoutURL: string, nonce: string, subscriptionId: string, currentClient: any): Observable<any> {
+    console.log('____ CHECKOUT REACHED _____');
+    let params = { 'payment_method_nonce': nonce, 'subscription_id': subscriptionId, 'currentClient': currentClient };
     return this.http.post<any>(checkoutURL, params).pipe(
       map(this.extractData),
       catchError(this.handleError('checkout', []))

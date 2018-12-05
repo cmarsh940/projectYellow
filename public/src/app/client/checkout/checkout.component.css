@@ -80,3 +80,7 @@ button {
   margin: 0 auto;
   padding: 1.875em;
 }
+
+button {
+  margin-top: 1em;
+}

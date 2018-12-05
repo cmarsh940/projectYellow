@@ -5,7 +5,7 @@ const Subscription = mongoose.model('Subscription');
 const config = require("../config/config");
 const secret = require('../config/config').jwt_secret;
 
-const BUCKET_NAME = "surveysbyme";
+const BUCKET_NAME = config.bucketName;
 const IAM_USER_KEY = config.iamUser;
 const IAM_USER_SECRET = config.iamSecret;
 
@@ -15,33 +15,6 @@ const Busboy = require("busboy");
 const jwt = require('jsonwebtoken');
 
 const nodemailer = require('nodemailer');
-
-
-// James wagner's example(signed url)
-// function uploadToS3(file, client) {
-//   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
-//   console.log("*** S3 FILE:", file)
-//   var aws2 = new AWS.S3({
-//     accessKeyId: IAM_USER_KEY,
-//     secretAccessKey: IAM_USER_SECRET,
-//     Bucket: BUCKET_NAME
-//   });
-
-//   aws2.getSignedUrl(
-//     "putObject",
-//     {
-//       Bucket: "surveysbyme",
-//       Key: `Profile / ${ file.name }`,
-//       ContentType: file.type
-//     },
-//     (err, url) => {
-//       if (err) {
-//         console.log("PUT ERR ON GETSINGNED URL",err);
-//       }
-//       console.log(url);
-//     }
-//   );
-// }
 
 function uploadToS3(file, client) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")

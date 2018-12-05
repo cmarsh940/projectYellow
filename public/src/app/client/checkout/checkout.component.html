@@ -1,6 +1,10 @@
 <div class="container">
-
-        <h2>Payment amount: ${{amount}}</h2>
+    <div *ngFor="let plan of plans.plans">
+        <div *ngIf="plan.id === subscriptionId">
+            <h2>{{ plan.name }}</h2>
+            <h2>Payment amount: ${{plan.price}}</h2>
+        </div>
+    </div>
 
     <div class="card-container">
         <form action="/" method="post" id="cardForm">
@@ -18,3 +22,5 @@
         </form>
     </div>
 </div>
+
+{{ currentClient | json }}

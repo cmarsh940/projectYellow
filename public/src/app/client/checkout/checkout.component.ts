@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ClientService } from './../client.service';
+import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
 import { CheckoutService } from './checkout.service';
 
 
@@ -9,6 +10,8 @@ import { client } from 'braintree-web';
 import { hostedFields } from 'braintree-web';
 import { HttpClient } from '@angular/common/http';
 import { subscription } from 'src/app/global/models/subscription';
+import { ProfileService } from '../profile/profile.service';
+import { Client } from 'src/app/global/models/client';
 
 
 @Component({
@@ -16,15 +19,18 @@ import { subscription } from 'src/app/global/models/subscription';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, AfterContentInit{
   subscriptionId: number;
   paymentTokenURL = 'api/braintree/getclienttoken';
   errors = [];
+  plans = [];
   selected: any;
   amount: any;
   private clientToken: string;
   subscriptions = subscription;
   clientId: any;
+  planName = '';
+  currentClient = new Client();
 
 
 
@@ -33,19 +39,27 @@ export class CheckoutComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
+    private _clientService: ClientService, 
+    private _profileService: ProfileService,
     private location: Location
     ) { }
 
   ngOnInit() {
     this.subscriptionId = this.route.snapshot.params['id'];
-    console.log("snapshot", this.route.snapshot)
+    console.log("snapshot", this.route.snapshot);
     console.log("SUBSCRIPTION ID", this.subscriptionId);
+
     this.clientId = this.route.snapshot.url[1].path;
+
     this.getAmount(this.subscriptionId);
     this.paymentService.getClientToken(this.paymentTokenURL).subscribe({
       next: res => {
-        this.clientToken = res;
-        console.log("Client Token ",this.clientToken);
+        console.log("RETURNED RESSSSS", res);
+        this.clientToken = res.token;
+        console.log("Client Token ", this.clientToken);
+
+        this.plans = res.plans;
+        console.log("PLANS ", this.plans);
       },
       error: err => {
         console.log("api error" + err);
@@ -54,6 +68,10 @@ export class CheckoutComponent implements OnInit {
         this.createPayment();
       }
     });
+  }
+
+  ngAfterContentInit(): void {
+    this.getClient();
   }
 
   createPayment() {
@@ -144,7 +162,8 @@ export class CheckoutComponent implements OnInit {
           }
           console.log('Got a nonce: ' + payload.nonce);
           console.log('URL: ' + checkoutURL);
-          self.paymentService.checkout(checkoutURL, payload.nonce, self.subscriptionId.toString()).subscribe({
+
+          self.paymentService.checkout(checkoutURL, payload.nonce, self.subscriptionId.toString(), self.currentClient).subscribe({
             next: res => {
               console.log("Response", res)
               alert("Thank you for your purchase");
@@ -184,7 +203,20 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+
   cancel() {
     this.location.back();
+  }
+
+
+  getClient() {
+    this.errors = [];
+    this._profileService.getparticipant(this.clientId).subscribe(
+      (res) => {
+        console.log("GET CLIENT", res)
+        this.currentClient = res;
+        console.log("CURRENTCLIENT", this.currentClient)
+      }
+    )
   }
 }
