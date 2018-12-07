@@ -147,7 +147,7 @@ const ClientSchema = new mongoose.Schema({
     default: 'FREE'
   },
 
-  subToken: {
+  subscriptionId: {
     type: String,
     default: ""
   },

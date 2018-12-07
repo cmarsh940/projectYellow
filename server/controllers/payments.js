@@ -157,7 +157,7 @@ class PaymentsController {
                                     }
                                     subscribedClient._subscription = subObject.name;
                                     subscribedClient.surveyCount = subObject.surveyCount; 
-                                    subscribedClient.subToken = newSubscriptionResult.id; 
+                                    subscribedClient.subscriptionId = newSubscriptionResult.subscription.id; 
                                     subscribedClient.paymentToken = paymentToken; 
                                     subscribedClient.save((err, subscribedClient) => {
                                         if (err) {
