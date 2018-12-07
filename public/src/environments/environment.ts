@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  braintreeKey: 'sandbox_yddk3k3z_7ztv22wfy86bsspy'
 };
 
 /*

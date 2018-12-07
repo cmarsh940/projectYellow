@@ -118,9 +118,23 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     default: Date.now()
   },
+
+  paymentToken: {
+    type: String
+  },
+
+  datesPaid:{
+    type: Array
+  },
   
   permissionLevel: {
     type: Number,
+    default: 1
+  },
+
+  billingCycle: {
+    type: Number,
+    enum: [1, 12],
     default: 1
   },
 
@@ -130,12 +144,17 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     uppercase: true,
     trim: true,
-    default: "FREE"
+    default: 'FREE'
+  },
+
+  subToken: {
+    type: String,
+    default: ""
   },
 
   surveyCount: {
     type: Number,
-    default: 10
+    default: 5
   },
   
   _surveys: {
@@ -166,7 +185,7 @@ const ClientSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     required: true,
-    default: false
+    default: true
   }
 
 }, {

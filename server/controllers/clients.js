@@ -116,7 +116,7 @@ class ClientsController {
         return res.json(err);
       }
       console.log("*** SERVER CLIENT CREATED", client);
-      var email = {
+      let email = {
         client: client._id,
         contact: client.email,
         name: client.firstName,

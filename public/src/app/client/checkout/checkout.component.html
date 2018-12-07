@@ -1,5 +1,5 @@
 <div class="container">
-    <div *ngFor="let plan of plans.plans">
+    <div *ngFor="let plan of plans">
         <div *ngIf="plan.id === subscriptionId">
             <h2>{{ plan.name }}</h2>
             <h2>Payment amount: ${{plan.price}}</h2>
@@ -22,5 +22,3 @@
         </form>
     </div>
 </div>
-
-{{ currentClient | json }}
