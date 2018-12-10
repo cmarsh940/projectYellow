@@ -58,6 +58,7 @@ const tempSub = [
 ]
 class PaymentsController {
 
+    // GET TOKEN FOR CLIENT
     getClientToken(req, res) {
         console.log("___ SERVER GET CLIENT TOKEN HIT ___");
         let gateway = braintree.connect({
@@ -81,14 +82,16 @@ class PaymentsController {
                 console.log("PLANS RESULT", plans);
                 let results = {token, plans};
                 return res.json(results);
-            });
+            })
             
-        });
+        })
     }
 
+
+
+    // CHECKOUT
     checkout(req, res) {
         console.log("___ HIT SERVER CHECKOUT ___");
-        console.log("___ req ___", req.body);
         // Create gateway to braintree
         let gateway = braintree.connect({
             environment: braintree.Environment.Sandbox,
@@ -141,14 +144,12 @@ class PaymentsController {
                             if(newSubscriptionResult.success) {
                                 console.log("CREATED NEW SUBSCRIPTION", newSubscriptionResult);
                                 let subObject = {};
-                                console.log("TEMP SUB", tempSub);
                                 for(let sub of tempSub) {
                                     if(sub.id === plan.id) {
                                         subObject = sub
-                                        console.log("SUB", sub);
                                     }
                                 }
-                                console.log("SUB OBJECT", subObject);
+
                                 // FIND AND UPDATE CLIENT THAT JUST SUBSCRIBED
                                 Client.findById(req.body.currentClient._id, (err, subscribedClient) => {
                                     if (err) {
@@ -159,6 +160,7 @@ class PaymentsController {
                                     subscribedClient.surveyCount = subObject.surveyCount; 
                                     subscribedClient.subscriptionId = newSubscriptionResult.subscription.id; 
                                     subscribedClient.paymentToken = paymentToken; 
+                                    subscribedClient.subscriptionStatus = newSubscriptionResult.subscription.status; 
                                     subscribedClient.save((err, subscribedClient) => {
                                         if (err) {
                                             console.log(`___ SAVE SUBSCRIBED CLIENT ERROR ___`, err);
@@ -180,80 +182,11 @@ class PaymentsController {
                     return res.json(newCustomerResult);
                 } 
             }
-        });
+        })
     }
-    // checkout(req, res) {
-    //     console.log("___ HIT SERVER CHECKOUT ___");
-    //     console.log("___ req ___", req.body);
-    //     // Create gateway to braintree
-    //     let gateway = braintree.connect({
-    //         environment: braintree.Environment.Sandbox,
-    //         merchantId: config.merchantId,
-    //         publicKey: config.publicKey,
-    //         privateKey: config.privateKey
-    //     });
 
-    //     // PAYMENT METHOD NONCE
-    //     let nonceFromTheClient = req.body.payment_method_nonce;
-    //     console.log("SERVER NONCE FROM CLIENT", nonceFromTheClient);
 
-    //     // SUBSCRIPTION PLAN
-    //     let plan = req.body.selectedPlan;
-    //     console.log("SERVER SUBSCRIPTION PLAN", plan);
-        
-    //     // SUBSCRIPTION PRICE
-    //     let paymentAmount = plan.price;
-    //     console.log("SERVER PAYMENT AMOUNT", paymentAmount);
-
-    //     // SUBMIT TRANSACTION FOR VERIFICATION THROUGH BRAINTREE
-    //     newTransaction = gateway.transaction.sale({
-    //         amount: paymentAmount,
-    //         paymentMethodNonce: nonceFromTheClient,
-    //         taxAmount: "5.00",
-    //         customer: {
-    //             id: req.body.currentClient._id,
-    //             firstName: req.body.currentClient.firstName,
-    //             lastName: req.body.currentClient.lastName,
-    //             company: req.body.currentClient.businessName,
-    //             email: req.body.currentClient.email,
-    //             phone: req.body.currentClient.phone,
-    //         },
-    //         options: {
-    //             submitForSettlement: true,
-    //             storeInVaultOnSuccess: true
-    //         },
-    //         deviceData: req.body.device_data
-    //     }, function (err, result) {
-    //         if (err) {
-    //             console.log("PAYMENT ERROR", err);
-    //             return res.json(err);
-    //         } else {
-    //             console.log("PAYMENT", result);
-    //             if (result.success || result.transaction) {
-    //                 console.log("AFTER PAYMENT SUCCESS CREATING SUBSCRIPTION");
-    //                 console.log("PAYMENT TOKEN", paymentToken);
-    //                 gateway.subscription.create({
-    //                     paymentMethodToken: paymentToken,
-    //                     planId: plan.id,
-    //                     merchantAccountId: "marshallevansllc",
-    //                 }, function (err, subscriptionResult) {
-    //                     if (err) {
-    //                         console.log("SERVER SUBSCRIPTION ERROR");
-    //                         return res.json(err);
-    //                     } else {
-    //                         console.log("SERVER SUBSCRIPTION COMPLETE");
-    //                         return res.json(subscriptionResult);
-    //                     }
-    //                 });
-    //             } else {
-    //                 transactionErrors = result.errors.deepErrors();
-    //                 console.log("AFTER PAYMENT FAILED", transactionErrors);
-    //                 return res.json(transactionErrors);
-    //             }
-    //         }
-    //     });
-    // }
-
+    // UPDATE PAYMENT METHOD
     updatePaymentMethod(req, res){
         let gateway = braintree.connect({
             environment: braintree.Environment.Sandbox,
@@ -264,14 +197,59 @@ class PaymentsController {
 
         // Use the payment method nonce here
         let nonceFromTheClient = req.body.payment_method_nonce;
-        gateway.transaction.sale({
-            amount: "0.00",
+        gateway.paymentMethod.update("thePaymentMethodToken", {
             paymentMethodNonce: nonceFromTheClient,
-            customerId: req.body.currentClient._id,
             options: {
-                storeInVaultOnSuccess: true
+                verifyCard: true
             }
-        }, function (err, result) {
+        }, function (err, updatePaymentMethod) {
+            if (err) {
+                console.log("ERROR UPDATING PAYMENT METHOD", err);
+                return res.json(err);
+            }
+            console.log("UPDATED PAYMENT METHOD", updatePaymentMethod);
+
+            let updatedPaymentToken = updatePaymentMethod.customer.paymentMethods[0].token;
+            console.log("PAYMENT TOKEN", updatedPaymentToken);
+
+            // FIND AND UPDATE CLIENT THAT UPDATED PAYMENT METHOD
+            Client.findById(req.body.currentClient._id, (err, updatedClient) => {
+                if (err) {
+                    console.log("ERROR FINDING CLIENT TO UPDATE", err)
+                    return res.json(err);
+                }
+
+                updatedClient.paymentToken = updatedPaymentToken;
+                updatedClient.save((err, subscribedClient) => {
+                    if (err) {
+                        console.log(`___ SAVE SUBSCRIBED CLIENT ERROR ___`, err);
+                        return res.json(err);
+                    }
+                    console.log(`___ UPDATED SUBSCRIBED CLIENT ___`, subscribedClient);
+                    return res.json(subscribedClient);
+                });
+            });
+            return res.json(updatePaymentMethod);
+        })
+    }
+
+
+    // CANCEL CLIENTS SUBSCRIPTION
+    cancelSubscription(req, res){
+        let gateway = braintree.connect({
+            environment: braintree.Environment.Sandbox,
+            merchantId: config.merchantId,
+            publicKey: config.publicKey,
+            privateKey: config.privateKey
+        });
+
+        gateway.subscription.cancel("theSubscriptionId", function (err, canceledSubResult) {
+            if(err){
+                console.log("ERROR CANCELING SUBSCRIPTION", err);
+                return res.json(err);
+            }
+            console.log("CANCELED SUBSCRIPTION", canceledSubResult)
+            return res.json(canceledSubResult);
         });
     }
 

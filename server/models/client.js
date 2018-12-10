@@ -152,6 +152,11 @@ const ClientSchema = new mongoose.Schema({
     default: ""
   },
 
+  subscriptionStatus: {
+    type: String,
+    default: "Trial",
+  },
+
   surveyCount: {
     type: Number,
     default: 5
