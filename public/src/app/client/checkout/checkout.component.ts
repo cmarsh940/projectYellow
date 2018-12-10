@@ -28,11 +28,13 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
   selectedPlan: any;
   selected: any;
   amount: any;
-  private clientToken: string;
   subscriptions = subscription;
   clientId: any;
   planName = '';
   currentClient = new Client();
+  loaded: Boolean;
+
+  private clientToken: string;
   private ngUnsubscribe = new Subject();
 
 
@@ -53,9 +55,11 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
     // CLIENT ID
     this.clientId = this.route.snapshot.url[1].path;
 
+
     // GET CLIENT TOKEN
     this.paymentService.getClientToken(this.paymentTokenURL).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: res => {
+        this.loaded = false;
         this.clientToken = res.token;
         console.log("Client Token ", this.clientToken);
 
@@ -72,14 +76,19 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
         console.log("api error" + err);
       },
       complete: () => {
+        this.loaded = false
         this.createPayment();
       }
     });
+
+
   }
 
   ngAfterContentInit(): void {
     this.getClient();
   }
+
+  
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -87,6 +96,7 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
   }
 
   createPayment() {
+    this.loaded = true;
     var self = this;
     // this.getPlan(this.subscriptionId);
     client.create({
@@ -161,7 +171,6 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
 
   handleHostedFields(hostedFieldsInstance) {
     var self = this;
-
 
     document.querySelector('#cardForm').addEventListener('submit',
       function (event) {

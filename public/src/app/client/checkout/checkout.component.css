@@ -1,3 +1,14 @@
+.loading {
+    min-width: 100%;
+    min-height: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.mat-spinner {
+    margin: 5em auto;
+}
+
 .hf-container {
   height: 50px;
   box-sizing: border-box;
