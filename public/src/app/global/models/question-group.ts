@@ -19,10 +19,15 @@ export const questionGroups: QuestionGroup[] = [
         ]
     },
     {
-        name: 'Satisfaction',
+        name: 'Dates',
         group: [
-            { value: "smilieFaces", viewValue: "Satisfaction (images)" },
-            { value: "satisfaction", viewValue: "Satisfaction (text)" },
+            { value: "date", viewValue: "Date (Calender)" },
+        ]
+    },
+    {
+        name: 'Multiple Choice',
+        group: [
+            { value: "mutiplechoice", viewValue: "Multiple Choice (one answer)" },
         ]
     },
     {
@@ -33,15 +38,16 @@ export const questionGroups: QuestionGroup[] = [
         ]
     },
     {
-        name: 'Dates',
+        name: 'Satisfaction',
         group: [
-            { value: "date", viewValue: "Date (Calender)" },       
+            { value: "smilieFaces", viewValue: "Satisfaction (images)" },
+            { value: "satisfaction", viewValue: "Satisfaction (text)" },
         ]
     },
     {
-        name: 'Multiple Choice',
+        name: 'Scales',
         group: [
-            { value: "mutiplechoice", viewValue: "Multiple Choice (one answer)" },
+            { value: "slide", viewValue: "Sliding scale (1-100)" },
         ]
     },
     {
@@ -50,11 +56,5 @@ export const questionGroups: QuestionGroup[] = [
             { value: "text", viewValue: "Single Answer Responce" },
             { value: "paragraph", viewValue: "User Feedback" },        
         ]
-    },
-    {
-        name: 'Scales',
-        group: [
-            { value: "slide", viewValue: "Sliding scale (1-100)" },     
-        ]
-    }   
+    }  
 ]

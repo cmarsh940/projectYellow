@@ -46,8 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.clientId = params['id'];
       this.getClient();
-    });
-    console.table(this.currentClient);
+    })
   }
 
   ngOnDestroy() {

@@ -5,7 +5,7 @@ const Subscription = mongoose.model('Subscription');
 const config = require("../config/config");
 const secret = require('../config/config').jwt_secret;
 
-const BUCKET_NAME = "surveysbyme";
+const BUCKET_NAME = config.bucketName;
 const IAM_USER_KEY = config.iamUser;
 const IAM_USER_SECRET = config.iamSecret;
 
@@ -13,35 +13,9 @@ const path = require("path");
 const AWS = require("aws-sdk");
 const Busboy = require("busboy");
 const jwt = require('jsonwebtoken');
+const braintree = require('braintree');
 
 const nodemailer = require('nodemailer');
-
-
-// James wagner's example(signed url)
-// function uploadToS3(file, client) {
-//   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
-//   console.log("*** S3 FILE:", file)
-//   var aws2 = new AWS.S3({
-//     accessKeyId: IAM_USER_KEY,
-//     secretAccessKey: IAM_USER_SECRET,
-//     Bucket: BUCKET_NAME
-//   });
-
-//   aws2.getSignedUrl(
-//     "putObject",
-//     {
-//       Bucket: "surveysbyme",
-//       Key: `Profile / ${ file.name }`,
-//       ContentType: file.type
-//     },
-//     (err, url) => {
-//       if (err) {
-//         console.log("PUT ERR ON GETSINGNED URL",err);
-//       }
-//       console.log(url);
-//     }
-//   );
-// }
 
 function uploadToS3(file, client) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
@@ -143,7 +117,7 @@ class ClientsController {
         return res.json(err);
       }
       console.log("*** SERVER CLIENT CREATED", client);
-      var email = {
+      let email = {
         client: client._id,
         contact: client.email,
         name: client.firstName,
@@ -164,25 +138,53 @@ class ClientsController {
         return res.json("____ AUTHENTICATE ERROR ____" + err);
       }
       if (client && client.authenticate(req.body.password)) {
+
         console.log("_____CLIENT LOGGING IN_____", client);
         var token = jwt.sign({ client }, secret, { expiresIn: '1h'});
-        req.session.client = {
-          _id: client._id,
-          n: client.firstName + " " + client.lastName,
-          a8o1: client.role,
-          b8o1: client.subscription,
-          c8o1: client.surveyCount,
-          s: client._surveys,
-          token: `Bearer ${token}`,
-          v: client.verified
-        };
-        if(err) {
-          console.log("ERROR INSIDE", err);
+
+        // CHECK IF CLIENT IS IN TRIAL OR SUBSCRIPTION
+        if (client.subscriptionStatus === 'Trial') {
+          req.session.client = {
+            _id: client._id,
+            n: client.firstName + " " + client.lastName,
+            a8o1: client.role,
+            b8o1: client.subscription,
+            c8o1: client.surveyCount,
+            s: client._surveys,
+            status: client.subscriptionStatus,
+            token: `Bearer ${token}`,
+            v: client.verified
+          };
+
+          return res.json(req.session.client);
+        } else {
+          // CREATE GATEWAY TO BRAINTREE TO CHECK CLIENTS SUBSCRIPTION
+          let gateway = braintree.connect({
+            environment: braintree.Environment.Sandbox,
+            merchantId: config.merchantId,
+            publicKey: config.publicKey,
+            privateKey: config.privateKey
+          });
+
+          gateway.subscription.find(client.subscriptionId, function (err, result) {
+            if (err) {
+              console.log("ERROR INSIDE", err);
+            }
+            req.session.client = {
+              _id: client._id,
+              n: client.firstName + " " + client.lastName,
+              a8o1: client.role,
+              b8o1: client.subscription,
+              c8o1: client.surveyCount,
+              s: client._surveys,
+              status: result.status,
+              token: `Bearer ${token}`,
+              v: client.verified
+            };
+            return res.json(req.session.client);
+          });
         }
-        return res.json(req.session.client);
       }
-      console.log("ERROR", err);
-      return res.json(err);
     })
   }
 

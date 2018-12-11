@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const QuestionSchema = new mongoose.Schema({
-    answers: [String],
+    answers: { type: Array, "default": [] },
     _survey: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Survey"

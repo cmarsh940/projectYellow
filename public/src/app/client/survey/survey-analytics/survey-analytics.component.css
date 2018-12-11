@@ -72,3 +72,26 @@ td, th {
 .answers {
     border-bottom: 1px solid #dddddd;
 }
+
+.answers .average {
+    width: 100%;
+    text-align: center;
+}
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  width:100%;
+  height: auto;
+}
+
+
+.booleanData {
+    width:100%;
+    display: flex;
+}
+
+.mat-card {
+    max-height: 300px;
+    overflow-y: scroll;
+}

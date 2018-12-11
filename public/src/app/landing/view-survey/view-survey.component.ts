@@ -187,6 +187,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     const saveSurvey: Survey = {
       _id: this.survey._id,
       category: this.survey.category,
+      submissionDates: this.survey.submissionDates,
       lastSubmission: Date.now(),
       name: this.survey.name,
       private: this.survey.private,

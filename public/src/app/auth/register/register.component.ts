@@ -121,9 +121,7 @@ export class RegisterComponent implements OnInit {
 
   addParticipant(form: any) {
     this.errors = [];
-    const subscription = {
-      "name": "FREE",
-    }
+    const subscription = "FREE";
     this.participant = {
       'firstName': this.firstNameFormControl.value,
       'lastName': this.lastNameFormControl.value,
@@ -175,9 +173,9 @@ export class RegisterComponent implements OnInit {
     const config = new MatSnackBarConfig();
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
-    config.duration = 2500;
+    config.duration = 10500;
     config.panelClass = ['logout-snackbar']
-    this.snackBar.open("Thank you for registering", '', config);
+    this.snackBar.open("Thank you for registering. Please verify your email to get started", '', config);
   }
   
 }

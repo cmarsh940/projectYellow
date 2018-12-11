@@ -1,14 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { environment } from './../../../environments/environment';
+import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
 import { CheckoutService } from './checkout.service';
 
-
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from "@angular/common";
+// import { Location } from "@angular/common";
 
-import { client } from 'braintree-web';
-import { hostedFields } from 'braintree-web';
 import { HttpClient } from '@angular/common/http';
 import { subscription } from 'src/app/global/models/subscription';
+import { ProfileService } from '../profile/profile.service';
+import { Client } from 'src/app/global/models/client';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { client, hostedFields } from 'braintree-web';
 
 
 @Component({
@@ -16,15 +20,22 @@ import { subscription } from 'src/app/global/models/subscription';
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
   subscriptionId: number;
   paymentTokenURL = 'api/braintree/getclienttoken';
   errors = [];
+  plans = [];
+  selectedPlan: any;
   selected: any;
   amount: any;
-  private clientToken: string;
   subscriptions = subscription;
   clientId: any;
+  planName = '';
+  currentClient = new Client();
+  loaded: Boolean;
+
+  private clientToken: string;
+  private ngUnsubscribe = new Subject();
 
 
 
@@ -32,34 +43,64 @@ export class CheckoutComponent implements OnInit {
     private paymentService: CheckoutService,
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router,
-    private location: Location
+    private _router: Router,
+    private _profileService: ProfileService,
+    // private location: Location
     ) { }
 
   ngOnInit() {
+    // GET SUBSCRIPTION ID
     this.subscriptionId = this.route.snapshot.params['id'];
-    console.log("snapshot", this.route.snapshot)
-    console.log("SUBSCRIPTION ID", this.subscriptionId);
+
+    // CLIENT ID
     this.clientId = this.route.snapshot.url[1].path;
-    this.getAmount(this.subscriptionId);
-    this.paymentService.getClientToken(this.paymentTokenURL).subscribe({
+
+
+    // GET CLIENT TOKEN
+    this.paymentService.getClientToken(this.paymentTokenURL).pipe(takeUntil(this.ngUnsubscribe)).subscribe({
       next: res => {
-        this.clientToken = res;
-        console.log("Client Token ",this.clientToken);
+        this.loaded = false;
+        this.clientToken = res.token;
+        console.log("Client Token ", this.clientToken);
+
+        this.plans = res.plans.plans;
+        console.log("PLANS ", this.plans);
+        for (let plan of this.plans) {
+          if (this.subscriptionId === plan.id) {
+            this.selectedPlan = plan;
+          }
+        }
+        console.log("SELCTED PLAN", this.selectedPlan);
       },
       error: err => {
         console.log("api error" + err);
       },
       complete: () => {
+        this.loaded = false
         this.createPayment();
       }
     });
+
+
+  }
+
+  ngAfterContentInit(): void {
+    this.getClient();
+  }
+
+  
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   createPayment() {
+    this.loaded = true;
     var self = this;
+    // this.getPlan(this.subscriptionId);
     client.create({
-      authorization: 'sandbox_yddk3k3z_7ztv22wfy86bsspy'
+      authorization: environment.braintreeKey
     },
       function (clientErr, clientInstance) {
         if (clientErr) {
@@ -131,7 +172,6 @@ export class CheckoutComponent implements OnInit {
   handleHostedFields(hostedFieldsInstance) {
     var self = this;
 
-
     document.querySelector('#cardForm').addEventListener('submit',
       function (event) {
         event.preventDefault();
@@ -144,49 +184,36 @@ export class CheckoutComponent implements OnInit {
           }
           console.log('Got a nonce: ' + payload.nonce);
           console.log('URL: ' + checkoutURL);
-          self.paymentService.checkout(checkoutURL, payload.nonce, self.subscriptionId.toString()).subscribe({
+
+          self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, self.currentClient).subscribe({
             next: res => {
-              console.log("Response", res)
-              // this._clientService.updateParticipant(this.client, this.data).subscribe();
-
-              alert("Thank you very much for your purchase");
-
-            },
-            error: err => {
-              alert("Your payment was declined")
-              console.log("api error" + err);
-            },
+              if (res.success === false) {
+                alert("Your payment was declined");
+                console.log("api error", res);
+              } else {
+                console.log("Response", res)
+                alert("Thank you for your purchase");
+              }
+            }
           });
+          this._router.navigate(['/dashboard']);
         });
       });
   }
 
-  getAmount(id: any): void {
-    console.log("GET AMOUNT ID", id);
-    if(id == 1) {
-      this.amount = 30;
-    }
-    if (id == 2) {
-      this.amount = 35;
-    }
-    if (id == 3) {
-      this.amount = 99;
-    }
-    if (id == 4) {
-      this.amount = 360;
-    }
-    if (id == 5) {
-      this.amount = 420;
-    }
-    if (id == 6) {
-      this.amount = 1188;
-    }
-    if (id > 6) {
-      this.amount = 123456789;
-    }
-  }
 
-  cancel() {
-    this.location.back();
+  // cancel() {
+  //   this.location.back();
+  // }
+
+
+  getClient() {
+    this.errors = [];
+    this._profileService.getparticipant(this.clientId).subscribe(
+      (res) => {
+        this.currentClient = res;
+        console.log("CURRENT CLIENT", this.currentClient)
+      }
+    )
   }
 }

@@ -14,6 +14,7 @@ import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 import { MainFooterComponent } from '../layout/main-footer/main-footer.component';
 import { VerifiedComponent } from './verified/verified.component';
+import { SubscriptionErrorComponent } from './subscription-error/subscription-error.component';
 
 @NgModule({
   imports: [
@@ -29,7 +30,7 @@ import { VerifiedComponent } from './verified/verified.component';
     RightsComponent, 
     AboutComponent,
     MainFooterComponent, 
-    PricingComponent, HomeComponent, ViewSurveyComponent, ListSurveysComponent, VerifiedComponent
+    PricingComponent, HomeComponent, ViewSurveyComponent, ListSurveysComponent, VerifiedComponent, SubscriptionErrorComponent
   ]
 })
 export class LandingModule { }

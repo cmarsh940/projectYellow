@@ -1,4 +1,4 @@
-import { SubscriptionOverlayComponent } from './client/profile/subscription-overlay/subscription-overlay.component';
+
 
 // MODULES
 import { NgModule } from '@angular/core';
@@ -20,6 +20,7 @@ import { EditClientComponent } from './client/profile/edit-client/edit-client.co
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { RightsComponent } from './landing/rights/rights.component';
+import { SubscriptionOverlayComponent } from './client/profile/subscription-overlay/subscription-overlay.component';
 
 // ENVIORMENTS
 import { environment } from '../environments/environment';
@@ -30,7 +31,6 @@ import { httpInterceptorProviders } from './global/interceptors';
 // SERVICES
 import { AuthService } from './auth/auth.service';
 import { ClientService } from './client/client.service';
-import { D3Service, D3_DIRECTIVES } from './global/d3';
 import { HttpErrorHandler } from './global/services/http-error-handler.service';
 import { MessagesService } from './global/services/messages.service';
 import { OverviewService } from './overview/overview.service';
@@ -54,7 +54,6 @@ import { AuthGuard } from './global/guards/auth.guard';
     LoginComponent,
     RegisterComponent,
     ForbiddenValidatorDirective,
-    ...D3_DIRECTIVES,
   ],
 
   imports: [
@@ -79,7 +78,6 @@ import { AuthGuard } from './global/guards/auth.guard';
     AuthService,
     MessagesService,
     ClientService,
-    D3Service,
     SurveyService,
     SurveyCategoryService,
     UserService,

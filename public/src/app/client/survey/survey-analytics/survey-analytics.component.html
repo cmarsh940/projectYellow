@@ -1,123 +1,144 @@
-<div *ngIf="!loaded; else mainTemplate">
-  <div class="loading">
-    <mat-spinner color="accent"></mat-spinner>
-  </div>
-</div>
-<ng-template #mainTemplate>
-  <div class="header">
-    <h3 class="mat-subheading-2" id="title">{{ survey?.name | titlecase }}</h3>
-    <span class="spacer"></span>
-    <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
-      <mat-icon>cloud_download</mat-icon>
+<div class="header">
+  <h3 class="mat-subheading-2" id="title">{{ survey?.name | titlecase }}</h3>
+  <span class="spacer"></span>
+  <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
+    <mat-icon>cloud_download</mat-icon>
+  </button>
+  <mat-menu #downloadMenu="matMenu">
+    <button mat-menu-item (click)="downloadJson()">
+      Json file
     </button>
-    <mat-menu #downloadMenu="matMenu">
-      <button mat-menu-item (click)="downloadJson()">
-        Json file
-      </button>
-      <button mat-menu-item (click)="downloadText()">
-        Text file
-      </button>
-    </mat-menu>
+    <button mat-menu-item (click)="downloadText()">
+      Text file
+    </button>
+  </mat-menu>
 
-    <h6 class="mat-caption">
-      <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
-    </h6>
-  </div>
+  <h6 class="mat-caption">
+    <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
+  </h6>
+  <h6>last submision was: {{ timeSinceLastSubmission | number:'1.0-0' }} hours ago.</h6>
 
-  <div id="survey" *ngFor="let question of questions; let i = index">
-    <mat-card>
-      <table>
-        <tr>
-          <th>#{{ i + 1 }} {{ question.question }}</th>
-        </tr>
-        <tr>
-          <div class="answers" *ngFor="let answer of question.answers; let j = index">
+  <mat-card>
+    <mat-card-title>Survey Volume</mat-card-title>
+    <mat-card-content>
+      <div class="chart-container">
+        <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
 
-            <ng-container [ngSwitch]="question?.questionType">
-            
-              <!-- BOOLEAN -->
-              <ng-container *ngSwitchCase="'boolean'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- DATE -->
-              <ng-container *ngSwitchCase="'date'">
-                <td>{{ j + 1 }} ) {{ answer | date }}</td>
-              </ng-container>
-            
-              <!-- YES NO -->
-              <ng-container *ngSwitchCase="'yesno'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- TEXT -->
-              <ng-container *ngSwitchCase="'text'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- MULTI CHOICE -->
-              <ng-container *ngSwitchCase="'mutiplechoice'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- PARAGRAPH -->
-              <ng-container *ngSwitchCase="'paragraph'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- FACES -->
-              <ng-container *ngSwitchCase="'smilieFaces'">
-                <td>Average {{ answer | number }}</td>
-              </ng-container>
-            
-              <!-- SATISFACTION -->
-              <ng-container *ngSwitchCase="'satisfaction'">
-                <td>Average {{ answer | number}}</td>
-              </ng-container>
-            
-              <!-- SLIDE -->
-              <ng-container *ngSwitchCase="'slide'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- SLIDE RATE -->
-              <ng-container *ngSwitchCase="'rate'">
-                <td>Average {{ answer | number}}</td>
-              </ng-container>
+<div id="survey" *ngFor="let question of questions; let i = index">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>#{{ i + 1 }} {{ question.question }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="answers" *ngFor="let answer of question.answers; let j = index">
 
-              <!-- STAR RATING -->
-              <ng-container *ngSwitchCase="'star'">
-                <td>Average {{ answer }}</td>
-              </ng-container>
-            
-              <!-- LIKE UNLIKE -->
-              <ng-container *ngSwitchCase="'likeunlike'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- GOOD BAD -->
-              <ng-container *ngSwitchCase="'goodbad'">
-                <td>{{ j + 1 }} ) {{ answer }}</td>
-              </ng-container>
-            
-              <!-- DEFAULT -->
-              <ng-container *ngSwitchDefault>
-              </ng-container>
+          <ng-container [ngSwitch]="question?.questionType">
+          
+            <!-- BOOLEAN -->
+            <ng-container *ngSwitchCase="'boolean'">
+              <h4 class="booleanData">True = {{ answer[0] }}</h4>
+              <h4 class="booleanData">False = {{ answer[1] }}</h4>
             </ng-container>
-          </div>
-        </tr>
-      </table>
-    </mat-card>
-  </div>
+          
+            <!-- DATE -->
+            <ng-container *ngSwitchCase="'date'">
+              <h4>{{ j + 1 }} ) {{ answer | date }}</h4>
+            </ng-container>
+          
+            <!-- YES NO -->
+            <ng-container *ngSwitchCase="'yesno'">
+              <h4 class="booleanData">Yes = {{ answer[0] }}</h4>
+              <h4 class="booleanData">No = {{ answer[1] }}</h4>
+            </ng-container>
+          
+            <!-- TEXT -->
+            <ng-container *ngSwitchCase="'text'">
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
+            </ng-container>
+          
+            <!-- MULTI CHOICE -->
+            <ng-container *ngSwitchCase="'mutiplechoice'">
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
+            </ng-container>
+          
+            <!-- PARAGRAPH -->
+            <ng-container *ngSwitchCase="'paragraph'">
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
+            </ng-container>
+          
+            <!-- FACES -->
+            <ng-container *ngSwitchCase="'smilieFaces'">
+              <h4>
+                <div class="average">
+                  <h1>{{answer | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </h4>
+            </ng-container>
+          
+            <!-- SATISFACTION -->
+            <ng-container *ngSwitchCase="'satisfaction'">
+              <h4>
+                <div class="average">
+                  <h1>{{answer | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </h4>
+            </ng-container>
+          
+            <!-- SLIDE -->
+            <ng-container *ngSwitchCase="'slide'">
+              <h4>{{ j + 1 }} ) {{ answer }}</h4>
+            </ng-container>
+          
+            <!-- SLIDE RATE -->
+            <ng-container *ngSwitchCase="'rate'">
+              <h4>
+                <div class="average">
+                  <h1>{{answer | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </h4>
+            </ng-container>
 
-  <!-- PIE CHART CARD -->
-  <!-- <mat-grid-tile>
-    <mat-card class="dashboard-card">
-      <app-pie-chart [width]="600" [height]="500" [data]="pieData"></app-pie-chart>
-    </mat-card>
-  </mat-grid-tile> -->
+            <!-- STAR RATING -->
+            <ng-container *ngSwitchCase="'star'">
+              <h4>
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h1>{{answer | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </h4>
+            </ng-container>
+          
+            <!-- LIKE UNLIKE -->
+            <ng-container *ngSwitchCase="'likeunlike'">
+              <h4 class="booleanData">Like = {{ answer[0] }}</h4>
+              <h4 class="booleanData">Unlike = {{ answer[1] }}</h4>
+            </ng-container>
+          
+            <!-- GOOD BAD -->
+            <ng-container *ngSwitchCase="'goodbad'">
+              <h4 class="booleanData">Good = {{ answer[0] }}</h4>
+              <h4 class="booleanData">Bad = {{ answer[1] }}</h4>
+            </ng-container>
+          
+            <!-- DEFAULT -->
+            <ng-container *ngSwitchDefault></ng-container>
+          </ng-container>
+        </div>
+      </mat-card-content>
+  </mat-card>
+</div>
 
-  <div id="button-group">
-    <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
-  </div>
-</ng-template>
+
+<div id="button-group">
+  <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
+</div>
+
+
