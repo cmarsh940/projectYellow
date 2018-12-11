@@ -22,6 +22,7 @@ export class ClientComponent implements OnInit {
 
     ngOnInit() {
         this.isLoggedIn();
+        this.activeSubscription();
         this.isValidated();
     }
 
@@ -32,6 +33,16 @@ export class ClientComponent implements OnInit {
             this._router.navigateByUrl('/login');
         } else {
             console.log("YOU ARE VERIFIED");
+        }
+    }
+
+    activeSubscription() {
+        let subscribed = this._authService.subVerified();
+        console.log("SUBSCRIBED", subscribed);
+        if (!subscribed) {
+            this._router.navigateByUrl('/error');
+        } else {
+            console.log("YOU ARE SUBSCRIPTION IS ACTIVE");
         }
     }
 

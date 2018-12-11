@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
+import { SubscriptionErrorComponent } from "./landing/subscription-error/subscription-error.component";
 
 
 const routes: Routes = [
@@ -13,6 +14,11 @@ const routes: Routes = [
     path: "register",
     pathMatch: "full",
     component: RegisterComponent
+  },
+  {
+    path: "error",
+    pathMatch: "full",
+    component: SubscriptionErrorComponent
   },
   {
     path: "dashboard",

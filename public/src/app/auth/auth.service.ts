@@ -80,6 +80,16 @@ export class AuthService {
     }
   }
 
+  subVerified() {
+    let data = JSON.parse(sessionStorage.getItem('currentClient'));
+    if ((data.status === "Active" || data.status === "Trial") ) {
+      console.log("DATA", data);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   emailVerified() {
     let data = JSON.parse(sessionStorage.getItem('currentClient'));
     if (!data || data.v === null) {
