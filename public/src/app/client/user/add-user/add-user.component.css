@@ -1,0 +1,19 @@
+#submit-button {
+    width:100%;
+}
+
+button {
+    width: 100%;
+}
+
+.mat-form-field {
+    width:100%;
+    display: block;
+}
+
+.errors {
+    width: 100%;
+    text-align: center;
+    color: red;
+    height: 10em;
+}

@@ -33,8 +33,13 @@ async function validJWTNeeded(req, res, next) {
             }
 
         } catch (err) {
-            console.log("ERROR", err)
-            return res.status(403).send();
+            if (err.name === 'TokenExpiredError') {
+                console.log("ERROR TOKEN EXIRED", err);
+                return res.json(err);
+            } else {
+                console.log("ERROR", err)
+                return res.status(403).send();
+            }
         }
     } else {
         if (req.method === 'GET') {
@@ -50,7 +55,10 @@ async function validJWTNeeded(req, res, next) {
 
 module.exports = function (app) {
     // CLIENT
-    app.get('/api/clients', Clients.index);
+    app.get('/api/clients', [
+        validJWTNeeded,
+        Clients.index
+    ]);
     app.post('/api/clients', Clients.create);
     app.delete('/api/clients', Clients.logout);
     app.post('/api/clients/login', Clients.authenticate);
@@ -140,11 +148,26 @@ module.exports = function (app) {
     ]);
 
     // USERS
-    app.get('/api/users', Users.index);
-    app.post('/api/users', Users.create);
-    app.delete('/api/users/:id', Users.delete);
-    app.get('/api/users/:id', Users.show);
-    app.put('/api/users/:id', Users.update);
+    app.get('/api/users', [
+        validJWTNeeded,
+        Users.index
+    ]);
+    app.post('/api/users', [
+        validJWTNeeded,
+        Users.create
+    ]);
+    app.delete('/api/users/:id', [
+        validJWTNeeded,
+        Users.delete
+    ]);
+    app.get('/api/users/:id', [
+        validJWTNeeded,
+        Users.show
+    ]);
+    app.put('/api/users/:id', [
+        validJWTNeeded,
+        Users.update
+    ]);
     
 
     // CATCH ALL

@@ -1,26 +1,60 @@
-<form (ngSubmit)="createUser()" #registerForm="ngForm">
-  <!-- FIRST NAME -->
+<h1>ADD USER COMPONENT</h1>
+<div class="container">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input matInput type="text" name="name" required [(ngModel)]="newUser.name" placeholder="Name">
-    </mat-form-field>
+        <form [formGroup]="myForm">
 
-  <!-- EMAIL -->
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <input matInput type="email" name="email" required autocomplete="username email" [(ngModel)]="newUser.email" autocomplete="email"
-        placeholder="Email">
-    </mat-form-field>
+            <!-- NAME -->
+            <mat-form-field appearance="outline" color="primary">
+                <mat-label>Name</mat-label>
+                <input matInput type="text" [formControl]="nameFormControl" [errorStateMatcher]="matcher">
+  
+                <mat-error *ngIf="nameFormControl.errors?.pattern">
+                    Name cannot have numbers or symbols
+                </mat-error>
+                <mat-error *ngIf="nameFormControl.errors?.forbiddenName">
+                    Name cannot be admin
+                </mat-error>
+                <mat-error *ngIf="nameFormControl.hasError('maxlength')">
+                    Name cannot be longer then 250 charactors
+                </mat-error>
+            </mat-form-field>
 
-    <!-- PHONE -->
-    <mat-form-field appearance="outline">
-      <mat-label>Phone #</mat-label>
-      <input matInput type="tel" name="phone" [(ngModel)]="newUser.phone" autocomplete="tel" placeholder="Phone #">
-    </mat-form-field>
 
-  <!-- SUBMIT BUTTON -->
-  <div class="text-center">
-    <button mat-stroked-button type="submit" color="accent" [disabled]="!registerForm.form.valid" (click)="createUser(); registerForm.reset()">Register</button>
-  </div>
-</form>
+            <!-- EMAIL -->
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" autocomplete="email" [formControl]="emailFormControl"
+                    [errorStateMatcher]="matcher">
+                <mat-error *ngIf="emailFormControl.hasError('maxlength')">
+                    Email cannot be longer then 250 charactors
+                </mat-error>
+            </mat-form-field>
+
+
+            <!-- PHONE -->
+            <mat-form-field appearance="outline">
+                <mat-label>Phone #</mat-label>
+                <input matInput type="tel" [formControl]="phoneFormControl" [errorStateMatcher]="matcher" autocomplete='tel-national'>
+                <mat-error *ngIf="phoneFormControl.errors?.pattern">
+                    Phone number cannot have letters or symbols in it.
+                </mat-error>
+                <mat-error *ngIf="phoneFormControl.hasError('minlength')">
+                    Please enter a valid phone number
+                </mat-error>
+                <mat-error *ngIf="phoneFormControl.hasError('maxlength')">
+                    Please enter a valid phone number
+                </mat-error>
+            </mat-form-field>
+
+            
+
+            <!-- SUBMIT BUTTON -->
+            <div id="submit-button">
+                <button mat-stroked-button type="submit" color="primary" (click)="addParticipant(myForm)" [disabled]="!myForm.valid">Add</button>
+            </div>
+        </form>
+
+        <div *ngIf="errors?.length > 0 " class="errors">
+            {{ errors | json }}
+        </div>
+    </div>

@@ -4,7 +4,7 @@ export class Client {
     lastName: string;
     businessName: string;
     email: string;
-    phone: number;
+    phone: string;
     address: string;
     city: string;
     state: string;

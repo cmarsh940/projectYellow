@@ -61,20 +61,21 @@ const routes: Routes = [
         component: SurveyAnalyticsComponent
       },
       {
-        path: "user",
+        path: "user/:id",
         pathMatch: "full",
         component: UserComponent
       },
       {
-        path: "user/:id",
-        pathMatch: "full",
-        component: EditUserComponent
-      },
-      {
-        path: "user/add",
+        path: "user/:id/add",
         pathMatch: "full",
         component: AddUserComponent
+      },
+      {
+        path: "user/:id/:id",
+        pathMatch: "full",
+        component: EditUserComponent
       }
+      
     ]
   }
 ];

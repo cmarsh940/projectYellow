@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Client = mongoose.model('Client');
 
 class UsersController {
     index(req, res) {
@@ -18,7 +19,15 @@ class UsersController {
                 console.log("*** SERVER CREATING ERROR", err);
                 return res.json(err);
             }
-            return res.json(user)
+            console.log("CREATED USER", user)
+            Client.findByIdAndUpdate(req.body.surveyOwner, { $push: { users: user._id } }, { new: true }, (err, client) => {
+                if (err) {
+                    console.log("___ PUSHING USER TO CLIENT ERROR ___", err);
+                    return res.json(err);
+                }
+                console.log("CLIENT", client);
+                return res.json(user)
+            })
         })
     }
 
