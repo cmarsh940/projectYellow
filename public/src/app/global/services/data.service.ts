@@ -55,6 +55,16 @@ export class DataService<Type> {
       );
   }
 
+  public getClientsUsers(ns: string, id: string): Observable<any> {
+    console.log("*** GET CLIENTS USERS ***");
+    console.log("*** CLIENTS NAME SPACE ***", ns);
+    console.log("*** CLIENTS ID ***", id);
+    return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
+      map(this.extractData),
+      catchError(this.handleError('getSingle', []))
+    );
+  }
+
   public getSingle(ns: string, id: string): Observable<any> {
     console.log("*** GET ***");
     return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(

@@ -1,1 +1,40 @@
-<h1>USER LIST</h1>
+<mat-table [dataSource]="dataSource" [trackBy]="TrackById">
+
+    <!-- Owner Column -->
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            {{ element.name }}
+        </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.email }} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="phone">
+        <mat-header-cell *matHeaderCellDef> Phone # </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.phone }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>
+            <span> Send Message </span>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element" class="view">
+            <mat-icon [routerLink]="['/takeSurvey', element._id]" color="accent">
+                <i class="material-icons">textsms</i>
+            </mat-icon>
+        </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+<mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50, 100]" [showFirstLastButtons]="true"
+    [length]="totalSize" [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+</mat-paginator>
+
+{{ users | json }}

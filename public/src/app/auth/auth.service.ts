@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagesService } from './../global/services/messages.service';
 import { Client } from './../global/models/client';
 import { Http } from '@angular/http';
-import { Injectable, Type } from '@angular/core';
+import { Injectable, Type, ɵConsole } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from '../global/services/http-error-handler.service';
@@ -143,10 +143,11 @@ export class AuthService {
   getAuthorizationToken() {
     console.log("HIT GET AUTH TOKEN FROM AUTH SERVICE")
     if (sessionStorage.getItem('token') === null) {
+      console.log("AUTHORIZATION FAILED");
       return false;
     }
     else {
-      const data = JSON.parse(sessionStorage.getItem('token'));
+      const data = JSON.parse(sessionStorage.getItem('token')); 
       return data
     }
   }

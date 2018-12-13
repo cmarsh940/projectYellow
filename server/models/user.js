@@ -9,12 +9,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         maxlength: [200, "Email cannot be greater then 200 characters"],
         trim: true,
-        validate: {
-            validator: function (email) {
-                return /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email);
-            },
-            message: "Please enter the email in the correct format."
-        }
+        unique: false
     },
     phone: {
         type: String,

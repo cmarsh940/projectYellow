@@ -31,30 +31,31 @@ class UsersController {
         })
     }
 
-    authenticate(req, res) {
-        User.findOne({ email: req.body.email }, (err, user) => {
-            if (err) {
-                return res.json(err);
-            }
-            if (user && user.authenticate(req.body.password)) {
-                req.session.user_id = user._id;
-                return res.json(user);
-            }
-            return res.json({
-                errors: {
-                    login: {
-                        message: 'Invalid credentials'
-                    }
+
+    showClientsUsers(req, res) {
+        console.log("*** HIT SHOW CLIENTS USERS ***", req);
+        // User.$where('this.').exec(function (err, docs) { });
+        Client.findById({ _id: req.params.id }).lean()
+            .populate('users')
+            .exec(function (err, doc) {
+                if (err) {
+                    console.log("ERROR FINDING CLIENT AND POPULATING USERS", err);
+                    return res.json(err); 
                 }
+                
+                let clientsUsers = doc.users;
+                console.log("RETURNING CLIENTS USERS", clientsUsers);
+                return res.json(clientsUsers);
             });
-        });
     }
 
     show(req, res) {
         User.findById(req.params.id, (err, user) => {
             if (err) {
+                console.log("ERROR FINDING USER", err);
                 return res.json(err);
             }
+            console.log("RETURNING USER", user);
             return res.json(user);
         });
     }
@@ -66,29 +67,13 @@ class UsersController {
             { new: true },
             (err, user) => {
                 if (err) {
+                    console.log("ERROR UPDATING USER", err);
                     return res.json(err);
                 }
+                console.log("RETURNING UPDATED USER", user);
                 return res.json(user);
             }
         );
-    }
-
-    session(req, res) {
-        if (req.session.user_id) {
-            User.findById(req.session.user_id, (err, user) => {
-                if (err) {
-                    return res.json(err);
-                }
-                return res.json(user);
-            });
-        } else {
-            return res.json({ status: false });
-        }
-    }
-
-    logout(req, res) {
-        delete req.session.user_id;
-        return res.json({ status: true });
     }
 
     delete(req, res) {

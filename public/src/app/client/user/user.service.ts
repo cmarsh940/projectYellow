@@ -21,6 +21,12 @@ export class UserService {
     return this.dataService.getAll(this.NAMESPACE);
   }
 
+  public getClientsUsers(id: any): Observable<any> {
+    console.log("HIT SERVICE GET CLIENTS USERS");
+    console.log("*** ID ***", id);
+    return this.dataService.getClientsUsers(this.NAMESPACE, id);
+  }
+
   public getparticipant(id: any): Observable<User> {
     return this.dataService.getSingle(this.NAMESPACE, id);
   }
