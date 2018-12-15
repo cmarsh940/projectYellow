@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    answers: [String],
     name: {
         type: String,
         maxlength: [200, "First name cannot be greater then 200 characters"]
     },
     email: {
         type: String,
-        maxlength: [200, "Email cannot be greater then 200 characters"],
-        trim: true,
-        unique: false
     },
     phone: {
         type: String,
@@ -26,9 +24,21 @@ const UserSchema = new mongoose.Schema({
         }
         
     },
+    textSent: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    answeredSurvey: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    submissionDate: {
+        type: Date
+    },
     surveyOwner: { type: mongoose.Schema.Types.ObjectId, ref: "Client" },
     _survey: { type: mongoose.Schema.Types.ObjectId, ref: "Survey" },
-    answers: [String],
 }, {
     timestamps: true
 });

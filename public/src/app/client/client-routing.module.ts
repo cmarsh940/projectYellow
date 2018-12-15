@@ -14,6 +14,7 @@ import { UserComponent } from './user/user.component';
 import { EditUserComponent } from './user/edit-user/edit-user.component';
 import { AddUserComponent } from './user/add-user/add-user.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { UploadUsersComponent } from './user/upload-users/upload-users.component';
 
 const routes: Routes = [
   {
@@ -70,6 +71,12 @@ const routes: Routes = [
         pathMatch: "full",
         component: AddUserComponent
       },
+      {
+        path: "user/:id/upload",
+        pathMatch: "full",
+        component: UploadUsersComponent
+      },
+
       {
         path: "user/:id/:id",
         pathMatch: "full",

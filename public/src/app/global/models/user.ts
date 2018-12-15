@@ -6,6 +6,8 @@ export class User {
     surveyOwner: any;
     _surveys: any;
     submissionDate: any;
+    textSent: boolean;
+    answeredSurvey: boolean;
     createdAt: any;
     updatedAt: any;
     errors: any;

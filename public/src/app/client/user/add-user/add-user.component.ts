@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
-import { forbiddenNameValidator } from 'src/app/global/validators/forbidden-name.directive';
 import { ErrorStateMatcher } from '@angular/material';
 
 import { User } from '../../../global/models/user';
 import { UserService } from '../user.service';
+import { Subscription } from 'rxjs';
+import { Location } from "@angular/common";
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -21,12 +22,15 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: "./add-user.component.html",
   styleUrls: ["./add-user.component.css"]
 })
-export class AddUserComponent implements OnInit {
+
+export class AddUserComponent implements OnInit, OnDestroy {
   errors: string[] = [];
   newUser: User = new User();
   myForm: FormGroup;
   currentClient = JSON.parse(sessionStorage.getItem('currentClient'));
   matcher = new MyErrorStateMatcher();
+  surveyId: string = "";
+  _routeSubscription: Subscription;
 
   private participant;
 
@@ -41,6 +45,8 @@ export class AddUserComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private _router: Router,
+    private _activatedRoute: ActivatedRoute,
+    private location: Location,
     fb: FormBuilder
   ) {
     this.myForm = fb.group({
@@ -50,8 +56,16 @@ export class AddUserComponent implements OnInit {
     }, { updateOn: 'blur' });
   }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+      this.surveyId = params['id'];
+      console.log("SURVEYS ID", this.surveyId);
+    });
+  }
 
+  ngOnDestroy() {
+    this._routeSubscription.unsubscribe();
+  }
 
   addParticipant(form: any) {
     this.errors = [];
@@ -60,7 +74,10 @@ export class AddUserComponent implements OnInit {
       'name': this.nameFormControl.value,
       'email': this.emailFormControl.value,
       'phone': `+1${this.phoneFormControl.value}`,
-      'surveyOwner': this.currentClient._id
+      'surveyOwner': this.currentClient._id,
+      '_survey': this.surveyId,
+      'textSent': false,
+      'answeredSurvey': false
     };
 
     this._userService.addParticipant(this.participant).subscribe((data) => {
@@ -76,7 +93,8 @@ export class AddUserComponent implements OnInit {
             'email': null,
             'phone': null,
           });
-          // this._router.navigateByUrl("/login");
+          this.location.back();
+          this._router.navigate(['../', { id: this.surveyId }], { relativeTo: this._activatedRoute });
         }
       }
     })

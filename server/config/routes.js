@@ -148,12 +148,11 @@ module.exports = function (app) {
     ]);
 
     // USERS
-    // app.get('/api/users', Users.index);
-    app.get('/api/users/:id', Users.showClientsUsers);
     app.post('/api/users', [
         validJWTNeeded,
         Users.create
     ]);
+    app.get('/api/users/:id', Users.showClientsUsers);
     app.delete('/api/users/:id', [
         validJWTNeeded,
         Users.delete

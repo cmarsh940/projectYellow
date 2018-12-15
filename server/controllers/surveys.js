@@ -168,6 +168,7 @@ class SurveysController {
             }
           })
         }
+        survey.private = req.body.private;
         survey.name = req.body.name;
         survey.category = req.body.category;
         survey.save((err, updatedSurvey) => {

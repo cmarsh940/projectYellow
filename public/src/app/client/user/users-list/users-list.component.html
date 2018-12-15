@@ -28,6 +28,11 @@
             <mat-icon [routerLink]="['/takeSurvey', element._id]" color="accent">
                 <i class="material-icons">textsms</i>
             </mat-icon>
+            <mat-icon (click)="destroyUser(element._id)" matTooltip="Delete" color="warn">
+                <i class="material-icons">
+                    delete_forever
+                </i>
+            </mat-icon>
         </mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

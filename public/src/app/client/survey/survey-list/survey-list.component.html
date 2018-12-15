@@ -32,11 +32,13 @@
        <span> Action </span>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> 
-        <mat-icon [routerLink]="['/user', element._id]" matTooltip="Send text message to take survey" color="primary">
-          <i class="material-icons">
-            textsms
-          </i>
-        </mat-icon> 
+        <div *ngIf="element.private">
+          <mat-icon [routerLink]="['/user', element._id]" matTooltip="Send text message to take survey" color="primary">
+            <i class="material-icons">
+              textsms
+            </i>
+          </mat-icon>
+        </div> 
         <mat-icon [routerLink]="['/takeSurvey', element._id]" matTooltip="Take Survey" color="primary">
           <i class="material-icons">
             visibility

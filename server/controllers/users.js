@@ -1,17 +1,10 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const Client = mongoose.model('Client');
+const Survey = mongoose.model('Survey');
 
 class UsersController {
-    index(req, res) {
-        User.find({}, (err, users) => {
-            if (err) {
-                return res.json(err);
-            }
-            return res.json(users);
-        });
-    }
-
+    
     create(req, res) {
         User.create(req.body, (err, user) => {
             console.log("*** SERVER CREATING USER")
@@ -25,17 +18,21 @@ class UsersController {
                     console.log("___ PUSHING USER TO CLIENT ERROR ___", err);
                     return res.json(err);
                 }
-                console.log("CLIENT", client);
-                return res.json(user)
+                Survey.findByIdAndUpdate(req.body._survey, { $push: { users: user._id } }, { new: true }, (err, survey) => {
+                    if (err) {
+                        console.log("___ PUSHING USER TO SURVEY ERROR ___", err);
+                        return res.json(err);
+                    }
+                    return res.json(user)
+                })
             })
         })
     }
 
 
     showClientsUsers(req, res) {
-        console.log("*** HIT SHOW CLIENTS USERS ***", req);
-        // User.$where('this.').exec(function (err, docs) { });
-        Client.findById({ _id: req.params.id }).lean()
+        console.log("*** HIT SHOW CLIENTS USERS ***");
+        Survey.findById({ _id: req.params.id }).lean()
             .populate('users')
             .exec(function (err, doc) {
                 if (err) {
@@ -55,7 +52,6 @@ class UsersController {
                 console.log("ERROR FINDING USER", err);
                 return res.json(err);
             }
-            console.log("RETURNING USER", user);
             return res.json(user);
         });
     }
@@ -77,7 +73,7 @@ class UsersController {
     }
 
     delete(req, res) {
-        User.findByIdAndRemove(req.params.id, (err, user) => {
+        User.findByIdAndRemove(req.params.id, (err) => {
             if (err) {
                 return res.json(err);
             } else {

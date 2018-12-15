@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { DataService } from '../../global/services/data.service';
 import { User } from './../../global/models/user';
+import { Survey } from 'src/app/global/models/survey';
 
 
 @Injectable({
