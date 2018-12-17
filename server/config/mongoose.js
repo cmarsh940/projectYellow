@@ -2,19 +2,14 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 var path = require('path');
 let models_path = __dirname + '/../models';
+const uri = require('./config').uri;
+const options = require('./config').options;
 
-mongoose.connect('mongodb://localhost:27017/MESurveys', { useNewUrlParser: true }).then((res) => {
-        console.log("Success!!")
-    }).catch((e) => { 
-        console.log("error is: " + e); 
-    });
-
-mongoose.Promise = global.Promise;
-
-const db = mongoose.connection;
-
-//Bind connection to error event (to get notification of connection errors)
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+mongoose.connect(uri, { useNewUrlParser: true }).then((res) => {
+        console.log("Success!!", res);
+    }).catch((e) => {
+    console.log("error is: " + e);
+});
 
 fs.readdirSync(models_path).forEach((file) => {
     if (file.includes('.js')) {

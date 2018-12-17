@@ -2,7 +2,6 @@ const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
 const path = require('path');
 const Payments = require('../controllers/payments');
-const Subscriptions = require('../controllers/subscriptions');
 const Surveys = require('../controllers/surveys');
 const Users = require('../controllers/users');
 const Questions = require('../controllers/questions');
@@ -94,31 +93,6 @@ module.exports = function (app) {
     app.get('/api/questions/:id', Questions.show);
     app.put('/api/questions/:id', Questions.update);
 
-    // SUBSCRIPTIONS
-    app.get('/api/subscriptions', [
-        validJWTNeeded,
-        Subscriptions.index
-    ]);
-    app.post('/api/subscriptions', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.create
-    ]);
-    app.delete('/api/subscriptions/:id', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.delete
-    ]);
-    app.get('/api/subscriptions/:id', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.show
-    ]);
-    app.put('/api/subscriptions/:id', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.update
-    ]);
     
     // SURVEYS
     app.get('/api/surveys', Surveys.index);

@@ -78,3 +78,7 @@ img {
 h5 {
     margin:0;
 }
+
+#cancel-subscription {
+    margin: 0!important;
+}

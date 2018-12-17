@@ -126,6 +126,10 @@ const ClientSchema = new mongoose.Schema({
     default: Date.now()
   },
 
+  paidThroughDate: {
+    type: Date
+  },
+
   paymentToken: {
     type: String
   },

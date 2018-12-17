@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Subscription = mongoose.model('Subscription');
+
 
 class SubscriptionsController {
     index(req, res) {

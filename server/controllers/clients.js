@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Client = mongoose.model('Client');
-const Subscription = mongoose.model('Subscription');
 
 const config = require("../config/config");
 const secret = require('../config/config').jwt_secret;
@@ -17,9 +16,10 @@ const braintree = require('braintree');
 
 const nodemailer = require('nodemailer');
 
+const tempSub = require("../models/jsonModels/subscription");
+
 function uploadToS3(file, client) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
-  console.log("*** S3 FILE:", file)
   let s3bucket = new AWS.S3({
     accessKeyId: IAM_USER_KEY,
     secretAccessKey: IAM_USER_SECRET,
@@ -35,9 +35,8 @@ function uploadToS3(file, client) {
     s3bucket.upload(params, function (err, data) {
       if (err) {
         console.log("*** Error in callback: ", err);
-        console.log("*** UPLOAD PARAMS: ", params);
       }
-      console.log("**** SUCCESS", data);
+      console.log("**** SUCCESS ****");
     });
   });
 }
@@ -100,7 +99,6 @@ class ClientsController {
 
   create(req, res) {
     console.log("*** SERVER HIT CREATE CLIENT");
-    console.log("*** REQ BODY", req.body);
     if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {
@@ -116,7 +114,7 @@ class ClientsController {
         console.log("*** SERVER CREATING ERROR", err);
         return res.json(err);
       }
-      console.log("*** SERVER CLIENT CREATED", client);
+      console.log("*** SERVER CLIENT CREATED");
       let email = {
         client: client._id,
         contact: client.email,
@@ -130,7 +128,6 @@ class ClientsController {
 
   authenticate(req, res) {
     console.log("___ SERVER HIT AUTHENTICATE ___");
-    console.log("___ SENT TO SERVER ___", req.body);
 
     Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).select("+password").populate('_surveys').exec((err, client) => {
       if (err) {
@@ -139,7 +136,7 @@ class ClientsController {
       }
       if (client && client.authenticate(req.body.password)) {
 
-        console.log("_____CLIENT LOGGING IN_____", client);
+        console.log("_____CLIENT LOGGING IN_____");
         var token = jwt.sign({ client }, secret, { expiresIn: '1h'});
 
         // CHECK IF CLIENT IS IN TRIAL OR SUBSCRIPTION
@@ -170,19 +167,62 @@ class ClientsController {
             if (err) {
               console.log("ERROR INSIDE", err);
             }
-            req.session.client = {
-              _id: client._id,
-              n: client.firstName + " " + client.lastName,
-              a8o1: client.role,
-              b8o1: client._subscription,
-              c8o1: client.surveyCount,
-              s: client._surveys,
-              status: result.status,
-              token: `Bearer ${token}`,
-              v: client.verified
-            };
-            return res.json(req.session.client);
-          });
+
+            // CHECK IF STORED PAYED THROUGH DATE IS BEHIND THE SUBSCRIBED PAYTHROUGH DATE
+            if (result.paidThroughDate > client.paidThroughDate) {
+
+              let subObject = {};
+              for (let sub of tempSub) {
+                if (sub.name === client._subscription) {
+                  subObject = sub
+                }
+              }
+
+              Client.findById(client._id, (err, paidClient) => {
+                if (err) {
+                  console.log("ERROR FINDING CLIENT TO UPDATE", err)
+                  return res.json(err);
+                }
+                paidClient._subscription = subObject.name;
+                paidClient.surveyCount += subObject.surveyCount;
+                paidClient.paidThroughDate = result.paidThroughDate;
+                paidClient.subscriptionStatus = result.status;
+                paidClient.save((err, subscribedClient) => {
+                  if (err) {
+                    console.log(`___ SAVE SUBSCRIBED CLIENT ERROR ___`, err);
+                    return res.json(err);
+                  }
+                  console.log(`___ UPDATED SUBSCRIBED CLIENT ___`, subscribedClient);
+                  req.session.client = {
+                    _id: subscribedClient._id,
+                    n: subscribedClient.firstName + " " + subscribedClient.lastName,
+                    a8o1: subscribedClient.role,
+                    b8o1: subscribedClient._subscription,
+                    c8o1: subscribedClient.surveyCount,
+                    s: subscribedClient._surveys,
+                    status: subscribedClient.status,
+                    token: `Bearer ${token}`,
+                    v: subscribedClient.verified
+                  };
+                  return res.json(req.session.client);
+                });
+              });
+            } else {
+              
+              req.session.client = {
+                _id: client._id,
+                n: client.firstName + " " + client.lastName,
+                a8o1: client.role,
+                b8o1: client._subscription,
+                c8o1: client.surveyCount,
+                s: client._surveys,
+                status: result.status,
+                token: `Bearer ${token}`,
+                v: client.verified
+              };
+              return res.json(req.session.client);
+            }
+          })
         }
       }
     })
@@ -279,7 +319,7 @@ class ClientsController {
           console.log("___ UPDATE CLIENT ERROR ___",err);
           return res.json(err);
         }
-        console.log("___ UPDATED CLIENT ___", client);
+        console.log("___ UPDATED CLIENT ___");
         return res.json(client);
       });
     } else {

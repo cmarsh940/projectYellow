@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
 import { CheckoutService } from './checkout.service';
 
 import { ActivatedRoute, Router } from '@angular/router';
-// import { Location } from "@angular/common";
+import { Location } from "@angular/common";
 
 import { HttpClient } from '@angular/common/http';
 import { subscription } from 'src/app/global/models/subscription';
@@ -45,7 +45,7 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
     private route: ActivatedRoute,
     private _router: Router,
     private _profileService: ProfileService,
-    // private location: Location
+    private location: Location
     ) { }
 
   ngOnInit() {
@@ -188,7 +188,7 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
           self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, self.currentClient).subscribe({
             next: res => {
               if (res.success === false) {
-                alert("Your payment was declined");
+                alert("YOUR PAYMENT WAS DECLINED");
                 console.log("api error", res);
               } else {
                 console.log("Response", res)
@@ -196,15 +196,14 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
               }
             }
           });
-          this._router.navigate(['/dashboard']);
         });
       });
   }
 
 
-  // cancel() {
-  //   this.location.back();
-  // }
+  cancel() {
+    this.location.back();
+  }
 
 
   getClient() {

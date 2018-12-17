@@ -52,6 +52,9 @@
         <h5>Subscription: {{ currentClient._subscription }}</h5>
         <div class="action">
           <button mat-raised-button (click)="openSubscriptionDialog()" color="accent">Upgrade Subscription</button>
+          <div *ngIf="currentClient._subscription !== 'FREE'">
+            <button mat-raised-button (click)="cancelSubscription()" color="warn" id="cancel-subscription">Cancel Subscription</button>
+          </div>
         </div>
       </div>
     </div>
