@@ -29,6 +29,38 @@ class UsersController {
         })
     }
 
+    upload(req, res) {
+        console.log("Params", req.params);
+        console.log("HIT UPLOAD", req.body);
+
+        let users = req.body;
+        for (const user of users) {
+            
+            User.create(user, (err, user) => {
+                console.log("*** SERVER CREATING USER")
+                if (err) {
+                    console.log("*** SERVER CREATING ERROR", err);
+                    return res.json(err);
+                }
+                console.log("CREATED USER", user)
+                Client.findByIdAndUpdate(user.surveyOwner, { $push: { users: user._id } }, { new: true }, (err, client) => {
+                    if (err) {
+                        console.log("___ PUSHING USER TO CLIENT ERROR ___", err);
+                        return res.json(err);
+                    }
+                    Survey.findByIdAndUpdate(req.params.id, { $push: { users: user._id } }, { new: true }, (err, survey) => {
+                        if (err) {
+                            console.log("___ PUSHING USER TO SURVEY ERROR ___", err);
+                            return res.json(err);
+                        }
+                        console.log("FINISHED CREATING USER", user);
+                    })
+                })
+            })
+        }
+        return res.json(users);
+    }
+
 
     showClientsUsers(req, res) {
         console.log("*** HIT SHOW CLIENTS USERS ***");

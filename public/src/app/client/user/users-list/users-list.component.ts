@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from 'src/app/global/models/user';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { UploadUsersComponent } from '../upload-users/upload-users.component';
 
+import * as XLSX from 'xlsx';
 
+type AOA = any[];
 @Component({
   selector: 'users-list',
   templateUrl: './users-list.component.html',
@@ -28,10 +31,18 @@ export class UsersListComponent implements OnInit {
   displayedColumns = ['name', 'email', 'phone', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  uploadData: AOA = [];
+  wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
+  fileName: string = 'surveyUsers.xlsx';
+
+  
+
   
   constructor(
     private _userService: UserService,
-    private _activatedRoute: ActivatedRoute
+    private _activatedRoute: ActivatedRoute,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -58,6 +69,19 @@ export class UsersListComponent implements OnInit {
         this.totalSize = this.array.length;
         this.iterator();
       })
+  }
+
+  openUploadDialog() {
+    const dialogRef = this.dialog.open(UploadUsersComponent, {
+      data: {
+        survey: this.surveyId,
+        surveyOwner: JSON.parse(localStorage.getItem('t940'))
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
   TrackById(index: number, user: User) {
@@ -93,5 +117,17 @@ export class UsersListComponent implements OnInit {
     } else {
       window.close();
     }
+  }
+
+  export(): void {
+    /* generate worksheet */
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.dataSource);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
 }

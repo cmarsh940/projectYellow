@@ -47,6 +47,7 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
 
 // GUARDS
 import { AuthGuard } from './global/guards/auth.guard';
+import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { AuthGuard } from './global/guards/auth.guard';
   entryComponents: [
     EditClientComponent,
     SubscriptionOverlayComponent,
-    RightsComponent
+    RightsComponent,
+    UploadUsersComponent
   ],
   bootstrap: [AppComponent]
 })

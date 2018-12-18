@@ -36,8 +36,13 @@ export class UserService {
     return this.dataService.add(this.NAMESPACE, itemToAdd);
   }
 
+
   public updateParticipant(id: any, itemToUpdate: any): Observable<User> {
     return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
+  }
+
+  public uploadParticipants(id: any, itemToUpdate: any): Observable<User> {
+    return this.dataService.uploadParticipants(this.NAMESPACE, id, itemToUpdate);
   }
 
   public deleteParticipant(id: any): Observable<User> {

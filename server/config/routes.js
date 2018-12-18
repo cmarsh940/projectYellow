@@ -135,6 +135,10 @@ module.exports = function (app) {
         validJWTNeeded,
         Users.update
     ]);
+    app.post('/api/usersUpload/:id', [
+        validJWTNeeded,
+        Users.upload
+    ]);
     
 
     // CATCH ALL
