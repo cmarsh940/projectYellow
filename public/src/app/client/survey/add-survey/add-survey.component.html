@@ -25,10 +25,12 @@
       <!-- The repeated question template -->
       <mat-card>
         <mat-card-header>
-          <h6>Question #{{i + 1}}</h6>
-          <span class="spacer"></span>
-          <mat-slide-toggle formControlName="isRequired" [checked]="checked">required</mat-slide-toggle>
-          <mat-icon matSuffix (click)="removeQuestion(i)">clear</mat-icon>
+          <div class="top-card">
+            <mat-slide-toggle formControlName="isRequired" [checked]="checked" class="required">required</mat-slide-toggle>
+            <span class="spacer"></span>
+            <mat-icon matSuffix (click)="removeQuestion(i)" class="clear-icon">clear</mat-icon>
+          </div>
+          <h6 class="question-number">Question #{{i + 1}}</h6>
         </mat-card-header>
         <mat-card-content>
             <mat-form-field>

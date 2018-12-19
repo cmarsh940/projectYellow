@@ -32,33 +32,35 @@
        <span> Action </span>
       </mat-header-cell>
       <mat-cell *matCellDef="let element"> 
-        <div *ngIf="element.private">
-          <mat-icon [routerLink]="['/user', element._id]" matTooltip="Send text message to take survey" color="primary">
+        <div class="action-icons">
+          <div *ngIf="element.private" class="private-icon">
+            <mat-icon [routerLink]="['/user', element._id]" matTooltip="Send text message to take survey" color="primary">
+              <i class="material-icons">
+                textsms
+              </i>
+            </mat-icon>
+          </div> 
+          <!-- <mat-icon [routerLink]="['/takeSurvey', element._id]" matTooltip="Take Survey" color="primary">
             <i class="material-icons">
-              textsms
+              visibility
+            </i>
+          </mat-icon>  -->
+          <mat-icon [routerLink]="['edit', element._id]" matTooltip="Edit" color="accent">
+            <i class="material-icons">
+              edit
+            </i>
+          </mat-icon> 
+          <mat-icon [routerLink]="['analytics', element._id]" matTooltip="Results" color="primary">
+            <i class="material-icons">
+              assessment
             </i>
           </mat-icon>
-        </div> 
-        <mat-icon [routerLink]="['/takeSurvey', element._id]" matTooltip="Take Survey" color="primary">
-          <i class="material-icons">
-            visibility
-          </i>
-        </mat-icon> 
-        <mat-icon [routerLink]="['edit', element._id]" matTooltip="Edit" color="accent">
-          <i class="material-icons">
-            edit
-          </i>
-        </mat-icon> 
-        <mat-icon [routerLink]="['analytics', element._id]" matTooltip="Results" color="primary">
-          <i class="material-icons">
-            assessment
-          </i>
-        </mat-icon>
-        <mat-icon (click)="destroySurvey(element._id)" matTooltip="Delete"  color="warn">
-          <i class="material-icons">
-            delete_forever
-          </i>
-        </mat-icon> 
+          <mat-icon (click)="destroySurvey(element._id)" matTooltip="Delete"  color="warn">
+            <i class="material-icons">
+              delete_forever
+            </i>
+          </mat-icon> 
+        </div>
       </mat-cell>
     </ng-container>
 

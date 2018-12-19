@@ -36,11 +36,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   nameFormControl = new FormControl('');
   emailFormControl = new FormControl('');
-  phoneFormControl = new FormControl('', [
-    Validators.pattern('[0-9]*'),
-    Validators.minLength(10),
-    Validators.maxLength(14),
-  ]);
+  phoneFormControl = new FormControl('');
 
   constructor(
     private _userService: UserService,
@@ -70,15 +66,30 @@ export class AddUserComponent implements OnInit, OnDestroy {
   addParticipant(form: any) {
     this.errors = [];
 
-    this.participant = {
-      'name': this.nameFormControl.value,
-      'email': this.emailFormControl.value,
-      'phone': `+1${this.phoneFormControl.value}`,
-      'surveyOwner': this.currentClient._id,
-      '_survey': this.surveyId,
-      'textSent': false,
-      'answeredSurvey': false
-    };
+    console.log("Phone value is:", this.phoneFormControl.value);
+    if (!this.phoneFormControl.value) {
+      this.participant = {
+        'name': this.nameFormControl.value,
+        'email': this.emailFormControl.value,
+        'phone': this.phoneFormControl.value,
+        'surveyOwner': this.currentClient._id,
+        '_survey': this.surveyId,
+        'textSent': false,
+        'answeredSurvey': false
+      };
+
+    } else {
+
+      this.participant = {
+        'name': this.nameFormControl.value,
+        'email': this.emailFormControl.value,
+        'phone': `+1${this.phoneFormControl.value}`,
+        'surveyOwner': this.currentClient._id,
+        '_survey': this.surveyId,
+        'textSent': false,
+        'answeredSurvey': false
+      }
+    }
 
     this._userService.addParticipant(this.participant).subscribe((data) => {
       if (data) {

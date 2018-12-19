@@ -27,4 +27,8 @@ export class ProfileService {
   public deleteParticipant(id: any): Observable<Client> {
     return this.dataService.delete(this.NAMESPACE, id);
   }
+  public cancelSubscription(id: any): Observable<Client> {
+    let ns = "payment/cancel"
+    return this.dataService.cancel(ns, id);
+  }
 }

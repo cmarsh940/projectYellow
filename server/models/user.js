@@ -4,15 +4,18 @@ const UserSchema = new mongoose.Schema({
     answers: [String],
     name: {
         type: String,
-        maxlength: [200, "First name cannot be greater then 200 characters"]
+        maxlength: [200, "First name cannot be greater then 200 characters"],
+        lowercase: true,
+        trim: true
     },
     email: {
         type: String,
+        lowercase: true,
+        trim: true
     },
     phone: {
         type: String,
         trim: true,
-        minlength: 10,
         maxlength: 12,
         lowercase: true,
         validate: {

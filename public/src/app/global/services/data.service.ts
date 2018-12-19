@@ -124,6 +124,14 @@ export class DataService<Type> {
     );
   }
 
+  public cancel(ns: string, id: string): Observable<any> {
+    console.log('what is the id to delete?', id);
+    console.log("*** DELETE ***");
+    return this.http.put<any>(this.actionUrl + ns + '/' + id, id).pipe(
+      catchError(this.handleError('Delete', []))
+    );
+  }
+
   private extractData(res: Response) {
     let body = res;
     return body || {};

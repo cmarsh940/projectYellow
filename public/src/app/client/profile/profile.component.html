@@ -52,7 +52,7 @@
         <h5 id="subscription">
           Subscription: {{ currentClient._subscription | titlecase }}
           <div *ngIf="currentClient._subscription !== 'FREE'" id="show">
-            <a (click)="cancelSubscription()" color="warn" id="cancel-subscription">Cancel Subscription</a>
+            <a (click)="cancelSubscription(currentClient.subscriptionId)" color="warn" id="cancel-subscription">Cancel Subscription</a>
           </div>
         </h5>
         <div class="action">

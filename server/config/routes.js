@@ -85,6 +85,7 @@ module.exports = function (app) {
     // PAYMENTS
     app.get('/api/braintree/getclienttoken', Payments.getClientToken);
     app.post('/api/braintree/createpurchase', Payments.checkout);
+    app.put('/api/payment/cancel/:id', Payments.cancelSubscription);
 
     // QUESTIONS
     app.get('/api/questions', Questions.index);

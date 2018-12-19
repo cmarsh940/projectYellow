@@ -73,14 +73,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
       console.log(`Dialog result: ${result}`);
     });
   }
-  cancelSubscription() {
-    const dialogRef = this.dialog.open(SubscriptionOverlayComponent, {
-      data: this.currentClient,
-    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+
+  cancelSubscription(id: string) {
+      let r = window.confirm("Are you sure you want to cancel your subscription");
+      if (r == true) {
+        this._profileService.cancelSubscription(id).subscribe(res => {
+          console.log("DESTROY SURVEY");
+          if (true) {
+            this.getClient();
+          }
+        });
+      } else {
+        window.close();
+        this.getClient();
+      }
   }
 
 

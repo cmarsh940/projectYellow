@@ -119,7 +119,10 @@ const ClientSchema = new mongoose.Schema({
     trim: true,
     default: "CLIENT"
   },
-
+  
+  lastUseDate: {
+    type: Date
+  },
   paymentDate: {
     type: Date,
     required: true,
@@ -150,7 +153,7 @@ const ClientSchema = new mongoose.Schema({
 
   _subscription: {
     type: String,
-    enum: ['FREE', 'BASIC', 'PRO', 'ELITE'],
+    enum: ['FREE', 'BASIC', 'PRO', 'ELITE', 'CANCELED'],
     required: true,
     uppercase: true,
     trim: true,
