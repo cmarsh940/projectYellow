@@ -2,7 +2,6 @@ const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
 const path = require('path');
 const Payments = require('../controllers/payments');
-const Subscriptions = require('../controllers/subscriptions');
 const Surveys = require('../controllers/surveys');
 const Users = require('../controllers/users');
 const Questions = require('../controllers/questions');
@@ -33,8 +32,13 @@ async function validJWTNeeded(req, res, next) {
             }
 
         } catch (err) {
-            console.log("ERROR", err)
-            return res.status(403).send();
+            if (err.name === 'TokenExpiredError') {
+                console.log("ERROR TOKEN EXIRED", err);
+                return res.json(err);
+            } else {
+                console.log("ERROR", err)
+                return res.status(403).send();
+            }
         }
     } else {
         if (req.method === 'GET') {
@@ -50,7 +54,10 @@ async function validJWTNeeded(req, res, next) {
 
 module.exports = function (app) {
     // CLIENT
-    app.get('/api/clients', Clients.index);
+    app.get('/api/clients', [
+        validJWTNeeded,
+        Clients.index
+    ]);
     app.post('/api/clients', Clients.create);
     app.delete('/api/clients', Clients.logout);
     app.post('/api/clients/login', Clients.authenticate);
@@ -86,31 +93,6 @@ module.exports = function (app) {
     app.get('/api/questions/:id', Questions.show);
     app.put('/api/questions/:id', Questions.update);
 
-    // SUBSCRIPTIONS
-    app.get('/api/subscriptions', [
-        validJWTNeeded,
-        Subscriptions.index
-    ]);
-    app.post('/api/subscriptions', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.create
-    ]);
-    app.delete('/api/subscriptions/:id', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.delete
-    ]);
-    app.get('/api/subscriptions/:id', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.show
-    ]);
-    app.put('/api/subscriptions/:id', [
-        validJWTNeeded,
-        PermissionMiddleware.minimumPermissionLevelRequired(ADMIN),
-        Subscriptions.update
-    ]);
     
     // SURVEYS
     app.get('/api/surveys', Surveys.index);
@@ -140,11 +122,23 @@ module.exports = function (app) {
     ]);
 
     // USERS
-    app.get('/api/users', Users.index);
-    app.post('/api/users', Users.create);
-    app.delete('/api/users/:id', Users.delete);
-    app.get('/api/users/:id', Users.show);
-    app.put('/api/users/:id', Users.update);
+    app.post('/api/users', [
+        validJWTNeeded,
+        Users.create
+    ]);
+    app.get('/api/users/:id', Users.showClientsUsers);
+    app.delete('/api/users/:id', [
+        validJWTNeeded,
+        Users.delete
+    ]);
+    app.put('/api/users/:id', [
+        validJWTNeeded,
+        Users.update
+    ]);
+    app.post('/api/usersUpload/:id', [
+        validJWTNeeded,
+        Users.upload
+    ]);
     
 
     // CATCH ALL

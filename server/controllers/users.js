@@ -1,16 +1,10 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const Client = mongoose.model('Client');
+const Survey = mongoose.model('Survey');
 
 class UsersController {
-    index(req, res) {
-        User.find({}, (err, users) => {
-            if (err) {
-                return res.json(err);
-            }
-            return res.json(users);
-        });
-    }
-
+    
     create(req, res) {
         User.create(req.body, (err, user) => {
             console.log("*** SERVER CREATING USER")
@@ -18,32 +12,80 @@ class UsersController {
                 console.log("*** SERVER CREATING ERROR", err);
                 return res.json(err);
             }
-            return res.json(user)
+            console.log("CREATED USER", user)
+            Client.findByIdAndUpdate(req.body.surveyOwner, { $push: { users: user._id } }, { new: true }, (err, client) => {
+                if (err) {
+                    console.log("___ PUSHING USER TO CLIENT ERROR ___", err);
+                    return res.json(err);
+                }
+                Survey.findByIdAndUpdate(req.body._survey, { $push: { users: user._id } }, { new: true }, (err, survey) => {
+                    if (err) {
+                        console.log("___ PUSHING USER TO SURVEY ERROR ___", err);
+                        return res.json(err);
+                    }
+                    return res.json(user)
+                })
+            })
         })
     }
 
-    authenticate(req, res) {
-        User.findOne({ email: req.body.email }, (err, user) => {
-            if (err) {
-                return res.json(err);
-            }
-            if (user && user.authenticate(req.body.password)) {
-                req.session.user_id = user._id;
-                return res.json(user);
-            }
-            return res.json({
-                errors: {
-                    login: {
-                        message: 'Invalid credentials'
-                    }
+    upload(req, res) {
+        console.log("Params", req.params);
+        console.log("HIT UPLOAD", req.body);
+
+        let users = req.body;
+        for (const user of users) {
+            
+            User.create(user, (err, user) => {
+                console.log("*** SERVER CREATING USER")
+                if (err) {
+                    console.log("*** SERVER CREATING ERROR", err);
+                    return res.json(err);
                 }
+                console.log("CREATED USER", user)
+                Client.findByIdAndUpdate(user.surveyOwner, { $push: { users: user._id } }, { new: true }, (err, client) => {
+                    if (err) {
+                        console.log("___ PUSHING USER TO CLIENT ERROR ___", err);
+                        return res.json(err);
+                    }
+                    Survey.findByIdAndUpdate(req.params.id, { $push: { users: user._id } }, { new: true }, (err, survey) => {
+                        if (err) {
+                            console.log("___ PUSHING USER TO SURVEY ERROR ___", err);
+                            return res.json(err);
+                        }
+                        console.log("FINISHED CREATING USER", user);
+                    })
+                })
+            })
+        }
+        return res.json(users);
+    }
+
+
+    showClientsUsers(req, res) {
+        console.log("*** HIT SHOW CLIENTS USERS ***");
+        Survey.findById({ _id: req.params.id }).lean()
+            .populate('users')
+            .exec(function (err, doc) {
+                if (err) {
+                    console.log("ERROR FINDING CLIENT AND POPULATING USERS", err);
+                    return res.json(err); 
+                }
+                
+                let clientsUsers = {
+                    'id': doc._id,
+                    'users': doc.users,
+                    'private': doc.private
+                }
+                console.log("RETURNING CLIENTS USERS", clientsUsers);
+                return res.json(clientsUsers);
             });
-        });
     }
 
     show(req, res) {
         User.findById(req.params.id, (err, user) => {
             if (err) {
+                console.log("ERROR FINDING USER", err);
                 return res.json(err);
             }
             return res.json(user);
@@ -57,33 +99,17 @@ class UsersController {
             { new: true },
             (err, user) => {
                 if (err) {
+                    console.log("ERROR UPDATING USER", err);
                     return res.json(err);
                 }
+                console.log("RETURNING UPDATED USER", user);
                 return res.json(user);
             }
         );
     }
 
-    session(req, res) {
-        if (req.session.user_id) {
-            User.findById(req.session.user_id, (err, user) => {
-                if (err) {
-                    return res.json(err);
-                }
-                return res.json(user);
-            });
-        } else {
-            return res.json({ status: false });
-        }
-    }
-
-    logout(req, res) {
-        delete req.session.user_id;
-        return res.json({ status: true });
-    }
-
     delete(req, res) {
-        User.findByIdAndRemove(req.params.id, (err, user) => {
+        User.findByIdAndRemove(req.params.id, (err) => {
             if (err) {
                 return res.json(err);
             } else {

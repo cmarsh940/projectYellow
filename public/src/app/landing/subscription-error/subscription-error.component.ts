@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { RightsComponent } from '../rights/rights.component';
 
 @Component({
   selector: 'app-subscription-error',
   templateUrl: './subscription-error.component.html',
   styleUrls: ['./subscription-error.component.css']
 })
-export class SubscriptionErrorComponent implements OnInit {
+export class SubscriptionErrorComponent {
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
+  openDialog() {
+    const dialogRef = this.dialog.open(RightsComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
-
 }

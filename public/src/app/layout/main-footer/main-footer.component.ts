@@ -1,5 +1,5 @@
 import { RightsComponent } from './../../landing/rights/rights.component';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '../../../../node_modules/@angular/material';
 
 @Component({

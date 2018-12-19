@@ -57,11 +57,18 @@ const ClientSchema = new mongoose.Schema({
   },
 
   phone: {
-    type: Number,
+    type: String,
     required: [true, 'Phone number cannot be blank'],
     trim: true,
     minlength: 10,
     maxlength: 12,
+    lowercase: true,
+    validate: {
+      validator: function (phone) {
+        return /^\+?[1-9]\d{1,14}$/.test(phone);
+      },
+      message: "Please enter a valid phone number"
+    }
   },
 
   address: {
@@ -119,6 +126,10 @@ const ClientSchema = new mongoose.Schema({
     default: Date.now()
   },
 
+  paidThroughDate: {
+    type: Date
+  },
+
   paymentToken: {
     type: String
   },
@@ -134,8 +145,7 @@ const ClientSchema = new mongoose.Schema({
 
   billingCycle: {
     type: Number,
-    enum: [1, 12],
-    default: 1
+    enum: [1, 12]
   },
 
   _subscription: {

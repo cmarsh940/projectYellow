@@ -73,6 +73,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       console.log(`Dialog result: ${result}`);
     });
   }
+  cancelSubscription() {
+    const dialogRef = this.dialog.open(SubscriptionOverlayComponent, {
+      data: this.currentClient,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 
 
   getClient() {

@@ -20,6 +20,7 @@ import { EditClientComponent } from './profile/edit-client/edit-client.component
 import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analytics.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { SubscriptionOverlayComponent } from './profile/subscription-overlay/subscription-overlay.component';
+import { UploadUsersComponent } from './user/upload-users/upload-users.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -44,7 +45,8 @@ import { SubscriptionOverlayComponent } from './profile/subscription-overlay/sub
     ProfileComponent,
     EditClientComponent,
     SurveyAnalyticsComponent,
-    SubscriptionOverlayComponent
+    SubscriptionOverlayComponent,
+    UploadUsersComponent
   ]
 })
 export class ClientModule {}

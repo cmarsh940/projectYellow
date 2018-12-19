@@ -55,6 +55,16 @@ export class DataService<Type> {
       );
   }
 
+  public getClientsUsers(ns: string, id: string): Observable<any> {
+    console.log("*** GET CLIENTS USERS ***");
+    console.log("*** CLIENTS NAME SPACE ***", ns);
+    console.log("*** CLIENTS ID ***", id);
+    return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
+      map(this.extractData),
+      catchError(this.handleError('getSingle', []))
+    );
+  }
+
   public getSingle(ns: string, id: string): Observable<any> {
     console.log("*** GET ***");
     return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
@@ -92,6 +102,17 @@ export class DataService<Type> {
     return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate)
     .pipe(
       catchError(this.handleError('Update', []))
+    );
+  }
+  public uploadParticipants(ns: string, id: string, itemToUpdate: Type): Observable<any> {
+    console.log('what is the id?', id);
+    console.log('what is the updated item?', itemToUpdate);
+    console.log("*** PUT ***");
+    let nameService = "usersUpload";
+    console.log(`${this.actionUrl}${nameService}/${id}`)
+    return this.http.post<Type>(`${this.actionUrl}${nameService}/${id}`, itemToUpdate)
+    .pipe(
+      catchError(this.handleError('Upload', []))
     );
   }
 

@@ -1,0 +1,37 @@
+#topBox {
+    width: 100%;
+    display: inline-flex;
+    overflow: hidden;
+    
+}
+
+#addMenu, .export-button {
+    display: inline-flex;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-header-cell span {
+    width: 100%;
+    text-align: center;
+}
+
+.view {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+.mat-paginator {
+    display: block;
+    position: fixed!important;
+    bottom: 0!important;
+    width: 100%;
+}
+
+.mat-button, p {
+  display: inline-block;
+  margin: 0 3px;
+}

@@ -3,59 +3,7 @@ const braintree = require('braintree');
 const Client = mongoose.model('Client');
 const config = require("../config/config");
 const token = String
-
-
-const tempSub = [
-        {
-            "id": "0",
-            "name": "FREE",
-            "price": 0.00,
-            "surveyCount": 5,
-            "billingCycle": 1
-        },
-        {
-            "id": "1",
-            "name": "BASIC",
-            "price": 30.00,
-            "surveyCount": 100,
-            "billingCycle": 1
-        },
-        {
-            "id": "2",
-            "name": "PRO",
-            "price": 35.00,
-            "surveyCount": 99999,
-            "billingCycle": 1
-        },
-        {
-            "id": "3",
-            "name": "ELITE",
-            "price": 99.00,
-            "surveyCount": 99999,
-            "billingCycle": 1
-        },
-        {
-            "id": "4",
-            "name": "BASIC",
-            "price": 360.00,
-            "surveyCount": 99999,
-            "billingCycle": 12
-        },
-        {
-            "id": "5",
-            "name": "PRO",
-            "price": 420.00,
-            "surveyCount": 99999,
-            "billingCycle": 12
-        },
-        {
-            "id": "6",
-            "name": "ELITE",
-            "price": 1188.00,
-            "surveyCount": 99999,
-            "billingCycle": 12
-        }
-]
+const tempSub = require("../models/staticModels/subscription");
 class PaymentsController {
 
     // GET TOKEN FOR CLIENT
@@ -106,11 +54,9 @@ class PaymentsController {
 
         // SUBSCRIPTION PLAN
         let plan = req.body.selectedPlan;
-        console.log("SERVER SUBSCRIPTION PLAN", plan);
         
         // SUBSCRIPTION PRICE
         let paymentAmount = plan.price;
-        console.log("SERVER PAYMENT AMOUNT", paymentAmount);
 
         // CREATE NEW CUSTOMER
         gateway.customer.create({
@@ -127,10 +73,10 @@ class PaymentsController {
                 return res.json(err);
             } else {
                 if (newCustomerResult.success) {
-                    console.log("CREATED NEW CUSTOMER", newCustomerResult);
+                    console.log("CREATED NEW CUSTOMER");
 
+                    // CREATED PAYMENT TOKEN FROM RETURNED PARAMETERS
                     let paymentToken = newCustomerResult.customer.paymentMethods[0].token;
-                    console.log("PAYMENT TOKEN", paymentToken);
 
                     // CREATE SUBSCRIPTION
                     gateway.subscription.create({
@@ -142,7 +88,7 @@ class PaymentsController {
                             return res.json(err);
                         } else {
                             if(newSubscriptionResult.success) {
-                                console.log("CREATED NEW SUBSCRIPTION", newSubscriptionResult);
+                                console.log("CREATED NEW SUBSCRIPTION");
                                 let subObject = {};
                                 for(let sub of tempSub) {
                                     if(sub.id === plan.id) {
@@ -160,25 +106,26 @@ class PaymentsController {
                                     subscribedClient.surveyCount = subObject.surveyCount; 
                                     subscribedClient.subscriptionId = newSubscriptionResult.subscription.id; 
                                     subscribedClient.paymentToken = paymentToken; 
+                                    subscribedClient.paidThroughDate = newSubscriptionResult.subscription.paidThroughDate; 
                                     subscribedClient.subscriptionStatus = newSubscriptionResult.subscription.status; 
                                     subscribedClient.save((err, subscribedClient) => {
                                         if (err) {
                                             console.log(`___ SAVE SUBSCRIBED CLIENT ERROR ___`, err);
                                             return res.json(err);
                                         }
-                                        console.log(`___ UPDATED SUBSCRIBED CLIENT ___`, subscribedClient);
+                                        console.log(`___ UPDATED SUBSCRIBED CLIENT ___`);
                                         return res.json(subscribedClient);
                                     }); 
                                 });
                             } else {
-                                console.log("ERROR CREATING NEW SUBSCRIPTION", newSubscriptionResult);
+                                console.log("ERROR CREATING NEW SUBSCRIPTION");
                                 return res.json(newSubscriptionResult);
                             }
                         }
                     });
 
                 } else {
-                    console.log("ERROR CREATING NEW CUSTOMER", newCustomerResult);
+                    console.log("ERROR CREATING NEW CUSTOMER");
                     return res.json(newCustomerResult);
                 } 
             }
@@ -207,10 +154,10 @@ class PaymentsController {
                 console.log("ERROR UPDATING PAYMENT METHOD", err);
                 return res.json(err);
             }
-            console.log("UPDATED PAYMENT METHOD", updatePaymentMethod);
+            console.log("UPDATED PAYMENT METHOD");
 
             let updatedPaymentToken = updatePaymentMethod.customer.paymentMethods[0].token;
-            console.log("PAYMENT TOKEN", updatedPaymentToken);
+            console.log("PAYMENT TOKEN");
 
             // FIND AND UPDATE CLIENT THAT UPDATED PAYMENT METHOD
             Client.findById(req.body.currentClient._id, (err, updatedClient) => {
@@ -225,7 +172,7 @@ class PaymentsController {
                         console.log(`___ SAVE SUBSCRIBED CLIENT ERROR ___`, err);
                         return res.json(err);
                     }
-                    console.log(`___ UPDATED SUBSCRIBED CLIENT ___`, subscribedClient);
+                    console.log(`___ UPDATED SUBSCRIBED CLIENT ___`);
                     return res.json(subscribedClient);
                 });
             });

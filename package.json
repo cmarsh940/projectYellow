@@ -1,6 +1,6 @@
 {
   "name": "mesurveys",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Survey",
   "private": true,
   "main": "server.js",
@@ -16,15 +16,17 @@
     "braintree": "^2.13.1",
     "busboy": "^0.2.14",
     "busboy-body-parser": "^0.3.2",
+    "compression": "^1.7.3",
     "connect-busboy": "0.0.2",
     "cors": "^2.8.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "helmet": "^3.14.0",
     "jsonwebtoken": "^8.3.0",
-    "mongoose": "5.3.9",
+    "mongoose": "5.4.0",
     "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
-    "nodemailer": "^4.6.8"
+    "nodemailer": "^4.6.8",
+    "twilio": "^3.25.0"
   }
 }

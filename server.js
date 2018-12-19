@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const busboy = require("connect-busboy");
 const busboyBodyParser = require("busboy-body-parser");
 const config = require("./server/config/config");
+const compression = require('compression');
 const cors = require("cors");
 const express = require('express');
 const fs = require('fs');
@@ -28,6 +29,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(helmet());
+app.use(compression()); //Compress all routes
 app.use(cors());
 app.use(express.static(path.join(__dirname + '/public/dist')));
 app.use(busboy());

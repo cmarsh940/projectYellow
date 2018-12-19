@@ -12,6 +12,7 @@ import { SurveyService } from '../survey.service';
 import { Survey } from '../../../global/models/survey';
 import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
 import { Question } from '../../../global/models/question';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 
@@ -48,6 +49,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
+    private _authService: AuthService,
     private _categoryService: SurveyCategoryService,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
@@ -83,6 +85,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.surveyId = params['id'];
       this.getSurvey();
+      this.checkPC();
     });
   }
 
@@ -96,6 +99,16 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       .pipe(debounceTime(800)).subscribe(value => {
         this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
       });
+  }
+
+  checkPC() {
+    this.pc = false;
+    let checked = this._authService.checkPC();
+    if (checked) {
+      this.pc = true
+    } else {
+      this.pc = false;
+    }
   }
 
   loadCategories() {
