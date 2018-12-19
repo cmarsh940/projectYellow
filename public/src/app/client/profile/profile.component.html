@@ -28,13 +28,13 @@
     </div>
     <div class="content">
       <div class="content-box">
-        <h5 class="content-top">Surveys</h5>
+        <h4 class="content-top">Total Surveys</h4>
         <div class="content-bottom">
           <div *ngIf="currentClient._subscription === 'FREE' || currentClient._subscription === 'BASIC'">
-            {{ currentClient._surveys?.length }} / {{ currentClient.surveyCount }}
+            <h4>{{ currentClient._surveys?.length }} / {{ currentClient.surveyCount }}</h4>
           </div>
           <div *ngIf="currentClient._subscription === 'PRO' || currentClient._subscription === 'ELITE'">
-            {{ currentClient._surveys?.length }}
+            <h4>{{ currentClient._surveys?.length }}</h4>
           </div>
         </div>
       </div>
@@ -49,17 +49,17 @@
         <h5>City: {{ currentClient.city }}</h5>
         <h5>State: {{ currentClient.state }}</h5>
         <h5>Zip: {{ currentClient.zip }}</h5>
-        <h5>Subscription: {{ currentClient._subscription }}</h5>
+        <h5 id="subscription">
+          Subscription: {{ currentClient._subscription | titlecase }}
+          <div *ngIf="currentClient._subscription !== 'FREE'" id="show">
+            <a (click)="cancelSubscription()" color="warn" id="cancel-subscription">Cancel Subscription</a>
+          </div>
+        </h5>
         <div class="action">
           <button mat-raised-button (click)="openSubscriptionDialog()" color="accent">Upgrade Subscription</button>
-          <div *ngIf="currentClient._subscription !== 'FREE'">
-            <button mat-raised-button (click)="cancelSubscription()" color="warn" id="cancel-subscription">Cancel Subscription</button>
-          </div>
+          <button mat-raised-button (click)="openDialog()" color="primary">Edit Information</button>
         </div>
       </div>
-    </div>
-    <div class="action">
-      <button mat-stroked-button (click)="openDialog()" color="primary">EDIT</button>
     </div>
   </div>
 </div>

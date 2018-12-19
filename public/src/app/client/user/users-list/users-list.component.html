@@ -1,9 +1,40 @@
-<div class="upload-button">
-    <button mat-stroked-button (click)="openUploadDialog()" matTooltip="Upload participants" color="primary">Upload participant</button>
+<div id="topBox">
+    <button mat-icon-button [matMenuTriggerFor]="addParticipants">
+        <mat-icon>add_circle_outline</mat-icon>
+        <p>Add participants</p>
+    </button>
+    <mat-menu #addParticipants="matMenu" id="addMenu">
+        <button mat-menu-item routerLink="add" matTooltip="Add participant" color="primary">
+            <mat-icon aria-label="Add a single participant">
+                add
+            </mat-icon>
+            <p> Add single participant</p>
+
+        </button>
+        <button mat-menu-item (click)="openUploadDialog()" matTooltip="Upload participants" color="primary">
+            <mat-icon aria-label="Export users in a excel file">cloud_upload</mat-icon>
+            <p> Upload excel file</p>
+        </button>
+    </mat-menu>
+
+    <span class="spacer"></span>
+    <span class="spacer"></span>
+
+    <div class="export-button">
+        <button mat-icon-button (click)="export()">
+            <mat-icon aria-label="Export users in a excel file">cloud_download</mat-icon>
+            <p> Participants list</p>
+        </button>
+    </div>
+    <span class="spacer"></span>
 </div>
 
-
-<button mat-stroked-button (click)="export()">Export participants</button>
+<!-- <div class="upload-button">
+    <button mat-stroked-button (click)="openUploadDialog()" matTooltip="Upload participants" color="primary">
+        <mat-icon aria-label="Export users in a excel file">cloud_upload</mat-icon>
+        <p>Upload participants</p>
+    </button>
+</div> -->
 
 
 
@@ -31,7 +62,7 @@
 
     <ng-container matColumnDef="action">
         <mat-header-cell *matHeaderCellDef>
-            <span> Send Message </span>
+            <span> Action </span>
         </mat-header-cell>
         <mat-cell *matCellDef="let element" class="view">
             <mat-icon [routerLink]="['/takeSurvey', element._id]" color="accent">

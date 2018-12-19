@@ -16,7 +16,7 @@ const braintree = require('braintree');
 
 const nodemailer = require('nodemailer');
 
-const tempSub = require("../models/jsonModels/subscription");
+const tempSub = require("../models/staticModels/subscription");
 
 function uploadToS3(file, client) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")

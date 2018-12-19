@@ -4,9 +4,6 @@ import * as XLSX from 'xlsx';
 import { UserService } from '../user.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { EditClientComponent } from '../../profile/edit-client/edit-client.component';
-import { Client } from 'src/app/global/models/client';
-import { Survey } from 'src/app/global/models/survey';
-import { User } from 'src/app/global/models/user';
 
 type AOA = any[];
 
@@ -19,8 +16,9 @@ type AOA = any[];
 export class UploadUsersComponent {
   uploadData: AOA = [];
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
-  fileName: string = 'surveyUsers.xlsx';
+  fileName: string = 'usersList.xlsx';
   errors = [];
+  show = false;
 
   private participant;
 
@@ -32,6 +30,7 @@ export class UploadUsersComponent {
 
 
   onFileChange(evt: any) {
+    this.show = true;
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>(evt.target);
     if (target.files.length !== 1) throw new Error('Cannot use multiple files');
@@ -86,6 +85,22 @@ export class UploadUsersComponent {
 
   cancel(): void {
     this.dialogRef.close();
+  }
+
+  export(): void {
+    let exportedUsers = [['name', 'email', 'phone']];
+  
+    console.log("Exported Users", exportedUsers);
+
+    /* generate worksheet */
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedUsers);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
 
 }

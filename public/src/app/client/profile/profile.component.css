@@ -63,12 +63,20 @@ img {
     margin: 0!important;
 }
 
-.action {
-    width: 100%;
+.content-bottom {
+    text-align: center;
 }
+
 .action button {
     width: 100%;
-    margin: 2em auto;
+}
+.action button:first-child {
+    width: 100%;
+    margin: 2em auto 0;
+}
+.action button:last-child {
+    width: 100%;
+    margin: 0.5em auto;
 }
 
 .mat-button {
@@ -77,6 +85,13 @@ img {
 
 h5 {
     margin:0;
+}
+
+h5 #show {
+    display: inline-block;
+    color: indianred;
+    font-size: smaller;
+    margin-left: 1em;
 }
 
 #cancel-subscription {

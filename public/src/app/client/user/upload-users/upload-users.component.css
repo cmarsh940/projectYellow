@@ -4,20 +4,36 @@
     text-align: center;
 }
 
+#upload-file {
+  margin: 1em 0;
+}
+
 table {
     width: 100%;
 }
 
 table, th, td {
-  border: 1px solid black;
+  border: 0.5px solid grey;
   border-collapse: collapse;
 }
+
 th, td {
-  padding: 15px;
+  padding: 3px;
   text-align: left;
 }
 
-#upload-button {
-  width: 25%;
-  color: green;
+.upload-button {
+  width: 100%;
+  margin-top: 1em;
+}
+
+
+.export-button {
+  width: 100%;
+  margin: 0;
+}
+
+.mat-button, p {
+  display: inline-block;
+  margin: 0 3px;
 }

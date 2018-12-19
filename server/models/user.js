@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: [true, 'Phone number cannot be blank'],
         trim: true,
         minlength: 10,
         maxlength: 12,

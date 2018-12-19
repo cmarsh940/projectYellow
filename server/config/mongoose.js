@@ -1,15 +1,21 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
-var path = require('path');
-let models_path = __dirname + '/../models';
+const path = require('path');
 const uri = require('./config').uri;
-const options = require('./config').options;
 
-mongoose.connect(uri, { useNewUrlParser: true }).then((res) => {
-        console.log("Success!!", res);
-    }).catch((e) => {
-    console.log("error is: " + e);
-});
+let models_path = __dirname + '/../models';
+
+
+mongoose.set('useNewUrlParser',true);
+mongoose.set('useCreateIndex',true);
+mongoose.connect(uri)
+.then(connection => {
+  console.log('Connected to MongoDB')
+})
+.catch(error => {
+console.log(error.message)
+})
+
 
 fs.readdirSync(models_path).forEach((file) => {
     if (file.includes('.js')) {

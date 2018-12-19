@@ -72,7 +72,11 @@ class UsersController {
                     return res.json(err); 
                 }
                 
-                let clientsUsers = doc.users;
+                let clientsUsers = {
+                    'id': doc._id,
+                    'users': doc.users,
+                    'private': doc.private
+                }
                 console.log("RETURNING CLIENTS USERS", clientsUsers);
                 return res.json(clientsUsers);
             });

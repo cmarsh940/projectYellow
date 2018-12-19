@@ -3,7 +3,7 @@ const braintree = require('braintree');
 const Client = mongoose.model('Client');
 const config = require("../config/config");
 const token = String
-const tempSub = require("../models/jsonModels/subscription");
+const tempSub = require("../models/staticModels/subscription");
 class PaymentsController {
 
     // GET TOKEN FOR CLIENT

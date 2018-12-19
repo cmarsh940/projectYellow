@@ -24,6 +24,7 @@ export class UsersListComponent implements OnInit {
   totalSize = 0;
   pageEvent;
   surveyId = '';
+  private = false;
 
   _routeSubscription: Subscription
 
@@ -63,9 +64,10 @@ export class UsersListComponent implements OnInit {
     this._userService.getClientsUsers(id)
       .subscribe((response) => {
         console.log("GET USERS RESPONSE", response);
-        this.dataSource = new MatTableDataSource<Element>(response);
+        this.dataSource = new MatTableDataSource<Element>(response.users);
         this.dataSource.paginator = this.paginator;
-        this.array = response;
+        this.private = response.private;
+        this.array = response.users;
         this.totalSize = this.array.length;
         this.iterator();
       })
@@ -80,6 +82,7 @@ export class UsersListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getUsers();
       console.log(`Dialog result: ${result}`);
     });
   }
@@ -120,8 +123,19 @@ export class UsersListComponent implements OnInit {
   }
 
   export(): void {
+
+    let exportedUsers = [['name', 'email', 'phone']];
+    for (const user of this.dataSource) {
+      let tempUser = [];
+      tempUser.push(user.name);
+      tempUser.push(user.email);
+      tempUser.push(user.phone);
+      exportedUsers.push(tempUser);
+    }
+    console.log("Exported Users", exportedUsers);
+
     /* generate worksheet */
-    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(this.dataSource);
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedUsers);
 
     /* generate workbook and add the worksheet */
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
