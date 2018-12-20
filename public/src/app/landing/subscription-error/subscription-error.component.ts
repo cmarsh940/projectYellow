@@ -1,6 +1,8 @@
+import { AuthService } from 'src/app/auth/auth.service';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { RightsComponent } from '../rights/rights.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-subscription-error',
@@ -9,13 +11,23 @@ import { RightsComponent } from '../rights/rights.component';
 })
 export class SubscriptionErrorComponent {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(
+    private _authService: AuthService,
+    private _router: Router,
+    public dialog: MatDialog
+    ) { }
 
   openDialog() {
     const dialogRef = this.dialog.open(RightsComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  logout(): void {
+    this._authService.logout((res) => {
+      this._router.navigateByUrl('/');
     });
   }
 }

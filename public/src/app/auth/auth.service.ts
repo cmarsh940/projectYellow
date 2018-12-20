@@ -6,6 +6,7 @@ import { Injectable, Type, ɵConsole } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from '../global/services/http-error-handler.service';
+import * as moment from 'moment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -82,10 +83,25 @@ export class AuthService {
 
   subVerified() {
     let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if ((data.status === "Active" || data.status === "Trial") ) {
+    let lastDateToUse = moment(new Date).isBefore(data.d);
+    console.log("LAST USE DATE", lastDateToUse);
+    if ((data.status === "Active" || data.status === "Trial")) {
+      console.log("ACTIVE OR TRIAL STATUS")
       console.log("DATA", data);
-      return true;
+      return true
+    } 
+    else if ((data.status === "Canceled")) {
+      console.log("ACTIVE OR TRIAL STATUS")
+      console.log("DATA", data);
+      if(lastDateToUse){
+          console.log("STILL IN PAID DATES", lastDateToUse);
+          return true
+        } else {
+          console.log("NOT IN PAID DATES", lastDateToUse);
+          return false
+      }
     } else {
+      console.log("ERROR");
       return false;
     }
   }
