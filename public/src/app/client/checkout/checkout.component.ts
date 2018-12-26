@@ -70,7 +70,7 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
             this.selectedPlan = plan;
           }
         }
-        console.log("SELCTED PLAN", this.selectedPlan);
+        console.log("SELECTED PLAN", this.selectedPlan);
       },
       error: err => {
         console.log("api error" + err);
@@ -193,6 +193,7 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
               } else {
                 console.log("Response", res)
                 alert("Thank you for your purchase");
+                this._router.navigate(['/dashboard']);
               }
             }
           });

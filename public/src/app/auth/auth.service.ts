@@ -159,12 +159,17 @@ export class AuthService {
   getAuthorizationToken() {
     console.log("HIT GET AUTH TOKEN FROM AUTH SERVICE")
     if (sessionStorage.getItem('token') === null) {
-      console.log("AUTHORIZATION FAILED");
+      console.log("NO TOKEN HAS BEEN SET")
       return false;
     }
     else {
-      const data = JSON.parse(sessionStorage.getItem('token')); 
-      return data
+      if (sessionStorage.getItem('token') === undefined) {
+        console.log("AUTHORIZATION FAILED");
+        return false;
+      } else {
+        const data = JSON.parse(sessionStorage.getItem('token')); 
+        return data
+      }
     }
   }
 
