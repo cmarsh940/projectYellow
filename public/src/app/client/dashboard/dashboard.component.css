@@ -36,12 +36,12 @@
 }
 
 .total {
-  width: 75%;
-  height: 65%;
-  border-radius: 50%;
-  background-image: radial-gradient(#ffd600 5%, #ffd600d9 13%, #ffd60029 70%);
+  height: 72%;
+  background-image: radial-gradient(#ffd600 5%, #ffd600cf 13%, #ffd60003 70%);
   margin: auto;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-pack: distribute;
   justify-content: space-around;
 }
 
