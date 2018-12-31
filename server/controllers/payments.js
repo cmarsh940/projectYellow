@@ -183,6 +183,7 @@ class PaymentsController {
 
     // CANCEL CLIENTS SUBSCRIPTION
     cancelSubscription(req, res){
+        console.log("___ SERVER HIT CANCEL SUBSCRIPTION ___");
         let gateway = braintree.connect({
             environment: braintree.Environment.Sandbox,
             merchantId: config.merchantId,
@@ -190,13 +191,30 @@ class PaymentsController {
             privateKey: config.privateKey
         });
 
-        gateway.subscription.cancel("theSubscriptionId", function (err, canceledSubResult) {
+        gateway.subscription.cancel(req.params.id, function (err, canceledSubResult) {
             if(err){
                 console.log("ERROR CANCELING SUBSCRIPTION", err);
                 return res.json(err);
             }
-            console.log("CANCELED SUBSCRIPTION", canceledSubResult)
-            return res.json(canceledSubResult);
+
+            console.log("UNSUBSCRIBED ID", canceledSubResult.subscription.id);
+            Client.findOne({ subscriptionId: canceledSubResult.subscription.id }, (err, updatedClient) => {
+                if (err) {
+                    console.log("ERROR FINDING CLIENT TO UPDATE", err)
+                    return res.json(err);
+                }
+                updatedClient.subscriptionStatus = canceledSubResult.subscription.status;
+                updatedClient._subscription = canceledSubResult.subscription.status;
+                updatedClient.lastUseDate = canceledSubResult.subscription.paidThroughDate;
+                updatedClient.save((err, unsubscribedClient) => {
+                    if (err) {
+                        console.log(`___ SAVE CANCELED SUBSCRIPTION CLIENT ERROR ___`, err);
+                        return res.json(err);
+                    }
+                    console.log(`___ UPDATED UNSUBSCRIBED CLIENT ___`);
+                    return res.json(unsubscribedClient);
+                });
+            });
         });
     }
 

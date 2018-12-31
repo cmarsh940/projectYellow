@@ -30,3 +30,16 @@ button {
     color: red;
     text-align: center;
 }
+
+.mat-cell:last-of-type {
+    padding-right: 10px;
+}
+
+.action-icons {
+    position: absolute;
+    right: 0;
+}
+
+.private-icon {
+    display: inline-flex;
+}

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Client } from 'src/app/global/models/client';
+import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatDialog } from '@angular/material';
+import { CheckoutComponent } from '../../checkout/checkout.component';
 
 @Component({
   selector: 'app-subscription-overlay',
@@ -10,16 +10,30 @@ import { Client } from 'src/app/global/models/client';
 export class SubscriptionOverlayComponent {
 
   constructor(
-    private dialogRef: MatDialogRef<SubscriptionOverlayComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Client
+    public checkoutDialog: MatDialog,
+    private bottomSheetRef: MatBottomSheetRef<SubscriptionOverlayComponent>,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any
   ) { }
 
-
-  click(){
-    this.dialogRef.close();
+  openLink(event: MouseEvent, subscriptionId: any): void {
+    console.log("DATA IS", this.data)
+    this.bottomSheetRef.dismiss();
+    event.preventDefault();
+    console.log(subscriptionId);
+    this.openCheckout(subscriptionId);
   }
-  
-  cancel(): void {
-    this.dialogRef.close();
+
+  openCheckout(subscriptionId: any) {
+    console.log("NEW DATA TRANSFER", this.data)
+    const checkoutRef = this.checkoutDialog.open(CheckoutComponent, {
+      data: {
+        data: this.data,
+        subscriptionId: subscriptionId
+      }
+    });
+
+    checkoutRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }

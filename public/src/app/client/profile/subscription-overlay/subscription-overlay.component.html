@@ -2,21 +2,21 @@
   <mat-tab-group>
     <mat-tab label="Monthly">
       <ng-template matTabContent>
-        <button mat-stroked-button [routerLink]="['/checkout', data._id, '1']" (click)='click()' matTooltip="Basic Subscription"
+        <button mat-stroked-button (click)="openLink($event, '1')" matTooltip="Basic Subscription"
           color="primary">Basic Subscription $30</button>
-        <button mat-stroked-button [routerLink]="['/checkout', data._id, '2']" (click)='click()' matTooltip="Pro Subscription"
+        <button mat-stroked-button (click)="openLink($event, '2')" matTooltip="Pro Subscription"
           color="primary">Pro Subscription $35</button>
-        <button mat-stroked-button [routerLink]="['/checkout', data._id, '3']" (click)='click()' matTooltip="Elite Subscription"
+        <button mat-stroked-button (click)="openLink($event, '3')" matTooltip="Elite Subscription"
           color="primary">Elite Subscription $99</button>
       </ng-template>
     </mat-tab>
     <mat-tab label="Anually">
       <ng-template matTabContent>
-        <button mat-stroked-button [routerLink]="['/checkout', data._id, '4']" (click)='click()' matTooltip="Basic Subscription"
+        <button mat-stroked-button (click)="openLink($event, '4')" matTooltip="Basic Subscription"
           color="primary">Basic Subscription $360</button>
-        <button mat-stroked-button [routerLink]="['/checkout', data._id, '5']" (click)='click()' matTooltip="Pro Subscription"
+        <button mat-stroked-button (click)="openLink($event, '5')" matTooltip="Pro Subscription"
           color="primary">Pro Subscription $420</button>
-        <button mat-stroked-button [routerLink]="['/checkout', data._id, '6']" (click)='click()' matTooltip="Elite Subscription"
+        <button mat-stroked-button (click)="openLink($event, '6')" matTooltip="Elite Subscription"
           color="primary">Elite Subscription $1,188</button>
       </ng-template>
     </mat-tab>

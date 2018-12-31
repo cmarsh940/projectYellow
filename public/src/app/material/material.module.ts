@@ -5,6 +5,7 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatCardModule,
+  MatBottomSheetModule,
   MatMenuModule,
   MatAutocompleteModule,
   MatButtonToggleModule,
@@ -42,6 +43,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   imports: [
     DragDropModule,
     MatAutocompleteModule,
+    MatBottomSheetModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
@@ -78,6 +80,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   exports: [
     DragDropModule,
     MatAutocompleteModule,
+    MatBottomSheetModule,
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
