@@ -22,7 +22,7 @@
   border: 1px solid #dddddd;
   line-height: 20px;
   background: #fcfcfc;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
   background: linear-gradient(to right, white 50%, #fcfcfc 50%);
   background-size: 200% 100%;
   background-position: right bottom;
@@ -89,7 +89,7 @@ button {
 #cardForm {
   max-width: 50.75em;
   margin: 0 auto;
-  padding: 1.875em;
+  padding: 0;
 }
 
 button {

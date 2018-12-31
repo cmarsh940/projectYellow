@@ -7,8 +7,8 @@
     <div class="container">
         <div *ngFor="let plan of plans">
             <div *ngIf="plan.id === subscriptionId">
-                <h2>{{ plan.name }}</h2>
-                <h2>Payment amount: ${{plan.price}}</h2>
+                <h3>{{ plan.name }}</h3>
+                <h3>Payment amount: ${{plan.price}}</h3>
             </div>
         </div>
 

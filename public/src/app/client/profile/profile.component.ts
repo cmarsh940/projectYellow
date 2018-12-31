@@ -4,11 +4,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Client } from './../../global/models/client';
-import { MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig } from '@angular/material';
+import { MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig, MatBottomSheet } from '@angular/material';
 import { EditClientComponent } from './edit-client/edit-client.component';
 import { ProfileService } from './profile.service';
 import { AuthService } from '../../auth/auth.service';
 import { SubscriptionOverlayComponent } from './subscription-overlay/subscription-overlay.component';
+import { CheckoutComponent } from '../checkout/checkout.component';
 
 @Component({
   selector: 'app-profile',
@@ -34,12 +35,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialog: MatDialog,
+    public checkoutDialog: MatDialog,
     private _profileService: ProfileService,
     private _authService: AuthService,
     private _uploadService: UploadService,
     private _router: Router,
     private _activatedRoute: ActivatedRoute,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private bottomSheet: MatBottomSheet
   ) { }
 
   ngOnInit() {
@@ -64,16 +67,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  openSubscriptionDialog() {
-    const dialogRef = this.dialog.open(SubscriptionOverlayComponent, {
+  openBottomSheet(): void {
+    this.bottomSheet.open(SubscriptionOverlayComponent, {
       data: this.currentClient,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+  }
+
+  openCheckout() {
+    const checkoutRef = this.checkoutDialog.open(CheckoutComponent, {
+      data: this.currentClient,
+    });
+
+    checkoutRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
-
 
   cancelSubscription(id: string) {
       let r = window.confirm("Are you sure you want to cancel your subscription");

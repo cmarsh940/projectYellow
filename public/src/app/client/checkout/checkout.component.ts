@@ -1,5 +1,5 @@
 import { environment } from './../../../environments/environment';
-import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterContentInit, Inject } from '@angular/core';
 import { CheckoutService } from './checkout.service';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { client, hostedFields } from 'braintree-web';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { EditClientComponent } from '../profile/edit-client/edit-client.component';
 
 
 @Component({
@@ -45,15 +47,19 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
     private route: ActivatedRoute,
     private _router: Router,
     private _profileService: ProfileService,
-    private location: Location
+    private location: Location,
+    private checkoutRef: MatDialogRef<EditClientComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
 
   ngOnInit() {
+    console.log("CHECKOUT DATA", this.data)
     // GET SUBSCRIPTION ID
-    this.subscriptionId = this.route.snapshot.params['id'];
+    
+    this.subscriptionId = this.data.subscriptionId;
 
     // CLIENT ID
-    this.clientId = this.route.snapshot.url[1].path;
+    this.clientId = this.data.data._id;
 
 
     // GET CLIENT TOKEN
@@ -98,7 +104,6 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
   createPayment() {
     this.loaded = true;
     var self = this;
-    // this.getPlan(this.subscriptionId);
     client.create({
       authorization: environment.braintreeKey
     },
@@ -185,18 +190,16 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
           console.log('Got a nonce: ' + payload.nonce);
           console.log('URL: ' + checkoutURL);
 
-          self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, self.currentClient).subscribe({
-            next: res => {
+          self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, self.currentClient).subscribe(res => {
               if (res.success === false) {
                 alert("YOUR PAYMENT WAS DECLINED");
-                console.log("api error", res);
+                console.error("api error", res);
               } else {
-                console.log("Response", res)
-                alert("Thank you for your purchase");
-                this._router.navigate(['/dashboard']);
+                alert("Thank you for your subscription");
+                window.location.reload();
               }
             }
-          });
+          );
         });
       });
   }
