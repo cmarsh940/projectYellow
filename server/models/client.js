@@ -184,11 +184,6 @@ const ClientSchema = new mongoose.Schema({
     ],
     default: []
   },
-  
-  used: {
-      type: [String],
-      select: false
-  },
 
   users: {
     type: [

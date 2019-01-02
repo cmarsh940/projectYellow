@@ -24,7 +24,6 @@ export class Client {
     subscriptionStatus: any;
     surveyCount: any;
     _surveys: any;
-    used: any;
     users: any;
     verified: any;
     createdAt: any;

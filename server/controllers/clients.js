@@ -129,7 +129,7 @@ class ClientsController {
   authenticate(req, res) {
     console.log("___ SERVER HIT AUTHENTICATE ___");
 
-    Client.findOneAndUpdate({ email: req.body.email }, { $addToSet: { used: req.body.used } }).select("+password").populate('_surveys').exec((err, client) => {
+    Client.findOne({ email: req.body.email }).select("+password").populate('_surveys').exec((err, client) => {
       if (err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
         return res.json("____ AUTHENTICATE ERROR ____" + err);
@@ -227,6 +227,14 @@ class ClientsController {
             }
           })
         }
+      } else {
+        return res.json({
+          errors: {
+            login: {
+              message: 'Invalid credentials'
+            }
+          }
+        });
       }
     })
   }

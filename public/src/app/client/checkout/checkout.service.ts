@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { catchError, map } from 'rxjs/operators';
-
 import { HttpErrorHandler, HandleError } from 'src/app/global/services/http-error-handler.service';
 
 function getToken() {
@@ -42,6 +40,15 @@ export class CheckoutService {
     console.log('____ CHECKOUT REACHED _____');
     let params = { 'payment_method_nonce': nonce, 'selectedPlan': selectedPlan, 'currentClient': currentClient };
     return this.http.post<any>(checkoutURL, params).pipe(
+      map(this.extractData),
+      catchError(this.handleError('checkout', []))
+    );
+  }
+
+  updateSub(checkoutURL: string, nonce: string, selectedPlan: any, currentClient: any): Observable<any> {
+    console.log('____ CHECKOUT REACHED _____');
+    let params = { 'payment_method_nonce': nonce, 'selectedPlan': selectedPlan, 'currentClient': currentClient };
+    return this.http.put<any>(checkoutURL, params).pipe(
       map(this.extractData),
       catchError(this.handleError('checkout', []))
     );

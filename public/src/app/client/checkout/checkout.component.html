@@ -3,7 +3,14 @@
         <mat-spinner color="accent"></mat-spinner>
     </div>
 </div>
-<div *ngIf="loaded">
+
+<div *ngIf="processing">
+    <div class="loading">
+        <mat-spinner color="accent"></mat-spinner>
+        <h4>We are processing your request, this may take some time. Please do not reload or close this screen</h4>
+    </div>
+</div>
+<div *ngIf="loaded && !processing">
     <div class="container">
         <div *ngFor="let plan of plans">
             <div *ngIf="plan.id === subscriptionId">

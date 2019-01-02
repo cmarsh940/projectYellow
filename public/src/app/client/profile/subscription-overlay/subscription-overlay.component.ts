@@ -36,4 +36,8 @@ export class SubscriptionOverlayComponent {
       console.log(`Dialog result: ${result}`);
     });
   }
+
+  cancel() {
+    this.bottomSheetRef.dismiss();
+  }
 }
