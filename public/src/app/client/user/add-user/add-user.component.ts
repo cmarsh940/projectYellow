@@ -1,36 +1,25 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material';
+import { ErrorStateMatcher, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { User } from '../../../global/models/user';
 import { UserService } from '../user.service';
-import { Subscription } from 'rxjs';
-import { Location } from "@angular/common";
 
 
-/** Error when invalid control is dirty, touched, or submitted. */
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+
 @Component({
   selector: "app-add-user",
   templateUrl: "./add-user.component.html",
   styleUrls: ["./add-user.component.css"]
 })
 
-export class AddUserComponent implements OnInit, OnDestroy {
+export class AddUserComponent implements OnInit {
   errors: string[] = [];
   newUser: User = new User();
   myForm: FormGroup;
-  currentClient = JSON.parse(sessionStorage.getItem('currentClient'));
-  matcher = new MyErrorStateMatcher();
   surveyId: string = "";
-  _routeSubscription: Subscription;
 
   private participant;
 
@@ -40,10 +29,9 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   constructor(
     private _userService: UserService,
-    private _router: Router,
-    private _activatedRoute: ActivatedRoute,
-    private location: Location,
-    fb: FormBuilder
+    fb: FormBuilder,
+    private dialogRef: MatDialogRef<AddUserComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.myForm = fb.group({
       name: this.nameFormControl,
@@ -52,16 +40,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
     }, { updateOn: 'blur' });
   }
 
-  ngOnInit() { 
-    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
-      this.surveyId = params['id'];
-      console.log("SURVEYS ID", this.surveyId);
-    });
-  }
-
-  ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
-  }
+  ngOnInit() { }
 
   addParticipant(form: any) {
     this.errors = [];
@@ -72,8 +51,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
         'name': this.nameFormControl.value,
         'email': this.emailFormControl.value,
         'phone': this.phoneFormControl.value,
-        'surveyOwner': this.currentClient._id,
-        '_survey': this.surveyId,
+        'surveyOwner': this.data.surveyOwner,
+        '_survey': this.data.survey,
         'textSent': false,
         'answeredSurvey': false
       };
@@ -84,8 +63,8 @@ export class AddUserComponent implements OnInit, OnDestroy {
         'name': this.nameFormControl.value,
         'email': this.emailFormControl.value,
         'phone': `+1${this.phoneFormControl.value}`,
-        'surveyOwner': this.currentClient._id,
-        '_survey': this.surveyId,
+        'surveyOwner': this.data.surveyOwner,
+        '_survey': this.data.survey,
         'textSent': false,
         'answeredSurvey': false
       }
@@ -104,10 +83,14 @@ export class AddUserComponent implements OnInit, OnDestroy {
             'email': null,
             'phone': null,
           });
-          this.location.back();
-          this._router.navigate(['../', { id: this.surveyId }], { relativeTo: this._activatedRoute });
+          this.dialogRef.close();
+          // this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
       }
     })
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
   }
 }

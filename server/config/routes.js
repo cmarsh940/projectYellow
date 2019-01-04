@@ -4,6 +4,7 @@ const path = require('path');
 const Payments = require('../controllers/payments');
 const Surveys = require('../controllers/surveys');
 const Users = require('../controllers/users');
+const Texts = require('../controllers/texts');
 const Questions = require('../controllers/questions');
 
 const PermissionMiddleware = require('../config/middleware/auth.permission.middleware');
@@ -122,6 +123,10 @@ module.exports = function (app) {
         validJWTNeeded,
         Categories.update
     ]);
+    
+
+    // TEXTING
+    app.post('/api/sendSms', Texts.text);
 
     // USERS
     app.post('/api/users', [

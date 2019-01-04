@@ -4,7 +4,7 @@
         <p>Add participants</p>
     </button>
     <mat-menu #addParticipants="matMenu" id="addMenu">
-        <button mat-menu-item routerLink="add" matTooltip="Add participant" color="primary">
+        <button mat-menu-item (click)="singleUploadDialog()" matTooltip="Add participant" color="primary">
             <mat-icon aria-label="Add a single participant">
                 add
             </mat-icon>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from 'src/app/global/models/user';
 import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { UploadUsersComponent } from '../upload-users/upload-users.component';
 
 import * as XLSX from 'xlsx';
+import { AddUserComponent } from '../add-user/add-user.component';
 
 type AOA = any[];
 @Component({
@@ -14,7 +15,7 @@ type AOA = any[];
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css']
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnChanges {
   errorMessage;
   dataSource: any;
   array: any;
@@ -82,6 +83,20 @@ export class UsersListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getUsers();
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  singleUploadDialog() {
+    const addDialogRef = this.dialog.open(AddUserComponent, {
+      data: {
+        survey: this.surveyId,
+        surveyOwner: JSON.parse(localStorage.getItem('t940'))
+      }
+    });
+
+    addDialogRef.afterClosed().subscribe(result => {
       this.getUsers();
       console.log(`Dialog result: ${result}`);
     });

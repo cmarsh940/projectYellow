@@ -1,3 +1,4 @@
+import { AddUserComponent } from './client/user/add-user/add-user.component';
 
 
 // MODULES
@@ -89,6 +90,7 @@ import { UploadUsersComponent } from './client/user/upload-users/upload-users.co
     httpInterceptorProviders
   ],
   entryComponents: [
+    AddUserComponent,
     EditClientComponent,
     SubscriptionOverlayComponent,
     RightsComponent,
