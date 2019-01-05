@@ -34,3 +34,7 @@
   display: inline-block;
   margin: 0 3px;
 }
+
+.mat-column-select {
+  overflow: initial;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnChanges } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from 'src/app/global/models/user';
 import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
@@ -8,6 +8,7 @@ import { UploadUsersComponent } from '../upload-users/upload-users.component';
 
 import * as XLSX from 'xlsx';
 import { AddUserComponent } from '../add-user/add-user.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 type AOA = any[];
 @Component({
@@ -15,7 +16,7 @@ type AOA = any[];
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css']
 })
-export class UsersListComponent implements OnInit, OnChanges {
+export class UsersListComponent implements OnInit {
   errorMessage;
   dataSource: any;
   array: any;
@@ -30,9 +31,10 @@ export class UsersListComponent implements OnInit, OnChanges {
   _routeSubscription: Subscription
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'email', 'phone', 'action'];
+  displayedColumns = ['select', 'name', 'email', 'phone', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  selection = new SelectionModel<User>(true, []);
 
   uploadData: AOA = [];
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
@@ -66,12 +68,30 @@ export class UsersListComponent implements OnInit, OnChanges {
       .subscribe((response) => {
         console.log("GET USERS RESPONSE", response);
         this.dataSource = new MatTableDataSource<Element>(response.users);
+        console.log("THE DATA SOURCE IS:", this.dataSource);
         this.dataSource.paginator = this.paginator;
         this.private = response.private;
         this.array = response.users;
         this.totalSize = this.array.length;
         this.iterator();
+        
       })
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    console.log("SELECTION", this.selection);
+    const numSelected = this.selection.selected.length;
+    console.log("THE DATA SOURCE IS:")
+    const numRows = this.dataSource.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.forEach(row => this.selection.select(row));
   }
 
   openUploadDialog() {
