@@ -9,7 +9,6 @@
                 add
             </mat-icon>
             <p> Add single participant</p>
-
         </button>
         <button mat-menu-item (click)="openUploadDialog()" matTooltip="Upload participants" color="primary">
             <mat-icon aria-label="Export users in a excel file">cloud_upload</mat-icon>
@@ -21,12 +20,21 @@
     <span class="spacer"></span>
 
     <div class="export-button">
-        <button mat-icon-button (click)="export()">
+        <button mat-icon-button (click)="export()" matTooltip="Download participants list">
             <mat-icon aria-label="Export users in a excel file">cloud_download</mat-icon>
             <p> Participants list</p>
         </button>
     </div>
     <span class="spacer"></span>
+</div>
+
+<div *ngIf="selection._selected" id="smsText">
+    <button mat-raised-button (click)="sendSMS(selection._selected)" color="primary" matTooltip="Send text message to selected participants">
+        <mat-icon  color="accent">
+            <i class="material-icons">textsms</i>
+        </mat-icon>
+        <p>send text message to selected</p>
+    </button>
 </div>
 
 
@@ -71,9 +79,6 @@
             <span> Action </span>
         </mat-header-cell>
         <mat-cell *matCellDef="let element" class="view">
-            <mat-icon [routerLink]="['/takeSurvey', element._id]" color="accent">
-                <i class="material-icons">textsms</i>
-            </mat-icon>
             <mat-icon (click)="destroyUser(element._id)" matTooltip="Delete" color="warn">
                 <i class="material-icons">
                     delete_forever
@@ -82,7 +87,7 @@
         </mat-cell>
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{hovered: row.hovered}" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"(click)="selection.toggle(row)"></mat-row>
 </mat-table>
 <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50, 100]" [showFirstLastButtons]="true"
     [length]="totalSize" [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">

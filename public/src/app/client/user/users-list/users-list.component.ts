@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from 'src/app/global/models/user';
 import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
@@ -16,8 +16,9 @@ type AOA = any[];
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css']
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecked {
   errorMessage;
+  errors = [];
   dataSource: any;
   array: any;
   resultsLength = 0;
@@ -47,6 +48,7 @@ export class UsersListComponent implements OnInit {
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
+    private cdref: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -61,6 +63,9 @@ export class UsersListComponent implements OnInit {
     this._routeSubscription.unsubscribe();
   }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
 
   getUsers() {
     let id = this.surveyId;
@@ -80,9 +85,7 @@ export class UsersListComponent implements OnInit {
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    console.log("SELECTION", this.selection);
     const numSelected = this.selection.selected.length;
-    console.log("THE DATA SOURCE IS:")
     const numRows = this.dataSource.length;
     return numSelected === numRows;
   }
@@ -178,5 +181,23 @@ export class UsersListComponent implements OnInit {
 
     /* save to file */
     XLSX.writeFile(wb, this.fileName);
+  }
+
+
+  sendSMS(users: any): void {
+
+    console.log("SEND SMS FUNCTION", users);
+    this.errors = [];
+    this._userService.sendSMS(this.surveyId, users).subscribe((data: any) => {
+      if (data.errors) {
+        console.log("*** ERROR ***", data.errors)
+        for (const key of Object.keys(data.errors)) {
+          const error = data.errors[key];
+          this.errors.push(error.message);
+        }
+      } else {
+        this.getUsers();
+      }
+    });
   }
 }

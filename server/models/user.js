@@ -36,6 +36,9 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: false
     },
+    messageSID: {
+        type: String
+    },
     submissionDate: {
         type: Date
     },

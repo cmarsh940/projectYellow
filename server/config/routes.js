@@ -126,7 +126,7 @@ module.exports = function (app) {
     
 
     // TEXTING
-    app.post('/api/sendSms', Texts.text);
+    app.post('/api/sendSMS/:id', Texts.text);
 
     // USERS
     app.post('/api/users', [
