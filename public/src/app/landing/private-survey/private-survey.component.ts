@@ -22,8 +22,13 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   _routeSubscription: Subscription;
   questionGroup = questionGroups;
   loaded: Boolean;
+  userId: String;
 
   @Input() survey: any;
+
+  // TIMER
+  time: number = 0;
+  interval;
 
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
@@ -61,6 +66,8 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
       questions: this.fb.array([this.buildQuestion()])
     });
 
+    this.userId = this._activatedRoute.snapshot.url[1].path;
+
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.surveyId = params['id'];
       this.getSurvey();
@@ -68,6 +75,7 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.loaded = true;
+      this.startTimer();
     }, 1000);
   }
 
@@ -190,12 +198,19 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
       name: this.survey.name,
       private: this.survey.private,
       questions: questionsDeepCopy,
-      user: this.survey.user,
+      user: this.userId,
+      surveyTime: this.interval,
       creator: this.survey.creator,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };
     return saveSurvey;
+  }
+
+  startTimer() {
+    this.interval = setInterval(() => {
+        this.time++;
+    }, 1000)
   }
 
 }

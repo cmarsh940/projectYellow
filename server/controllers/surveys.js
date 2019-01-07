@@ -94,7 +94,12 @@ class SurveysController {
 
     Survey.findByIdAndUpdate(req.params.id, { 
       $push: { submissionDates: Date.now() },
-      $set: { lastSubmission: Date.now() } }, { new: true }, (err, survey) => {
+      $set: { 
+        lastSubmission: Date.now(), 
+        averageTime: req.body.averageTime,
+        totalAnswers: req.body.totalAnswers,
+        surveyTime: req.body.surveyTime
+      } }, { new: true }, (err, survey) => {
       if (err) {
         console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);

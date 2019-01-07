@@ -42,6 +42,13 @@ const UserSchema = new mongoose.Schema({
     submissionDate: {
         type: Date
     },
+    loc: { 
+        type: String, 
+        coordinates: [Number] 
+    },
+    surveyTime: {
+        type: Number
+    },
     surveyOwner: { type: mongoose.Schema.Types.ObjectId, ref: "Client" },
     _survey: { type: mongoose.Schema.Types.ObjectId, ref: "Survey" },
 }, {

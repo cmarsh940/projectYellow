@@ -8,7 +8,7 @@ let models_path = __dirname + '/../models';
 
 mongoose.set('useNewUrlParser',true);
 mongoose.set('useCreateIndex',true);
-mongoose.connect(uri)
+mongoose.connect(uri, { autoIndex: false })
 .then(connection => {
   console.log('Connected to MongoDB')
 })

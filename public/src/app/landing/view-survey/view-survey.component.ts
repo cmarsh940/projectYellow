@@ -27,6 +27,11 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
 
   @Input() survey: any;
 
+  // TIMER
+  time: number = 0;
+  interval;
+  timeAverage: any;
+
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
@@ -59,6 +64,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loaded = false;
+    this.startTimer();
     this.surveyForm = this.fb.group({
       questions: this.fb.array([this.buildQuestion()])
     });
@@ -175,6 +181,17 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   }
 
   prepareSaveSurvey(): Survey {
+    let tempTotal = this.survey.totalAnswers + 1;
+    let allTime = this.survey.surveyTime + this.interval
+
+
+    this.timeAverage = allTime / tempTotal;
+    console.log("AVERAGE TIME TAKEN", this.timeAverage);
+    console.log("SURVEYS TIME", this.survey.surveyTime);
+    console.log("NEW ALL TIME", allTime);
+    console.log("INTERVAL", this.interval);
+    console.log(`Taken ammount is ${tempTotal}, the total time is ${allTime}, the interval is ${this.interval}. The average should be ${this.timeAverage}`);
+    
     const formModel = this.surveyForm.value;
 
     // deep copy of form model questions
@@ -193,11 +210,20 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       private: this.survey.private,
       questions: questionsDeepCopy,
       user: this.survey.user,
+      averageTime: this.timeAverage,
+      surveyTime: allTime,
+      totalAnswers: this.survey.totalAnswers + 1,
       creator: this.survey.creator,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };
     return saveSurvey;
+  }
+
+  startTimer() {
+    this.interval = setInterval(() => {
+      this.time++;
+    }, 1000)
   }
 
 }

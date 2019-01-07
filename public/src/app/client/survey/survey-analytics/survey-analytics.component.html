@@ -3,6 +3,7 @@
   <span class="spacer"></span>
   <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
     <mat-icon>cloud_download</mat-icon>
+    <p>Download results</p>
   </button>
   <mat-menu #downloadMenu="matMenu">
     <button mat-menu-item (click)="downloadJson()">
