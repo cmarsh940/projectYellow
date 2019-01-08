@@ -21,7 +21,7 @@
   </h6>
 
   <div *ngIf="lvl !== 'FREE'">
-    <h6>last submision was: {{ timeSinceLastSubmission | number:'1.0-0' }} hours ago.</h6>
+    <h6>last submission was: <span *ngIf="timeSinceLastSubmission <= 1"> Less then an hour ago.</span> <span *ngIf="timeSinceLastSubmission > 1">{{ timeSinceLastSubmission | number:'1.0-0' }} hours ago.</span></h6>
 
     <mat-card>
       <mat-card-title>Survey Volume</mat-card-title>
@@ -83,8 +83,12 @@
             </ng-container>
           
             <!-- MULTI CHOICE -->
-            <ng-container *ngSwitchCase="'mutiplechoice'">
-              <h4>{{ j + 1 }} ) {{ answer }}</h4>
+            <ng-container *ngSwitchCase="'multiplechoice'">
+              <mat-chip-list class="mat-chip-list-stacked">
+                <mat-chip [style.background]="answer.color" disabled>
+                  {{ j + 1 }} ) {{ answer.optionName }} =  <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{ answer.count }}</span>
+                </mat-chip>
+              </mat-chip-list>
             </ng-container>
           
             <!-- PARAGRAPH -->

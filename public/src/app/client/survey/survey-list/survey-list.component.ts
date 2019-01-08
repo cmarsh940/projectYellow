@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 
 import { Client } from '../../../global/models/client';
@@ -13,7 +13,7 @@ import { saveAs } from 'file-saver';
   templateUrl: './survey-list.component.html',
   styleUrls: ['./survey-list.component.css']
 })
-export class SurveyListComponent implements OnInit {
+export class SurveyListComponent implements OnInit, AfterContentChecked {
   currentClient: Client;
   remaining: number;
   errorMessage;
@@ -34,11 +34,16 @@ export class SurveyListComponent implements OnInit {
 
   constructor(
     private _profileService: ProfileService,
-    private _surveyService: SurveyService
+    private _surveyService: SurveyService,
+    private cdref: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
     this.getSurveys();
+  }
+
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
   }
 
   getSurveys() {

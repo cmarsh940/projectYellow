@@ -110,3 +110,12 @@ p{
 h5 h4 {
     display: grid;
 }
+
+mat-chip {
+    margin: 1em 0!important;
+    font-size: large;
+}
+
+span {
+    margin-left: 5px;
+}

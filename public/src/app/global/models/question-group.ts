@@ -27,7 +27,7 @@ export const questionGroups: QuestionGroup[] = [
     {
         name: 'Multiple Choice',
         group: [
-            { value: "mutiplechoice", viewValue: "Multiple Choice (one answer)" },
+            { value: "multiplechoice", viewValue: "Multiple Choice (one answer)" },
         ]
     },
     {

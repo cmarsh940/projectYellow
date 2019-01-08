@@ -49,9 +49,8 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   @ViewChild('myCanvas') myCanvas: ElementRef;
   public context: CanvasRenderingContext2D;
 
+  colors = ["#ffd600", "#ffab00", "#ff6d00", "#ff3d00", "#c51162", "#536dfe", "#2979ff", "#0091ea", "#00b8d4", "#00bfa5", "#00c853", "#64dd17", "#aeea00"];
   
-
-  // TEST TIME
   constructor(
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
@@ -94,17 +93,13 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
       alldates.forEach((res) => {
         let date = moment(res).format('l');
-        console.log("DATE", date);
         tempDates.push(date);
       });
-      console.log("ALL DATES", alldates);
 
       tempDates.forEach(function (x) { 
         answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
       });
-      console.log("TempDates", tempDates);
-      console.log("answeredTempDates", answeredTempDates);
-
+      
       let dateValues = Object.values(answeredTempDates);
       let dateNames = Object.keys(answeredTempDates);
       
@@ -226,42 +221,72 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         this.survey[i].answers.push([e,f]);
         this.booleanAnswers = this.survey[i].answers;
 
-        this.barChart = new Chart('bar', {
-          type: 'bar',
-          data: {
-            labels: ["True", "False"],
-            datasets: [
-              {
-                data: this.booleanAnswers[0],
-                borderColor: '#3cba9f',
-                borderWidth: 2,
-                fill: false 
-              }
-            ]
-          },
-          options: {
-            legend: {
-              display:false
-            },
-            maintainAspectRatio: false,
-            scales: {
-              yAxes: [{
-                stacked: true,
-                gridLines: {
-                  display: true,
-                  color: "rgba(255,99,132,0.2)"
-                }
-              }],
-              xAxes: [{
-                gridLines: {
-                  display: false
-                }
-              }]
-            }
-          }
-        })
+        // this.barChart = new Chart('bar', {
+        //   type: 'bar',
+        //   data: {
+        //     labels: ["True", "False"],
+        //     datasets: [
+        //       {
+        //         data: this.booleanAnswers[0],
+        //         borderColor: '#3cba9f',
+        //         borderWidth: 2,
+        //         fill: false 
+        //       }
+        //     ]
+        //   },
+        //   options: {
+        //     legend: {
+        //       display:false
+        //     },
+        //     maintainAspectRatio: false,
+        //     scales: {
+        //       yAxes: [{
+        //         stacked: true,
+        //         gridLines: {
+        //           display: true,
+        //           color: "rgba(255,99,132,0.2)"
+        //         }
+        //       }],
+        //       xAxes: [{
+        //         gridLines: {
+        //           display: false
+        //         }
+        //       }]
+        //     }
+        //   }
+        // })
 
-      } else {
+      }
+
+      // MULTIPLE CHOICE ANSWERS
+      else if (this.survey[i].questionType === 'multiplechoice') {
+        console.log("_*_*_* MULTIPLE CHOICE QUESTION *_*_*_", this.survey[i]);
+
+        let options = this.survey[i].options; 
+        let tempAnswers = this.survey[i].answers;
+        tempAnswers.forEach(answer => {
+          options.forEach(option => {
+            if (option.optionName === answer) {
+              let randomNum = Math.floor(Math.random() * 12) + 0;
+              if (!option.count) {
+                option.count = 1;
+                option.color = this.colors[randomNum];
+              } else {
+                option.count = option.count +1;
+              }
+            }
+          });
+          
+        });
+
+        console.log("NEW OPTIONS", options);
+        this.survey[i].answers = options;
+        this.questions.push(this.survey[i]);
+
+      } 
+      
+      // EVERYTHING ELSE
+      else {
         this.questions.push(this.survey[i]);
       }
     }

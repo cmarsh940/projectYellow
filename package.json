@@ -5,6 +5,7 @@
   "private": true,
   "main": "server.js",
   "scripts": {
+    "DB": "mongod --auth --port 27017 --dbpath /data/db",
     "start": "node server.js"
   },
   "keywords": [],
