@@ -104,6 +104,7 @@ module.exports = function (app) {
     app.get('/api/surveys/:id', Surveys.show);
     app.put('/api/surveys/:id', Surveys.update);
     app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
+    app.put('/api/answer/pSurveys/:id', Surveys.answerPrivateSurvey);
 
     // SURVEY CATEGORIES
     app.get('/api/survey-categories', Categories.index);

@@ -183,14 +183,10 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   prepareSaveSurvey(): Survey {
     let tempTotal = this.survey.totalAnswers + 1;
     let allTime = this.survey.surveyTime + this.interval
-
-
     this.timeAverage = allTime / tempTotal;
-    console.log("AVERAGE TIME TAKEN", this.timeAverage);
-    console.log("SURVEYS TIME", this.survey.surveyTime);
-    console.log("NEW ALL TIME", allTime);
-    console.log("INTERVAL", this.interval);
-    console.log(`Taken ammount is ${tempTotal}, the total time is ${allTime}, the interval is ${this.interval}. The average should be ${this.timeAverage}`);
+
+    // CANCEL INTERVALS
+    clearInterval(this.interval);
     
     const formModel = this.surveyForm.value;
 

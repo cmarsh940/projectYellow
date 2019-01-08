@@ -31,6 +31,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   loaded: Boolean;
   booleanAnswers: any[];
   countAvgAnswers: number;
+  private: any;
+  total: any;
+  timeTotal: any;
+  surveyAvg: any;
+  title: string;
+  lvl: any;
 
   timeSinceLastSubmission: any;
 
@@ -81,7 +87,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId).subscribe(res => {
-
+      console.log("RES",res);
       let alldates = res.submissionDates;
       let answeredTempDates = {};
       let tempDates = [];
@@ -159,6 +165,15 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           }
         }
       });
+
+      // SET KEY ANALYTICS
+      this.title = res.name;
+      this.lvl = res.creator._subscription;
+      this.private = res.private;
+      this.total = res.totalAnswers;
+      this.timeTotal = `${res.surveyTime / 60 ^ 0}:` + res.surveyTime % 60;
+      this.surveyAvg = `${res.averageTime / 60 ^ 0}:` + res.averageTime % 60;
+
 
       // SET QUESTIONS
       this.survey = res.questions;

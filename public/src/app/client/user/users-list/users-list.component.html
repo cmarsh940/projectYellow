@@ -79,6 +79,11 @@
             <span> Action </span>
         </mat-header-cell>
         <mat-cell *matCellDef="let element" class="view">
+            <mat-icon routerLink="/pSurvey/{{element._id}}/{{surveyId}}" color="accent">
+                <i class="material-icons">visibility</i>
+            </mat-icon>
+        </mat-cell>
+        <mat-cell *matCellDef="let element" class="view">
             <mat-icon (click)="destroyUser(element._id)" matTooltip="Delete" color="warn">
                 <i class="material-icons">
                     delete_forever

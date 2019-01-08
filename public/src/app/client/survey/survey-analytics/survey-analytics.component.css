@@ -95,3 +95,18 @@ td, th {
     max-height: 300px;
     overflow-y: scroll;
 }
+
+.mat-icon, p {
+    display: inline-block;
+}
+
+p{
+    margin: 0 0.5em;
+}
+.small-boxes {
+    width: 100%;
+}
+
+h5 h4 {
+    display: grid;
+}

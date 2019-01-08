@@ -11,6 +11,7 @@ export class Survey {
     surveyTime?: number;
     averageTime?:number;
     totalAnswers?: number;
+    users?: any;
     createdAt: any;
     updatedAt: any;
 }

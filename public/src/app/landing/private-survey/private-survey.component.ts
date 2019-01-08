@@ -29,6 +29,9 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   // TIMER
   time: number = 0;
   interval;
+  timeAverage: any;
+
+  assigned: Boolean;
 
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
@@ -119,10 +122,42 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(
         (survey: Survey) => {
-          for (let i = 0; i < survey.questions.length; i++) {
-            survey.questions[i].answers = [];
+          this.assigned = false;
+
+          // CHECK IF SURVEY IS PRIVATE
+          if(survey.private) {
+
+            // SET ANSWERS TO EMPTY []
+            for (let i = 0; i < survey.questions.length; i++) {
+              survey.questions[i].answers = [];
+            }
+            this.assigned = false;
+
+            // CHECK IF USER IS ASSIGNED TO SURVEY
+            let tempArray = survey.users;
+
+            tempArray.forEach(user => {
+              if(user === this.userId) {
+                // IF USER IS IN THE LIST ASSIGN VALUE TO TRUE
+                this.assigned = true;
+              }
+            });
+
+            // IF ASSIGNED THEN START TO DISPLAY SURVEY
+            if (this.assigned) {
+              this.onSurveyRetrieved(survey)
+            } else {
+
+              // IF NOT ASSIGNED THEN REDIRECT TO SURVEY ERROR
+              console.warn("ERROR USER NOT ASSIGENED TO SURVEY");
+              this._router.navigate(["/surveyError"]);
+            }
+          } else {
+
+            // IF SURVEY NOT PRIVATE REDIRECT TO SURVEY ERROR
+            console.warn("ERROR SURVEY IS NOT PRIVATE");
+            this._router.navigate(["/surveyError"]);
           }
-          this.onSurveyRetrieved(survey)
         },
         (error: any) => {
           if (error) {
@@ -163,10 +198,10 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   submitForm(): void {
     this.errors = [];
     this.survey = this.prepareSaveSurvey();
-    this._surveyService.updateAnswer(this.survey._id, this.survey).subscribe(
+    this._surveyService.updatePrivateAnswer(this.survey._id, this.survey).subscribe(
       result => {
-        alert("Thank you for taking our survey!");
-        this._router.navigate(["/list_of_surveys"]);
+        console.log("Thank you for taking our survey!");
+        this._router.navigate(["/success"]);
       },
       error => {
         console.log("___ERROR___:", error);
@@ -181,6 +216,13 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   }
 
   prepareSaveSurvey(): Survey {
+    let tempTotal = this.survey.totalAnswers + 1;
+    let allTime = this.survey.surveyTime + this.interval
+    this.timeAverage = allTime / tempTotal;
+
+    // CANCEL INTERVALS
+    clearInterval(this.interval);
+
     const formModel = this.surveyForm.value;
 
     // deep copy of form model questions
@@ -199,7 +241,9 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
       private: this.survey.private,
       questions: questionsDeepCopy,
       user: this.userId,
-      surveyTime: this.interval,
+      averageTime: this.timeAverage,
+      surveyTime: allTime,
+      totalAnswers: this.survey.totalAnswers + 1,
       creator: this.survey.creator,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
@@ -209,7 +253,7 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
 
   startTimer() {
     this.interval = setInterval(() => {
-        this.time++;
+      this.time++;
     }, 1000)
   }
 

@@ -26,7 +26,9 @@
       <mat-card>
         <mat-card-header>
           <div class="top-card">
-            <mat-slide-toggle formControlName="isRequired" [checked]="checked" class="required">required</mat-slide-toggle>
+            <div *ngIf="pc">
+              <mat-slide-toggle formControlName="isRequired" [checked]="checked" class="required">required</mat-slide-toggle>
+            </div>
             <span class="spacer"></span>
             <mat-icon matSuffix (click)="removeQuestion(i)" class="clear-icon">clear</mat-icon>
           </div>
@@ -173,6 +175,7 @@
     </div>
   </div>
   <div class="private-toggle" *ngIf="pc">
+    <h5>Please check if this survey is ment to be private and only accessed by those you assign.</h5>
     <mat-slide-toggle formControlName="private">Private Survey</mat-slide-toggle>
   </div>
   <!-- Submit Button -->

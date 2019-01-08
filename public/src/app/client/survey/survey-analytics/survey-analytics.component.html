@@ -1,34 +1,55 @@
 <div class="header">
-  <h3 class="mat-subheading-2" id="title">{{ survey?.name | titlecase }}</h3>
-  <span class="spacer"></span>
-  <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
-    <mat-icon>cloud_download</mat-icon>
-    <p>Download results</p>
-  </button>
-  <mat-menu #downloadMenu="matMenu">
-    <button mat-menu-item (click)="downloadJson()">
-      Json file
+  <div *ngIf="lvl !== 'FREE'">
+    <button mat-icon-button matTooltip="Download Survey" [matMenuTriggerFor]="downloadMenu" id="download-icon">
+      <mat-icon>cloud_download</mat-icon>
+      <p>Download results</p>
     </button>
-    <button mat-menu-item (click)="downloadText()">
-      Text file
-    </button>
-  </mat-menu>
+    <mat-menu #downloadMenu="matMenu">
+      <button mat-menu-item (click)="downloadJson()">
+        Json file
+      </button>
+      <button mat-menu-item (click)="downloadText()">
+        Text file
+      </button>
+    </mat-menu>
+    <br>
+  </div>
+  <h2>{{ title | titlecase }}</h2>
 
-  <h6 class="mat-caption">
+  <h6 class="mat-caption" *ngIf="!private">
     <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
   </h6>
-  <h6>last submision was: {{ timeSinceLastSubmission | number:'1.0-0' }} hours ago.</h6>
 
-  <mat-card>
-    <mat-card-title>Survey Volume</mat-card-title>
-    <mat-card-content>
-      <div class="chart-container">
-        <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
-      </div>
-    </mat-card-content>
-  </mat-card>
+  <div *ngIf="lvl !== 'FREE'">
+    <h6>last submision was: {{ timeSinceLastSubmission | number:'1.0-0' }} hours ago.</h6>
+
+    <mat-card>
+      <mat-card-title>Survey Volume</mat-card-title>
+      <mat-card-content>
+        <div class="chart-container">
+          <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
 
+<div class="small-boxes" *ngIf="private">
+  <mat-grid-list cols="3" rowHeight="100px">
+    <mat-grid-tile >
+      <mat-grid-tile-header>Total Answers</mat-grid-tile-header>
+      <mat-grid-tile-footer>{{ total | number }}</mat-grid-tile-footer>
+    </mat-grid-tile>
+    <mat-grid-tile >
+      <mat-grid-tile-header>Average Time</mat-grid-tile-header>
+      <mat-grid-tile-footer>{{ surveyAvg }}</mat-grid-tile-footer>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-grid-tile-header>Total Time</mat-grid-tile-header>
+      <mat-grid-tile-footer>{{ timeTotal }}</mat-grid-tile-footer>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
 <div id="survey" *ngFor="let question of questions; let i = index">
   <mat-card>
     <mat-card-header>
@@ -139,7 +160,7 @@
 
 
 <div id="button-group">
-  <button mat-raised-button (tap)="back()" color="primary">View All Surveys</button>
+  <button mat-raised-button (tap)="back()" color="primary">Back to Surveys</button>
 </div>
 
 
