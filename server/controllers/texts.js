@@ -13,10 +13,10 @@ class TextsController {
     text(req, res) {
         console.log("___ HIT TEXT ___");
         console.log("req.body", req.body);
-        let users = req.body;
+        let users = req.body._selected;
         users.forEach(user => {
-            let url = `http://localhost:8000/pSurvey/${user._survey}/${user._id}`
-            let output = `Hi ${user.name}! Please participate in our survey. ${url}`;
+            let url = `http://localhost:8000/pSurvey/${user._id}/${user._survey}`
+            let output = `Please participate in our survey. ${url} `;
 
             client.messages
                 .create({ from: smsNumber, body: output, to: user.phone })

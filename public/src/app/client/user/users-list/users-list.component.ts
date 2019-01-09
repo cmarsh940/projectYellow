@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from 'src/app/global/models/user';
-import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UploadUsersComponent } from '../upload-users/upload-users.component';
@@ -28,6 +28,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   pageEvent;
   surveyId = '';
   private = false;
+  loaded: Boolean;
 
   _routeSubscription: Subscription
 
@@ -42,21 +43,28 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   fileName: string = 'surveyUsers.xlsx';
 
   
-
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   
   constructor(
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
-    private cdref: ChangeDetectorRef
+    private cdref: ChangeDetectorRef,
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
+    this.loaded = false;
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.surveyId = params['id'];
 
       this.getUsers();
     });
+
+    setTimeout(() => {
+      this.loaded = true;
+    }, 1000);
   }
 
   ngOnDestroy() {
@@ -68,18 +76,16 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   }
 
   getUsers() {
+    this.loaded = false;
     let id = this.surveyId;
     this._userService.getClientsUsers(id)
       .subscribe((response) => {
-        console.log("GET USERS RESPONSE", response);
         this.dataSource = new MatTableDataSource<Element>(response.users);
-        console.log("THE DATA SOURCE IS:", this.dataSource);
         this.dataSource.paginator = this.paginator;
         this.private = response.private;
         this.array = response.users;
         this.totalSize = this.array.length;
         this.iterator();
-        
       })
   }
 
@@ -185,19 +191,38 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
 
 
   sendSMS(users: any): void {
-
-    console.log("SEND SMS FUNCTION", users);
+    this.loaded = false;
+    console.log("HIT SEND SMS");
     this.errors = [];
     this._userService.sendSMS(this.surveyId, users).subscribe((data: any) => {
-      if (data.errors) {
-        console.log("*** ERROR ***", data.errors)
-        for (const key of Object.keys(data.errors)) {
-          const error = data.errors[key];
-          this.errors.push(error.message);
+      if(data){
+        if (data.errors) {
+          console.log("*** ERROR ***", data.errors)
+          for (const key of Object.keys(data.errors)) {
+            const error = data.errors[key];
+            this.errors.push(error.message);
+          }
+        } else {
+          console.log("HIT GET USERS")
+          this.loaded = true;
+          this.openSnackBar();
         }
       } else {
-        this.getUsers();
+        this.loaded = true;
+        this.errors = data;
+        console.log("ERROR SENDING MESSAGE", data);
       }
     });
+  }
+
+  openSnackBar() {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 1500;
+    config.panelClass = ['logout-snackbar'];
+    this.loaded = true;
+    this.snackBar.open("Message Sent!", '', config);
+    this.getUsers();
   }
 }

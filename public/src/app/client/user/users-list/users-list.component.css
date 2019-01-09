@@ -1,3 +1,14 @@
+.loading {
+    min-width: 100%;
+    min-height: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.mat-spinner {
+    margin: 5em auto;
+}
+
 #topBox {
     width: 100%;
     display: inline-flex;
@@ -40,11 +51,13 @@
 }
 
 .mat-header-cell:last-of-type {
-    padding-right: 0;
+    padding: 0;
+    max-width: 9%;
 }
 
 .mat-cell:last-of-type {
     padding: 0;
+    max-width: 9%;
 }
 
 #smsText {
@@ -53,9 +66,18 @@
 }
 
 .mat-row.hovered {
-  background: #eee;
+  background-color: #ffd60033;
 }
 
-.mat-row.highlighted {
-  background: #999;
+.action-button {
+    display: inline-flex;
+    right: 0;
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+}
+
+.action-icon {
+    margin: auto;
+    width: 100%;
 }

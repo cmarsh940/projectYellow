@@ -1,99 +1,127 @@
-<div id="topBox">
-    <button mat-icon-button [matMenuTriggerFor]="addParticipants">
-        <mat-icon>add_circle_outline</mat-icon>
-        <p>Add participants</p>
-    </button>
-    <mat-menu #addParticipants="matMenu" id="addMenu">
-        <button mat-menu-item (click)="singleUploadDialog()" matTooltip="Add participant" color="primary">
-            <mat-icon aria-label="Add a single participant">
-                add
+<div *ngIf="!loaded">
+    <div class="loading">
+        <mat-spinner color="accent"></mat-spinner>
+    </div>
+</div>
+<div *ngIf="loaded">
+    <div id="topBox">
+        <button mat-icon-button [matMenuTriggerFor]="addParticipants">
+            <mat-icon>add_circle_outline</mat-icon>
+            <p>Add participants</p>
+        </button>
+        <mat-menu #addParticipants="matMenu" id="addMenu">
+            <button mat-menu-item (click)="singleUploadDialog()" matTooltip="Add participant" color="primary">
+                <mat-icon aria-label="Add a single participant">
+                    add
+                </mat-icon>
+                <p> Add single participant</p>
+            </button>
+            <button mat-menu-item (click)="openUploadDialog()" matTooltip="Upload participants" color="primary">
+                <mat-icon aria-label="Export users in a excel file">cloud_upload</mat-icon>
+                <p> Upload excel file</p>
+            </button>
+        </mat-menu>
+
+        <span class="spacer"></span>
+        <span class="spacer"></span>
+
+        <div class="export-button">
+            <button mat-icon-button (click)="export()" matTooltip="Download participants list">
+                <mat-icon aria-label="Export users in a excel file">cloud_download</mat-icon>
+                <p> Participants list</p>
+            </button>
+        </div>
+        <span class="spacer"></span>
+    </div>
+
+    <div id="smsText">
+        <button mat-raised-button (click)="sendSMS(selection)" color="primary" matTooltip="Send text message to selected participants">
+            <mat-icon  color="accent">
+                <i class="material-icons">textsms</i>
             </mat-icon>
-            <p> Add single participant</p>
-        </button>
-        <button mat-menu-item (click)="openUploadDialog()" matTooltip="Upload participants" color="primary">
-            <mat-icon aria-label="Export users in a excel file">cloud_upload</mat-icon>
-            <p> Upload excel file</p>
-        </button>
-    </mat-menu>
-
-    <span class="spacer"></span>
-    <span class="spacer"></span>
-
-    <div class="export-button">
-        <button mat-icon-button (click)="export()" matTooltip="Download participants list">
-            <mat-icon aria-label="Export users in a excel file">cloud_download</mat-icon>
-            <p> Participants list</p>
+            <p>send text message to selected</p>
         </button>
     </div>
-    <span class="spacer"></span>
+
+
+
+    <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+            </mat-header-cell>>
+            <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                </mat-checkbox>
+            </mat-cell>>
+        </ng-container>
+
+        <!-- Owner Column -->
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                {{ element.name | titlecase }}
+            </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="email">
+            <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.email }} </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="phone">
+            <mat-header-cell *matHeaderCellDef> Phone # </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.phone }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="action" stickyEnd>
+            
+            <mat-header-cell *matHeaderCellDef>
+                <mat-icon class="action-icon">more_vert</mat-icon>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button mat-icon-button [matMenuTriggerFor]="userAction" class="action-button">
+                    <mat-icon class="action-icon">more_vert</mat-icon>
+                </button>
+                <mat-menu #userAction="matMenu" class="user-action">
+                    <div *ngIf="element.textSent && !element.answeredSurvey">
+                        <button mat-menu-item matTooltip="Take Survey as user" routerLink="/pSurvey/{{element._id}}/{{surveyId}}">
+                            <mat-icon color="primary">
+                                <i class="material-icons">textsms</i>
+                            </mat-icon>
+                            <p>Resend text message</p>
+                        </button>
+                    </div>
+                    <button mat-menu-item matTooltip="Take Survey as user" routerLink="/pSurvey/{{element._id}}/{{surveyId}}">
+                        <mat-icon color="accent" >
+                            <i class="material-icons">visibility</i>
+                        </mat-icon>
+                        <p>Take Survey</p>
+                    </button>
+                    <button mat-menu-item matTooltip="Remove User" (click)="destroyUser(element._id)" matTooltip="Remove User">
+                        <mat-icon (click)="destroyUser(element._id)" matTooltip="Delete" color="warn">
+                            <i class="material-icons">
+                                delete_forever
+                            </i>
+                        </mat-icon>
+                        <p>Remove User</p>
+                    </button>
+
+                </mat-menu>
+            </mat-cell>
+
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{hovered: row.hovered}" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"(click)="selection.toggle(row)"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50, 100]" [showFirstLastButtons]="true"
+        [length]="totalSize" [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+    </mat-paginator>
+
 </div>
-
-<div *ngIf="selection._selected" id="smsText">
-    <button mat-raised-button (click)="sendSMS(selection._selected)" color="primary" matTooltip="Send text message to selected participants">
-        <mat-icon  color="accent">
-            <i class="material-icons">textsms</i>
-        </mat-icon>
-        <p>send text message to selected</p>
-    </button>
-</div>
-
-
-
-<mat-table [dataSource]="dataSource" [trackBy]="TrackById">
-
-    <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
-        <mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-        </mat-header-cell>>
-        <mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
-            </mat-checkbox>
-        </mat-cell>>
-    </ng-container>
-
-    <!-- Owner Column -->
-    <ng-container matColumnDef="name">
-        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-            {{ element.name }}
-        </mat-cell>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="email">
-        <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.email }} </mat-cell>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="phone">
-        <mat-header-cell *matHeaderCellDef> Phone # </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{ element.phone }} </mat-cell>
-    </ng-container>
-
-    <ng-container matColumnDef="action">
-        <mat-header-cell *matHeaderCellDef>
-            <span> Action </span>
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element" class="view">
-            <mat-icon routerLink="/pSurvey/{{element._id}}/{{surveyId}}" color="accent">
-                <i class="material-icons">visibility</i>
-            </mat-icon>
-        </mat-cell>
-        <mat-cell *matCellDef="let element" class="view">
-            <mat-icon (click)="destroyUser(element._id)" matTooltip="Delete" color="warn">
-                <i class="material-icons">
-                    delete_forever
-                </i>
-            </mat-icon>
-        </mat-cell>
-    </ng-container>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{hovered: row.hovered}" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"(click)="selection.toggle(row)"></mat-row>
-</mat-table>
-<mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50, 100]" [showFirstLastButtons]="true"
-    [length]="totalSize" [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
-</mat-paginator>
