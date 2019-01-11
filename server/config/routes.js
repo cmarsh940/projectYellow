@@ -1,19 +1,13 @@
 const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
+const EmailSubs = require('../controllers/emailSubs');
+const Feedbacks = require('../controllers/feedbacks');
 const path = require('path');
 const Payments = require('../controllers/payments');
-const Surveys = require('../controllers/surveys');
-const Users = require('../controllers/users');
-const Texts = require('../controllers/texts');
 const Questions = require('../controllers/questions');
-
-const PermissionMiddleware = require('../config/middleware/auth.permission.middleware');
-const ValidationMiddleware = require('../config/middleware/auth.validation.middleware');
-const config = require('./config');
-
-const ADMIN = config.permissionLevels.ADMIN;
-const PAID = config.permissionLevels.PAID_USER;
-const FREE = config.permissionLevels.NORMAL_USER;
+const Surveys = require('../controllers/surveys');
+const Texts = require('../controllers/texts');
+const Users = require('../controllers/users');
 
 const jwt = require('jsonwebtoken');
 const secret = require('./config').jwt_secret;
@@ -76,6 +70,12 @@ module.exports = function (app) {
     ]);
     app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
+
+    // EMAIL SUBSCRIPTION
+    app.post('/api/emailSub', EmailSubs.create);
+
+    // FEEDBACK
+    app.post('/api/feedback', Feedbacks.create);
 
     // IMAGES
     app.post('/api/upload/portfolio/:id', [
@@ -143,11 +143,12 @@ module.exports = function (app) {
         validJWTNeeded,
         Users.update
     ]);
+
     app.post('/api/usersUpload/:id', [
         validJWTNeeded,
         Users.upload
     ]);
-    
+
 
     // CATCH ALL
     app.all('*', (req, res, next) => {
