@@ -116,6 +116,18 @@ export class DataService<Type> {
     );
   }
 
+  public sendSMS(ns: string, id: string, itemToUpdate: Type): Observable<any> {
+    console.log('what is the id?', id);
+    console.log('what is the updated item?', itemToUpdate);
+    console.log("*** POST ***");
+    let nameService = "sendSMS";
+    console.log(`${this.actionUrl}${nameService}/${id}`)
+    return this.http.post<Type>(`${this.actionUrl}${nameService}/${id}`, itemToUpdate)
+    .pipe(
+      catchError(this.handleError('Send SMS', []))
+    );
+  }
+
   public delete(ns: string, id: string): Observable<any> {
     console.log('what is the id to delete?', id);
     console.log("*** DELETE ***");

@@ -16,8 +16,25 @@
     text-align: center;
 }
 
-#header a {
+#top {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+#top a {
     font-size: x-small;
+}
+
+#volume-chart {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    max-height: 330px;
+    overflow-y: unset;
+    background: #000000d1;
+    color: white;
+    border-radius: 0;
 }
 
 #survey {
@@ -94,4 +111,28 @@ td, th {
 .mat-card {
     max-height: 300px;
     overflow-y: scroll;
+}
+
+.mat-icon, p {
+    display: inline-block;
+}
+
+p{
+    margin: 0 0.5em;
+}
+.small-boxes {
+    width: 100%;
+}
+
+h5 h4 {
+    display: grid;
+}
+
+mat-chip {
+    margin: 1em 0!important;
+    font-size: large;
+}
+
+span {
+    margin-left: 5px;
 }

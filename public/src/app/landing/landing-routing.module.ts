@@ -8,6 +8,9 @@ import { PricingComponent } from './pricing/pricing.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 import { VerifiedComponent } from './verified/verified.component';
+import { PrivateSurveyComponent } from './private-survey/private-survey.component';
+import { SuccessComponent } from './success/success.component';
+import { SurveyErrorComponent } from './survey-error/survey-error.component';
 
 const routes: Routes = [
   {
@@ -43,6 +46,21 @@ const routes: Routes = [
         path: "takeSurvey/:id",
         pathMatch: "full",
         component: ViewSurveyComponent
+      },
+      {
+        path: "pSurvey/:id/:id",
+        pathMatch: "full",
+        component: PrivateSurveyComponent
+      },
+      {
+        path: "success",
+        pathMatch: "full",
+        component: SuccessComponent
+      },
+      {
+        path: "surveyError",
+        pathMatch: "full",
+        component: SurveyErrorComponent
       },
       {
         path: "verified/:id/:id",

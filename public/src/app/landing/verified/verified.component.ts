@@ -21,7 +21,7 @@ export class VerifiedComponent implements OnInit {
   ngOnInit() {
     this.loaded = false;
     console.log("SNAPSHOT", this.route.snapshot);
-    this.clientId = this.route.snapshot.url[1].path
+    this.clientId = this.route.snapshot.url[1].path;
     this.clientToken = this.route.snapshot.params['id'];
     this.verifyClientEmail();
     setTimeout(() => {

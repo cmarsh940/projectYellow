@@ -1,5 +1,5 @@
 import { environment } from './../../../environments/environment';
-import { Component, OnInit, OnDestroy, AfterContentInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { CheckoutService } from './checkout.service';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { EditClientComponent } from '../profile/edit-client/edit-client.componen
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
+export class CheckoutComponent implements OnDestroy, OnInit{
   subscriptionId: number;
   paymentTokenURL = 'api/braintree/getclienttoken';
   errors = [];
@@ -35,6 +35,7 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
   planName = '';
   currentClient = new Client();
   loaded: Boolean;
+  processing: Boolean;
 
   private clientToken: string;
   private ngUnsubscribe = new Subject();
@@ -53,9 +54,15 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
     ) { }
 
   ngOnInit() {
+    this.processing = false;
     console.log("CHECKOUT DATA", this.data)
     // GET SUBSCRIPTION ID
     
+    // SET CURRENT CLIENT
+    const currentClient = this.data.data;
+    console.log("CURRENT CLIENT", this.currentClient);
+
+    // SUBSCRIPTION ID
     this.subscriptionId = this.data.subscriptionId;
 
     // CLIENT ID
@@ -82,16 +89,13 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
         console.log("api error" + err);
       },
       complete: () => {
-        this.loaded = false
+        this.loaded = false;
+        this.processing = false;
         this.createPayment();
       }
     });
 
 
-  }
-
-  ngAfterContentInit(): void {
-    this.getClient();
   }
 
   
@@ -179,27 +183,47 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
 
     document.querySelector('#cardForm').addEventListener('submit',
       function (event) {
+        self.processing = false;
         event.preventDefault();
-        const checkoutURL = 'api/braintree/createpurchase';
         hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+          self.processing = true;
           if (tokenizeErr) {
+            self.processing = false;
             alert("Some payment input fields are invalid.");
             console.error(tokenizeErr);
             return;
           }
           console.log('Got a nonce: ' + payload.nonce);
-          console.log('URL: ' + checkoutURL);
-
-          self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, self.currentClient).subscribe(res => {
+          let currentClient = self.data.data;
+          if (currentClient._subscription === "FREE") {
+            self.processing = true;
+            const checkoutURL = 'api/braintree/createpurchase';
+            self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, currentClient).subscribe(res => {
               if (res.success === false) {
                 alert("YOUR PAYMENT WAS DECLINED");
+                self.processing = false;
                 console.error("api error", res);
               } else {
                 alert("Thank you for your subscription");
                 window.location.reload();
               }
             }
-          );
+            );
+          } else {
+            self.processing = true;
+            const checkoutURL = 'api/braintree/updatepurchase';
+            self.paymentService.updateSub(checkoutURL, payload.nonce, self.selectedPlan, currentClient).subscribe(res => {
+                if (res.success === false) {
+                  self.processing =  false;
+                  alert("YOUR PAYMENT WAS DECLINED");
+                  console.error("api error", res);
+                } else {
+                  alert("Thank you for your subscription");
+                  window.location.reload();
+                }
+              }
+            );
+          }
         });
       });
   }
@@ -209,14 +233,4 @@ export class CheckoutComponent implements AfterContentInit, OnDestroy, OnInit{
     this.location.back();
   }
 
-
-  getClient() {
-    this.errors = [];
-    this._profileService.getparticipant(this.clientId).subscribe(
-      (res) => {
-        this.currentClient = res;
-        console.log("CURRENT CLIENT", this.currentClient)
-      }
-    )
-  }
 }

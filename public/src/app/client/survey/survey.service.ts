@@ -38,6 +38,13 @@ export class SurveyService {
     let NAMESPACE = "answer/surveys";
     return this.dataService.update(NAMESPACE, id, itemToUpdate);
   }
+  public updatePrivateAnswer(id: any, itemToUpdate: any): Observable<Survey> {
+    console.log("HIT SERVICE UPDATE ANSWER");
+    console.log("*** ID ***", id);
+    console.log("*** ITEM TO UPDATE ***", itemToUpdate);
+    let NAMESPACE = "answer/pSurveys";
+    return this.dataService.update(NAMESPACE, id, itemToUpdate);
+  }
 
   public deleteAsset(id: any): Observable<Survey> {
     return this.dataService.delete(this.NAMESPACE, id);

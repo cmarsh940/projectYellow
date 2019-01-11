@@ -1,18 +1,13 @@
 const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
+const EmailSubs = require('../controllers/emailSubs');
+const Feedbacks = require('../controllers/feedbacks');
 const path = require('path');
 const Payments = require('../controllers/payments');
-const Surveys = require('../controllers/surveys');
-const Users = require('../controllers/users');
 const Questions = require('../controllers/questions');
-
-const PermissionMiddleware = require('../config/middleware/auth.permission.middleware');
-const ValidationMiddleware = require('../config/middleware/auth.validation.middleware');
-const config = require('./config');
-
-const ADMIN = config.permissionLevels.ADMIN;
-const PAID = config.permissionLevels.PAID_USER;
-const FREE = config.permissionLevels.NORMAL_USER;
+const Surveys = require('../controllers/surveys');
+const Texts = require('../controllers/texts');
+const Users = require('../controllers/users');
 
 const jwt = require('jsonwebtoken');
 const secret = require('./config').jwt_secret;
@@ -76,6 +71,12 @@ module.exports = function (app) {
     app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
 
+    // EMAIL SUBSCRIPTION
+    app.post('/api/emailSub', EmailSubs.create);
+
+    // FEEDBACK
+    app.post('/api/feedback', Feedbacks.create);
+
     // IMAGES
     app.post('/api/upload/portfolio/:id', [
         validJWTNeeded,
@@ -85,6 +86,7 @@ module.exports = function (app) {
     // PAYMENTS
     app.get('/api/braintree/getclienttoken', Payments.getClientToken);
     app.post('/api/braintree/createpurchase', Payments.checkout);
+    app.put('/api/braintree/updatepurchase', Payments.update);
     app.put('/api/payment/cancel/:id', Payments.cancelSubscription);
 
     // QUESTIONS
@@ -102,6 +104,7 @@ module.exports = function (app) {
     app.get('/api/surveys/:id', Surveys.show);
     app.put('/api/surveys/:id', Surveys.update);
     app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
+    app.put('/api/answer/pSurveys/:id', Surveys.answerPrivateSurvey);
 
     // SURVEY CATEGORIES
     app.get('/api/survey-categories', Categories.index);
@@ -121,6 +124,10 @@ module.exports = function (app) {
         validJWTNeeded,
         Categories.update
     ]);
+    
+
+    // TEXTING
+    app.post('/api/sendSMS/:id', Texts.text);
 
     // USERS
     app.post('/api/users', [
@@ -136,11 +143,12 @@ module.exports = function (app) {
         validJWTNeeded,
         Users.update
     ]);
+
     app.post('/api/usersUpload/:id', [
         validJWTNeeded,
         Users.upload
     ]);
-    
+
 
     // CATCH ALL
     app.all('*', (req, res, next) => {

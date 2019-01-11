@@ -55,15 +55,18 @@ export class LoginComponent implements OnInit {
     console.log("*** STARTING LOGIN ***")
     this.participant = {
       'email': this.email.value,
-      'password': this.password.value,
-      'used': this.password.value
+      'password': this.password.value
     };
 
     this._authService.authenticate(this.participant).subscribe((data) => {
       if(data) {
         if (data.errors) {
-          console.log("___ LOGIN ERROR ___:", data.errors);
-          this.errors.push(data.errors);
+          console.log("___ LOGIN ERROR ___:");
+          for (const key of Object.keys(data.errors)) {
+            const error = data.errors[key];
+            this.errors.push(error.message);
+          }
+          // this.errors.push(data.errors);
         } else {
           if (data.a8o1 === "CAPTAIN") {
             this._authService.setCurrentClient(data);

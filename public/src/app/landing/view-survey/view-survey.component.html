@@ -52,7 +52,7 @@
                                 </div>
 
                                 <!-- MULTI CHOICE -->
-                                <div *ngIf="survey?.questions[i]?.questionType === 'mutiplechoice'">
+                                <div *ngIf="survey?.questions[i]?.questionType === 'multiplechoice'">
                                     <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired" id="multichoice">
                                         <mat-radio-button *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
                                             {{option.optionName}}

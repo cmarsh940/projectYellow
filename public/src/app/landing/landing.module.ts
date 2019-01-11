@@ -15,6 +15,9 @@ import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 import { MainFooterComponent } from '../layout/main-footer/main-footer.component';
 import { VerifiedComponent } from './verified/verified.component';
 import { SubscriptionErrorComponent } from './subscription-error/subscription-error.component';
+import { PrivateSurveyComponent } from './private-survey/private-survey.component';
+import { SuccessComponent } from './success/success.component';
+import { SurveyErrorComponent } from './survey-error/survey-error.component';
 
 @NgModule({
   imports: [
@@ -30,7 +33,13 @@ import { SubscriptionErrorComponent } from './subscription-error/subscription-er
     RightsComponent, 
     AboutComponent,
     MainFooterComponent, 
-    PricingComponent, HomeComponent, ViewSurveyComponent, ListSurveysComponent, VerifiedComponent, SubscriptionErrorComponent
+    PricingComponent, 
+    HomeComponent, 
+    ViewSurveyComponent, 
+    ListSurveysComponent, 
+    VerifiedComponent, 
+    SubscriptionErrorComponent, 
+    PrivateSurveyComponent, SuccessComponent, SurveyErrorComponent
   ]
 })
 export class LandingModule { }

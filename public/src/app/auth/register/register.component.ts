@@ -129,7 +129,6 @@ export class RegisterComponent implements OnInit {
       'email': this.emailFormControl.value,
       'password': this.passwordFormControl.value,
       'confirm_pass': this.confirm_pass.value,
-      'used': this.confirm_pass.value,
       'phone': `+1${this.phoneFormControl.value}`,
       'address': this.addressFormControl.value,
       'city': this.cityFormControl.value,

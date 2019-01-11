@@ -8,6 +8,10 @@ export class Survey {
     creator: any;
     lastSubmission: any;
     submissionDates: any;
+    surveyTime?: number;
+    averageTime?:number;
+    totalAnswers?: number;
+    users?: any;
     createdAt: any;
     updatedAt: any;
 }

@@ -1,12 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
 import { UserService } from '../user.service';
 import { User } from 'src/app/global/models/user';
-import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UploadUsersComponent } from '../upload-users/upload-users.component';
 
 import * as XLSX from 'xlsx';
+import { AddUserComponent } from '../add-user/add-user.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 type AOA = any[];
 @Component({
@@ -14,8 +16,9 @@ type AOA = any[];
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css']
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecked {
   errorMessage;
+  errors = [];
   dataSource: any;
   array: any;
   resultsLength = 0;
@@ -25,28 +28,34 @@ export class UsersListComponent implements OnInit {
   pageEvent;
   surveyId = '';
   private = false;
+  loaded: Boolean;
 
   _routeSubscription: Subscription
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['name', 'email', 'phone', 'action'];
+  displayedColumns = ['select', 'name', 'email', 'phone', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  selection = new SelectionModel<User>(true, []);
 
   uploadData: AOA = [];
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName: string = 'surveyUsers.xlsx';
 
   
-
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   
   constructor(
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
+    private cdref: ChangeDetectorRef,
+    public snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
+    this.loaded = false;
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.surveyId = params['id'];
 
@@ -58,12 +67,15 @@ export class UsersListComponent implements OnInit {
     this._routeSubscription.unsubscribe();
   }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
 
   getUsers() {
+    this.loaded = false;
     let id = this.surveyId;
     this._userService.getClientsUsers(id)
       .subscribe((response) => {
-        console.log("GET USERS RESPONSE", response);
         this.dataSource = new MatTableDataSource<Element>(response.users);
         this.dataSource.paginator = this.paginator;
         this.private = response.private;
@@ -71,6 +83,28 @@ export class UsersListComponent implements OnInit {
         this.totalSize = this.array.length;
         this.iterator();
       })
+      setTimeout(() => {
+        this.loaded = true;
+      }, 1000);
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.forEach(row => this.selection.select(row));
+  }
+
+  moreToggleOff(){
+    console.log("SELECTION IS", this.selection);
+    this.selection.clear();
   }
 
   openUploadDialog() {
@@ -82,6 +116,20 @@ export class UsersListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getUsers();
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  singleUploadDialog() {
+    const addDialogRef = this.dialog.open(AddUserComponent, {
+      data: {
+        survey: this.surveyId,
+        surveyOwner: JSON.parse(localStorage.getItem('t940'))
+      }
+    });
+
+    addDialogRef.afterClosed().subscribe(result => {
       this.getUsers();
       console.log(`Dialog result: ${result}`);
     });
@@ -143,5 +191,42 @@ export class UsersListComponent implements OnInit {
 
     /* save to file */
     XLSX.writeFile(wb, this.fileName);
+  }
+
+
+  sendSMS(users: any): void {
+    this.loaded = false;
+    console.log("HIT SEND SMS");
+    this.errors = [];
+    this._userService.sendSMS(this.surveyId, users).subscribe((data: any) => {
+      if(data){
+        if (data.errors) {
+          console.log("*** ERROR ***", data.errors)
+          for (const key of Object.keys(data.errors)) {
+            const error = data.errors[key];
+            this.errors.push(error.message);
+          }
+        } else {
+          console.log("HIT GET USERS")
+          this.loaded = true;
+          this.openSnackBar();
+        }
+      } else {
+        this.loaded = true;
+        this.errors = data;
+        console.log("ERROR SENDING MESSAGE", data);
+      }
+    });
+  }
+
+  openSnackBar() {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 1500;
+    config.panelClass = ['logout-snackbar'];
+    this.loaded = true;
+    this.snackBar.open("Message Sent!", '', config);
+    this.getUsers();
   }
 }

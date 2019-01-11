@@ -42,7 +42,7 @@ export class ClientComponent implements OnInit {
         if (!subscribed) {
             this._router.navigateByUrl('/error');
         } else {
-            console.log("YOU ARE SUBSCRIPTION IS ACTIVE");
+            console.log("YOUR SUBSCRIPTION IS ACTIVE");
         }
     }
 

@@ -44,6 +44,9 @@ export class UserService {
   public uploadParticipants(id: any, itemToUpdate: any): Observable<User> {
     return this.dataService.uploadParticipants(this.NAMESPACE, id, itemToUpdate);
   }
+  public sendSMS(id: any, itemToUpdate: any): Observable<User> {
+    return this.dataService.sendSMS(this.NAMESPACE, id, itemToUpdate);
+  }
 
   public deleteParticipant(id: any): Observable<User> {
     return this.dataService.delete(this.NAMESPACE, id);

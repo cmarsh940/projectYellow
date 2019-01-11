@@ -1,19 +1,20 @@
 {
   "name": "mesurveys",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Survey",
   "private": true,
   "main": "server.js",
   "scripts": {
+    "DB": "mongod --auth --port 27017 --dbpath /data/db",
     "start": "node server.js"
   },
   "keywords": [],
   "author": "Cam",
   "dependencies": {
-    "aws-sdk": "^2.348.0",
+    "aws-sdk": "^2.384.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "braintree": "^2.13.1",
+    "braintree": "^2.14.0",
     "busboy": "^0.2.14",
     "busboy-body-parser": "^0.3.2",
     "compression": "^1.7.3",
@@ -21,12 +22,12 @@
     "cors": "^2.8.4",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
-    "helmet": "^3.14.0",
-    "jsonwebtoken": "^8.3.0",
-    "mongoose": "5.4.0",
+    "helmet": "^3.15.0",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "5.4.2",
     "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
-    "nodemailer": "^4.6.8",
-    "twilio": "^3.25.0"
+    "nodemailer": "^5.1.0",
+    "twilio": "^3.26.1"
   }
 }

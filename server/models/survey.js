@@ -34,6 +34,17 @@ const SurveySchema = new mongoose.Schema({
       ref: "User"
     }
   ],
+  averageTime: {
+    type: Number
+  },
+  totalAnswers: {
+    type: Number,
+    default: 0
+  },
+  surveyTime: {
+    type: Number,
+    default: 0
+  },
   submissionDates: [Date],
   lastSubmission: {
     type: Date,

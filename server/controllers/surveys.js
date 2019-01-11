@@ -3,6 +3,7 @@ const Survey = mongoose.model("Survey");
 const Category = mongoose.model('Category');
 const Client = mongoose.model('Client');
 const Question = mongoose.model('Question');
+const User = mongoose.model('User');
 
 class SurveysController {
   index(req, res) {
@@ -74,7 +75,7 @@ class SurveysController {
 
   show(req, res) {
     Survey.findById({ _id: req.params.id }).lean()
-      .populate({ path: 'creator', select: 'firstName', model: Client })
+      .populate({ path: 'creator', select: 'firstName', select: '_subscription', model: Client })
       .populate("questions")
       .exec((err, survey) => {
         if (err) {
@@ -94,7 +95,12 @@ class SurveysController {
 
     Survey.findByIdAndUpdate(req.params.id, { 
       $push: { submissionDates: Date.now() },
-      $set: { lastSubmission: Date.now() } }, { new: true }, (err, survey) => {
+      $set: { 
+        lastSubmission: Date.now(), 
+        averageTime: req.body.averageTime,
+        totalAnswers: req.body.totalAnswers,
+        surveyTime: req.body.surveyTime
+      } }, { new: true }, (err, survey) => {
       if (err) {
         console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);
@@ -118,6 +124,63 @@ class SurveysController {
           })
         }
         return res.json(survey);
+      }
+    })
+  }
+  answerPrivateSurvey(req, res) {
+    console.log("*** HIT SERVER UPDATE ANSWER ***");
+    console.log("*** PARAMS ***", req.params);
+    console.log("*** BODY ***", req.body);
+
+    Survey.findByIdAndUpdate(req.params.id, { 
+      $push: { submissionDates: Date.now() },
+      $set: { 
+        lastSubmission: Date.now(), 
+        averageTime: req.body.averageTime,
+        totalAnswers: req.body.totalAnswers,
+        surveyTime: req.body.surveyTime
+      } }, { new: true }, (err, survey) => {
+      if (err) {
+        console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
+        return res.json(err);
+      } else {
+        let arr = req.body.questions;
+        let userAnswers = [];
+        for (let i = 0; i < arr.length; i++) {
+          Question.findById(arr[i]._id, (err, question) => {
+            if (err) {
+              console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
+              return res.json(err);
+            }
+            userAnswers.push(arr[i].answers);
+            question.answers.push(arr[i].answers)
+            question.lastAnswered = Date.now();
+            question.save((err, question) => {
+              if (err) {
+                console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+                return res.json(err);
+              }
+              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`, question);
+            });
+          })
+        }
+        User.findById(req.body.user, (err, user) => {
+          if (err) {
+            console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
+            return res.json(err);
+          }
+          user.answers.push(userAnswers)
+          user.submissionDate = Date.now();
+          user.answeredSurvey = true;
+          user.save((err, savedUser) => {
+            if (err) {
+              console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+              return res.json(err);
+            }
+            console.log("SAVED USER", savedUser);
+            return res.json(survey);
+          });
+        })
       }
     })
   }

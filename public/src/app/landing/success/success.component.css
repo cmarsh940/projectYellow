@@ -1,0 +1,9 @@
+.success-header {
+    width: 100;
+    text-align: center;
+    color: green;
+}
+
+.success-body {
+    padding: 1em;
+}
