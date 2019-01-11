@@ -118,6 +118,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       // INITIALIZE CHART FROM HTML
       this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
 
+      let gradient = this.context.createLinearGradient(0, 0, 320, 0);
+      gradient.addColorStop(0, '#ffd600');
+      gradient.addColorStop(0.4, '#ffff52');
+      gradient.addColorStop(0.9, '#ffd600');
+      gradient.addColorStop(1, '#ffff52');
+
+      this.context.fillStyle = gradient;
+
       // GENERATE CHART AND COMPONENTS
       this.chart = new Chart(this.context, {
         type: 'line',
@@ -126,7 +134,10 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           datasets: [
             {
               data: dateValues,
-              borderColor: '#3cba9f',
+              label: 'Volume',
+              borderColor: gradient,
+              hoverBorderColor: '#ffff52',
+              backgroundColor: '#fdff0066',
               fill: true
             },
           ]
@@ -134,6 +145,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         options: {
           legend: {
             display: false,
+            
           },
           animation: {
             duration: 0, // general animation time
@@ -142,6 +154,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
             animationDuration: 0, // duration of animations when hovering an item
           },
           responsiveAnimationDuration: 0, // animation duration after a resize
+          layout: {
+            padding: {
+              top: 20,
+              bottom: 0
+            }
+          },
           scales: {
             xAxes: [{
               type: 'time',
@@ -153,9 +171,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
               }
             }],
             yAxes: [{
-              ticks: {
-                source: 'auto'
-              }
+              display: false
             }]
           }
         }

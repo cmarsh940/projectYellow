@@ -16,8 +16,25 @@
     text-align: center;
 }
 
-#header a {
+#top {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+#top a {
     font-size: x-small;
+}
+
+#volume-chart {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    max-height: 330px;
+    overflow-y: unset;
+    background: #000000d1;
+    color: white;
+    border-radius: 0;
 }
 
 #survey {

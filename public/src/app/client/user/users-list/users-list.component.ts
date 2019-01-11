@@ -61,10 +61,6 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
 
       this.getUsers();
     });
-
-    setTimeout(() => {
-      this.loaded = true;
-    }, 1000);
   }
 
   ngOnDestroy() {
@@ -87,6 +83,9 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
         this.totalSize = this.array.length;
         this.iterator();
       })
+      setTimeout(() => {
+        this.loaded = true;
+      }, 1000);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -101,6 +100,11 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.forEach(row => this.selection.select(row));
+  }
+
+  moreToggleOff(){
+    console.log("SELECTION IS", this.selection);
+    this.selection.clear();
   }
 
   openUploadDialog() {

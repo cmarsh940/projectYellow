@@ -15,7 +15,8 @@
     <br>
   </div>
   <h2>{{ title | titlecase }}</h2>
-
+</div>
+<div id="top">
   <h6 class="mat-caption" *ngIf="!private">
     <a href="https://www.surveysbyme.com/takeSurvey/{{ survey?._id }}">URL: www.surveysbyme.com/takeSurvey/{{ survey?._id }}</a>
   </h6>
@@ -23,7 +24,7 @@
   <div *ngIf="lvl !== 'FREE'">
     <h6>last submission was: <span *ngIf="timeSinceLastSubmission <= 1"> Less then an hour ago.</span> <span *ngIf="timeSinceLastSubmission > 1">{{ timeSinceLastSubmission | number:'1.0-0' }} hours ago.</span></h6>
 
-    <mat-card>
+    <mat-card id="volume-chart">
       <mat-card-title>Survey Volume</mat-card-title>
       <mat-card-content>
         <div class="chart-container">
