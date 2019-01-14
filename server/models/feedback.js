@@ -1,17 +1,9 @@
 const mongoose = require('mongoose');
 
+const root = 'https://surveysbyme.s3.us-west-2.amazonaws.com/Feedback/';
+
 const FeedbackSchema = new mongoose.Schema({
-    name: {
-        type: String, 
-        maxlength: [250, "Max characters reached. please stay below 250 characters"],
-        trim: true,
-        validate: {
-            validator: function (name) {
-                return /^[a-zA-Z]+$/.test(name);
-            },
-            message: "First name cannot contain numbers or symbols."
-        }
-    },
+
     email: {
         type: String, 
         maxlength: [200, "Email cannot be greater then 200 characters"],
@@ -24,18 +16,30 @@ const FeedbackSchema = new mongoose.Schema({
             message: "Please enter a valid email"
         }
     },
-    phone: {
-        type: Number,
-        validate: {
-            validator: function (phone) {
-                return /^\+?[1-9]\d{1,14}$/.test(phone);
-            },
-            message: "Please enter a valid phone number"
-        }
+
+    feedbackType: {
+        type: String
     },
+
     message: {
         type: String,
-    }   
+        required: [true, "Feedback must have a message with it"],
+    },
+
+    name: {
+        type: String,
+        maxlength: [250, "Max characters reached. please stay below 250 characters"],
+        trim: true,
+    },
+
+    rating: {
+        type: Number
+    },
+
+    screenshot: {
+        type: String,
+        get: v => `${root}${v}`
+    }  
 }, { timestamps: true });
 
 const Feedback = mongoose.model('Feedback', FeedbackSchema);

@@ -44,6 +44,17 @@ export class UploadService {
       catchError(this.handleError('Upload', []))
     );
   }
+  
+  postFeedback(formData): Observable<any> {
+    console.log("**** HIT UPLOAD SERVICE FOR FEEDBACK");
+
+    var URL = this.actionUrl + "upload/feedback";
+    console.log("**** url", URL);
+    return this.http.post<any>(URL, formData).pipe(
+      map(this.extractData),
+      catchError(this.handleError('Upload', []))
+    );
+  }
 
   deleteImage(id: any) {
     var URL = this.actionUrl + "deleteImage";

@@ -1,6 +1,7 @@
 import { RightsComponent } from './../../landing/rights/rights.component';
 import { Component } from '@angular/core';
 import { MatDialog } from '../../../../node_modules/@angular/material';
+import { FeedbackComponent } from '../feedback/feedback.component';
 
 @Component({
   selector: 'app-main-footer',
@@ -16,6 +17,14 @@ export class MainFooterComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
+    });
+  }
+
+  openFeedback() {
+    const feedbackRef = this.dialog.open(FeedbackComponent);
+
+    feedbackRef.afterClosed().subscribe(result => {
+      console.log(`Feedback result: ${result}`);
     });
   }
 }

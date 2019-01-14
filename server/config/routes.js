@@ -75,7 +75,7 @@ module.exports = function (app) {
     app.post('/api/emailSub', EmailSubs.create);
 
     // FEEDBACK
-    app.post('/api/feedback', Feedbacks.create);
+    app.post('/api/upload/feedback', Feedbacks.create);
 
     // IMAGES
     app.post('/api/upload/portfolio/:id', [
