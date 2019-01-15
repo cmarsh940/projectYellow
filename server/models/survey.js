@@ -34,6 +34,16 @@ const SurveySchema = new mongoose.Schema({
       ref: "User"
     }
   ],
+  meta: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Meta"
+      }
+    ],
+    select: false,
+    default: []
+  },
   averageTime: {
     type: Number
   },

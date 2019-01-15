@@ -199,7 +199,14 @@ const ClientSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
     default: true
-  }
+  },
+  
+  resetRequest: {
+    type: Boolean,
+    required: true,
+    default: true
+  },
+  resetDates: { type: Array, "default": [] },
 
 }, {
     timestamps: true

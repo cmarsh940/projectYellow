@@ -9,6 +9,7 @@ import { Survey } from '../../global/models/survey';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { Question } from '../../global/models/question';
 import { questionGroups } from '../../global/models/question-group';
+import { Platform } from '@angular/cdk/platform';
 
 
 @Component({
@@ -24,6 +25,9 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   _routeSubscription: Subscription;
   questionGroup = questionGroups;
   loaded: Boolean;
+  currentPlatform: any;
+  currentDevice: any;
+  agent: any;
 
   @Input() survey: any;
 
@@ -64,6 +68,11 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loaded = false;
+    this.currentDevice = window.clientInformation.platform;
+    this.currentPlatform = window.clientInformation.vendor;
+    this.agent = window.clientInformation.userAgent;
+
+    console.log("INFO", window.clientInformation);
     this.startTimer();
     this.surveyForm = this.fb.group({
       questions: this.fb.array([this.buildQuestion()])
@@ -78,6 +87,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       this.loaded = true;
     }, 1000);
   }
+  
 
   ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
@@ -210,6 +220,9 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       surveyTime: allTime,
       totalAnswers: this.survey.totalAnswers + 1,
       creator: this.survey.creator,
+      device: this.currentDevice,
+      agent: this.agent, 
+      platform: this.currentPlatform,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };

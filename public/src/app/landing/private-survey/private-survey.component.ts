@@ -23,6 +23,9 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   questionGroup = questionGroups;
   loaded: Boolean;
   userId: String;
+  currentPlatform: any;
+  currentDevice: any;
+  agent: any;
 
   @Input() survey: any;
 
@@ -65,6 +68,12 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loaded = false;
+
+    // SET META INFO
+    this.currentDevice = window.clientInformation.platform;
+    this.currentPlatform = window.clientInformation.vendor;
+    this.agent = window.clientInformation.userAgent;
+
     this.surveyForm = this.fb.group({
       questions: this.fb.array([this.buildQuestion()])
     });
@@ -245,6 +254,9 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
       surveyTime: allTime,
       totalAnswers: this.survey.totalAnswers + 1,
       creator: this.survey.creator,
+      device: this.currentDevice,
+      agent: this.agent,
+      platform: this.currentPlatform,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };

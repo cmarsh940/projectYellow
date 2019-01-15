@@ -12,6 +12,9 @@ export class Survey {
     averageTime?:number;
     totalAnswers?: number;
     users?: any;
+    device?: any;
+    agent?:any;
+    platform?: any;
     createdAt: any;
     updatedAt: any;
 }

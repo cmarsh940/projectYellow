@@ -5,6 +5,7 @@ class FeedbacksController {
 
     create(req, res) {
         console.log("___ SERVER HIT CREATE FEEDBACK ___");
+
         Feedback.create(req.body, (err, feedback) => {
             if (err) {
                 console.log("___ FEEDBACK ERRO ___", err);

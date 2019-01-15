@@ -81,8 +81,9 @@ export class FeedbackComponent implements OnInit {
           });
           this.openSnackBar();
         }
+      } else {
+        this.errors = data;
       }
-      this.errors.push(data);
     })
   }
 
