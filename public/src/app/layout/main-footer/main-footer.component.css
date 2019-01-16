@@ -1,3 +1,26 @@
+footer {
+    min-width:100%;
+    background-color: black;
+    height: 8em;
+}
+
+.mat-toolbar {
+    padding: 0;
+    height: 8em;
+}
+
+input {
+    background-color: white;
+}
+
+.mat-form-field button {
+    display: block;
+}
+
+.mat-icon-button {
+    vertical-align: super;
+}
+
 a {
     color: white;
 }
@@ -9,4 +32,12 @@ a {
 .row {
     width: 100%;
     display: flex;
+}
+
+.errors {
+    color: red;
+}
+
+.errors span {
+    font-size: small;
 }

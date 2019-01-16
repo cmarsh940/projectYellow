@@ -44,6 +44,16 @@ export class UploadService {
       catchError(this.handleError('Upload', []))
     );
   }
+
+  addEmailSub(formData): Observable<any> {
+    console.log("**** HIT EMAIL SUB SERVICE");
+
+    var URL = this.actionUrl + "add/emailSub";
+    return this.http.post<any>(URL, formData).pipe(
+      map(this.extractData),
+      catchError(this.handleError('Email Subscription', []))
+    );
+  }
   
   postFeedback(formData): Observable<any> {
     console.log("**** HIT UPLOAD SERVICE FOR FEEDBACK");

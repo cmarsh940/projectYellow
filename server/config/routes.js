@@ -72,7 +72,7 @@ module.exports = function (app) {
     app.get('/sessions', Clients.session);
 
     // EMAIL SUBSCRIPTION
-    app.post('/api/emailSub', EmailSubs.create);
+    app.post('/api/add/emailSub', EmailSubs.create);
 
     // FEEDBACK
     app.post('/api/upload/feedback', Feedbacks.create);
