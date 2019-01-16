@@ -1,9 +1,10 @@
 import { RightsComponent } from './../../landing/rights/rights.component';
 import { Component } from '@angular/core';
-import { MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig, ErrorStateMatcher } from '../../../../node_modules/@angular/material';
+import { MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig, MatIconRegistry } from '../../../../node_modules/@angular/material';
 import { FeedbackComponent } from '../feedback/feedback.component';
-import { FormGroup, FormControl, Validators, FormBuilder, FormGroupDirective, NgForm } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { UploadService } from 'src/app/global/services/upload.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 
 @Component({
@@ -26,12 +27,21 @@ export class MainFooterComponent {
 
   private emailSub;
 
+  facebookUrl = 'https://www.facebook.com/SurveysbyME/';
+  contactEmail = 'mailto:surveysbyme@mellcgroup.com';
+
   constructor(
     private _uploadService: UploadService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
     fb: FormBuilder
     ) {
+    iconRegistry.addSvgIcon(
+      'facebook',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'));
+
     this.emailSubForm = fb.group({
       email: this.emailFormControl,
     }, { updateOn: 'blur' });

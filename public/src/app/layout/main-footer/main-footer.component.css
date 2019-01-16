@@ -1,37 +1,25 @@
 footer {
-    min-width:100%;
+    width:100%;
     background-color: black;
-    height: 8em;
-}
-
-.mat-toolbar {
-    padding: 0;
-    height: 8em;
-}
-
-input {
-    background-color: white;
+    color: white;
 }
 
 .mat-form-field button {
     display: block;
 }
 
-.mat-icon-button {
-    vertical-align: super;
+.mat-form-field {
+    max-width: 95%;
+    background-color: white;
 }
 
 a {
     color: white;
+    text-decoration: none;
 }
 
 .mat-toolbar {
     padding: 0;
-}
-
-.row {
-    width: 100%;
-    display: flex;
 }
 
 .errors {
@@ -40,4 +28,53 @@ a {
 
 .errors span {
     font-size: small;
+}
+
+ul {
+    list-style: none;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    margin: 0;
+    
+}
+
+ul li {
+    vertical-align: top;
+    height: 2em;
+}
+
+li h5 {
+    width: 100%;
+    font-size: larger;
+    text-align: center;
+    text-decoration: underline;
+    font-weight: 100;
+    letter-spacing: 2px;
+}
+
+.mat-form-field-appearance-outline {
+    padding: 0;
+}
+
+#facebook-icon {
+    text-decoration: none;
+}
+
+span {
+    font-size: medium;
+    vertical-align: super;
+}
+
+#copyright {
+    width: 100%;
+}
+
+#left-column {
+    padding: 0 0 0 1em;
+}
+
+#services-list {
+    margin: 0;
+    width: fit-content;
 }
