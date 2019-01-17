@@ -72,6 +72,26 @@
               <h4>{{ j + 1 }} ) {{ answer | date }}</h4>
             </ng-container>
           
+            <!-- DROP DOWN SINGLE ANSWER -->
+            <ng-container *ngSwitchCase="'dropDown'">
+              <mat-chip-list class="mat-chip-list-stacked">
+                <mat-chip [style.background]="answer.color" disabled>
+                  {{ j + 1 }} ) {{ answer.optionName }} = <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{
+                    answer.count }}</span>
+                </mat-chip>
+              </mat-chip-list>
+            </ng-container>
+            
+            <!-- DROP DOWN MULTIPLE ANSWERS -->
+            <ng-container *ngSwitchCase="'dropDownMultiple'">
+              <mat-chip-list class="mat-chip-list-stacked">
+                <mat-chip [style.background]="answer.color" disabled>
+                  {{ j + 1 }} ) {{ answer.optionName }} = <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{
+                    answer.count }}</span>
+                </mat-chip>
+              </mat-chip-list>
+            </ng-container>
+
             <!-- YES NO -->
             <ng-container *ngSwitchCase="'yesno'">
               <h4 class="booleanData">Yes = {{ answer[0] }}</h4>
@@ -85,6 +105,15 @@
           
             <!-- MULTI CHOICE -->
             <ng-container *ngSwitchCase="'multiplechoice'">
+              <mat-chip-list class="mat-chip-list-stacked">
+                <mat-chip [style.background]="answer.color" disabled>
+                  {{ j + 1 }} ) {{ answer.optionName }} =  <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{ answer.count }}</span>
+                </mat-chip>
+              </mat-chip-list>
+            </ng-container>
+
+            <!-- MULTI CHOICE WITH OTHER OPTION -->
+            <ng-container *ngSwitchCase="'multiplechoiceOther'">
               <mat-chip-list class="mat-chip-list-stacked">
                 <mat-chip [style.background]="answer.color" disabled>
                   {{ j + 1 }} ) {{ answer.optionName }} =  <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{ answer.count }}</span>

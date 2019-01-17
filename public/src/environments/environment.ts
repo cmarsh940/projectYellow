@@ -5,7 +5,10 @@
 export const environment = {
   production: false,
 
-  braintreeKey: 'sandbox_yddk3k3z_7ztv22wfy86bsspy'
+  braintreeKey: 'sandbox_yddk3k3z_7ztv22wfy86bsspy',
+
+  facebookId: '2287097054898932',
+  facebookVersion: 'v3.2'
 };
 
 /*

@@ -14,6 +14,19 @@ import * as Chart from 'chart.js';
 import * as moment from 'moment';
 
 
+function flatten(arr) {
+  return [].concat(...arr)
+}
+function deepFlatten(arr) {
+  return flatten(           // return shalowly flattened array
+    arr.map(x =>             // with each x in array
+      Array.isArray(x)      // is x an array?
+        ? deepFlatten(x)    // if yes, return deeply flattened x
+        : x                 // if no, return just x
+    )
+  )
+}
+
 @Component({
   selector: 'app-survey-analytics',
   templateUrl: './survey-analytics.component.html',
@@ -198,7 +211,6 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     })
   }
 
-
   loopThroughQuestions() {
     for (let i = 0; i < (<any>this.survey).length; i++) {
       // GENERATING AVERAGE
@@ -236,50 +248,44 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         this.survey[i].answers = [];
         this.survey[i].answers.push([e,f]);
         this.booleanAnswers = this.survey[i].answers;
-
-        // this.barChart = new Chart('bar', {
-        //   type: 'bar',
-        //   data: {
-        //     labels: ["True", "False"],
-        //     datasets: [
-        //       {
-        //         data: this.booleanAnswers[0],
-        //         borderColor: '#3cba9f',
-        //         borderWidth: 2,
-        //         fill: false 
-        //       }
-        //     ]
-        //   },
-        //   options: {
-        //     legend: {
-        //       display:false
-        //     },
-        //     maintainAspectRatio: false,
-        //     scales: {
-        //       yAxes: [{
-        //         stacked: true,
-        //         gridLines: {
-        //           display: true,
-        //           color: "rgba(255,99,132,0.2)"
-        //         }
-        //       }],
-        //       xAxes: [{
-        //         gridLines: {
-        //           display: false
-        //         }
-        //       }]
-        //     }
-        //   }
-        // })
-
       }
 
-      // MULTIPLE CHOICE ANSWERS
-      else if (this.survey[i].questionType === 'multiplechoice') {
-        console.log("_*_*_* MULTIPLE CHOICE QUESTION *_*_*_", this.survey[i]);
+      if (this.survey[i].questionType === 'dropDownMultiple') {
+        console.log("_*_*_* MULTIPLE DROP DOWN QUESTION *_*_*_", this.survey[i]);
 
+        let options = this.survey[i].options;
+
+        // FLATTEN NESTED ARRAY OF ANSWERS
+        let tempAnswers = deepFlatten(this.survey[i].answers);
+
+        // LOOP THROUGH ANSWERS AND OPTIONS AND COUNT HOW MANY OF EACH
+        tempAnswers.forEach(answer => {
+          options.forEach(option => {
+            if (option.optionName == answer) {
+              let randomNum = Math.floor(Math.random() * 12) + 0;
+              if (!option.count) {
+                option.count = 1;
+                option.color = this.colors[randomNum];
+                return
+              } else {
+                option.count = option.count + 1;
+                return
+              }
+            }
+          });
+        });
+        // SET NEW OPTIONS AND PUTH THEM TO THE QUESTIONS ANSWERS
+        this.survey[i].answers = options;
+        this.questions.push(this.survey[i]);
+      }
+
+
+      // MULTIPLE CHOICE OR DROP DOWN ANSWERS
+      else if (this.survey[i].questionType === 'multiplechoice' || this.survey[i].questionType === 'multiplechoiceOther' || this.survey[i].questionType === 'dropDown') {
         let options = this.survey[i].options; 
         let tempAnswers = this.survey[i].answers;
+
+        // LOOP THROUGH ANSWERS AND OPTIONS AND COUNT HOW MANY OF EACH
         tempAnswers.forEach(answer => {
           options.forEach(option => {
             if (option.optionName === answer) {
@@ -292,13 +298,11 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
               }
             }
           });
-          
         });
 
-        console.log("NEW OPTIONS", options);
+        // SET NEW OPTIONS AND PUTH THEM TO THE QUESTIONS ANSWERS
         this.survey[i].answers = options;
         this.questions.push(this.survey[i]);
-
       } 
       
       // EVERYTHING ELSE

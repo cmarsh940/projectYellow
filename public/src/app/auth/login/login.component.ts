@@ -4,7 +4,9 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Client } from "../../global/models/client";
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar } from '@angular/material';
+import { environment } from './../../../environments/environment';
 
+declare var FB: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -47,8 +49,49 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.verified()
+    this.verified();
+    this.loadFacebook();
    }
+
+
+  loadFacebook() {
+
+    (window as any).fbAsyncInit = function () {
+      FB.init({
+          appId: environment.facebookId,
+          cookie: true,
+          xfbml: true,
+          version: environment.facebookVersion
+        });
+        FB.AppEvents.logPageView();
+      };
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+  }
+
+  submitLogin() {
+    console.log("submit login to facebook");
+    // FB.login();
+    FB.login((response) => {
+      console.log('submitLogin', response);
+      if (response.authResponse) {
+        console.log('Welcome!  Fetching your information.... ');
+        FB.api('/me', { fields: 'last_name, first_name, email, location' }, function (response) {
+          console.log('Request response is', response);
+        });
+      }
+      else {
+        console.log('User login failed');
+      }
+    }, { scope: 'email,user_location'});
+
+  }
 
   loginParticipant(form: any) {
     this.errors = [];

@@ -57,6 +57,54 @@
                   <input matInput formControlName="question">
                 </mat-form-field>
               </ng-container>
+
+              <!-- DROP DOWN SINGLE ANSWER -->
+              <ng-container *ngSwitchCase="'dropDown'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              
+                <mat-divider></mat-divider>
+              
+                <div formArrayName="options">
+                  <div *ngFor="let option of question.get('options').controls; let j=index">
+                    <div [formGroupName]="j">
+                      <mat-form-field>
+                        <mat-label>option #{{j+1}}</mat-label>
+                        <input matInput formControlName="optionName" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <button mat-raised-button type="button" (click)="addNewOption(question.controls.options)" color="primary">
+                    Add new Option
+                  </button>
+                </div>
+              </ng-container>
+              
+              <!-- DROP DOWN MULTIPLE ANSWERS -->
+              <ng-container *ngSwitchCase="'dropDownMultiple'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+              
+                <mat-divider></mat-divider>
+              
+                <div formArrayName="options">
+                  <div *ngFor="let option of question.get('options').controls; let j=index">
+                    <div [formGroupName]="j">
+                      <mat-form-field>
+                        <mat-label>option #{{j+1}}</mat-label>
+                        <input matInput formControlName="optionName" />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <button mat-raised-button type="button" (click)="addNewOption(question.controls.options)" color="primary">
+                    Add new Option
+                  </button>
+                </div>
+              </ng-container>
   
               <!-- YES NO -->
               <ng-container *ngSwitchCase="'yesno'">

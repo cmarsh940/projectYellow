@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const os = require('os');
 const geoip = require('geoip-lite');
 
+// MODELS
 const Survey = mongoose.model("Survey");
 const Category = mongoose.model('Category');
 const Client = mongoose.model('Client');
@@ -12,6 +13,7 @@ const User = mongoose.model('User');
 
 class SurveysController {
   index(req, res) {
+    console.log("THE REQUEST HEADERS:", req.headers);
     Survey.find({}).lean()
     .populate({ path: "category", select: 'name', model: Category })
     .populate({ path: "creator", select: 'firstName lastName businessName', model: Client })
@@ -132,10 +134,11 @@ class SurveysController {
         let meta = {
           address: req.ip,
           agent: req.body.agent,
+          device: req.body.device,
+          browser: req.body.platform, 
           loc: geo,
           metaName: os.userInfo().username,
-          device: req.body.device,
-          browser: req.body.platform,
+          referer: req.headers.referer,
           _survey: survey._id
         }
         Meta.create(meta, function (err, metas) {
@@ -205,10 +208,11 @@ class SurveysController {
           let meta = {
             address: req.ip,
             agent: req.body.agent,
-            loc: geo,
-            metaName: os.userInfo().username,
             device: req.body.device,
             browser: req.body.platform,
+            loc: geo,
+            metaName: os.userInfo().username,
+            referer: req.headers.referer,
             _survey: survey._id,
             _user: user._id
           }

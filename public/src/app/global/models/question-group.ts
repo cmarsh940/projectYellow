@@ -25,9 +25,17 @@ export const questionGroups: QuestionGroup[] = [
         ]
     },
     {
+        name: 'Drop Down',
+        group: [
+            { value: "dropDown", viewValue: "Drop Down (Single answer)" },
+            { value: "dropDownMultiple", viewValue: "Drop Down (Multiple answer)" },
+        ]
+    },
+    {
         name: 'Multiple Choice',
         group: [
-            { value: "multiplechoice", viewValue: "Multiple Choice (one answer)" },
+            { value: "multiplechoice", viewValue: "Multiple Choice (Single answer)" },
+            { value: "multiplechoiceOther", viewValue: "Multiple Choice W/ optional user input (one answer)" },
         ]
     },
     {

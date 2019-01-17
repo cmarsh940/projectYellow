@@ -14,9 +14,12 @@ const MetaSchema = new mongoose.Schema({
         type: String
     },
     loc: {
-        type: Object,
+        type: Object
     },
     metaName: {
+        type: String
+    },
+    referer: {
         type: String
     },
     _survey: {

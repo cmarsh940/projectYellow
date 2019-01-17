@@ -47,6 +47,17 @@ export class AuthService {
       catchError(this.handleError('addParticipant', []))
     );
   }
+  requestFacebookRedirectUri(): Observable<any> {
+    return this._httpClient.get('api/auth/facebook/uri');
+  }
+
+  facebookSignIn(code: string): Observable<any> {
+    return this._httpClient.post('api/auth/facebook/signin', { code })
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError('facebook signin', []))
+      );
+  }
 
   setCurrentClient(client) {
     console.log("*** SERVICE SET CURRENT CLIENT ***")

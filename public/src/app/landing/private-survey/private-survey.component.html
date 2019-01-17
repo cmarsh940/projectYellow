@@ -71,6 +71,24 @@
                   </mat-form-field>
                 </div>
 
+                <!-- DROP DOWN SINGLE ANSWER -->
+                <div *ngIf="survey?.questions[i]?.questionType === 'dropDown'">
+                  <mat-select formControlName="answers" [required]="survey?.questions[i]?.isRequired" class="dropDown">
+                    <mat-option *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                      {{option.optionName}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+
+                <!-- DROP DOWN MULTIPLE ANSWERS -->
+                <div *ngIf="survey?.questions[i]?.questionType === 'dropDownMultiple'">
+                  <mat-select formControlName="answers" [required]="survey?.questions[i]?.isRequired" multiple>
+                    <mat-option *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                      {{option.optionName}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+
                 <!-- PARAGRAPH -->
                 <div *ngIf="survey?.questions[i]?.questionType === 'paragraph'">
                   <mat-form-field>

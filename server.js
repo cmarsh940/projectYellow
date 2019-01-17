@@ -15,8 +15,10 @@ const session = require('express-session');
 
 const app = express();
 
+app.use(helmet());
+
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'https://surveysbyme.com');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
     res.header('Access-Control-Expose-Headers', 'Content-Length');
@@ -28,7 +30,6 @@ app.use(function (req, res, next) {
     }
 });
 
-app.use(helmet());
 app.use(compression()); //Compress all routes
 app.use(cors());
 app.use(express.static(path.join(__dirname + '/public/dist')));

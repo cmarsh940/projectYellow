@@ -60,6 +60,19 @@
                                     </mat-radio-group>
                                 </div>
 
+                                <!-- MULTI CHOICE WITH OPTION -->
+                                <div *ngIf="survey?.questions[i]?.questionType === 'multiplechoiceOther'">
+                                    <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired" id="multichoiceOption">
+                                        <mat-radio-button *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                                            {{option.optionName}}
+                                        </mat-radio-button>
+                                        <mat-radio-button [value]="OPTION.value"> Other
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                    <textarea matInput #OPTION placeholder="Leave a comment"></textarea>
+                                    {{OPTION.value}}
+                                </div>
+
                                 <!-- DATE -->
                                 <div *ngIf="survey?.questions[i]?.questionType === 'date'">
                                     <mat-form-field>
@@ -68,6 +81,24 @@
                                         <mat-datepicker touchUi #picker></mat-datepicker>
                                         <mat-hint align="start"><strong>MM/DD/YYYY</strong> </mat-hint>
                                     </mat-form-field>
+                                </div>
+
+                                <!-- DROP DOWN SINGLE ANSWER -->
+                                <div *ngIf="survey?.questions[i]?.questionType === 'dropDown'">
+                                    <mat-select formControlName="answers" [required]="survey?.questions[i]?.isRequired">
+                                        <mat-option *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                                            {{option.optionName}}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+
+                                <!-- DROP DOWN MULTIPLE ANSWERS -->
+                                <div *ngIf="survey?.questions[i]?.questionType === 'dropDownMultiple'">
+                                    <mat-select formControlName="answers" [required]="survey?.questions[i]?.isRequired" multiple>
+                                        <mat-option *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                                            {{option.optionName}}
+                                        </mat-option>
+                                    </mat-select>
                                 </div>
 
                                 <!-- PARAGRAPH -->

@@ -29,6 +29,8 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   currentDevice: any;
   agent: any;
 
+  other = 'Other';
+
   @Input() survey: any;
 
   // TIMER
@@ -72,7 +74,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this.currentPlatform = window.clientInformation.vendor;
     this.agent = window.clientInformation.userAgent;
 
-    console.log("INFO", window.clientInformation);
     this.startTimer();
     this.surveyForm = this.fb.group({
       questions: this.fb.array([this.buildQuestion()])
@@ -198,7 +199,9 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     // CANCEL INTERVALS
     clearInterval(this.interval);
     
+    console.log("FORM BEFORE", this.surveyForm);
     const formModel = this.surveyForm.value;
+    console.log("FORM SUB IS:", formModel);
 
     // deep copy of form model questions
     const questionsDeepCopy: Question[] = formModel.questions.map(
