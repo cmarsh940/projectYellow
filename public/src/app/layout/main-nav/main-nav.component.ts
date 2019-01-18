@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'main-nav',
@@ -16,6 +18,17 @@ export class MainNavComponent {
       map(result => result.matches)
     );
     
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    public dialog: MatDialog,
+    private breakpointObserver: BreakpointObserver
+  ) {}
+
+  openDialog() {
+    const dialogRef = this.dialog.open(RegisterDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
   
   }

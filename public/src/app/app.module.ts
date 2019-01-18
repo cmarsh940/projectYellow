@@ -50,6 +50,7 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
 import { AuthGuard } from './global/guards/auth.guard';
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 import { FeedbackComponent } from './layout/feedback/feedback.component';
+import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { FeedbackComponent } from './layout/feedback/feedback.component';
     RegisterComponent,
     ForbiddenValidatorDirective,
     FeedbackComponent,
+    RegisterDialogComponent,
   ],
 
   imports: [
@@ -96,6 +98,7 @@ import { FeedbackComponent } from './layout/feedback/feedback.component';
     EditClientComponent,
     FeedbackComponent,
     SubscriptionOverlayComponent,
+    RegisterDialogComponent,
     RightsComponent,
     UploadUsersComponent
   ],

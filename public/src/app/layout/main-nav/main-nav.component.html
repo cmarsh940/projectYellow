@@ -13,7 +13,7 @@
       <a mat-list-item routerLink="/about" (click)="drawer.toggle()">About Us</a>
       <a mat-list-item routerLink="/pricing" (click)="drawer.toggle()">Pricing</a>
       <a mat-list-item routerLink="/list_of_surveys" (click)="drawer.toggle()">View All Surveys</a>
-      <a mat-list-item routerLink="/register" (click)="drawer.toggle()">Sign Up</a>
+      <a mat-list-item (click)="openDialog()" (tap)="drawer.toggle()">Sign Up</a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

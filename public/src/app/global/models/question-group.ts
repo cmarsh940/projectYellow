@@ -21,7 +21,8 @@ export const questionGroups: QuestionGroup[] = [
     {
         name: 'Dates',
         group: [
-            { value: "date", viewValue: "Date (Calender)" },
+            { value: "date", viewValue: "Date Calendar" },
+            { value: "dateWeekday", viewValue: "Weekday Calendar (Monday - Friday)" },
         ]
     },
     {

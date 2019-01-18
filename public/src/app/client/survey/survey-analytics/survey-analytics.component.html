@@ -71,6 +71,11 @@
             <ng-container *ngSwitchCase="'date'">
               <h4>{{ j + 1 }} ) {{ answer | date }}</h4>
             </ng-container>
+
+            <!-- DATE WEEKDAYS-->
+            <ng-container *ngSwitchCase="'dateWeekday'">
+              <h4>{{ j + 1 }} ) {{ answer | date }}</h4>
+            </ng-container>
           
             <!-- DROP DOWN SINGLE ANSWER -->
             <ng-container *ngSwitchCase="'dropDown'">
