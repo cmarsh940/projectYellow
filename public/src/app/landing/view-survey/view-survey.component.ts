@@ -136,6 +136,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(
         (survey: Survey) => {
+          console.log("RETURNED SURVEY IS:", survey)
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }

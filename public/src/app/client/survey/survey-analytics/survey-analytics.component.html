@@ -72,6 +72,11 @@
               <h4>{{ j + 1 }} ) {{ answer | date }}</h4>
             </ng-container>
 
+            <!-- DATE WITH START AND END RANGE-->
+            <ng-container *ngSwitchCase="'dateStartEnd'">
+              <h4>{{ j + 1 }} ) {{ answer | date }}</h4>
+            </ng-container>
+
             <!-- DATE WEEKDAYS-->
             <ng-container *ngSwitchCase="'dateWeekday'">
               <h4>{{ j + 1 }} ) {{ answer | date }}</h4>

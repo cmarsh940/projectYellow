@@ -22,6 +22,7 @@ export const questionGroups: QuestionGroup[] = [
         name: 'Dates',
         group: [
             { value: "date", viewValue: "Date Calendar" },
+            { value: "dateStartEnd", viewValue: "Date Calendar (Min - Max date range)" },
             { value: "dateWeekday", viewValue: "Weekday Calendar (Monday - Friday)" },
         ]
     },

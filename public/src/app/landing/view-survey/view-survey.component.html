@@ -83,6 +83,16 @@
                                     </mat-form-field>
                                 </div>
 
+                                <!-- DATE WITH START AND END RANGE -->
+                                <div *ngIf="survey?.questions[i]?.questionType === 'dateStartEnd'">
+                                    <mat-form-field>
+                                        <input matInput [min]="survey?.questions[i]?.options[0]?.optionName" [max]="survey?.questions[i]?.options[1]?.optionName" [matDatepicker]="startEndPicker" placeholder="Choose a date" formControlName="answers" [required]="survey?.questions[i]?.isRequired">
+                                        <mat-datepicker-toggle matSuffix [for]="startEndPicker"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi #startEndPicker color="accent"></mat-datepicker>
+                                        <mat-hint align="start"><strong>MM/DD/YYYY</strong> </mat-hint>
+                                    </mat-form-field>
+                                </div>
+
                                 <!-- DATE WEEKDAYS -->
                                 <div *ngIf="survey?.questions[i]?.questionType === 'dateWeekday'">
                                     <mat-form-field>

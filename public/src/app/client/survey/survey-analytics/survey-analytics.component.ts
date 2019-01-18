@@ -213,12 +213,10 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   loopThroughQuestions() {
     for (let i = 0; i < (<any>this.survey).length; i++) {
-      // GENERATING AVERAGE
       if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
-        this.questions.push(this.survey[i]);
-        let b = 0
+        let b = 0;
         let c = this.survey[i].answers.map(parseFloat);
-        let d = 0
+        let d = 0;
 
         // TOTAL NUMBER OF ANSWERS TO CALCULATE
         this.countAvgAnswers = this.survey[i].answers.length;
@@ -227,14 +225,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           b += c[a];
         }
         this.average = b / this.survey[i].answers.length;
-        this.survey[i].answers = [];
         let avg = this.average.toString();
+        this.survey[i].answers = [];
         this.survey[i].answers.push(avg);
+        this.questions.push(this.survey[i]);
       }
 
       //BOOLEANS
       else if (this.survey[i].questionType === 'boolean' || this.survey[i].questionType === 'yesno' || this.survey[i].questionType === 'likeunlike' || this.survey[i].questionType === 'goodbad') {
-        this.questions.push(this.survey[i]);
         let e = 0
         let f = 0
         let g = this.survey[i].answers.map(Number);
@@ -247,10 +245,10 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         }
         this.survey[i].answers = [];
         this.survey[i].answers.push([e,f]);
-        this.booleanAnswers = this.survey[i].answers;
+        this.questions.push(this.survey[i]);
       }
 
-      if (this.survey[i].questionType === 'dropDownMultiple') {
+      else if (this.survey[i].questionType === 'dropDownMultiple') {
         console.log("_*_*_* MULTIPLE DROP DOWN QUESTION *_*_*_", this.survey[i]);
 
         let options = this.survey[i].options;

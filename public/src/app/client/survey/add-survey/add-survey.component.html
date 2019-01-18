@@ -62,6 +62,40 @@
                 </mat-form-field>
               </ng-container>
 
+              <!-- DATE START END-->
+              <ng-container *ngSwitchCase="'dateStartEnd'">
+                <mat-form-field>
+                  <mat-label>Question:</mat-label>
+                  <input matInput formControlName="question">
+                </mat-form-field>
+                
+                <mat-divider></mat-divider>
+                <strong>Start Date</strong>
+                <div formArrayName="options">
+                  <div *ngFor="let option of question.get('options').controls; let j=index">
+                    <div [formGroupName]="j">
+                      <div *ngIf="j === 1">
+                        <mat-divider>
+                        </mat-divider>
+                        <strong>End Date</strong>
+                      </div>
+                      <mat-form-field>
+                        <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="optionName" (click)="picker.open()">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker color="accent"></mat-datepicker>
+                        <mat-hint align="start"><strong>MM/DD/YYYY</strong> </mat-hint>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="question.get('options').length === 1">
+                  <button mat-raised-button type="button" (click)="addNewOption(question.controls.options)" color="primary" [hidden]="j === 1">
+                    Add End Date
+                  </button>
+                </div>
+                
+              </ng-container>
+
               <!-- DATE WEEKDAYS -->
               <ng-container *ngSwitchCase="'dateWeekday'">
                 <mat-form-field>
