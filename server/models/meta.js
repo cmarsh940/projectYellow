@@ -29,6 +29,10 @@ const MetaSchema = new mongoose.Schema({
     _user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    _client: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Client"
     }
 }, { timestamps: true });
 

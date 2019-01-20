@@ -111,6 +111,16 @@ const ClientSchema = new mongoose.Schema({
     get: v => `${root}${v}`
   },
 
+  registerPlatform: {
+    type: String,
+    enum: ['EMAIL', 'FACEBOOK', 'GOOGLE'],
+    required: true,
+    uppercase: true,
+    select: false,
+    trim: true,
+    default: "EMAIL"
+  },
+
   role: {
     type: String,
     enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
@@ -184,6 +194,15 @@ const ClientSchema = new mongoose.Schema({
     ],
     default: []
   },
+  _meta: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Meta"
+      }
+    ],
+    default: []
+  },
 
   users: {
     type: [
@@ -204,7 +223,7 @@ const ClientSchema = new mongoose.Schema({
   resetRequest: {
     type: Boolean,
     required: true,
-    default: true
+    default: false
   },
   resetDates: { type: Array, "default": [] },
 
@@ -218,7 +237,7 @@ ClientSchema.plugin(unique, { message: "Email'{VALUE}' already exists." });
 ClientSchema.pre('save', function (next) {
   let client = this;
 
-  if (client.isNew) {
+  if (client.isNew && client.registerPlatform === 'EMAIL') {
     client.password = bcrypt.hashSync(client.password, bcrypt.genSaltSync());
     client.grt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }

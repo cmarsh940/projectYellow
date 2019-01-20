@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
+const AWS = require("aws-sdk");
+const braintree = require('braintree');
+const Busboy = require("busboy");
+const geoip = require('geoip-lite');
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const os = require('os');
+const path = require("path");
+
+const tempSub = require("../models/staticModels/subscription");
 const Client = mongoose.model('Client');
+const Meta = mongoose.model('Meta');
 
 const config = require("../config/config");
 const secret = require('../config/config').jwt_secret;
@@ -7,16 +18,6 @@ const secret = require('../config/config').jwt_secret;
 const BUCKET_NAME = config.bucketName;
 const IAM_USER_KEY = config.iamUser;
 const IAM_USER_SECRET = config.iamSecret;
-
-const path = require("path");
-const AWS = require("aws-sdk");
-const Busboy = require("busboy");
-const jwt = require('jsonwebtoken');
-const braintree = require('braintree');
-
-const nodemailer = require('nodemailer');
-
-const tempSub = require("../models/staticModels/subscription");
 
 function uploadToS3(file, client) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
@@ -114,15 +115,42 @@ class ClientsController {
         console.log("*** SERVER CREATING ERROR", err);
         return res.json(err);
       }
-      console.log("*** SERVER CLIENT CREATED");
-      let email = {
-        client: client._id,
-        contact: client.email,
-        name: client.firstName,
-        message: client.grt
+      let geo = geoip.lookup(req.ip);
+      let meta = {
+        address: req.ip,
+        agent: req.body.agent,
+        device: req.body.device,
+        browser: req.body.platform,
+        loc: geo,
+        metaName: os.userInfo().username,
+        referer: req.headers.referer,
+        _client: client._id
       }
-      sendVerificationEmail(email);
-      return res.json(client)
+      Meta.create(meta, function (err, metas) {
+        if (err) {
+          console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
+          return res.json(err);
+        } else {
+          console.log("CREATING META SUCCESS", metas);
+          Client.findByIdAndUpdate(req.params.id, {
+            $push: { _meta: metas._id }
+          }, { new: true }, (err, updatedClient) => {
+            if (err) {
+              console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
+              return res.json(err);
+            }
+              console.log("*** SERVER CLIENT CREATED");
+              let email = {
+                client: updatedClient._id,
+                contact: updatedClient.email,
+                name: updatedClient.firstName,
+                message: updatedClient.grt
+              }
+              sendVerificationEmail(email);
+              return res.json(updatedClient) 
+          })
+        }
+      })
     })
   }
 
