@@ -4,6 +4,7 @@ const busboyBodyParser = require("busboy-body-parser");
 const config = require("./server/config/config");
 const compression = require('compression');
 const cors = require("cors");
+const csrf = require('csurf')
 const express = require('express');
 const fs = require('fs');
 const helmet = require('helmet');
@@ -13,22 +14,29 @@ const path = require("path");
 const port = normalizePort(process.env.PORT || '8000');
 const session = require('express-session');
 
+const csp = `default-src * data: blob:;script-src *.facebook.com  *.facebook.net *.google-analytics.com *.google.com 127.0.0.1:*  'unsafe-inline' 'unsafe-eval' blob: data: 'self';style-src data: blob: 'unsafe-inline' *;connect-src localhost:* *.facebook.com facebook.com *.fbcdn.net *.facebook.net`;
+
 const app = express();
 
 app.use(helmet());
 
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://surveysbyme.com');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-    res.header('Access-Control-Expose-Headers', 'Content-Length');
-    res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
+    res.header('X-Content-Type-Options', 'nosniff');
+    res.header('X-Frame-Options', 'DENY');
+    res.header('Referrer-Policy', 'no-referrer-when-downgrade');
+    res.header('Content-Security-Policy', csp);
+    res.header('Strict-Transport-Security', 'max-age=7889238; includeSubDomains; preload');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range, X-XSRF-TOKEN');
     if (req.method === 'OPTIONS') {
-        return res.send(200);
+        return res.end();
     } else {
         return next();
     }
 });
+
 
 app.use(compression()); //Compress all routes
 app.use(cors());
@@ -56,23 +64,11 @@ app.use(session({
 require('./server/config/mongoose');
 require('./server/config/routes')(app);
 
-// catch 404 and forward to error handler
+app.use(csrf());
 app.use(function (req, res, next) {
-    next(createError(404));
+    res.cookie("XSRF-TOKEN", req.csrfToken());
+    return next();
 });
-
-// error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.status(err.status || 500);
-});
-
-const cpuCount = require('os').cpus().length;
-console.log('CPU nodes = ' + cpuCount);
 
 app.set('port', port);
 const server = http.createServer(app);

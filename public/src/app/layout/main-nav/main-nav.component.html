@@ -23,11 +23,11 @@
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+          <img src="/assets/icons/menu.png" alt="menu icon" class="icon-button">
       </button>
       <span class="spacer"></span>
       <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>apps</mat-icon>
+          <img src="/assets/icons/apps.png" alt="apps icon" class="icon-button">
       </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item routerLink="/login" matTooltip="Login">

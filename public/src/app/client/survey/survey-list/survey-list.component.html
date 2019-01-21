@@ -35,9 +35,7 @@
         <div class="action-icons">
           <div *ngIf="element.private" class="private-icon">
             <mat-icon [routerLink]="['/user', element._id]" matTooltip="Send text message to take survey" color="primary">
-              <i class="material-icons">
-                textsms
-              </i>
+              <img src="/assets/icons/sms.png" alt="apps icon" class="icon-button">
             </mat-icon>
           </div>
           <mat-icon [routerLink]="['/takeSurvey', element._id]" matTooltip="Take Survey" color="primary">
@@ -51,9 +49,7 @@
             </i>
           </mat-icon> 
           <mat-icon [routerLink]="['analytics', element._id]" matTooltip="Results" color="primary">
-            <i class="material-icons">
-              assessment
-            </i>
+            <img src="/assets/icons/assessment.png" alt="apps icon" class="icon-button">
           </mat-icon>
           <mat-icon (click)="destroySurvey(element._id)" matTooltip="Delete"  color="warn">
             <i class="material-icons">

@@ -13,7 +13,7 @@ const User = mongoose.model('User');
 
 class SurveysController {
   index(req, res) {
-    console.log("THE REQUEST HEADERS:", req.headers);
+    console.log("THE REQUEST:", req);
     Survey.find({}).lean()
     .populate({ path: "category", select: 'name', model: Category })
     .populate({ path: "creator", select: 'firstName lastName businessName', model: Client })
