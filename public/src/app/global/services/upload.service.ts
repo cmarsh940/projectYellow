@@ -5,8 +5,8 @@ import { HandleError, HttpErrorHandler } from './http-error-handler.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 function getToken() {
-  if (sessionStorage.getItem('token') === null) {
-    const data = JSON.parse(sessionStorage.getItem('token'));
+  if (localStorage.getItem('token') === null) {
+    const data = JSON.parse(localStorage.getItem('token'));
     return data
   }
 }

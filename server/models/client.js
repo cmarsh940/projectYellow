@@ -251,3 +251,8 @@ ClientSchema.methods.authenticate = function (password) {
 }
 
 const Client = mongoose.model('Client', ClientSchema);
+
+
+module.exports.getClientById = function (id, callback) {
+  Client.findById(id, callback);
+}

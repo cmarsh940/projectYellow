@@ -6,15 +6,15 @@ import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 import { MessagesService } from './messages.service';
 
 function getToken() {
-  if (sessionStorage.getItem('token') === null) {
-    const data = JSON.parse(sessionStorage.getItem('token'));
+  if (localStorage.getItem('token') === null) {
+    const data = JSON.parse(localStorage.getItem('token'));
     return data
   }
 }
 
 function loadToken() {
-  if (sessionStorage.getItem('token') !== null) {
-    const data = JSON.parse(sessionStorage.getItem('token'));
+  if (localStorage.getItem('token') !== null) {
+    const data = JSON.parse(localStorage.getItem('token'));
     return data
   }
 }
@@ -68,7 +68,6 @@ export class DataService<Type> {
   public getSingle(ns: string, id: string): Observable<any> {
     console.log("*** GET ***");
     return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
-      map(this.extractData),
       catchError(this.handleError('getSingle', []))
     );
   }

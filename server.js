@@ -10,6 +10,7 @@ const fs = require('fs');
 const helmet = require('helmet');
 const http = require('http');
 const morgan = require('morgan');
+const passport = require('passport');
 const path = require("path");
 const port = normalizePort(process.env.PORT || '8000');
 const session = require('express-session');
@@ -21,20 +22,17 @@ const app = express();
 app.use(helmet());
 
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:* always');
+    res.header('Access-Control-Allow-Credentials', true);
     res.header('X-Content-Type-Options', 'nosniff');
     res.header('X-Frame-Options', 'DENY');
     res.header('Referrer-Policy', 'no-referrer-when-downgrade');
     res.header('Content-Security-Policy', csp);
     res.header('Strict-Transport-Security', 'max-age=7889238; includeSubDomains; preload');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Expose-Headers', 'Content-Length');
     res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range, X-XSRF-TOKEN');
-    if (req.method === 'OPTIONS') {
-        return res.end();
-    } else {
-        return next();
-    }
+    return next();
 });
 
 
@@ -52,7 +50,7 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
 // setup the logger
 app.use(morgan('combined', { stream: accessLogStream }))
 
-app.set('trust proxy', true) // trust first proxy
+// app.set('trust proxy', true) // trust first proxy
 
 app.use(session({
     secret: config.secret,
@@ -61,6 +59,12 @@ app.use(session({
     cookie: { maxAge: 60000 }
 }))
 
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Passport Config
+require('./server/config/middleware/passport')(passport);
 require('./server/config/mongoose');
 require('./server/config/routes')(app);
 
@@ -72,6 +76,15 @@ app.use(function (req, res, next) {
 
 app.set('port', port);
 const server = http.createServer(app);
+
+// Index Route
+app.get('/', (req, res) => {
+    res.send('invaild endpoint');
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
+});
 
 server.listen(port, () => console.log(`listening in port ${port}...`));
 

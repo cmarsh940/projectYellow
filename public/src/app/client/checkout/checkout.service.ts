@@ -5,8 +5,8 @@ import { catchError, map } from 'rxjs/operators';
 import { HttpErrorHandler, HandleError } from 'src/app/global/services/http-error-handler.service';
 
 function getToken() {
-  if (sessionStorage.getItem('token') === null) {
-    const data = JSON.parse(sessionStorage.getItem('token'));
+  if (localStorage.getItem('token') === null) {
+    const data = JSON.parse(localStorage.getItem('token'));
     return data
   }
 }

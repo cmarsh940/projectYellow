@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const os = require('os');
 const path = require("path");
+const passport = require('passport');
 
 const tempSub = require("../models/staticModels/subscription");
 const Client = mongoose.model('Client');
@@ -103,7 +104,7 @@ class ClientsController {
     if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {
-          password: {
+          password: { 
             message: "Your passwords do not match"
           }
         }
@@ -178,7 +179,7 @@ class ClientsController {
             d: client.lastUseDate,
             s: client._surveys,
             status: client.subscriptionStatus,
-            token: `Bearer ${token}`,
+            token: token,
             v: client.verified
           };
 
@@ -231,7 +232,7 @@ class ClientsController {
                     d: subscribedClient.lastUseDate,
                     s: subscribedClient._surveys,
                     status: subscribedClient.status,
-                    token: `Bearer ${token}`,
+                    token: token,
                     v: subscribedClient.verified
                   };
                   return res.json(req.session.client);
@@ -248,7 +249,7 @@ class ClientsController {
                 d: client.lastUseDate,
                 s: client._surveys,
                 status: result.status,
-                token: `Bearer ${token}`,
+                token: token,
                 v: client.verified
               };
               return res.json(req.session.client);
@@ -268,6 +269,7 @@ class ClientsController {
   }
 
   show(req, res, next) {
+    console.log("HIT CLIENT SHOW", req);
     Client.findById({ _id: req.params.id }).lean()
       .populate('_surveys')
       .populate('category')

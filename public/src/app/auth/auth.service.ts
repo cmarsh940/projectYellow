@@ -64,7 +64,7 @@ export class AuthService {
     let token = client.token;
     delete client.token;
     sessionStorage.setItem('currentClient', JSON.stringify(client));
-    sessionStorage.setItem('token', JSON.stringify(token));
+    localStorage.setItem('token', JSON.stringify(token));
     localStorage.setItem('t940', JSON.stringify(client._id));
   }
 
@@ -75,7 +75,7 @@ export class AuthService {
       res => {
         this.currentClient = null;
         sessionStorage.removeItem('currentClient');
-        sessionStorage.removeItem('token');
+        localStorage.removeItem('token');
         localStorage.removeItem('t940');
         callback(res.json());
       },
@@ -169,16 +169,16 @@ export class AuthService {
 
   getAuthorizationToken() {
     console.log("HIT GET AUTH TOKEN FROM AUTH SERVICE")
-    if (sessionStorage.getItem('token') === null) {
+    if (localStorage.getItem('token') === null) {
       console.log("NO TOKEN HAS BEEN SET")
       return false;
     }
     else {
-      if (sessionStorage.getItem('token') === undefined) {
+      if (localStorage.getItem('token') === undefined) {
         console.log("AUTHORIZATION FAILED");
         return false;
       } else {
-        const data = JSON.parse(sessionStorage.getItem('token')); 
+        const data = JSON.parse(localStorage.getItem('token')); 
         return data
       }
     }

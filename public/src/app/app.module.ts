@@ -1,3 +1,4 @@
+import { ErrorDialogService } from './global/services/error-dialog.service';
 import { AddUserComponent } from './client/user/add-user/add-user.component';
 
 
@@ -51,6 +52,7 @@ import { AuthGuard } from './global/guards/auth.guard';
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 import { FeedbackComponent } from './layout/feedback/feedback.component';
 import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
+import { ErrorDialogComponent } from './global/handlers/error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,18 +62,19 @@ import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.
     ForbiddenValidatorDirective,
     FeedbackComponent,
     RegisterDialogComponent,
+    ErrorDialogComponent,
   ],
 
   imports: [
     BrowserModule,
     LandingModule,
     ClientModule,
+    HttpClientModule,
     OverviewModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     ServiceWorkerModule.register("/ngsw-worker.js", {
@@ -82,6 +85,7 @@ import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.
     AuthGuard,
     HttpErrorHandler,
     AuthService,
+    ErrorDialogService,
     MessagesService,
     ClientService,
     SurveyService,
@@ -96,6 +100,7 @@ import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.
   entryComponents: [
     AddUserComponent,
     EditClientComponent,
+    ErrorDialogComponent,
     FeedbackComponent,
     SubscriptionOverlayComponent,
     RegisterDialogComponent,
