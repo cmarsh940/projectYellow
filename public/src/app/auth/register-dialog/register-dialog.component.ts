@@ -89,7 +89,7 @@ export class RegisterDialogComponent implements OnInit {
           console.log('User login failed');
           reject('User cancelled login or did not fully authorize.');
         }
-      }, { scope: 'email,public_profile' }).next()
+      }, { scope: 'email,public_profile' })
       this.openSnackBar();
       this.dialogRef.close();
     })
@@ -114,6 +114,7 @@ export class RegisterDialogComponent implements OnInit {
       //   else {
       console.log("ADDED DATA", data)
       this._authService.setCurrentClient(data);
+      return data
       // this.errors = null;
       // this._router.navigateByUrl("/login");
       // }
