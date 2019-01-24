@@ -24,7 +24,6 @@ export class RegisterDialogComponent implements OnInit {
 
   constructor(
     private _authService: AuthService,
-    private _router: Router,
     public snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<RegisterDialogComponent>,
     iconRegistry: MatIconRegistry,
@@ -105,22 +104,14 @@ export class RegisterDialogComponent implements OnInit {
     this.participant = response;
     console.log("ADDING PARTICIPANT:", this.participant);
     this._authService.addParticipant(this.participant).subscribe((data) => {
-      // if (data) {
-      //   if (data.errors) {
-      //     console.log("___ DATA ERROR ___:", data.errors);
-      //     this.errors = data.errors;
-      //     // this.errors.push(data.errors);
-      //   }
-      //   else {
-      console.log("ADDED DATA", data)
-      this._authService.setCurrentClient(data);
-      return data
-      // this.errors = null;
-      // this._router.navigateByUrl("/login");
-      // }
-      // } else {
-      //   console.log("ERROR ADDING PARTICIPANT", data);
-      // }
+      if (data.errors) {
+        console.log("ERROR", data);
+        this.errors.push(data.message);
+      } else {
+        console.log("ADDED DATA", data)
+        this._authService.setCurrentClient(data);
+        return data;
+      }
     })
   }
 
@@ -128,7 +119,7 @@ export class RegisterDialogComponent implements OnInit {
     const config = new MatSnackBarConfig();
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
-    config.duration = 2500;
+    config.duration = 3500;
     config.panelClass = ['logout-snackbar']
     this.snackBar.open("Thank you for registering", '', config);
   }

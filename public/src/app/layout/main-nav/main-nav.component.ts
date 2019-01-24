@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
 import { MatDialog } from '@angular/material';
-import { Client } from 'src/app/global/models/client';
 import { Router } from '@angular/router';
 
 @Component({
@@ -30,9 +29,14 @@ export class MainNavComponent {
     const dialogRef = this.dialog.open(RegisterDialogComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result:`);
-      console.table(result);
-      this._router.navigateByUrl("/login");
+      if(!result) {
+        console.log(`Dialog result:`);
+        console.table(result);
+      } else {
+        console.log(`Dialog result:`);
+        console.table(result);
+        this._router.navigateByUrl("/login");
+      }
     });
   }
   

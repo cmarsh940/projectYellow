@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagesService } from './../global/services/messages.service';
 import { Client } from './../global/models/client';
 import { Http } from '@angular/http';
-import { Injectable, Type, ɵConsole } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from '../global/services/http-error-handler.service';
@@ -46,17 +46,6 @@ export class AuthService {
       map(this.extractData),
       catchError(this.handleError('addParticipant', []))
     );
-  }
-  requestFacebookRedirectUri(): Observable<any> {
-    return this._httpClient.get('api/auth/facebook/uri');
-  }
-
-  facebookSignIn(code: string): Observable<any> {
-    return this._httpClient.post('api/auth/facebook/signin', { code })
-      .pipe(
-        map(this.extractData),
-        catchError(this.handleError('facebook signin', []))
-      );
   }
 
   setCurrentClient(client) {

@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   myForm: FormGroup;
   currentClient: Client;
   errorMessage;
-
+  loaded: Boolean;
   hide = true;
 
   private participant;
@@ -56,22 +56,23 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loaded = false;
     this.verified();
     this.loadFacebook();
+    this.loaded = true;
    }
 
 
   loadFacebook() {
-
     (window as any).fbAsyncInit = function () {
       FB.init({
-          appId: environment.facebookId,
-          cookie: true,
-          xfbml: true,
-          version: environment.facebookVersion
-        });
-        FB.AppEvents.logPageView();
-      };
+        appId: environment.facebookId,
+        cookie: true,
+        xfbml: true,
+        version: environment.facebookVersion
+      });
+      FB.AppEvents.logPageView();
+    };
 
     (function (d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -83,21 +84,57 @@ export class LoginComponent implements OnInit {
   }
 
   submitLogin() {
-    console.log("submit login to facebook");
-    // FB.login();
-    FB.login((response) => {
-      console.log('submitLogin', response);
-      if (response.authResponse) {
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', { fields: 'last_name, first_name, email, location' }, function (response) {
-          console.log('Request response is', response);
-        });
-      }
-      else {
-        console.log('User login failed');
-      }
-    }, { scope: 'email,user_location'});
+    this.loaded = false;
+    return new Promise((resolve, reject) => {
+      FB.login((response: any) => {
+        console.table(response);
+        if (response.authResponse) {
+          FB.api('/me', { fields: 'email, first_name, last_name, picture' }, (data: any) => {
+            let client = new Client();
+            client.email = data.email
+            client.password = `Facebook${data.id}`;
+            resolve(client)
+            this.loginFacebookParticipant(client);
+          });
+        }
+        else {
+          console.log('User login failed');
+          reject('User cancelled login or did not fully authorize.');
+        }
+      }, { scope: 'email,public_profile' })
+      setTimeout(() => {
+        this.loaded = true;
+        this._router.navigateByUrl("/dashboard");
+      }, 5000);
+    })
+  }
 
+  loginFacebookParticipant(data: any) {
+    this.errors = [];
+    console.log("*** STARTING FACEBOOK LOGIN ***", data)
+    this.participant = {
+      'email': data.email,
+      'password': data.password
+    };
+
+    this._authService.authenticate(this.participant).subscribe((data) => {
+      if (data) {
+        if (data.errors) {
+          console.log("___ LOGIN ERROR ___:", data.errors);
+          for (const key of Object.keys(data.errors)) {
+            const error = data.errors[key];
+            this.errors.push(error.message);
+            return;
+          }
+        } else {
+          this._authService.setCurrentClient(data);
+          return data;
+        }
+      } else {
+        this.errors = data;
+        return data;
+      }
+    });
   }
 
   loginParticipant(form: any) {
@@ -133,12 +170,14 @@ export class LoginComponent implements OnInit {
   }
 
   verified() {
+    this.loaded = false;
     let data = this._authService.emailVerified();
     if (data) {
       console.log("VERIFIED");
       this.alreadyLoggedIn();
     } else {
       console.log("Need to verify email");
+      return;
     }
   }
 
@@ -157,5 +196,14 @@ export class LoginComponent implements OnInit {
     config.duration = 2500;
     config.panelClass = ['logout-snackbar']
     this.snackBar.open("You are already logged in!", '', config);
+  }
+  openFacebookSnackBar() {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 2500;
+    config.panelClass = ['logout-snackbar']
+    this.snackBar.open("You are already logged in!", '', config);
+    this._router.navigateByUrl("/dashboard");
   }
 }
