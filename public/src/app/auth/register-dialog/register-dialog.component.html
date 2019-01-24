@@ -1,13 +1,18 @@
-<mat-dialog-content class="container-fluid">
-  <p>
-    register-dialog works!
-  </p>
-
+<div class="header">
+  <h2 mat-dialog-title>Register</h2>
+</div>
+<mat-dialog-content class="container-dialog">
   <mat-dialog-actions>
     <button mat-button (click)="submitLogin()" id="FB-button">
       <mat-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
-      <span>Continue with Facebook</span>
+      <span class="text">Continue with Facebook</span>
     </button>
-    <button mat-stroked-button (click)="cancel()" color='warn'>Cancel</button>
+    <mat-divider>
+    </mat-divider>
+    <button mat-stroked-button routerLink="/register" mat-dialog-close>
+      <img src="/assets/icons/email.png" alt="email icon" class="icon" />
+      <span class="text">Register with Email</span>
+    </button>
+    <button mat-stroked-button mat-dialog-close color='warn'>Cancel</button>
   </mat-dialog-actions>
 </mat-dialog-content>

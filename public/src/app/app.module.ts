@@ -1,7 +1,6 @@
 import { ErrorDialogService } from './global/services/error-dialog.service';
 import { AddUserComponent } from './client/user/add-user/add-user.component';
 
-
 // MODULES
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
@@ -54,6 +53,8 @@ import { FeedbackComponent } from './layout/feedback/feedback.component';
 import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
 import { ErrorDialogComponent } from './global/handlers/error-dialog/error-dialog.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -95,7 +96,7 @@ import { ErrorDialogComponent } from './global/handlers/error-dialog/error-dialo
     OverviewService,
     SubscriptionService,
     { provide: RequestCache, useClass: RequestCacheWithMap },
-    httpInterceptorProviders
+    httpInterceptorProviders,
   ],
   entryComponents: [
     AddUserComponent,

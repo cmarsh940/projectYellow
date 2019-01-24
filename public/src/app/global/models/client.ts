@@ -11,6 +11,7 @@ export class Client {
     state: string;
     zip: any;
     password: any;
+    confirm_pass?: any;
     picture: any;
     role: string;
     paymentDate: any;
@@ -29,6 +30,8 @@ export class Client {
     device?: any;
     agent?: any;
     platform?: any;
+    platformAuth?: any;
+    platformId?: any;
     verified: any;
     createdAt: any;
     updatedAt: any;

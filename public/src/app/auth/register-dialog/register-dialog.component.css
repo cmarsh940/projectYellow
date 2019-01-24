@@ -1,6 +1,7 @@
 .mat-dialog-content {
     padding: 0!important;
     margin: 0!important;
+    overflow: -webkit-paged-x;
 }
 
 .mat-dialog-actions {
@@ -12,7 +13,22 @@
     margin: 0.4em auto;
 }
 
+.mat-divider {
+    margin: 1em 0;
+    width: 100%;
+}
+
 #FB-button {
     background-color: #4267b2;
     color: #fff;
+}
+
+.icon {
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+}
+.text {
+    vertical-align: sub;
+    margin-left: 1em;
 }

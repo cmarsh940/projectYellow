@@ -3,8 +3,9 @@ import { FormControl, Validators, FormGroup, FormBuilder } from "@angular/forms"
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Client } from "../../global/models/client";
-import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar } from '@angular/material';
+import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatIconRegistry } from '@angular/material';
 import { environment } from './../../../environments/environment';
+import { DomSanitizer } from '@angular/platform-browser';
 
 declare var FB: any;
 @Component({
@@ -40,8 +41,14 @@ export class LoginComponent implements OnInit {
     private _authService: AuthService, 
     private _router: Router,
     public snackBar: MatSnackBar, 
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
     fb: FormBuilder
   ) {
+    iconRegistry.addSvgIcon(
+      'facebook',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
+
     this.myForm = fb.group({
       email: this.email,
       password: this.password,

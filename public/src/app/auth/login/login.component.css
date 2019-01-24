@@ -11,10 +11,6 @@ img {
 
 form {
     margin: auto;
-    position: fixed;
-    bottom: 6em;
-    left: 1em;
-    right: 1em;
 }
 
 .mat-form-field {
@@ -22,7 +18,28 @@ form {
     background-color: white;
 }
 
-button {
+.social {
+    width:100%;
+    display: flex;
+    justify-content: center;
+}
+
+#FB-button {
+    background-color: #4267b2;
+    color: #fff;
+}
+
+.text {
+    vertical-align: sub;
+    margin-left: 1em;
+}
+
+.mat-divider {
+    margin: 5em auto;
+    width: 75%;
+}
+
+#login-button {
     width:100%;
 }
 

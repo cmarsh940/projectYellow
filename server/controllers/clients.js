@@ -140,6 +140,8 @@ class ClientsController {
               console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
               return res.json(err);
             }
+            else if (client.registerPlatform === "EMAIL") {
+              
               console.log("*** SERVER CLIENT CREATED");
               let email = {
                 client: updatedClient._id,
@@ -148,7 +150,30 @@ class ClientsController {
                 message: updatedClient.grt
               }
               sendVerificationEmail(email);
-              return res.json(updatedClient) 
+              return res.json(updatedClient);
+            }
+            else if (client.registerPlatform === "FACEBOOK") {
+              
+              console.log("*** SERVER CLIENT CREATED");
+
+              let token = jwt.sign({ client }, secret, { expiresIn: '1h' });
+              req.session.client = {
+                _id: client._id,
+                n: client.firstName + " " + client.lastName,
+                a8o1: client.role,
+                b8o1: client._subscription,
+                c8o1: client.surveyCount,
+                d: client.lastUseDate,
+                s: client._surveys,
+                status: client.subscriptionStatus,
+                token: token,
+                v: client.verified
+              };
+              return res.json(req.session.client);
+            }
+            else {
+              return res.json(updatedClient);
+            }
           })
         }
       })
