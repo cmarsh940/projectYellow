@@ -158,7 +158,6 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         options: {
           legend: {
             display: false,
-            
           },
           animation: {
             duration: 0, // general animation time
@@ -175,8 +174,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           },
           scales: {
             xAxes: [{
+              display: true,
+              gridLines: {
+                color: "#FFFFFF"
+              },
+              ticks: {
+                fontColor: '#FFFFFF'
+              },
               type: 'time',
-              distribution: 'linear',
               time: {
                 displayFormats: {
                   day: 'MMM DD'
@@ -233,7 +238,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
       //BOOLEANS
       else if (this.survey[i].questionType === 'boolean' || this.survey[i].questionType === 'yesno' || this.survey[i].questionType === 'likeunlike' || this.survey[i].questionType === 'goodbad') {
+        let percentE:number;
         let e = 0
+        let percentF:number;
         let f = 0
         let g = this.survey[i].answers.map(Number);
         for (let a = 0; a < this.survey[i].answers.length; a++) {
@@ -243,8 +250,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
             f++;
           }
         }
+        percentE = (e * 100) / this.survey[i].answers.length;
+        let finalPercentE = Math.round(percentE);
+        percentF = (f * 100) / this.survey[i].answers.length;
+        let finalPercentF = Math.round(percentF);
         this.survey[i].answers = [];
-        this.survey[i].answers.push([e,f]);
+        this.survey[i].answers.push([e, finalPercentE,f, finalPercentF]);
         this.questions.push(this.survey[i]);
       }
 

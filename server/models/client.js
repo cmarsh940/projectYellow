@@ -245,7 +245,7 @@ ClientSchema.pre('save', function (next) {
   if (client.isNew) {
     client.password = bcrypt.hashSync(client.password, bcrypt.genSaltSync());
     client.grt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    if (client.registerPlatform === "FACEBOOK") {
+    if (client.registerPlatform === "FACEBOOK" || client.registerPlatform === "GOOGLE") {
       client.verified = true;
     }
   }
@@ -259,8 +259,3 @@ ClientSchema.methods.authenticate = function (password) {
 }
 
 const Client = mongoose.model('Client', ClientSchema);
-
-
-module.exports.getClientById = function (id, callback) {
-  Client.findById(id, callback);
-}

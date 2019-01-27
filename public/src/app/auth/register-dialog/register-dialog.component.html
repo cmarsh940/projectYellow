@@ -6,10 +6,15 @@
   <mat-dialog-actions>
     <button mat-button (click)="submitLogin()" id="FB-button">
       <mat-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
-      <span class="text">Continue with Facebook</span>
+      <span class="socialText">Continue with Facebook</span>
+    </button>
+    <button mat-stroked-button id="glogin">
+      <mat-icon svgIcon="google" aria-label="Google Icon"></mat-icon>
+      <span class="socialText">Sign in with Google</span>
     </button>
     <mat-divider>
     </mat-divider>
+    
     <button mat-stroked-button routerLink="/register" mat-dialog-close>
       <img src="/assets/icons/email.png" alt="email icon" class="icon" />
       <span class="text">Register with Email</span>

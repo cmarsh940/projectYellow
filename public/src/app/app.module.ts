@@ -1,4 +1,3 @@
-import { ErrorDialogService } from './global/services/error-dialog.service';
 import { AddUserComponent } from './client/user/add-user/add-user.component';
 
 // MODULES
@@ -51,7 +50,6 @@ import { AuthGuard } from './global/guards/auth.guard';
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 import { FeedbackComponent } from './layout/feedback/feedback.component';
 import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
-import { ErrorDialogComponent } from './global/handlers/error-dialog/error-dialog.component';
 
 
 
@@ -63,7 +61,6 @@ import { ErrorDialogComponent } from './global/handlers/error-dialog/error-dialo
     ForbiddenValidatorDirective,
     FeedbackComponent,
     RegisterDialogComponent,
-    ErrorDialogComponent,
   ],
 
   imports: [
@@ -86,7 +83,6 @@ import { ErrorDialogComponent } from './global/handlers/error-dialog/error-dialo
     AuthGuard,
     HttpErrorHandler,
     AuthService,
-    ErrorDialogService,
     MessagesService,
     ClientService,
     SurveyService,
@@ -101,7 +97,6 @@ import { ErrorDialogComponent } from './global/handlers/error-dialog/error-dialo
   entryComponents: [
     AddUserComponent,
     EditClientComponent,
-    ErrorDialogComponent,
     FeedbackComponent,
     SubscriptionOverlayComponent,
     RegisterDialogComponent,

@@ -29,13 +29,30 @@ form {
 
 .social {
     width:100%;
-    display: flex;
+    display: grid;
     justify-content: center;
 }
 
 #FB-button {
     background-color: #4267b2;
     color: #fff;
+    width: 100%;
+}
+
+#glogin {
+    margin-top: 1em;
+    background-color: #FFFFFF ;
+    width: 100%;
+}
+
+.socialText {
+    font: Roboto-Medium;
+    size: 14px;
+    color: #000000 / 0,0,0(54%);
+}
+
+#FB-button, #glogin {
+    display: block;
 }
 
 .text {
@@ -44,7 +61,7 @@ form {
 }
 
 .mat-divider {
-    margin: 5em auto;
+    margin: 4em auto;
     width: 75%;
 }
 
@@ -73,4 +90,8 @@ a {
     width: 100%;
     text-align: center;
     margin: 5% 0;
+}
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar {
+    height: auto;
 }

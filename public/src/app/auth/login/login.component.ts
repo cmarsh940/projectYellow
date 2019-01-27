@@ -7,7 +7,9 @@ import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPo
 import { environment } from './../../../environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 
-declare var FB: any;
+declare const FB: any;
+declare const gapi: any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,6 +23,7 @@ export class LoginComponent implements OnInit {
   errorMessage;
   loaded: Boolean;
   hide = true;
+  auth2: any
 
   private participant;
 
@@ -48,6 +51,9 @@ export class LoginComponent implements OnInit {
     iconRegistry.addSvgIcon(
       'facebook',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
+    iconRegistry.addSvgIcon(
+      'google',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'));
 
     this.myForm = fb.group({
       email: this.email,
@@ -56,11 +62,37 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.errors = null;
     this.loaded = false;
     this.verified();
     this.loadFacebook();
-    this.loaded = true;
-   }
+    this.loaded = true
+  }
+
+  ngAfterViewInit() {
+    gapi.load('auth2', () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: environment.clientId,
+        cookiepolicy: 'single_host_origin',
+        scope: 'profile email'
+      });
+      this.attachSignin(document.getElementById('glogin'));
+    });
+  }
+
+  attachSignin(element) {
+    this.auth2.attachClickHandler(element, {},
+      (data) => {
+        console.log("LOGGEDINUSER:",data);
+        let client = new Client();
+        client.email = data.w3.U3
+        client.password = `Google${data.w3.Eea}`;
+        this.loginGoogleParticipant(client);
+      }, function (error) {
+        console.log("GOOGLE LOGIN ERROR",error)
+        // alert(JSON.stringify(error, undefined, 2));
+      });
+  }
 
 
   loadFacebook() {
@@ -109,8 +141,31 @@ export class LoginComponent implements OnInit {
     })
   }
 
+  loginGoogleParticipant(data: any) {
+    this.errors = null;
+    console.log("*** STARTING GOOGLE LOGIN ***", data)
+    this.participant = {
+      'email': data.email,
+      'password': data.password
+    };
+
+    this._authService.authenticate(this.participant).subscribe((data) => {
+      if (data) {
+        if (data.errors) {
+          console.log("___ LOGIN ERROR ___:", data.errors);
+          this.errors = data;
+        } else {
+          this._authService.setCurrentClient(data);
+          window.location.href = environment.redirectLoginUrl;
+        }
+      } else {
+        this.errors = data;
+        return data;
+      }
+    });
+  }
   loginFacebookParticipant(data: any) {
-    this.errors = [];
+    this.errors = null;
     console.log("*** STARTING FACEBOOK LOGIN ***", data)
     this.participant = {
       'email': data.email,
@@ -128,7 +183,7 @@ export class LoginComponent implements OnInit {
           }
         } else {
           this._authService.setCurrentClient(data);
-          return data;
+          window.location.href = environment.redirectLoginUrl;
         }
       } else {
         this.errors = data;
@@ -138,7 +193,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginParticipant(form: any) {
-    this.errors = [];
+    this.errors = null;
     console.log("*** STARTING LOGIN ***")
     this.participant = {
       'email': this.email.value,

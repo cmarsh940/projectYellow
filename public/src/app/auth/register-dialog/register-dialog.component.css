@@ -28,9 +28,17 @@
     height: 30px;
     width: 30px;
 }
-.text {
-    vertical-align: sub;
-    margin-left: 1em;
+
+#glogin {
+    margin-top: 1em;
+    background-color: #FFFFFF ;
+    width: 100%;
+}
+
+.socialText {
+    font: Roboto-Medium;
+    size: 14px;
+    color: #000000 / 0,0,0(54%);
 }
 
 strong {

@@ -11,7 +11,7 @@ class FeedbacksController {
                 console.log("___ FEEDBACK ERRO ___", err);
                 return res.json(err);
             }
-            console.log("___ CREATED FEEDBACK ___", feedback);
+            console.log("___ CREATED FEEDBACK ___");
             return res.json(feedback);
         });
     }

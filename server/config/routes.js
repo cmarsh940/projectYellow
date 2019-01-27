@@ -4,14 +4,12 @@ const EmailSubs = require('../controllers/emailSubs');
 const Feedbacks = require('../controllers/feedbacks');
 const path = require('path');
 const Payments = require('../controllers/payments');
-const Questions = require('../controllers/questions');
 const Surveys = require('../controllers/surveys');
 const Texts = require('../controllers/texts');
 const Users = require('../controllers/users');
 
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const secret = require('./config').jwt_secret;
+// const jwt = require('jsonwebtoken');
+// const secret = require('./config').jwt_secret;
 
 
 // async function validJWTNeeded(req, res, next) {
@@ -51,10 +49,7 @@ const secret = require('./config').jwt_secret;
 
 module.exports = function (app) {
     // CLIENT
-    app.get('/api/clients', [
-        passport.authenticate('jwt', { session: false }),
-        Clients.index
-    ]);
+    app.get('/api/clients', Clients.index);
     app.post('/api/clients', Clients.create);
     app.delete('/api/clients', Clients.logout);
     app.post('/api/clients/login', Clients.authenticate);
@@ -63,10 +58,7 @@ module.exports = function (app) {
     //     Clients.delete
     // ]);
     app.get('/api/clients/:id', Clients.show);
-    app.put('/api/clients/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Clients.update
-    ]);
+    app.put('/api/clients/:id', Clients.update);
     app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
 
@@ -77,90 +69,42 @@ module.exports = function (app) {
     app.post('/api/upload/feedback', Feedbacks.create);
 
     // IMAGES
-    app.post('/api/upload/portfolio/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Clients.upload
-    ]);
+    app.post('/api/upload/portfolio/:id', Clients.upload);
 
     // PAYMENTS
     app.get('/api/braintree/getclienttoken', Payments.getClientToken);
-    app.post('/api/braintree/createpurchase', [
-        passport.authenticate('jwt', { session: false }),
-        Payments.checkout
-    ]);
-    app.put('/api/braintree/updatepurchase', [
-        passport.authenticate('jwt', { session: false }),
-        Payments.update
-    ]);
-    app.put('/api/payment/cancel/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Payments.cancelSubscription
-    ]);
+    app.post('/api/braintree/createpurchase', Payments.checkout);
+    app.put('/api/braintree/updatepurchase', Payments.update);
+    app.put('/api/payment/cancel/:id', Payments.cancelSubscription);
 
     
     // SURVEYS
     app.get('/api/surveys', Surveys.index);
-    app.post('/api/surveys', [
-        passport.authenticate('jwt', { session: false }),
-        Surveys.create
-    ]);
-    app.delete('/api/surveys/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Surveys.delete
-    ]);
+    app.post('/api/surveys', Surveys.create);
+    app.delete('/api/surveys/:id', Surveys.delete);
     app.get('/api/surveys/:id', Surveys.show);
-    app.put('/api/surveys/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Surveys.update
-    ]);
+    app.put('/api/surveys/:id', Surveys.update);
     app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
     app.put('/api/answer/pSurveys/:id', Surveys.answerPrivateSurvey);
 
     // SURVEY CATEGORIES
     app.get('/api/survey-categories', Categories.index);
-    app.post('/api/survey-categories', [
-        passport.authenticate('jwt', { session: false }),
-        Categories.create
-    ]);
-    app.delete('/api/survey-categories/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Categories.delete
-    ]);
-    app.get('/api/survey-categories/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Categories.show
-    ]);
-    app.put('/api/survey-categories/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Categories.update
-    ]);
+    app.post('/api/survey-categories', Categories.create);
+    app.delete('/api/survey-categories/:id', Categories.delete);
+    app.get('/api/survey-categories/:id', Categories.show);
+    app.put('/api/survey-categories/:id', Categories.update);
     
 
     // TEXTING
-    app.post('/api/sendSMS/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Texts.text
-    ]);
+    app.post('/api/sendSMS/:id', Texts.text);
 
     // USERS
-    app.post('/api/users', [
-        passport.authenticate('jwt', { session: false }),
-        Users.create
-    ]);
+    app.post('/api/users', Users.create);
     app.get('/api/users/:id', Users.showClientsUsers);
-    app.delete('/api/users/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Users.delete
-    ]);
-    app.put('/api/users/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Users.update
-    ]);
+    app.delete('/api/users/:id', Users.delete);
+    app.put('/api/users/:id', Users.update);
 
-    app.post('/api/usersUpload/:id', [
-        passport.authenticate('jwt', { session: false }),
-        Users.upload
-    ]);
+    app.post('/api/usersUpload/:id', Users.upload);
 
     // CATCH ALL
     app.all('*', (req, res, next) => {

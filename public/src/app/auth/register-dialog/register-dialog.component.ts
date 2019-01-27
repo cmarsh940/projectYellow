@@ -1,42 +1,117 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatIconRegistry, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { environment } from './../../../environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Client } from 'src/app/global/models/client';
+import { Subject } from 'rxjs';
 
 declare var FB: any;
+declare const gapi: any;
 
 @Component({
   selector: 'app-register-dialog',
   templateUrl: './register-dialog.component.html',
   styleUrls: ['./register-dialog.component.css']
 })
-export class RegisterDialogComponent implements OnInit {
+
+export class RegisterDialogComponent implements OnInit, AfterViewInit {
 
   errors = [];
   responseData:any;
   private participant;
-
+  auth2:any;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
+  private ngUnsubscribe = new Subject();
 
   constructor(
     private _authService: AuthService,
     public snackBar: MatSnackBar,
-    private dialogRef: MatDialogRef<RegisterDialogComponent>,
+    private _router: Router,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    public dialogRef: MatDialogRef<RegisterDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public dataDialog: any
   ) { 
     iconRegistry.addSvgIcon(
       'facebook',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
+    iconRegistry.addSvgIcon(
+      'google',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'));
   }
 
   ngOnInit() {
     this.loadFacebook();
+  }
+
+  ngAfterViewInit() {
+    gapi.load('auth2', () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: environment.clientId,
+        cookiepolicy: 'single_host_origin',
+        scope: 'profile email'
+      });
+      this.attachSignin(document.getElementById('glogin'));
+    });
+  }
+
+  // attachSignin(element) {
+  //   this.auth2.attachClickHandler(element, {}).subscribe({
+  //     next: data => {
+  //       const subscription = "FREE";
+  //       const registerPlatform = 'GOOGLE';
+  //       let authResponse = data.Zi;
+  //       console.log("LOGEDINUSER:", data);
+  //       let client = new Client();
+  //       client.platformId = data.El
+  //       client.email = data.w3.U3
+  //       client.firstName = data.w3.ofa;
+  //       client.lastName = data.w3.wea;
+  //       client.password = `Google${data.w3.Eea}`;
+  //       client.confirm_pass = `Google${data.w3.Eea}`;
+  //       client.picture = data.w3.Paa;
+  //       client._subscription = subscription;
+  //       client.registerPlatform = registerPlatform;
+  //       client.platformAuth = authResponse.id_token;
+
+  //       this.addGoogleParticipant(client);
+  //     },
+  //       error: err => {
+  //         console.log("api error" + err);
+  //     },
+  //     complete: () => {
+  //       this.dialogRef.close("success");
+  //     }
+  //   })
+  // }
+  attachSignin(element) {
+    this.auth2.attachClickHandler(element, {},
+      (data) => {
+        const subscription = "FREE";
+        const registerPlatform = 'GOOGLE';
+        let authResponse = data.Zi;
+        console.log("LOGEDINUSER:", data);
+        let client = new Client();
+        client.platformId = data.El
+        client.email = data.w3.U3
+        client.firstName = data.w3.ofa;
+        client.lastName = data.w3.wea;
+        client.password = `Google${data.w3.Eea}`;
+        client.confirm_pass = `Google${data.w3.Eea}`;
+        client.picture = data.w3.Paa;
+        client._subscription = subscription;
+        client.registerPlatform = registerPlatform;
+        client.platformAuth = authResponse.id_token;
+
+        this.addGoogleParticipant(client);
+        console.log("ADDED AND RETURNING");
+      }, function (error) {
+        console.log("GOOGLE LOGIN ERROR", error)
+      });
   }
 
 
@@ -107,10 +182,28 @@ export class RegisterDialogComponent implements OnInit {
       if (data.errors) {
         console.log("ERROR", data);
         this.errors.push(data.message);
+        return data
       } else {
         console.log("ADDED DATA", data)
         this._authService.setCurrentClient(data);
-        return data;
+        window.location.href = environment.redirectLoginUrl;
+      }
+    })
+  }
+
+  addGoogleParticipant(response: any) {
+    this.errors = [];
+    this.participant = response;
+    console.log("ADDING PARTICIPANT:", this.participant);
+    this._authService.addParticipant(this.participant).subscribe((data) => {
+      if (data.errors) {
+        console.log("ERROR", data);
+        this.errors.push(data.message);
+      } else {
+        console.log("ADDED DATA", data)
+        this._authService.setCurrentClient(data);
+        console.log("RETURNING FROM ADDING GOOGLE CLIENT");
+        window.location.href = environment.redirectUrl;
       }
     })
   }

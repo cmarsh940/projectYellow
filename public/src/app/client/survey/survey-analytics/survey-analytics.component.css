@@ -106,6 +106,8 @@ td, th {
 .booleanData {
     width:100%;
     display: flex;
+    border-bottom: 1px solid #00000040;
+    word-spacing: 1em;
 }
 
 .mat-card {

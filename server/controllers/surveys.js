@@ -13,7 +13,6 @@ const User = mongoose.model('User');
 
 class SurveysController {
   index(req, res) {
-    console.log("THE REQUEST:", req);
     Survey.find({}).lean()
     .populate({ path: "category", select: 'name', model: Category })
     .populate({ path: "creator", select: 'firstName lastName businessName', model: Client })
@@ -23,7 +22,7 @@ class SurveysController {
         console.log("*** ERROR: FINDING SURVEYS=", err);
         return res.json(err);
       }
-      console.log("*** FOUND SURVEYS ***", surveys);
+      console.log("*** FOUND SURVEYS ***");
       return res.json(surveys);
     })
   }
@@ -71,7 +70,7 @@ class SurveysController {
                 console.log("___ CREATE SURVEY PUSH QUESTIONS ERROR ___", err);
                 return res.json(err);
               }
-              console.log("___ CREATED SURVEY ___", survey);
+              console.log("___ CREATED SURVEY ___");
               return res.json(survey);
             })
           })
@@ -91,7 +90,7 @@ class SurveysController {
           console.log("*** ERROR: FINDING SURVEY ***", err);
           return res.json(err);
         }
-        console.log("*** FOUND SURVEY ***", survey);
+        console.log("*** FOUND SURVEY ***");
         return res.json(survey);
     });
   }
@@ -126,7 +125,7 @@ class SurveysController {
                 console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                 return res.json(err);
               }
-              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`, question);
+              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`);
             });
           })
         }
@@ -146,7 +145,7 @@ class SurveysController {
             console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
             return res.json(err);
           } else {
-            console.log("CREATING META SUCCESS" , metas);
+            console.log("CREATING META SUCCESS");
             Survey.findByIdAndUpdate(req.params.id, {
               $push: { meta: metas._id }
             }, { new: true }, (err, updatedSurvey) => {
@@ -164,8 +163,6 @@ class SurveysController {
 
   answerPrivateSurvey(req, res) {
     console.log("*** HIT SERVER UPDATE ANSWER ***");
-    console.log("*** PARAMS ***", req.params);
-    console.log("*** BODY ***", req.body);
 
     Survey.findByIdAndUpdate(req.params.id, { 
       $push: { submissionDates: Date.now() },
@@ -195,7 +192,7 @@ class SurveysController {
                 console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                 return res.json(err);
               }
-              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`, question);
+              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`);
             });
           })
         }
@@ -230,9 +227,9 @@ class SurveysController {
                   console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                   return res.json(err);
                 }
-                console.log("SAVED USER", savedUser);
+                console.log("SAVED USER");
                 
-                console.log("CREATING USER META SUCCESS", metas);
+                console.log("CREATING USER META SUCCESS");
                 Survey.findByIdAndUpdate(req.params.id, {
                   $push: { meta: metas._id }
                 }, { new: true }, (err, updatedSurvey) => {
@@ -252,7 +249,6 @@ class SurveysController {
 
   update(req, res) {
     console.log("*** HIT SERVER UPDATE ***");
-    console.log("*** BODY ***", req.body);
 
     Survey.findById(req.params.id, (err, survey) => {
       if (err) {
@@ -260,7 +256,7 @@ class SurveysController {
         return res.json(err);
       } else {
         var arr = req.body.questions;
-        console.log("___ ARRAY OF QUESTIONS TO UPDATE ___", arr);
+        console.log("___ ARRAY OF QUESTIONS TO UPDATE ___");
 
         for (let i = 0; i < arr.length; i++) {
           Question.findById(arr[i]._id, (err, question) => {
@@ -291,7 +287,7 @@ class SurveysController {
                   console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                   return res.json(err);
                 }
-                console.log(`___ UPDATED QUESTION[${i}] ___`, question);
+                console.log(`___ UPDATED QUESTION[${i}] ___`);
               });
             }
           })
@@ -304,7 +300,7 @@ class SurveysController {
             console.log("___  SURVEY ERROR ___", err);
             return res.json(err);
           }
-          console.log("___  UPDATED SURVEY ___", updatedSurvey);
+          console.log("___  UPDATED SURVEY ___");
           return res.json(updatedSurvey);
         })
       }

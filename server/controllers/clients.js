@@ -6,8 +6,6 @@ const geoip = require('geoip-lite');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const os = require('os');
-const path = require("path");
-const passport = require('passport');
 
 const tempSub = require("../models/staticModels/subscription");
 const Client = mongoose.model('Client');
@@ -132,7 +130,7 @@ class ClientsController {
           console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
           return res.json(err);
         } else {
-          console.log("CREATING META SUCCESS", metas);
+          console.log("CREATING META SUCCESS");
           Client.findByIdAndUpdate(req.params.id, {
             $push: { _meta: metas._id }
           }, { new: true }, (err, updatedClient) => {
@@ -152,7 +150,7 @@ class ClientsController {
               sendVerificationEmail(email);
               return res.json(updatedClient);
             }
-            else if (client.registerPlatform === "FACEBOOK") {
+            else if (client.registerPlatform === "FACEBOOK" || client.registerPlatform === "GOOGLE") {
               
               console.log("*** SERVER CLIENT CREATED");
 
@@ -191,10 +189,13 @@ class ClientsController {
       if (client && client.authenticate(req.body.password)) {
 
         console.log("_____CLIENT LOGGING IN_____");
-        var token = jwt.sign({ client }, secret, { expiresIn: '1h'});
-
+        const token = jwt.sign(client.toJSON(), config.secret, {
+          expiresIn: 604800 // 1 week
+        });
+        console.log("_____CREATED TOKEN_____");
         // CHECK IF CLIENT IS IN TRIAL OR SUBSCRIPTION
         if (client.subscriptionStatus === 'Trial') {
+          console.log("_____SUBSCRIPTION IS TRIAL_____");
           req.session.client = {
             _id: client._id,
             n: client.firstName + " " + client.lastName,
@@ -210,6 +211,7 @@ class ClientsController {
 
           return res.json(req.session.client);
         } else {
+          console.log("_____SUBSCRIPTION IS PAID_____");
           // CREATE GATEWAY TO BRAINTREE TO CHECK CLIENTS SUBSCRIPTION
           let gateway = braintree.connect({
             environment: braintree.Environment.Sandbox,
@@ -225,7 +227,7 @@ class ClientsController {
 
             // CHECK IF STORED PAYED THROUGH DATE IS BEHIND THE SUBSCRIBED PAYTHROUGH DATE
             if (result.paidThroughDate > client.paidThroughDate) {
-
+              console.log("_____NO PROBLEMS WITH PAID TIME _____");
               let subObject = {};
               for (let sub of tempSub) {
                 if (sub.name === client._subscription) {
@@ -238,6 +240,7 @@ class ClientsController {
                   console.log("ERROR FINDING CLIENT TO UPDATE", err)
                   return res.json(err);
                 }
+                console.log("_____FOUND PAID CLIENT_____");
                 paidClient._subscription = subObject.name;
                 paidClient.surveyCount += subObject.surveyCount;
                 paidClient.paidThroughDate = result.paidThroughDate;
@@ -247,7 +250,7 @@ class ClientsController {
                     console.log(`___ SAVE SUBSCRIBED CLIENT ERROR ___`, err);
                     return res.json(err);
                   }
-                  console.log(`___ UPDATED SUBSCRIBED CLIENT ___`, subscribedClient);
+                  console.log(`___ UPDATED SUBSCRIBED CLIENT ___`);
                   req.session.client = {
                     _id: subscribedClient._id,
                     n: subscribedClient.firstName + " " + subscribedClient.lastName,
@@ -264,7 +267,7 @@ class ClientsController {
                 });
               });
             } else {
-              
+              console.log("_____PROBLEM WITH PAYMENT TIME_____");
               req.session.client = {
                 _id: client._id,
                 n: client.firstName + " " + client.lastName,
@@ -282,6 +285,7 @@ class ClientsController {
           })
         }
       } else {
+        console.log("_____ ERROR _____");
         return res.json({
           errors: {
             login: {
@@ -294,7 +298,7 @@ class ClientsController {
   }
 
   show(req, res, next) {
-    console.log("HIT CLIENT SHOW", req);
+    console.log("HIT CLIENT SHOW");
     Client.findById({ _id: req.params.id }).lean()
       .populate('_surveys')
       .populate('category')
@@ -319,6 +323,7 @@ class ClientsController {
       }
     );
   }
+
   update(req, res) {
     Client.findByIdAndUpdate(
       req.params.id,

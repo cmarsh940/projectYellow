@@ -13,23 +13,27 @@
 </div>
 <ng-template #mainTemplate>
   <div class="container">
-    <div *ngIf="errors === null" class="errors">
-      <b>** Password or email is not correct **</b>
-    </div>
-    <div *ngIf="errors?.length > 0 " class="errors">
-      {{ errors }}
-    </div>
     <div class="login-text">
       <h1 class="mat-h2">What do you want to know?</h1>
       <h2 class="mat-h2">reach anyone, anywhere!</h2>
       <h1 class="mat-h1">Get Started</h1>
     </div>
 
+    <div *ngIf="errors" class="errors">
+      {{ errors }}
+    </div>
+
     <div class="social">
-      <button mat-button (click)="submitLogin()" id="FB-button">
-        <mat-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
-        <span class="text">Continue with Facebook</span>
-      </button>
+      <mat-list>
+          <button mat-list-item (click)="submitLogin()" id="FB-button">
+            <mat-icon mat-list-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
+            <span mat-line class="socialText">Continue with Facebook</span>
+          </button>
+          <button mat-list-item id="glogin">
+            <mat-icon mat-list-icon svgIcon="google" aria-label="Google Icon"></mat-icon>
+            <span mat-line class="socialText">Sign in with Google</span>
+          </button>
+      </mat-list>
     </div>
 
     <mat-divider>

@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/l
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
 
 @Component({
@@ -26,12 +26,16 @@ export class MainNavComponent {
   ) {}
 
   openDialog() {
-    const dialogRef = this.dialog.open(RegisterDialogComponent);
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+
+
+    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(result => {
       if(!result) {
-        console.log(`Dialog result:`);
-        console.table(result);
+        console.log(`Dialog Error result:`);
+        console.log(result);
       } else {
         console.log(`Dialog result:`);
         console.table(result);

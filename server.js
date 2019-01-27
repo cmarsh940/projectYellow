@@ -6,16 +6,14 @@ const compression = require('compression');
 const cors = require("cors");
 const csrf = require('csurf')
 const express = require('express');
-const fs = require('fs');
 const helmet = require('helmet');
 const http = require('http');
 const morgan = require('morgan');
-const passport = require('passport');
 const path = require("path");
 const port = normalizePort(process.env.PORT || '8000');
 const session = require('express-session');
 
-const csp = `default-src * data: blob:;script-src *.facebook.com  *.facebook.net *.google-analytics.com *.google.com *.linkedin.com 127.0.0.1:*  'unsafe-inline' 'unsafe-eval' blob: data: 'self';style-src data: blob: 'unsafe-inline' *;connect-src localhost:* *.facebook.com facebook.com *.fbcdn.net *.facebook.net`;
+const csp = `default-src * data: blob:;script-src *.facebook.com  *.facebook.net *.google-analytics.com *.google.com *.linkedin.com 127.0.0.1:*  'unsafe-inline' 'unsafe-eval' blob: data: 'self';style-src data: blob: 'unsafe-inline' *;connect-src localhost:* *.facebook.com facebook.com *.fbcdn.net *.facebook.net *.google.com *.googleapis.com`;
 
 const app = express();
 
@@ -32,7 +30,12 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Expose-Headers', 'Content-Length');
     res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range, X-XSRF-TOKEN');
-    return next();
+    if (req.method === 'OPTIONS') {
+        return res.send(200); 
+    } else { 
+        return next(); 
+    }
+        
 });
 
 
@@ -44,11 +47,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(busboyBodyParser());
 
-// create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
-
 // setup the logger
-app.use(morgan('combined', { stream: accessLogStream }))
+app.use(morgan('dev'))
 
 // app.set('trust proxy', true) // trust first proxy
 
@@ -59,12 +59,6 @@ app.use(session({
     cookie: { maxAge: 60000 }
 }))
 
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Passport Config
-require('./server/config/middleware/passport')(passport);
 require('./server/config/mongoose');
 require('./server/config/routes')(app);
 
@@ -74,13 +68,10 @@ app.use(function (req, res, next) {
     return next();
 });
 
+
 app.set('port', port);
 const server = http.createServer(app);
 
-// Index Route
-app.get('/', (req, res) => {
-    res.send('invaild endpoint');
-});
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/index.html'));
