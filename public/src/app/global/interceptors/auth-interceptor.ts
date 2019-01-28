@@ -7,25 +7,21 @@ import { Observable, throwError } from 'rxjs';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(
-        private auth: AuthService
-    ) { }
-
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log(`AddTokenInterceptor - ${req.url}`);
 
-        const token =  this.auth.getAuthorizationToken();
+        const idToken = localStorage.getItem("token");
 
-        if (token) {
-
-            // Logged in. Add Bearer token.
-            return next.handle(
-                req.clone({
-                    headers: req.headers.append('Authorization', `Bearer ${token}`)
-                })
-            );
+        if (idToken) {
+            const cloned = req.clone({
+                headers: req.headers.set("Authorization",
+                    `Bearer ${idToken}`)
+            });
+            console.log("SENDING CLONED HEADERS");
+            return next.handle(cloned);
         }
-        // Not logged in. Continue without modification.
-        return next.handle(req);
+        else {
+            console.log("SENDING WITHOUT HEADERS");
+            return next.handle(req);
+        }
     }
 }

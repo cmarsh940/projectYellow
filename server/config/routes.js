@@ -8,43 +8,45 @@ const Surveys = require('../controllers/surveys');
 const Texts = require('../controllers/texts');
 const Users = require('../controllers/users');
 
-// const jwt = require('jsonwebtoken');
-// const secret = require('./config').jwt_secret;
+const jwt = require('jsonwebtoken');
+const secret = require('./config').jwt_secret;
 
 
-// async function validJWTNeeded(req, res, next) {
-//     if (req.headers['Authorization']) {
-//         console.log("RECIEVED HEADER WITH AUTHORIZATION IN IT");
-//         try {
-//             let Authorization = await req.headers['Authorization'].split(' ');
-//             if (Authorization[0] !== 'Bearer') {
-//                 console.log("Not Valid");
-//                 return res.status(401).send();
-//             } else {
-//                 req.jwt = jwt.verify(Authorization[1], secret);
-//                 console.log("NEXT");
-//                 return next();
-//             }
+async function validJWTNeeded(req, res, next) {
+    if (req.headers['authorization']) {
+        console.log("RECIEVED HEADER WITH AUTHORIZATION IN IT");
+        try {
+            let Authorization = await req.headers['authorization'].split(' ');
+            if (Authorization[0] !== 'Bearer') {
+                console.log("Not Valid");
+                return res.status(401).send();
+            } else {
+                req.jwt = jwt.verify(Authorization[1], secret);
+                console.log("NEXT");
+                return next();
+            }
 
-//         } catch (err) {
-//             if (err.name === 'TokenExpiredError') {
-//                 console.log("ERROR TOKEN EXIRED", err);
-//                 return res.json(err);
-//             } else {
-//                 console.log("ERROR", err)
-//                 return res.status(403).send();
-//             }
-//         }
-//     } else {
-//         if (req.method === 'GET') {
-//             console.log("ITS A GET");
-//             return next();
-//         } else {
-//             console.log("RETURNING EVERYTHING ELSE", res);
-//             return res.status(401).send();
-//         }
-//     }
-// };
+        } catch (err) {
+            if (err.name === 'TokenExpiredError') {
+                console.log("ERROR TOKEN EXIRED", err);
+                return res.json(err);
+            } else {
+                console.log("ERROR", err)
+                return res.status(403).send();
+            }
+        }
+    } 
+    else {
+        // if (req.method === 'GET') {
+            console.log("ELSE");
+            return next();
+        // } 
+        // else {
+        //     console.log("RETURNING EVERYTHING ELSE", res);
+        //     return res.status(401).send();
+        // }
+    }
+};
 
 
 module.exports = function (app) {
@@ -99,7 +101,10 @@ module.exports = function (app) {
     app.post('/api/sendSMS/:id', Texts.text);
 
     // USERS
-    app.post('/api/users', Users.create);
+    app.post('/api/users', [
+        validJWTNeeded,
+        Users.create
+    ]);
     app.get('/api/users/:id', Users.showClientsUsers);
     app.delete('/api/users/:id', Users.delete);
     app.put('/api/users/:id', Users.update);

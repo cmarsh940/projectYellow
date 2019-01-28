@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { ClientModule } from './client/client.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { LandingModule } from './landing/landing.module';
 import { MaterialModule } from './material/material.module';
@@ -50,6 +50,7 @@ import { AuthGuard } from './global/guards/auth.guard';
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 import { FeedbackComponent } from './layout/feedback/feedback.component';
 import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
+import { AuthInterceptor } from './global/interceptors/auth-interceptor';
 
 
 
@@ -92,7 +93,8 @@ import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.
     OverviewService,
     SubscriptionService,
     { provide: RequestCache, useClass: RequestCacheWithMap },
-    httpInterceptorProviders,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    // httpInterceptorProviders,
   ],
   entryComponents: [
     AddUserComponent,

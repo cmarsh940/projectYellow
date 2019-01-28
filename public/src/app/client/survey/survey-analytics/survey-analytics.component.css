@@ -2,6 +2,10 @@
   flex: 1 1 auto;
 }
 
+h4 {
+    font-weight: 400!important;
+}
+
 .loaded {
     width: 100%;
     margin: auto;
@@ -137,4 +141,8 @@ mat-chip {
 
 span {
     margin-left: 5px;
+}
+
+mat-grid-list {
+    background-color: #2d2d2de3;
 }

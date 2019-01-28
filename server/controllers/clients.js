@@ -165,6 +165,7 @@ class ClientsController {
                 s: client._surveys,
                 status: client.subscriptionStatus,
                 token: token,
+                expiresIn: 604800,
                 v: client.verified
               };
               return res.json(req.session.client);
@@ -189,7 +190,7 @@ class ClientsController {
       if (client && client.authenticate(req.body.password)) {
 
         console.log("_____CLIENT LOGGING IN_____");
-        const token = jwt.sign(client.toJSON(), config.secret, {
+        const token = jwt.sign(client.toJSON(), config.jwt_secret, {
           expiresIn: 604800 // 1 week
         });
         console.log("_____CREATED TOKEN_____");
@@ -206,6 +207,7 @@ class ClientsController {
             s: client._surveys,
             status: client.subscriptionStatus,
             token: token,
+            expiresIn: 604800,
             v: client.verified
           };
 
@@ -261,6 +263,7 @@ class ClientsController {
                     s: subscribedClient._surveys,
                     status: subscribedClient.status,
                     token: token,
+                    expiresIn: 604800,
                     v: subscribedClient.verified
                   };
                   return res.json(req.session.client);
@@ -278,6 +281,7 @@ class ClientsController {
                 s: client._surveys,
                 status: result.status,
                 token: token,
+                expiresIn: 604800,
                 v: client.verified
               };
               return res.json(req.session.client);

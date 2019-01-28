@@ -6,6 +6,7 @@ const Survey = mongoose.model('Survey');
 class UsersController {
     
     create(req, res) {
+        console.log(req.headers);
         User.create(req.body, (err, user) => {
             console.log("*** SERVER CREATING USER")
             if (err) {

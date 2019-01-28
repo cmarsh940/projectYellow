@@ -64,6 +64,8 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   colors = ["#ffd600", "#ffab00", "#ff6d00", "#ff3d00", "#c51162", "#536dfe", "#2979ff", "#0091ea", "#00b8d4", "#00bfa5", "#00c853", "#64dd17", "#aeea00"];
   
+  displayedColumns = ['optionName', 'count', 'percentage'];
+
   constructor(
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
@@ -266,7 +268,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
         // FLATTEN NESTED ARRAY OF ANSWERS
         let tempAnswers = deepFlatten(this.survey[i].answers);
-
+        console.log("TEMP ANSWERS", tempAnswers);
         // LOOP THROUGH ANSWERS AND OPTIONS AND COUNT HOW MANY OF EACH
         tempAnswers.forEach(answer => {
           options.forEach(option => {
@@ -282,6 +284,19 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
               }
             }
           });
+        });
+        options.forEach(option => {
+          if (!option.count) {
+            option.percentage = 0
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          } else {
+            let tempPercent = (option.count/tempAnswers.length) * 100;
+            console.log("TEMP PERCENT", tempPercent)
+            option.percentage = Math.round(tempPercent);
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          }
         });
         // SET NEW OPTIONS AND PUTH THEM TO THE QUESTIONS ANSWERS
         this.survey[i].answers = options;
@@ -309,6 +324,19 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           });
         });
 
+        options.forEach(option => {
+          if (!option.count) {
+            option.percentage = 0
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          } else {
+            let tempPercent = (option.count / tempAnswers.length) * 100;
+            console.log("TEMP PERCENT", tempPercent)
+            option.percentage = Math.round(tempPercent);
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          }
+        });
         // SET NEW OPTIONS AND PUTH THEM TO THE QUESTIONS ANSWERS
         this.survey[i].answers = options;
         this.questions.push(this.survey[i]);

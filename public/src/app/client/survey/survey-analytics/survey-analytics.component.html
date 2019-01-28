@@ -90,8 +90,13 @@
             <ng-container *ngSwitchCase="'dropDown'">
               <mat-chip-list class="mat-chip-list-stacked">
                 <mat-chip [style.background]="answer.color" disabled>
-                  {{ j + 1 }} ) {{ answer.optionName }} = <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{
-                    answer.count }}</span>
+                  {{ j + 1 }} ) {{ answer.optionName }} 
+                  <span class="spacer"></span> 
+                  <span> 
+                    <span *ngIf="!answer.count"> 0</span> 
+                    <span *ngIf="answer.count"> {{answer.count }}</span>
+                    {{answer.percentage}}%
+                  </span>
                 </mat-chip>
               </mat-chip-list>
             </ng-container>
@@ -100,8 +105,13 @@
             <ng-container *ngSwitchCase="'dropDownMultiple'">
               <mat-chip-list class="mat-chip-list-stacked">
                 <mat-chip [style.background]="answer.color" disabled>
-                  {{ j + 1 }} ) {{ answer.optionName }} = <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{
-                    answer.count }}</span>
+                  {{ j + 1 }} ) {{ answer.optionName }} 
+                  <span class="spacer"></span> 
+                  <span> 
+                    <span *ngIf="!answer.count"> 0</span> 
+                    <span *ngIf="answer.count"> {{ answer.count }}</span>
+                    {{answer.percentage}}%
+                  </span>
                 </mat-chip>
               </mat-chip-list>
             </ng-container>
@@ -125,7 +135,14 @@
             <ng-container *ngSwitchCase="'multiplechoice'">
               <mat-chip-list class="mat-chip-list-stacked">
                 <mat-chip [style.background]="answer.color" disabled>
-                  {{ j + 1 }} ) {{ answer.optionName }} =  <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{ answer.count }}</span>
+                  {{ j + 1 }} ) {{ answer.optionName }} 
+                  <span class="spacer"></span> 
+                  <span>
+                    <span *ngIf="!answer.count"> 0</span> 
+                    <span *ngIf="answer.count"> {{ answer.count }}</span>
+                    {{answer.percentage}}%
+                  </span>
+
                 </mat-chip>
               </mat-chip-list>
             </ng-container>
@@ -134,7 +151,13 @@
             <ng-container *ngSwitchCase="'multiplechoiceOther'">
               <mat-chip-list class="mat-chip-list-stacked">
                 <mat-chip [style.background]="answer.color" disabled>
-                  {{ j + 1 }} ) {{ answer.optionName }} =  <span *ngIf="!answer.count"> 0</span> <span *ngIf="answer.count"> {{ answer.count }}</span>
+                  {{ j + 1 }} ) {{ answer.optionName }} 
+                  <span class="spacer"></span> 
+                  <span>
+                    <span *ngIf="!answer.count"> 0</span> 
+                    <span *ngIf="answer.count"> {{ answer.count }}</span>
+                    {{answer.percentage}}%
+                  </span>
                 </mat-chip>
               </mat-chip-list>
             </ng-container>

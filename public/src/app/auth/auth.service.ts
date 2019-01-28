@@ -52,9 +52,12 @@ export class AuthService {
     console.log("*** SERVICE SET CURRENT CLIENT ***")
     let token = client.token;
     delete client.token;
-    sessionStorage.setItem('currentClient', JSON.stringify(client));
-    localStorage.setItem('token', JSON.stringify(token));
+    const expiresAt = moment().add(client.expiresIn, 'second');
+
+    localStorage.setItem('token', token);
+    localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
     localStorage.setItem('t940', JSON.stringify(client._id));
+    sessionStorage.setItem('currentClient', JSON.stringify(client));
   }
 
   logout(callback) {
@@ -65,6 +68,7 @@ export class AuthService {
         this.currentClient = null;
         sessionStorage.removeItem('currentClient');
         localStorage.removeItem('token');
+        localStorage.removeItem('expires_at')
         localStorage.removeItem('t940');
         callback(res.json());
       },
@@ -151,7 +155,7 @@ export class AuthService {
       return false;
     }
     if (data._id === check) {
-      return true;
+      return moment().isBefore(this.getExpiration());
     } 
     return false;
   }
@@ -171,6 +175,12 @@ export class AuthService {
         return data
       }
     }
+  }
+
+  getExpiration() {
+    const expiration = localStorage.getItem("expires_at");
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
   }
 
   
