@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from '../global/services/http-error-handler.service';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
+
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -25,6 +28,7 @@ export class AuthService {
     private _messageService: MessagesService,
     private _http: Http,
     private _httpClient: HttpClient,
+    private _router: Router,
     private httpErrorHandler: HttpErrorHandler,
   ) {
   this.handleError = httpErrorHandler.createHandleError("AuthService");
@@ -141,10 +145,14 @@ export class AuthService {
 
   authorize() {
     let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if (data.a8o1 === 'CAPTAIN') {
-      return true;
+    if(data) {
+      if (data.a8o1 === 'CAPTAIN') {
+        return true;
+      } else {
+        return false
+      }
     } else {
-      return false;
+      window.location.href = environment.redirect404;
     }
   }
 

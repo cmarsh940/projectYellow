@@ -37,14 +37,8 @@ async function validJWTNeeded(req, res, next) {
         }
     } 
     else {
-        // if (req.method === 'GET') {
-            console.log("ELSE");
-            return next();
-        // } 
-        // else {
-        //     console.log("RETURNING EVERYTHING ELSE", res);
-        //     return res.status(401).send();
-        // }
+        console.log("ELSE");
+        return next();
     }
 };
 
@@ -53,14 +47,23 @@ module.exports = function (app) {
     // CLIENT
     app.get('/api/clients', Clients.index);
     app.post('/api/clients', Clients.create);
-    app.delete('/api/clients', Clients.logout);
+    app.delete('/api/clients', [
+        validJWTNeeded, 
+        Clients.logout
+    ]);
     app.post('/api/clients/login', Clients.authenticate);
     // app.delete('/api/clients/:id', [
     //     validJWTNeeded,
     //     Clients.delete
     // ]);
-    app.get('/api/clients/:id', Clients.show);
-    app.put('/api/clients/:id', Clients.update);
+    app.get('/api/clients/:id', [
+        validJWTNeeded,
+        Clients.show
+    ]);
+    app.put('/api/clients/:id', [
+        validJWTNeeded,
+        Clients.update
+    ]);
     app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
 
@@ -71,45 +74,99 @@ module.exports = function (app) {
     app.post('/api/upload/feedback', Feedbacks.create);
 
     // IMAGES
-    app.post('/api/upload/portfolio/:id', Clients.upload);
+    app.post('/api/upload/portfolio/:id', [
+        validJWTNeeded,
+        Clients.upload
+    ]);
 
     // PAYMENTS
-    app.get('/api/braintree/getclienttoken', Payments.getClientToken);
-    app.post('/api/braintree/createpurchase', Payments.checkout);
-    app.put('/api/braintree/updatepurchase', Payments.update);
-    app.put('/api/payment/cancel/:id', Payments.cancelSubscription);
+    app.get('/api/braintree/getclienttoken', [
+        validJWTNeeded,
+        Payments.getClientToken
+    ]);
+    app.post('/api/braintree/createpurchase', [
+        validJWTNeeded,
+        Payments.checkout
+    ]);
+    app.put('/api/braintree/updatepurchase', [
+        validJWTNeeded,
+        Payments.update
+    ]);
+    app.put('/api/payment/cancel/:id', [
+        validJWTNeeded,
+        Payments.cancelSubscription
+    ]);
 
     
     // SURVEYS
     app.get('/api/surveys', Surveys.index);
-    app.post('/api/surveys', Surveys.create);
-    app.delete('/api/surveys/:id', Surveys.delete);
+    app.post('/api/surveys', [
+        validJWTNeeded,
+        Surveys.create
+    ]);
+    app.delete('/api/surveys/:id', [
+        validJWTNeeded,
+        Surveys.delete
+    ]);
     app.get('/api/surveys/:id', Surveys.show);
-    app.put('/api/surveys/:id', Surveys.update);
+    app.put('/api/surveys/:id', [
+        validJWTNeeded,
+        Surveys.update
+    ]);
     app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
     app.put('/api/answer/pSurveys/:id', Surveys.answerPrivateSurvey);
 
     // SURVEY CATEGORIES
-    app.get('/api/survey-categories', Categories.index);
-    app.post('/api/survey-categories', Categories.create);
-    app.delete('/api/survey-categories/:id', Categories.delete);
-    app.get('/api/survey-categories/:id', Categories.show);
-    app.put('/api/survey-categories/:id', Categories.update);
+    app.get('/api/survey-categories', [
+        validJWTNeeded,
+        Categories.index
+    ]);
+    app.post('/api/survey-categories', [
+        validJWTNeeded,
+        Categories.create
+    ]);
+    app.delete('/api/survey-categories/:id', [
+        validJWTNeeded,
+        Categories.delete
+    ]);
+    app.get('/api/survey-categories/:id', [
+        validJWTNeeded,
+        Categories.show
+    ]);
+    app.put('/api/survey-categories/:id', [
+        validJWTNeeded,
+        Categories.update
+    ]);
     
 
     // TEXTING
-    app.post('/api/sendSMS/:id', Texts.text);
+    app.post('/api/sendSMS/:id', [
+        validJWTNeeded,
+        Texts.text
+    ]);
 
     // USERS
     app.post('/api/users', [
         validJWTNeeded,
         Users.create
     ]);
-    app.get('/api/users/:id', Users.showClientsUsers);
-    app.delete('/api/users/:id', Users.delete);
-    app.put('/api/users/:id', Users.update);
+    app.get('/api/users/:id', [
+        validJWTNeeded,
+        Users.showClientsUsers
+    ]);
+    app.delete('/api/users/:id', [
+        validJWTNeeded,
+        Users.delete
+    ]);
+    app.put('/api/users/:id', [
+        validJWTNeeded,
+        Users.update
+    ]);
 
-    app.post('/api/usersUpload/:id', Users.upload);
+    app.post('/api/usersUpload/:id', [
+        validJWTNeeded,
+        Users.upload
+    ]);
 
     // CATCH ALL
     app.all('*', (req, res, next) => {

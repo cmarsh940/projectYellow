@@ -3,6 +3,7 @@ import { Routes, RouterModule } from "@angular/router";
 import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SubscriptionErrorComponent } from "./landing/subscription-error/subscription-error.component";
+import { PageNotFoundComponent } from './layout/page-not-found/page-not-found.component';
 
 
 const routes: Routes = [
@@ -19,6 +20,11 @@ const routes: Routes = [
     path: "error",
     pathMatch: "full",
     component: SubscriptionErrorComponent
+  },
+  {
+    path: "404error",
+    pathMatch: "full",
+    component: PageNotFoundComponent
   },
   {
     path: "dashboard",

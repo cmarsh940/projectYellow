@@ -17,7 +17,8 @@ export const environment = {
 
   // REDIRECTS
   redirectUrl: 'http://localhost:8000/login',
-  redirectLoginUrl: 'http://localhost:8000/dashboard'
+  redirectLoginUrl: 'http://localhost:8000/dashboard',
+  redirect404: 'http://localhost:8000/404error'
 };
 
 /*

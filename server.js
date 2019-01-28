@@ -48,7 +48,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(busboyBodyParser());
 
 // setup the logger
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 
 // app.set('trust proxy', true) // trust first proxy
 

@@ -64,10 +64,12 @@
             <!-- BOOLEAN -->
             <ng-container *ngSwitchCase="'boolean'">
               <h4 class="booleanData">True 
-                <span class="spacer"></span> <span> {{ answer[0] }} {{ answer[1] | number }}%</span>
+                <span class="spacer"></span> 
+                <span> {{ answer[0] }} {{ answer[1] | number }}%</span>
               </h4>
               <h4 class="booleanData">False 
-                <span class="spacer"></span> <span> {{ answer[2] }} {{ answer[3] | number }}%</span>
+                <span class="spacer"></span> 
+                <span> {{ answer[2] }} {{ answer[3] | number }}%</span>
               </h4>
             </ng-container>
           
@@ -119,10 +121,12 @@
             <!-- YES NO -->
             <ng-container *ngSwitchCase="'yesno'">
               <h4 class="booleanData">Yes 
-                <span class="spacer"></span> <span> {{ answer[0] }} {{ answer[1] | number }}%</span>
+                <span class="spacer"></span> 
+                <span> {{ answer[0] }} {{ answer[1] | number }}%</span>
               </h4>
               <h4 class="booleanData">No 
-                <span class="spacer"></span> <span> {{ answer[2] }} {{ answer[3] | number }}%</span>
+                <span class="spacer"></span> 
+                <span> {{ answer[2] }} {{ answer[3] | number }}%</span>
               </h4>
             </ng-container>
           
@@ -215,18 +219,25 @@
           
             <!-- LIKE UNLIKE -->
             <ng-container *ngSwitchCase="'likeunlike'">
-              <h4 class="booleanData">Like <span class="spacer"></span> <span>{{ answer[0] }} {{ answer[1] | number }}%</span></h4>
-              <h4 class="booleanData">Unlike = {{ answer[2] }} {{ answer[3] | number }}%</h4>
+              <h4 class="booleanData">Like 
+                <span class="spacer"></span> 
+                <span>{{ answer[0] }} {{ answer[1] | number }}%</span>
+              </h4>
+              <h4 class="booleanData">Unlike
+                <span class="spacer"></span>
+                <span>{{ answer[2] }} {{ answer[3] | number }}%</span>
+              </h4>
             </ng-container>
           
             <!-- GOOD BAD -->
             <ng-container *ngSwitchCase="'goodbad'">
               <h4 class="booleanData">Good 
-                <span class="spacer"></span> <span>  {{ answer[0] }}  {{ answer[1] | number }}%
-                </span>
+                <span class="spacer"></span> 
+                <span>  {{ answer[0] }}  {{ answer[1] | number }}%</span>
               </h4>
               <h4 class="booleanData">Bad 
-                <span class="spacer"></span> <span> {{ answer[2] }}   {{ answer[3] | number }}%</span>
+                <span class="spacer"></span> 
+                <span> {{ answer[2] }}   {{ answer[3] | number }}%</span>
               </h4>
             </ng-container>
           
