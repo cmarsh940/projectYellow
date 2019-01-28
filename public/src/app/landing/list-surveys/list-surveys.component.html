@@ -1,8 +1,9 @@
 <div class="header">
   <h2 class="mat-title">Surveys</h2>
 </div>
-
-<button mat-stroked-button routerLink="/survey">View your surveys</button>
+<div *ngIf="logedIn">
+  <button mat-stroked-button routerLink="/survey" color="primary" id="your-surveys-button">View your surveys</button>
+</div>
 <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
 
   <!-- Owner Column -->
