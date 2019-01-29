@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { Survey } from 'src/app/global/models/survey';
 import { Question } from 'src/app/global/models/question';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
 
 @Component({
   selector: 'app-private-survey',
@@ -56,7 +58,8 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    public dialog: MatDialog
   ) {
 
     // Defines all of the validation messages for the form.
@@ -275,4 +278,23 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     }, 1000)
   }
 
+
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+
+
+    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        console.log(`Dialog Error result:`);
+        console.log(result);
+      } else {
+        console.log(`Dialog result:`);
+        console.table(result);
+        this._router.navigateByUrl("/login");
+      }
+    });
+  }
 }

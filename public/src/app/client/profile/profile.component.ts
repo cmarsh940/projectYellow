@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   _routeSubscription: Subscription;
   id: String;
   errors = [];
+  profileUrl: string;
 
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
@@ -103,6 +104,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   getClient() {
     this._profileService.getparticipant(this.clientId).subscribe((client: Client) => {
         this.currentClient = client;
+        this.profileUrl = client.picture;
+        console.log(this.currentClient);
       },
       (error: any) => {
         if (error) {

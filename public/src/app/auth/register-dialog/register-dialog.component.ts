@@ -59,40 +59,11 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // attachSignin(element) {
-  //   this.auth2.attachClickHandler(element, {}).subscribe({
-  //     next: data => {
-  //       const subscription = "FREE";
-  //       const registerPlatform = 'GOOGLE';
-  //       let authResponse = data.Zi;
-  //       console.log("LOGEDINUSER:", data);
-  //       let client = new Client();
-  //       client.platformId = data.El
-  //       client.email = data.w3.U3
-  //       client.firstName = data.w3.ofa;
-  //       client.lastName = data.w3.wea;
-  //       client.password = `Google${data.w3.Eea}`;
-  //       client.confirm_pass = `Google${data.w3.Eea}`;
-  //       client.picture = data.w3.Paa;
-  //       client._subscription = subscription;
-  //       client.registerPlatform = registerPlatform;
-  //       client.platformAuth = authResponse.id_token;
-
-  //       this.addGoogleParticipant(client);
-  //     },
-  //       error: err => {
-  //         console.log("api error" + err);
-  //     },
-  //     complete: () => {
-  //       this.dialogRef.close("success");
-  //     }
-  //   })
-  // }
   attachSignin(element) {
     this.auth2.attachClickHandler(element, {},
       (data) => {
         const subscription = "FREE";
-        const registerPlatform = 'GOOGLE';
+        const registerPlatform = 'G';
         let authResponse = data.Zi;
         console.log("LOGEDINUSER:", data);
         let client = new Client();
@@ -138,7 +109,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   submitLogin() {
     return new Promise((resolve, reject) => {
       const subscription = "FREE";
-      const registerPlatform = 'FACEBOOK';
+      const registerPlatform = 'F';
       FB.login((response: any) => {
         console.table(response);
         if (response.authResponse) {

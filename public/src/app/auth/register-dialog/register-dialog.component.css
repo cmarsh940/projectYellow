@@ -9,7 +9,7 @@
 }
 
 .mat-dialog-actions button {
-    width: 100%;
+    width: 80%;
     margin: 0.4em auto;
 }
 
@@ -25,14 +25,13 @@
 
 .icon {
     display: inline-block;
-    height: 30px;
-    width: 30px;
+    height: 24px;
+    width: 24px;
 }
 
 #glogin {
     margin-top: 1em;
     background-color: #FFFFFF ;
-    width: 100%;
 }
 
 .socialText {
@@ -43,4 +42,14 @@
 
 strong {
     color: red;
+}
+
+.signin-icon {
+    position: absolute;
+    left: 10%;
+    margin: 2% 0;
+}
+
+button {
+    letter-spacing: -0.5px;
 }

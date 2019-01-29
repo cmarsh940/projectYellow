@@ -13,7 +13,7 @@ const path = require("path");
 const port = normalizePort(process.env.PORT || '8000');
 const session = require('express-session');
 
-const csp = `default-src * data: blob:;script-src *.facebook.com  *.facebook.net *.google-analytics.com *.google.com *.linkedin.com 127.0.0.1:*  'unsafe-inline' 'unsafe-eval' blob: data: 'self';style-src data: blob: 'unsafe-inline' *;connect-src localhost:* *.facebook.com facebook.com *.fbcdn.net *.facebook.net *.google.com *.googleapis.com`;
+const csp = `default-src * data: blob:;script-src *.braintree-api.com *.braintreegateway.com *.facebook.com  *.facebook.net *.google-analytics.com *.google.com *.linkedin.com 127.0.0.1:*  'unsafe-inline' 'unsafe-eval' blob: data: 'self';style-src data: blob: 'unsafe-inline' *;connect-src *.braintree-api.com *.braintreegateway.com localhost:* *.facebook.com facebook.com *.fbcdn.net *.facebook.net *.google.com *.googleapis.com`;
 
 const app = express();
 

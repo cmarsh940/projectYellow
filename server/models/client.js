@@ -104,17 +104,15 @@ const ClientSchema = new mongoose.Schema({
 
   picture: {
     type: String,
-    get: v => `${root}${v}`
   },
 
   registerPlatform: {
     type: String,
-    enum: ['EMAIL', 'FACEBOOK', 'GOOGLE'],
+    enum: ['E', 'F', 'G'],
     required: true,
     uppercase: true,
-    select: false,
     trim: true,
-    default: "EMAIL"
+    default: "E"
   },
 
   platformId: {
@@ -245,7 +243,7 @@ ClientSchema.pre('save', function (next) {
   if (client.isNew) {
     client.password = bcrypt.hashSync(client.password, bcrypt.genSaltSync());
     client.grt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    if (client.registerPlatform === "FACEBOOK" || client.registerPlatform === "GOOGLE") {
+    if (client.registerPlatform === "F" || client.registerPlatform === "G") {
       client.verified = true;
     }
   }

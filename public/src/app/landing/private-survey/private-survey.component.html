@@ -224,4 +224,11 @@
   <div>
     <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
   </div>
+
+  <div class="poweredBy">
+    <pre>
+        Powered by: <strong>Surveys by ME</strong>
+        <a (click)="openDialog()">Create your free survey today.</a>
+    </pre>
+  </div>
 </ng-template>

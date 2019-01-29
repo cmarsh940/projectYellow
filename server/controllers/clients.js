@@ -138,7 +138,7 @@ class ClientsController {
               console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
               return res.json(err);
             }
-            else if (client.registerPlatform === "EMAIL") {
+            else if (updatedClient.registerPlatform === "E") {
               
               console.log("*** SERVER CLIENT CREATED");
               let email = {
@@ -150,7 +150,7 @@ class ClientsController {
               sendVerificationEmail(email);
               return res.json(updatedClient);
             }
-            else if (client.registerPlatform === "FACEBOOK" || client.registerPlatform === "GOOGLE") {
+            else if (updatedClient.registerPlatform === "F" || updatedClient.registerPlatform === "G") {
               
               console.log("*** SERVER CLIENT CREATED");
 

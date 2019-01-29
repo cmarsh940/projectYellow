@@ -28,6 +28,7 @@ export class MainNavComponent {
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.closeOnNavigation = true;
+    dialogConfig.maxWidth = '22em'
 
 
     const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);

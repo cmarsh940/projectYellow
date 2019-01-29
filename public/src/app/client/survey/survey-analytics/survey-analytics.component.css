@@ -136,7 +136,9 @@ h5 h4 {
 
 mat-chip {
     margin: 1em 0!important;
-    font-size: large;
+    font-weight: 400;
+    font-size: 14px;
+    opacity:1!important;
 }
 
 span {

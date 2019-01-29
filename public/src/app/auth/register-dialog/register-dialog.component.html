@@ -5,18 +5,18 @@
 <mat-dialog-content class="container-dialog">
   <mat-dialog-actions>
     <button mat-button (click)="submitLogin()" id="FB-button">
-      <mat-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
+      <mat-icon svgIcon="facebook" aria-label="Facebook Icon" class="signin-icon"></mat-icon>
       <span class="socialText">Continue with Facebook</span>
     </button>
     <button mat-stroked-button id="glogin">
-      <mat-icon svgIcon="google" aria-label="Google Icon"></mat-icon>
+      <mat-icon svgIcon="google" aria-label="Google Icon" class="signin-icon"></mat-icon>
       <span class="socialText">Sign in with Google</span>
     </button>
     <mat-divider>
     </mat-divider>
     
     <button mat-stroked-button routerLink="/register" mat-dialog-close>
-      <img src="/assets/icons/email.png" alt="email icon" class="icon" />
+      <img src="/assets/icons/email.png" alt="email icon" class="icon signin-icon" />
       <span class="text">Register with Email</span>
     </button>
     <button mat-stroked-button mat-dialog-close color='warn'>Cancel</button>

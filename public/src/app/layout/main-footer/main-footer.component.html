@@ -1,14 +1,15 @@
 <footer>
-  <mat-grid-list cols="4" rowHeight="50px">
+  <mat-grid-list cols="3" rowHeight="50px">
     <!-- LEFT COLUMN -->
     <mat-grid-tile colspan="2" rowspan="4" id="left-column">
       <ul>
         <li><h5>SUBSCRIBE</h5></li>
-        <li><form [formGroup]="emailSubForm">
+        <li>
+          <form [formGroup]="emailSubForm">
           <div *ngIf="errors" class="errors">
             <span>{{ errors }}</span>
           </div>
-          <mat-form-field appearance="legacy">
+          <mat-form-field class="emailSub">
             <mat-label>email</mat-label>
             <input matInput autocomplete="email" [formControl]="emailFormControl" />
             <button mat-icon-button type="submit" (click)="addEmailSub(emailSubForm)" [disabled]="!emailSubForm.valid" matSuffix>
@@ -30,7 +31,7 @@
       </ul>
     </mat-grid-tile>
     <!-- RIGHT COLUMN -->
-    <mat-grid-tile colspan="2" rowspan="4">
+    <mat-grid-tile colspan="1" rowspan="4">
       <ul id="services-list">
         <li>
           <h5>COMPANY</h5>
@@ -56,7 +57,7 @@
       </ul>
     </mat-grid-tile>
     <!-- BOTTOM COPY RIGHT -->
-    <mat-grid-tile colspan="4" rowspan="1">
+    <mat-grid-tile colspan="3" rowspan="1">
       <button mat-button (click)="openDialog()" id="copyright">&copy; 2019 ME LLC Group. All Rights Reserved.</button>
     </mat-grid-tile>
   </mat-grid-list>

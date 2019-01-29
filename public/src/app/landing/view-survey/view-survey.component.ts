@@ -10,6 +10,8 @@ import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { Question } from '../../global/models/question';
 import { questionGroups } from '../../global/models/question-group';
 import { Platform } from '@angular/cdk/platform';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
 
 
 @Component({
@@ -58,7 +60,8 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    public dialog: MatDialog
   ) {
 
     // Defines all of the validation messages for the form.
@@ -243,6 +246,25 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       this.time++;
     }, 1000)
+  }
+
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+
+
+    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        console.log(`Dialog Error result:`);
+        console.log(result);
+      } else {
+        console.log(`Dialog result:`);
+        console.table(result);
+        this._router.navigateByUrl("/login");
+      }
+    });
   }
 
 }
