@@ -45,6 +45,9 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   get questions(): FormArray {
     return <FormArray>this.surveyForm.get('questions');
   }
+  get options(): FormArray {
+    return <FormArray>this.surveyForm.get('options');
+  }
 
 
   constructor(
@@ -137,10 +140,16 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       isRequired: false,
       questionType: ["", Validators.required],
       question: ["", Validators.required],
-      options: this.fb.array([])
+      options: this.fb.array([this.initOption()])
     });
   }
 
+  initOption() {
+    return this.fb.group({
+      isRequired: false,
+      optionName: [""],
+    });
+  }
 
   onSurveyRetrieved(survey: Survey): void {
     if (this.surveyForm) {
@@ -196,6 +205,9 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   get question(): FormArray {
     return this.surveyForm.get("question") as FormArray;
   }
+  get option(): FormArray {
+    return this.surveyForm.get("option") as FormArray;
+  }
 
   setQuestions(questions: Question[]) {
     const questionFGs = questions.map(question => this.fb.group(question));
@@ -208,11 +220,21 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     questionsControl.push(this.initQuestion());
   }
 
+  addOption() {
+    const optionsControl = <FormArray>this.surveyForm.controls["options"];
+    optionsControl.push(this.initOption());
+  }
+
   addNewOption(control) {
     control.push(
       this.fb.group({
         optionName: ['']
       }))
+  }
+
+  removeQuestion(i) {
+    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
+    questionsControl.removeAt(i);
   }
 
   // PREPARE SURVEY FORM FOR SUBMITTING
@@ -229,9 +251,9 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     const saveSurvey: Survey = {
       _id: this.survey._id,
       category: formModel.category as string,
+      name: formModel.name as string,
       submissionDates: this.survey.submissionDates,
       lastSubmission: this.survey.lastSubmission,
-      name: formModel.name as string,
       private: formModel.private,
       questions: questionsDeepCopy,
       user: this.survey.user,
@@ -261,16 +283,4 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       this._router.navigate(["/survey"]);
     }
   }
-
-  // drop(event: CdkDragDrop<string[]>) {
-  //   console.log("EVENT", event);
-  //   if (event.previousContainer === event.container) {
-  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-  //   } else {
-  //     transferArrayItem(event.previousContainer.data,
-  //       event.container.data,
-  //       event.previousIndex,
-  //       event.currentIndex);
-  //   }
-  // }
 }

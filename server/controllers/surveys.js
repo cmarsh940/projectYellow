@@ -1,22 +1,28 @@
 const mongoose = require("mongoose");
+const os = require('os');
+const geoip = require('geoip-lite');
+
+// MODELS
 const Survey = mongoose.model("Survey");
 const Category = mongoose.model('Category');
 const Client = mongoose.model('Client');
+const Meta = mongoose.model('Meta');
 const Question = mongoose.model('Question');
 const User = mongoose.model('User');
+
 
 class SurveysController {
   index(req, res) {
     Survey.find({}).lean()
     .populate({ path: "category", select: 'name', model: Category })
-    .populate({ path: "creator", model: Client })
+    .populate({ path: "creator", select: 'firstName lastName businessName', model: Client })
     .populate("questions")
     .exec((err, surveys) => {
       if (err) {
         console.log("*** ERROR: FINDING SURVEYS=", err);
         return res.json(err);
       }
-      console.log("*** FOUND SURVEYS ***", surveys);
+      console.log("*** FOUND SURVEYS ***");
       return res.json(surveys);
     })
   }
@@ -64,7 +70,7 @@ class SurveysController {
                 console.log("___ CREATE SURVEY PUSH QUESTIONS ERROR ___", err);
                 return res.json(err);
               }
-              console.log("___ CREATED SURVEY ___", survey);
+              console.log("___ CREATED SURVEY ___");
               return res.json(survey);
             })
           })
@@ -75,14 +81,16 @@ class SurveysController {
 
   show(req, res) {
     Survey.findById({ _id: req.params.id }).lean()
+      .select("+meta")
       .populate({ path: 'creator', select: 'firstName', select: '_subscription', model: Client })
       .populate("questions")
+      .populate({ path: 'meta', select: 'browser device loc', model: Meta})
       .exec((err, survey) => {
         if (err) {
           console.log("*** ERROR: FINDING SURVEY ***", err);
           return res.json(err);
         }
-        console.log("*** FOUND SURVEY ***", survey);
+        console.log("*** FOUND SURVEY ***");
         return res.json(survey);
     });
   }
@@ -90,9 +98,7 @@ class SurveysController {
 
   answerSurvey(req, res) {
     console.log("*** HIT SERVER UPDATE ANSWER ***");
-    console.log("*** PARAMS ***", req.params);
-    console.log("*** BODY ***", req.body);
-
+    
     Survey.findByIdAndUpdate(req.params.id, { 
       $push: { submissionDates: Date.now() },
       $set: { 
@@ -119,18 +125,44 @@ class SurveysController {
                 console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                 return res.json(err);
               }
-              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`, question);
+              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`);
             });
           })
         }
-        return res.json(survey);
+        let geo = geoip.lookup(req.ip);
+        let meta = {
+          address: req.ip,
+          agent: req.body.agent,
+          device: req.body.device,
+          browser: req.body.platform, 
+          loc: geo,
+          metaName: os.userInfo().username,
+          referer: req.headers.referer,
+          _survey: survey._id
+        }
+        Meta.create(meta, function (err, metas) {
+          if (err) {
+            console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
+            return res.json(err);
+          } else {
+            console.log("CREATING META SUCCESS");
+            Survey.findByIdAndUpdate(req.params.id, {
+              $push: { meta: metas._id }
+            }, { new: true }, (err, updatedSurvey) => {
+              if (err) {
+                console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
+                return res.json(err);
+              } 
+              res.json(updatedSurvey);
+            })
+          }
+        })
       }
     })
   }
+
   answerPrivateSurvey(req, res) {
     console.log("*** HIT SERVER UPDATE ANSWER ***");
-    console.log("*** PARAMS ***", req.params);
-    console.log("*** BODY ***", req.body);
 
     Survey.findByIdAndUpdate(req.params.id, { 
       $push: { submissionDates: Date.now() },
@@ -160,7 +192,7 @@ class SurveysController {
                 console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                 return res.json(err);
               }
-              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`, question);
+              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`);
             });
           })
         }
@@ -169,17 +201,47 @@ class SurveysController {
             console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
             return res.json(err);
           }
-          user.answers.push(userAnswers)
-          user.submissionDate = Date.now();
-          user.answeredSurvey = true;
-          user.save((err, savedUser) => {
+          let geo = geoip.lookup(req.ip);
+          let meta = {
+            address: req.ip,
+            agent: req.body.agent,
+            device: req.body.device,
+            browser: req.body.platform,
+            loc: geo,
+            metaName: os.userInfo().username,
+            referer: req.headers.referer,
+            _survey: survey._id,
+            _user: user._id
+          }
+          Meta.create(meta, function (err, metas) {
             if (err) {
-              console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+              console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
               return res.json(err);
+            } else {
+              user.answers.push(userAnswers)
+              user.submissionDate = Date.now();
+              user.answeredSurvey = true;
+              user._meta = metas._id;
+              user.save((err, savedUser) => {
+                if (err) {
+                  console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+                  return res.json(err);
+                }
+                console.log("SAVED USER");
+                
+                console.log("CREATING USER META SUCCESS");
+                Survey.findByIdAndUpdate(req.params.id, {
+                  $push: { meta: metas._id }
+                }, { new: true }, (err, updatedSurvey) => {
+                  if (err) {
+                    console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
+                    return res.json(err);
+                  }
+                  res.json(updatedSurvey);
+                })
+              })
             }
-            console.log("SAVED USER", savedUser);
-            return res.json(survey);
-          });
+          })
         })
       }
     })
@@ -187,7 +249,6 @@ class SurveysController {
 
   update(req, res) {
     console.log("*** HIT SERVER UPDATE ***");
-    console.log("*** BODY ***", req.body);
 
     Survey.findById(req.params.id, (err, survey) => {
       if (err) {
@@ -195,7 +256,7 @@ class SurveysController {
         return res.json(err);
       } else {
         var arr = req.body.questions;
-        console.log("___ ARRAY OF QUESTIONS TO UPDATE ___", arr);
+        console.log("___ ARRAY OF QUESTIONS TO UPDATE ___");
 
         for (let i = 0; i < arr.length; i++) {
           Question.findById(arr[i]._id, (err, question) => {
@@ -226,7 +287,7 @@ class SurveysController {
                   console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                   return res.json(err);
                 }
-                console.log(`___ UPDATED QUESTION[${i}] ___`, question);
+                console.log(`___ UPDATED QUESTION[${i}] ___`);
               });
             }
           })
@@ -239,7 +300,7 @@ class SurveysController {
             console.log("___  SURVEY ERROR ___", err);
             return res.json(err);
           }
-          console.log("___  UPDATED SURVEY ___", updatedSurvey);
+          console.log("___  UPDATED SURVEY ___");
           return res.json(updatedSurvey);
         })
       }

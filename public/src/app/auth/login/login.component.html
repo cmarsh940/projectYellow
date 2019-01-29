@@ -5,47 +5,72 @@
     </a>
   </mat-toolbar-row>
 </mat-toolbar>
-<div class="container">
-  <div *ngIf="errors === null" class="errors">
-    <b>** Password or email is not correct **</b>
-  </div>
-  <div *ngIf="errors?.length > 0 " class="errors">
-    {{ errors }}
-  </div>
-  <div class="login-text">
-    <h1 class="mat-h2">What do you want to know?</h1>
-    <h2 class="mat-h2">reach anyone, anywhere!</h2>
-    <h1 class="mat-h1">Get Started</h1>
-  </div>
-  <form [formGroup]="myForm">
-    <!-- ** EMAIL ** -->
-    <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
-      <span matPrefix>
-        <mat-icon>
-          email
-        </mat-icon>
-      </span>
-      <input matInput required formControlName="email" autocomplete="email">
-    </mat-form-field>
 
-    <!-- **  PASSWORD ** -->
-    <mat-form-field appearance="outline">
-    <mat-label>Password</mat-label>
-      <span matPrefix> 
-        <mat-icon>
-          https
-        </mat-icon>
-      </span>
-      <input matInput type="password" formControlName="password" required autocomplete="new-password">
-      <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-    </mat-form-field>
-
-    <!-- BUTTON -->
-    <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary">Login
-    </button>
-  </form>
+<div *ngIf="!loaded; else mainTemplate">
+  <div class="loading">
+    <mat-spinner color="accent"></mat-spinner>
+  </div>
 </div>
+<ng-template #mainTemplate>
+  <div class="container">
+    <div class="login-text">
+      <h1 class="mat-h2">What do you want to know?</h1>
+      <h2 class="mat-h2">reach anyone, anywhere!</h2>
+      <h1 class="mat-h1">Get Started</h1>
+    </div>
+
+    <div *ngIf="errors" class="errors">
+      {{ errors }}
+    </div>
+
+    <div class="social">
+      <mat-list>
+          <button mat-list-item (click)="submitLogin()" id="FB-button">
+            <mat-icon mat-list-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
+            <span mat-line class="socialText">Continue with Facebook</span>
+          </button>
+          <button mat-list-item id="glogin">
+            <mat-icon mat-list-icon svgIcon="google" aria-label="Google Icon"></mat-icon>
+            <span mat-line class="socialText">Sign in with Google</span>
+          </button>
+      </mat-list>
+    </div>
+
+    <mat-divider>
+    </mat-divider>
+
+    <form [formGroup]="myForm">
+      <!-- ** EMAIL ** -->
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <span matPrefix>
+          <mat-icon>
+            email
+          </mat-icon>
+        </span>
+        <input matInput required formControlName="email" autocomplete="email">
+      </mat-form-field>
+
+      <!-- **  PASSWORD ** -->
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <span matPrefix>
+          <mat-icon>
+            https
+          </mat-icon>
+        </span>
+        <input matInput type="password" formControlName="password" required autocomplete="new-password">
+        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+      </mat-form-field>
+
+      <!-- BUTTON -->
+      <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary"
+        id="login-button">Login
+      </button>
+    </form>
+  </div>
+</ng-template>
+
 <mat-toolbar id="bottom" color="primary">
   <div class="text-center">
     <p class="mat-h5">Don't have a account? <a routerLink="/register" color="accent">Sign up</a> for free!</p>

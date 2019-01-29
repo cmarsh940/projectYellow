@@ -58,7 +58,6 @@ const ClientSchema = new mongoose.Schema({
 
   phone: {
     type: String,
-    required: [true, 'Phone number cannot be blank'],
     trim: true,
     minlength: 10,
     maxlength: 12,
@@ -73,23 +72,20 @@ const ClientSchema = new mongoose.Schema({
 
   address: {
     type: String,
-    required: [true, 'Address cannot be blank'],
   },
 
   city: {
     type: String,
-    required: [true, 'City cannot be blank'],
     trim: true
   },
 
   state: {
     type: String,
-    required: [true, 'State cannot be blank'],
+    trim: true
   },
 
   zip: {
     type: Number,
-    required: [true, 'Zip code cannot be blank'],
   },
 
   password: {
@@ -108,7 +104,23 @@ const ClientSchema = new mongoose.Schema({
 
   picture: {
     type: String,
-    get: v => `${root}${v}`
+  },
+
+  registerPlatform: {
+    type: String,
+    enum: ['E', 'F', 'G'],
+    required: true,
+    uppercase: true,
+    trim: true,
+    default: "E"
+  },
+
+  platformId: {
+    type: String
+  },
+
+  platformAuth: {
+    type: String
   },
 
   role: {
@@ -123,6 +135,7 @@ const ClientSchema = new mongoose.Schema({
   lastUseDate: {
     type: Date
   },
+  
   paymentDate: {
     type: Date,
     required: true,
@@ -184,6 +197,15 @@ const ClientSchema = new mongoose.Schema({
     ],
     default: []
   },
+  _meta: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Meta"
+      }
+    ],
+    default: []
+  },
 
   users: {
     type: [
@@ -198,8 +220,15 @@ const ClientSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     required: true,
-    default: true
-  }
+    default: false
+  },
+  
+  resetRequest: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  resetDates: { type: Array, "default": [] },
 
 }, {
     timestamps: true
@@ -214,6 +243,9 @@ ClientSchema.pre('save', function (next) {
   if (client.isNew) {
     client.password = bcrypt.hashSync(client.password, bcrypt.genSaltSync());
     client.grt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    if (client.registerPlatform === "F" || client.registerPlatform === "G") {
+      client.verified = true;
+    }
   }
 
   next();

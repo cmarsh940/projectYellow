@@ -63,12 +63,40 @@
                 <!-- DATE -->
                 <div *ngIf="survey?.questions[i]?.questionType === 'date'">
                   <mat-form-field>
-                    <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="answers"
-                      [required]="survey?.questions[i]?.isRequired">
+                    <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="answers" [required]="survey?.questions[i]?.isRequired">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker touchUi #picker></mat-datepicker>
+                    <mat-datepicker touchUi #picker color="accent"></mat-datepicker>
                     <mat-hint align="start"><strong>MM/DD/YYYY</strong> </mat-hint>
                   </mat-form-field>
+                </div>
+                
+                <!-- DATE WEEKDAYS -->
+                <div *ngIf="survey?.questions[i]?.questionType === 'dateWeekday'">
+                  <mat-form-field>
+                    <input matInput [matDatepickerFilter]="weekdayFilter" [matDatepicker]="weekdayPicker" placeholder="Choose a date"
+                      formControlName="answers" [required]="survey?.questions[i]?.isRequired">
+                    <mat-datepicker-toggle matSuffix [for]="weekdayPicker"></mat-datepicker-toggle>
+                    <mat-datepicker touchUi #weekdayPicker color="accent"></mat-datepicker>
+                    <mat-hint align="start"><strong>MM/DD/YYYY</strong> </mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <!-- DROP DOWN SINGLE ANSWER -->
+                <div *ngIf="survey?.questions[i]?.questionType === 'dropDown'">
+                  <mat-select formControlName="answers" [required]="survey?.questions[i]?.isRequired" class="dropDown">
+                    <mat-option *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                      {{option.optionName}}
+                    </mat-option>
+                  </mat-select>
+                </div>
+
+                <!-- DROP DOWN MULTIPLE ANSWERS -->
+                <div *ngIf="survey?.questions[i]?.questionType === 'dropDownMultiple'">
+                  <mat-select formControlName="answers" [required]="survey?.questions[i]?.isRequired" multiple>
+                    <mat-option *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
+                      {{option.optionName}}
+                    </mat-option>
+                  </mat-select>
                 </div>
 
                 <!-- PARAGRAPH -->
@@ -195,5 +223,12 @@
   </form>
   <div>
     <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
+  </div>
+
+  <div class="poweredBy">
+    <pre>
+        Powered by: <strong>Surveys by ME</strong>
+        <a (click)="openDialog()">Create your free survey today.</a>
+    </pre>
   </div>
 </ng-template>

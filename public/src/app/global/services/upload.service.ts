@@ -5,8 +5,8 @@ import { HandleError, HttpErrorHandler } from './http-error-handler.service';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 
 function getToken() {
-  if (sessionStorage.getItem('token') === null) {
-    const data = JSON.parse(sessionStorage.getItem('token'));
+  if (localStorage.getItem('token') === null) {
+    const data = JSON.parse(localStorage.getItem('token'));
     return data
   }
 }
@@ -38,6 +38,27 @@ export class UploadService {
     console.log("**** ID", id);
 
     var URL = this.actionUrl + "upload/portfolio/" + id;
+    console.log("**** url", URL);
+    return this.http.post<any>(URL, formData).pipe(
+      map(this.extractData),
+      catchError(this.handleError('Upload', []))
+    );
+  }
+
+  addEmailSub(formData): Observable<any> {
+    console.log("**** HIT EMAIL SUB SERVICE");
+
+    var URL = this.actionUrl + "add/emailSub";
+    return this.http.post<any>(URL, formData).pipe(
+      map(this.extractData),
+      catchError(this.handleError('Email Subscription', []))
+    );
+  }
+  
+  postFeedback(formData): Observable<any> {
+    console.log("**** HIT UPLOAD SERVICE FOR FEEDBACK");
+
+    var URL = this.actionUrl + "upload/feedback";
     console.log("**** url", URL);
     return this.http.post<any>(URL, formData).pipe(
       map(this.extractData),

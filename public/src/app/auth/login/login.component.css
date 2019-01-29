@@ -9,12 +9,17 @@ img {
     padding-top: 2.5em;
 }
 
+.loaded {
+    width: 100%;
+    margin: auto;
+}
+
+.mat-spinner {
+    margin: 5em auto;
+}
+
 form {
     margin: auto;
-    position: fixed;
-    bottom: 6em;
-    left: 1em;
-    right: 1em;
 }
 
 .mat-form-field {
@@ -22,7 +27,45 @@ form {
     background-color: white;
 }
 
-button {
+.social {
+    width:100%;
+    display: grid;
+    justify-content: center;
+}
+
+#FB-button {
+    background-color: #4267b2;
+    color: #fff;
+    width: 100%;
+}
+
+#glogin {
+    margin-top: 1em;
+    background-color: #FFFFFF ;
+    width: 100%;
+}
+
+.socialText {
+    font: Roboto-Medium;
+    size: 14px;
+    color: #000000 / 0,0,0(54%);
+}
+
+#FB-button, #glogin {
+    display: block;
+}
+
+.text {
+    vertical-align: sub;
+    margin-left: 1em;
+}
+
+.mat-divider {
+    margin: 4em auto;
+    width: 75%;
+}
+
+#login-button {
     width:100%;
 }
 
@@ -47,4 +90,8 @@ a {
     width: 100%;
     text-align: center;
     margin: 5% 0;
+}
+
+.mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar {
+    height: auto;
 }

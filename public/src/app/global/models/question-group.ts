@@ -21,13 +21,23 @@ export const questionGroups: QuestionGroup[] = [
     {
         name: 'Dates',
         group: [
-            { value: "date", viewValue: "Date (Calender)" },
+            { value: "date", viewValue: "Date Calendar" },
+            { value: "dateStartEnd", viewValue: "Date Calendar (Min - Max date range)" },
+            { value: "dateWeekday", viewValue: "Weekday Calendar (Monday - Friday)" },
+        ]
+    },
+    {
+        name: 'Drop Down',
+        group: [
+            { value: "dropDown", viewValue: "Drop Down (Single answer)" },
+            { value: "dropDownMultiple", viewValue: "Drop Down (Multiple answer)" },
         ]
     },
     {
         name: 'Multiple Choice',
         group: [
-            { value: "multiplechoice", viewValue: "Multiple Choice (one answer)" },
+            { value: "multiplechoice", viewValue: "Multiple Choice (Single answer)" },
+            { value: "multiplechoiceOther", viewValue: "Multiple Choice W/ optional user input (one answer)" },
         ]
     },
     {

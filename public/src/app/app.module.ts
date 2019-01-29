@@ -1,13 +1,12 @@
 import { AddUserComponent } from './client/user/add-user/add-user.component';
 
-
 // MODULES
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { ClientModule } from './client/client.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { LandingModule } from './landing/landing.module';
 import { MaterialModule } from './material/material.module';
@@ -49,6 +48,12 @@ import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.
 // GUARDS
 import { AuthGuard } from './global/guards/auth.guard';
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
+import { FeedbackComponent } from './layout/feedback/feedback.component';
+import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
+import { AuthInterceptor } from './global/interceptors/auth-interceptor';
+import { PageNotFoundComponent } from './layout/page-not-found/page-not-found.component';
+
+
 
 @NgModule({
   declarations: [
@@ -56,18 +61,21 @@ import { UploadUsersComponent } from './client/user/upload-users/upload-users.co
     LoginComponent,
     RegisterComponent,
     ForbiddenValidatorDirective,
+    FeedbackComponent,
+    RegisterDialogComponent,
+    PageNotFoundComponent,
   ],
 
   imports: [
     BrowserModule,
     LandingModule,
     ClientModule,
+    HttpClientModule,
     OverviewModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
     ServiceWorkerModule.register("/ngsw-worker.js", {
@@ -87,12 +95,15 @@ import { UploadUsersComponent } from './client/user/upload-users/upload-users.co
     OverviewService,
     SubscriptionService,
     { provide: RequestCache, useClass: RequestCacheWithMap },
-    httpInterceptorProviders
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    // httpInterceptorProviders,
   ],
   entryComponents: [
     AddUserComponent,
     EditClientComponent,
+    FeedbackComponent,
     SubscriptionOverlayComponent,
+    RegisterDialogComponent,
     RightsComponent,
     UploadUsersComponent
   ],

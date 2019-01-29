@@ -8,6 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { Survey } from 'src/app/global/models/survey';
 import { Question } from 'src/app/global/models/question';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
 
 @Component({
   selector: 'app-private-survey',
@@ -23,6 +25,9 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   questionGroup = questionGroups;
   loaded: Boolean;
   userId: String;
+  currentPlatform: any;
+  currentDevice: any;
+  agent: any;
 
   @Input() survey: any;
 
@@ -38,6 +43,12 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
+  weekdayFilter = (d: Date): boolean => {
+    const day = d.getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  }
+
   get questions(): FormArray {
     return <FormArray>this.surveyForm.get('questions');
   }
@@ -47,7 +58,8 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    public dialog: MatDialog
   ) {
 
     // Defines all of the validation messages for the form.
@@ -65,6 +77,12 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loaded = false;
+
+    // SET META INFO
+    this.currentDevice = window.clientInformation.platform;
+    this.currentPlatform = window.clientInformation.vendor;
+    this.agent = window.clientInformation.userAgent;
+
     this.surveyForm = this.fb.group({
       questions: this.fb.array([this.buildQuestion()])
     });
@@ -245,6 +263,9 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
       surveyTime: allTime,
       totalAnswers: this.survey.totalAnswers + 1,
       creator: this.survey.creator,
+      device: this.currentDevice,
+      agent: this.agent,
+      platform: this.currentPlatform,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };
@@ -257,4 +278,23 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     }, 1000)
   }
 
+
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+
+
+    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        console.log(`Dialog Error result:`);
+        console.log(result);
+      } else {
+        console.log(`Dialog result:`);
+        console.table(result);
+        this._router.navigateByUrl("/login");
+      }
+    });
+  }
 }

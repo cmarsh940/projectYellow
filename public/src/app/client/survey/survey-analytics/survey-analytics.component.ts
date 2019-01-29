@@ -14,6 +14,19 @@ import * as Chart from 'chart.js';
 import * as moment from 'moment';
 
 
+function flatten(arr) {
+  return [].concat(...arr)
+}
+function deepFlatten(arr) {
+  return flatten(           // return shalowly flattened array
+    arr.map(x =>             // with each x in array
+      Array.isArray(x)      // is x an array?
+        ? deepFlatten(x)    // if yes, return deeply flattened x
+        : x                 // if no, return just x
+    )
+  )
+}
+
 @Component({
   selector: 'app-survey-analytics',
   templateUrl: './survey-analytics.component.html',
@@ -51,6 +64,8 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   colors = ["#ffd600", "#ffab00", "#ff6d00", "#ff3d00", "#c51162", "#536dfe", "#2979ff", "#0091ea", "#00b8d4", "#00bfa5", "#00c853", "#64dd17", "#aeea00"];
   
+  displayedColumns = ['optionName', 'count', 'percentage'];
+
   constructor(
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
@@ -145,7 +160,6 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         options: {
           legend: {
             display: false,
-            
           },
           animation: {
             duration: 0, // general animation time
@@ -162,8 +176,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           },
           scales: {
             xAxes: [{
+              display: true,
+              gridLines: {
+                color: "#FFFFFF"
+              },
+              ticks: {
+                fontColor: '#FFFFFF'
+              },
               type: 'time',
-              distribution: 'linear',
               time: {
                 displayFormats: {
                   day: 'MMM DD'
@@ -198,15 +218,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     })
   }
 
-
   loopThroughQuestions() {
     for (let i = 0; i < (<any>this.survey).length; i++) {
-      // GENERATING AVERAGE
       if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
-        this.questions.push(this.survey[i]);
-        let b = 0
+        let b = 0;
         let c = this.survey[i].answers.map(parseFloat);
-        let d = 0
+        let d = 0;
 
         // TOTAL NUMBER OF ANSWERS TO CALCULATE
         this.countAvgAnswers = this.survey[i].answers.length;
@@ -215,15 +232,17 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           b += c[a];
         }
         this.average = b / this.survey[i].answers.length;
-        this.survey[i].answers = [];
         let avg = this.average.toString();
+        this.survey[i].answers = [];
         this.survey[i].answers.push(avg);
+        this.questions.push(this.survey[i]);
       }
 
       //BOOLEANS
       else if (this.survey[i].questionType === 'boolean' || this.survey[i].questionType === 'yesno' || this.survey[i].questionType === 'likeunlike' || this.survey[i].questionType === 'goodbad') {
-        this.questions.push(this.survey[i]);
+        let percentE:number;
         let e = 0
+        let percentF:number;
         let f = 0
         let g = this.survey[i].answers.map(Number);
         for (let a = 0; a < this.survey[i].answers.length; a++) {
@@ -233,53 +252,64 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
             f++;
           }
         }
+        percentE = (e * 100) / this.survey[i].answers.length;
+        let finalPercentE = Math.round(percentE);
+        percentF = (f * 100) / this.survey[i].answers.length;
+        let finalPercentF = Math.round(percentF);
         this.survey[i].answers = [];
-        this.survey[i].answers.push([e,f]);
-        this.booleanAnswers = this.survey[i].answers;
-
-        // this.barChart = new Chart('bar', {
-        //   type: 'bar',
-        //   data: {
-        //     labels: ["True", "False"],
-        //     datasets: [
-        //       {
-        //         data: this.booleanAnswers[0],
-        //         borderColor: '#3cba9f',
-        //         borderWidth: 2,
-        //         fill: false 
-        //       }
-        //     ]
-        //   },
-        //   options: {
-        //     legend: {
-        //       display:false
-        //     },
-        //     maintainAspectRatio: false,
-        //     scales: {
-        //       yAxes: [{
-        //         stacked: true,
-        //         gridLines: {
-        //           display: true,
-        //           color: "rgba(255,99,132,0.2)"
-        //         }
-        //       }],
-        //       xAxes: [{
-        //         gridLines: {
-        //           display: false
-        //         }
-        //       }]
-        //     }
-        //   }
-        // })
-
+        this.survey[i].answers.push([e, finalPercentE,f, finalPercentF]);
+        this.questions.push(this.survey[i]);
       }
 
-      // MULTIPLE CHOICE ANSWERS
-      else if (this.survey[i].questionType === 'multiplechoice') {
-        console.log("_*_*_* MULTIPLE CHOICE QUESTION *_*_*_", this.survey[i]);
+      else if (this.survey[i].questionType === 'dropDownMultiple') {
+        console.log("_*_*_* MULTIPLE DROP DOWN QUESTION *_*_*_", this.survey[i]);
 
+        let options = this.survey[i].options;
+
+        // FLATTEN NESTED ARRAY OF ANSWERS
+        let tempAnswers = deepFlatten(this.survey[i].answers);
+        console.log("TEMP ANSWERS", tempAnswers);
+        // LOOP THROUGH ANSWERS AND OPTIONS AND COUNT HOW MANY OF EACH
+        tempAnswers.forEach(answer => {
+          options.forEach(option => {
+            if (option.optionName == answer) {
+              let randomNum = Math.floor(Math.random() * 12) + 0;
+              if (!option.count) {
+                option.count = 1;
+                option.color = this.colors[randomNum];
+                return
+              } else {
+                option.count = option.count + 1;
+                return
+              }
+            }
+          });
+        });
+        options.forEach(option => {
+          if (!option.count) {
+            option.percentage = 0
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          } else {
+            let tempPercent = (option.count/tempAnswers.length) * 100;
+            console.log("TEMP PERCENT", tempPercent)
+            option.percentage = Math.round(tempPercent);
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          }
+        });
+        // SET NEW OPTIONS AND PUTH THEM TO THE QUESTIONS ANSWERS
+        this.survey[i].answers = options;
+        this.questions.push(this.survey[i]);
+      }
+
+
+      // MULTIPLE CHOICE OR DROP DOWN ANSWERS
+      else if (this.survey[i].questionType === 'multiplechoice' || this.survey[i].questionType === 'multiplechoiceOther' || this.survey[i].questionType === 'dropDown') {
         let options = this.survey[i].options; 
         let tempAnswers = this.survey[i].answers;
+
+        // LOOP THROUGH ANSWERS AND OPTIONS AND COUNT HOW MANY OF EACH
         tempAnswers.forEach(answer => {
           options.forEach(option => {
             if (option.optionName === answer) {
@@ -292,13 +322,24 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
               }
             }
           });
-          
         });
 
-        console.log("NEW OPTIONS", options);
+        options.forEach(option => {
+          if (!option.count) {
+            option.percentage = 0
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          } else {
+            let tempPercent = (option.count / tempAnswers.length) * 100;
+            console.log("TEMP PERCENT", tempPercent)
+            option.percentage = Math.round(tempPercent);
+            console.log(`Option count is ${option.count} the percentage is ${option.percentage}`)
+            return
+          }
+        });
+        // SET NEW OPTIONS AND PUTH THEM TO THE QUESTIONS ANSWERS
         this.survey[i].answers = options;
         this.questions.push(this.survey[i]);
-
       } 
       
       // EVERYTHING ELSE

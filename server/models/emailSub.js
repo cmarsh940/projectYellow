@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const unique = require('mongoose-unique-validator');
 
 const EmailSubSchema = new mongoose.Schema({
     email: {
@@ -7,7 +8,7 @@ const EmailSubSchema = new mongoose.Schema({
         minlength: [5, "Email did not meat the requirments"],
         maxlength: [200, "Email cannot be greater then 200 characters"],
         trim: true,
-        unique: [true, 'You are already subscribed'],
+        unique: true,
         lowercase: true,
         validate: {
             validator: function (email) {
@@ -17,5 +18,8 @@ const EmailSubSchema = new mongoose.Schema({
         }
     },
 }, { timestamps: true });
+
+// Uniqueness
+EmailSubSchema.plugin(unique, { message: "Already Subscribed." });
 
 const EmailSub = mongoose.model('EmailSub', EmailSubSchema);

@@ -1,0 +1,55 @@
+.mat-dialog-content {
+    padding: 0!important;
+    margin: 0!important;
+    overflow: -webkit-paged-x;
+}
+
+.mat-dialog-actions {
+    width: 100%;
+}
+
+.mat-dialog-actions button {
+    width: 80%;
+    margin: 0.4em auto;
+}
+
+.mat-divider {
+    margin: 1em 0;
+    width: 100%;
+}
+
+#FB-button {
+    background-color: #4267b2;
+    color: #fff;
+}
+
+.icon {
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+}
+
+#glogin {
+    margin-top: 1em;
+    background-color: #FFFFFF ;
+}
+
+.socialText {
+    font: Roboto-Medium;
+    size: 14px;
+    color: #000000 / 0,0,0(54%);
+}
+
+strong {
+    color: red;
+}
+
+.signin-icon {
+    position: absolute;
+    left: 10%;
+    margin: 2% 0;
+}
+
+button {
+    letter-spacing: -0.5px;
+}

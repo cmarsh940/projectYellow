@@ -9,6 +9,9 @@ import { Survey } from '../../global/models/survey';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { Question } from '../../global/models/question';
 import { questionGroups } from '../../global/models/question-group';
+import { Platform } from '@angular/cdk/platform';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
 
 
 @Component({
@@ -24,6 +27,11 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   _routeSubscription: Subscription;
   questionGroup = questionGroups;
   loaded: Boolean;
+  currentPlatform: any;
+  currentDevice: any;
+  agent: any;
+
+  other = 'Other';
 
   @Input() survey: any;
 
@@ -37,6 +45,12 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   private validationMessages: { [key: string]: { [key: string]: string } };
   private genericValidator: GenericValidator;
 
+  weekdayFilter = (d: Date): boolean => {
+    const day = d.getDay();
+    // Prevent Saturday and Sunday from being selected.
+    return day !== 0 && day !== 6;
+  }
+
   get questions(): FormArray {
     return <FormArray>this.surveyForm.get('questions');
   }
@@ -46,7 +60,8 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    public dialog: MatDialog
   ) {
 
     // Defines all of the validation messages for the form.
@@ -64,6 +79,10 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loaded = false;
+    this.currentDevice = window.clientInformation.platform;
+    this.currentPlatform = window.clientInformation.vendor;
+    this.agent = window.clientInformation.userAgent;
+
     this.startTimer();
     this.surveyForm = this.fb.group({
       questions: this.fb.array([this.buildQuestion()])
@@ -78,6 +97,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       this.loaded = true;
     }, 1000);
   }
+  
 
   ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
@@ -119,6 +139,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(
         (survey: Survey) => {
+          console.log("RETURNED SURVEY IS:", survey)
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }
@@ -188,7 +209,9 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     // CANCEL INTERVALS
     clearInterval(this.interval);
     
+    console.log("FORM BEFORE", this.surveyForm);
     const formModel = this.surveyForm.value;
+    console.log("FORM SUB IS:", formModel);
 
     // deep copy of form model questions
     const questionsDeepCopy: Question[] = formModel.questions.map(
@@ -210,6 +233,9 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       surveyTime: allTime,
       totalAnswers: this.survey.totalAnswers + 1,
       creator: this.survey.creator,
+      device: this.currentDevice,
+      agent: this.agent, 
+      platform: this.currentPlatform,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };
@@ -220,6 +246,25 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       this.time++;
     }, 1000)
+  }
+
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+
+
+    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        console.log(`Dialog Error result:`);
+        console.log(result);
+      } else {
+        console.log(`Dialog result:`);
+        console.table(result);
+        this._router.navigateByUrl("/login");
+      }
+    });
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SurveyService } from '../../client/survey/survey.service';
 import { Survey } from '../../global/models/survey';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-list-surveys',
@@ -17,18 +18,25 @@ export class ListSurveysComponent implements OnInit {
   currentPage = 0;
   totalSize = 0;
   pageEvent;
-  
+  logedIn: boolean;
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['owner', 'name', 'action'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
+    private _authService: AuthService,
     private _surveyService: SurveyService
   ) { }
 
   ngOnInit() {
+    this.checkLogedIn();
     this.loadAll();
+  }
+
+  checkLogedIn() {
+    let response = this._authService.checkLoggedIn();
+    this.logedIn = response;
   }
 
   loadAll(): Promise<any> {

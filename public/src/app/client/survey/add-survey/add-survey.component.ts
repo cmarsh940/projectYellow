@@ -122,7 +122,12 @@ export class AddSurveyComponent implements OnInit {
       isRequired: false,
       questionType: ["", Validators.required],
       question: ["", Validators.required],
-      options: this.fb.array([])
+      options: this.fb.array([this.initOption()])
+    });
+  }
+  initOption() {
+    return this.fb.group({
+      optionName: [""],
     });
   }
 
@@ -140,6 +145,9 @@ export class AddSurveyComponent implements OnInit {
   get question(): FormArray {
     return this.surveyForm.get("question") as FormArray;
   }
+  get option(): FormArray {
+    return this.surveyForm.get("option") as FormArray;
+  }
 
   setQuestions(questions: Question[]) {
     const questionFGs = questions.map(question => this.fb.group(question));
@@ -150,6 +158,11 @@ export class AddSurveyComponent implements OnInit {
   addQuestion() {
     const questionsControl = <FormArray>this.surveyForm.controls["questions"];
     questionsControl.push(this.initQuestion());
+  }
+
+  addOption() {
+    const optionsControl = <FormArray>this.surveyForm.controls["options"];
+    optionsControl.push(this.initOption());
   }
   
   addNewOption(control) {

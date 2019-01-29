@@ -2,7 +2,7 @@ export class Client {
     _id: any;
     firstName: string;
     lastName: string;
-    businessName: string;
+    businessName?: string;
     email: any;
     grt: any;
     phone: any;
@@ -11,11 +11,13 @@ export class Client {
     state: string;
     zip: any;
     password: any;
+    confirm_pass?: any;
     picture: any;
     role: string;
     paymentDate: any;
     paidThroughDate: any;
     paymentToken: any;
+    registerPlatform?: string;
     datesPaid: any;
     permissionLevel: any;
     billingCycle: any;
@@ -25,6 +27,11 @@ export class Client {
     surveyCount: any;
     _surveys: any;
     users: any;
+    device?: any;
+    agent?: any;
+    platform?: any;
+    platformAuth?: any;
+    platformId?: any;
     verified: any;
     createdAt: any;
     updatedAt: any;

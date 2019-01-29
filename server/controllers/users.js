@@ -6,13 +6,14 @@ const Survey = mongoose.model('Survey');
 class UsersController {
     
     create(req, res) {
+        console.log(req.headers);
         User.create(req.body, (err, user) => {
             console.log("*** SERVER CREATING USER")
             if (err) {
                 console.log("*** SERVER CREATING ERROR", err);
                 return res.json(err);
             }
-            console.log("CREATED USER", user)
+            console.log("CREATED USER")
             Client.findByIdAndUpdate(req.body.surveyOwner, { $push: { users: user._id } }, { new: true }, (err, client) => {
                 if (err) {
                     console.log("___ PUSHING USER TO CLIENT ERROR ___", err);
@@ -30,8 +31,6 @@ class UsersController {
     }
 
     upload(req, res) {
-        console.log("Params", req.params);
-        console.log("HIT UPLOAD", req.body);
 
         let users = req.body;
         for (const user of users) {
@@ -42,7 +41,7 @@ class UsersController {
                     console.log("*** SERVER CREATING ERROR", err);
                     return res.json(err);
                 }
-                console.log("CREATED USER", user)
+                console.log("CREATED USER")
                 Client.findByIdAndUpdate(user.surveyOwner, { $push: { users: user._id } }, { new: true }, (err, client) => {
                     if (err) {
                         console.log("___ PUSHING USER TO CLIENT ERROR ___", err);
@@ -53,7 +52,7 @@ class UsersController {
                             console.log("___ PUSHING USER TO SURVEY ERROR ___", err);
                             return res.json(err);
                         }
-                        console.log("FINISHED CREATING USER", user);
+                        console.log("FINISHED CREATING USER");
                     })
                 })
             })
@@ -77,7 +76,7 @@ class UsersController {
                     'users': doc.users,
                     'private': doc.private
                 }
-                console.log("RETURNING CLIENTS USERS", clientsUsers);
+                console.log("RETURNING CLIENTS USERS");
                 return res.json(clientsUsers);
             });
     }
@@ -102,7 +101,7 @@ class UsersController {
                     console.log("ERROR UPDATING USER", err);
                     return res.json(err);
                 }
-                console.log("RETURNING UPDATED USER", user);
+                console.log("RETURNING UPDATED USER");
                 return res.json(user);
             }
         );

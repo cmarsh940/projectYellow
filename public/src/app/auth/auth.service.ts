@@ -2,11 +2,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagesService } from './../global/services/messages.service';
 import { Client } from './../global/models/client';
 import { Http } from '@angular/http';
-import { Injectable, Type, ɵConsole } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from '../global/services/http-error-handler.service';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
+
+import { environment } from '../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -25,6 +28,7 @@ export class AuthService {
     private _messageService: MessagesService,
     private _http: Http,
     private _httpClient: HttpClient,
+    private _router: Router,
     private httpErrorHandler: HttpErrorHandler,
   ) {
   this.handleError = httpErrorHandler.createHandleError("AuthService");
@@ -52,9 +56,12 @@ export class AuthService {
     console.log("*** SERVICE SET CURRENT CLIENT ***")
     let token = client.token;
     delete client.token;
-    sessionStorage.setItem('currentClient', JSON.stringify(client));
-    sessionStorage.setItem('token', JSON.stringify(token));
+    const expiresAt = moment().add(client.expiresIn, 'second');
+
+    localStorage.setItem('token', token);
+    localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
     localStorage.setItem('t940', JSON.stringify(client._id));
+    sessionStorage.setItem('currentClient', JSON.stringify(client));
   }
 
   logout(callback) {
@@ -64,7 +71,8 @@ export class AuthService {
       res => {
         this.currentClient = null;
         sessionStorage.removeItem('currentClient');
-        sessionStorage.removeItem('token');
+        localStorage.removeItem('token');
+        localStorage.removeItem('expires_at')
         localStorage.removeItem('t940');
         callback(res.json());
       },
@@ -137,10 +145,14 @@ export class AuthService {
 
   authorize() {
     let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if (data.a8o1 === 'CAPTAIN') {
-      return true;
+    if(data) {
+      if (data.a8o1 === 'CAPTAIN') {
+        return true;
+      } else {
+        return false
+      }
     } else {
-      return false;
+      window.location.href = environment.redirect404;
     }
   }
 
@@ -151,26 +163,32 @@ export class AuthService {
       return false;
     }
     if (data._id === check) {
-      return true;
+      return moment().isBefore(this.getExpiration());
     } 
     return false;
   }
 
   getAuthorizationToken() {
     console.log("HIT GET AUTH TOKEN FROM AUTH SERVICE")
-    if (sessionStorage.getItem('token') === null) {
+    if (localStorage.getItem('token') === null) {
       console.log("NO TOKEN HAS BEEN SET")
       return false;
     }
     else {
-      if (sessionStorage.getItem('token') === undefined) {
+      if (localStorage.getItem('token') === undefined) {
         console.log("AUTHORIZATION FAILED");
         return false;
       } else {
-        const data = JSON.parse(sessionStorage.getItem('token')); 
+        const data = JSON.parse(localStorage.getItem('token')); 
         return data
       }
     }
+  }
+
+  getExpiration() {
+    const expiration = localStorage.getItem("expires_at");
+    const expiresAt = JSON.parse(expiration);
+    return moment(expiresAt);
   }
 
   

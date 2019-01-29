@@ -2,6 +2,10 @@
   flex: 1 1 auto;
 }
 
+h4 {
+    font-weight: 400!important;
+}
+
 .loaded {
     width: 100%;
     margin: auto;
@@ -106,6 +110,8 @@ td, th {
 .booleanData {
     width:100%;
     display: flex;
+    border-bottom: 1px solid #00000040;
+    word-spacing: 1em;
 }
 
 .mat-card {
@@ -130,9 +136,15 @@ h5 h4 {
 
 mat-chip {
     margin: 1em 0!important;
-    font-size: large;
+    font-weight: 400;
+    font-size: 14px;
+    opacity:1!important;
 }
 
 span {
     margin-left: 5px;
+}
+
+mat-grid-list {
+    background-color: #2d2d2de3;
 }

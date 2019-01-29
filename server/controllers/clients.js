@@ -1,5 +1,15 @@
 const mongoose = require('mongoose');
+const AWS = require("aws-sdk");
+const braintree = require('braintree');
+const Busboy = require("busboy");
+const geoip = require('geoip-lite');
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const os = require('os');
+
+const tempSub = require("../models/staticModels/subscription");
 const Client = mongoose.model('Client');
+const Meta = mongoose.model('Meta');
 
 const config = require("../config/config");
 const secret = require('../config/config').jwt_secret;
@@ -7,16 +17,6 @@ const secret = require('../config/config').jwt_secret;
 const BUCKET_NAME = config.bucketName;
 const IAM_USER_KEY = config.iamUser;
 const IAM_USER_SECRET = config.iamSecret;
-
-const path = require("path");
-const AWS = require("aws-sdk");
-const Busboy = require("busboy");
-const jwt = require('jsonwebtoken');
-const braintree = require('braintree');
-
-const nodemailer = require('nodemailer');
-
-const tempSub = require("../models/staticModels/subscription");
 
 function uploadToS3(file, client) {
   console.log("*** STARTING TO UPLOADTOS3 FUNCTION")
@@ -102,7 +102,7 @@ class ClientsController {
     if (req.body.password != req.body.confirm_pass) {
       return res.json({
         errors: {
-          password: {
+          password: { 
             message: "Your passwords do not match"
           }
         }
@@ -114,15 +114,68 @@ class ClientsController {
         console.log("*** SERVER CREATING ERROR", err);
         return res.json(err);
       }
-      console.log("*** SERVER CLIENT CREATED");
-      let email = {
-        client: client._id,
-        contact: client.email,
-        name: client.firstName,
-        message: client.grt
+      let geo = geoip.lookup(req.ip);
+      let meta = {
+        address: req.ip,
+        agent: req.body.agent,
+        device: req.body.device,
+        browser: req.body.platform,
+        loc: geo,
+        metaName: os.userInfo().username,
+        referer: req.headers.referer,
+        _client: client._id
       }
-      sendVerificationEmail(email);
-      return res.json(client)
+      Meta.create(meta, function (err, metas) {
+        if (err) {
+          console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
+          return res.json(err);
+        } else {
+          console.log("CREATING META SUCCESS");
+          Client.findByIdAndUpdate(req.params.id, {
+            $push: { _meta: metas._id }
+          }, { new: true }, (err, updatedClient) => {
+            if (err) {
+              console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
+              return res.json(err);
+            }
+            else if (updatedClient.registerPlatform === "E") {
+              
+              console.log("*** SERVER CLIENT CREATED");
+              let email = {
+                client: updatedClient._id,
+                contact: updatedClient.email,
+                name: updatedClient.firstName,
+                message: updatedClient.grt
+              }
+              sendVerificationEmail(email);
+              return res.json(updatedClient);
+            }
+            else if (updatedClient.registerPlatform === "F" || updatedClient.registerPlatform === "G") {
+              
+              console.log("*** SERVER CLIENT CREATED");
+
+              let token = jwt.sign({ client }, secret, { expiresIn: '1h' });
+              req.session.client = {
+                _id: client._id,
+                n: client.firstName + " " + client.lastName,
+                a8o1: client.role,
+                b8o1: client._subscription,
+                c8o1: client.surveyCount,
+                d: client.lastUseDate,
+                s: client._surveys,
+                status: client.subscriptionStatus,
+                token: token,
+                expiresIn: 604800,
+                v: client.verified
+              };
+              return res.json(req.session.client);
+            }
+            else {
+              return res.json(updatedClient);
+            }
+          })
+        }
+      })
     })
   }
 
@@ -137,10 +190,13 @@ class ClientsController {
       if (client && client.authenticate(req.body.password)) {
 
         console.log("_____CLIENT LOGGING IN_____");
-        var token = jwt.sign({ client }, secret, { expiresIn: '1h'});
-
+        const token = jwt.sign(client.toJSON(), config.jwt_secret, {
+          expiresIn: 604800 // 1 week
+        });
+        console.log("_____CREATED TOKEN_____");
         // CHECK IF CLIENT IS IN TRIAL OR SUBSCRIPTION
         if (client.subscriptionStatus === 'Trial') {
+          console.log("_____SUBSCRIPTION IS TRIAL_____");
           req.session.client = {
             _id: client._id,
             n: client.firstName + " " + client.lastName,
@@ -150,12 +206,14 @@ class ClientsController {
             d: client.lastUseDate,
             s: client._surveys,
             status: client.subscriptionStatus,
-            token: `Bearer ${token}`,
+            token: token,
+            expiresIn: 604800,
             v: client.verified
           };
 
           return res.json(req.session.client);
         } else {
+          console.log("_____SUBSCRIPTION IS PAID_____");
           // CREATE GATEWAY TO BRAINTREE TO CHECK CLIENTS SUBSCRIPTION
           let gateway = braintree.connect({
             environment: braintree.Environment.Sandbox,
@@ -171,7 +229,7 @@ class ClientsController {
 
             // CHECK IF STORED PAYED THROUGH DATE IS BEHIND THE SUBSCRIBED PAYTHROUGH DATE
             if (result.paidThroughDate > client.paidThroughDate) {
-
+              console.log("_____NO PROBLEMS WITH PAID TIME _____");
               let subObject = {};
               for (let sub of tempSub) {
                 if (sub.name === client._subscription) {
@@ -184,6 +242,7 @@ class ClientsController {
                   console.log("ERROR FINDING CLIENT TO UPDATE", err)
                   return res.json(err);
                 }
+                console.log("_____FOUND PAID CLIENT_____");
                 paidClient._subscription = subObject.name;
                 paidClient.surveyCount += subObject.surveyCount;
                 paidClient.paidThroughDate = result.paidThroughDate;
@@ -193,7 +252,7 @@ class ClientsController {
                     console.log(`___ SAVE SUBSCRIBED CLIENT ERROR ___`, err);
                     return res.json(err);
                   }
-                  console.log(`___ UPDATED SUBSCRIBED CLIENT ___`, subscribedClient);
+                  console.log(`___ UPDATED SUBSCRIBED CLIENT ___`);
                   req.session.client = {
                     _id: subscribedClient._id,
                     n: subscribedClient.firstName + " " + subscribedClient.lastName,
@@ -203,14 +262,15 @@ class ClientsController {
                     d: subscribedClient.lastUseDate,
                     s: subscribedClient._surveys,
                     status: subscribedClient.status,
-                    token: `Bearer ${token}`,
+                    token: token,
+                    expiresIn: 604800,
                     v: subscribedClient.verified
                   };
                   return res.json(req.session.client);
                 });
               });
             } else {
-              
+              console.log("_____PROBLEM WITH PAYMENT TIME_____");
               req.session.client = {
                 _id: client._id,
                 n: client.firstName + " " + client.lastName,
@@ -220,7 +280,8 @@ class ClientsController {
                 d: client.lastUseDate,
                 s: client._surveys,
                 status: result.status,
-                token: `Bearer ${token}`,
+                token: token,
+                expiresIn: 604800,
                 v: client.verified
               };
               return res.json(req.session.client);
@@ -228,6 +289,7 @@ class ClientsController {
           })
         }
       } else {
+        console.log("_____ ERROR _____");
         return res.json({
           errors: {
             login: {
@@ -240,6 +302,7 @@ class ClientsController {
   }
 
   show(req, res, next) {
+    console.log("HIT CLIENT SHOW");
     Client.findById({ _id: req.params.id }).lean()
       .populate('_surveys')
       .populate('category')
@@ -264,6 +327,7 @@ class ClientsController {
       }
     );
   }
+
   update(req, res) {
     Client.findByIdAndUpdate(
       req.params.id,

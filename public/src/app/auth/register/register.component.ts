@@ -32,7 +32,9 @@ export class RegisterComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   states = states;
-
+  currentDevice: any;
+  currentPlatform: any;
+  agent: any;
   errors = [];
 
   private participant;
@@ -94,7 +96,6 @@ export class RegisterComponent implements OnInit {
     Validators.maxLength(18),
   ]);
 
-
   constructor(
     private _authService: AuthService, 
     private _router: Router,
@@ -116,12 +117,17 @@ export class RegisterComponent implements OnInit {
     },{ updateOn: 'blur' });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.currentDevice = window.clientInformation.platform;
+    this.currentPlatform = window.clientInformation.vendor;
+    this.agent = window.clientInformation.userAgent;
+  }
 
 
   addParticipant(form: any) {
     this.errors = [];
     const subscription = "FREE";
+    const platform = 'EMAIL';
     this.participant = {
       'firstName': this.firstNameFormControl.value,
       'lastName': this.lastNameFormControl.value,
@@ -130,6 +136,7 @@ export class RegisterComponent implements OnInit {
       'password': this.passwordFormControl.value,
       'confirm_pass': this.confirm_pass.value,
       'phone': `+1${this.phoneFormControl.value}`,
+      'platform': platform,
       'address': this.addressFormControl.value,
       'city': this.cityFormControl.value,
       'state': this.stateFormControl.value,

@@ -79,6 +79,12 @@ form {
     text-align: -webkit-auto;
 }
 
+#multichoiceOption {
+    display: flex;
+    flex-direction: column;
+    text-align: -webkit-auto;
+}
+
 #multichoice .mat-radio-button {
     margin: 1em;
 }
