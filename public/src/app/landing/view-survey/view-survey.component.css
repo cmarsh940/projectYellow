@@ -135,3 +135,20 @@ form {
   text-shadow: 0 0 20px #F9BF3B;
   text-shadow: 2px 2px 2px rgb(179, 172, 139);
 }
+
+.poweredBy {
+    width: 100%;
+    margin: 1em auto;
+    text-align: center;
+    font-size: smaller;
+    font-weight: 300;
+}
+
+strong {
+    font-size: medium;
+}
+
+.dropDown {
+    border: 1px solid #35300a91;
+    margin: 1em 0;
+}

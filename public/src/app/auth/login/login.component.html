@@ -19,9 +19,44 @@
       <h1 class="mat-h1">Get Started</h1>
     </div>
 
+    <div class="login-card">
+      <form [formGroup]="myForm">
+        <!-- ** EMAIL ** -->
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <span matPrefix>
+            <mat-icon>
+              email
+            </mat-icon>
+          </span>
+          <input matInput required formControlName="email" autocomplete="email">
+        </mat-form-field>
+      
+        <!-- **  PASSWORD ** -->
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <span matPrefix>
+            <mat-icon>
+              https
+            </mat-icon>
+          </span>
+          <input matInput type="password" formControlName="password" required autocomplete="new-password">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+        </mat-form-field>
+      
+        <!-- BUTTON -->
+        <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary"
+          id="login-button">Login
+        </button>
+      </form>
+    </div>
+
     <div *ngIf="errors" class="errors">
       {{ errors }}
     </div>
+
+    <mat-divider>
+    </mat-divider>
 
     <div class="social">
       <mat-list>
@@ -36,38 +71,6 @@
       </mat-list>
     </div>
 
-    <mat-divider>
-    </mat-divider>
-
-    <form [formGroup]="myForm">
-      <!-- ** EMAIL ** -->
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <span matPrefix>
-          <mat-icon>
-            email
-          </mat-icon>
-        </span>
-        <input matInput required formControlName="email" autocomplete="email">
-      </mat-form-field>
-
-      <!-- **  PASSWORD ** -->
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <span matPrefix>
-          <mat-icon>
-            https
-          </mat-icon>
-        </span>
-        <input matInput type="password" formControlName="password" required autocomplete="new-password">
-        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-      </mat-form-field>
-
-      <!-- BUTTON -->
-      <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary"
-        id="login-button">Login
-      </button>
-    </form>
   </div>
 </ng-template>
 
