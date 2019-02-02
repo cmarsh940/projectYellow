@@ -42,8 +42,8 @@
           </span>
           <input matInput type="password" formControlName="password" required autocomplete="new-password">
           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          <mat-hint><a [routerLink]="[ '/change-password' ]" id="reset">forgot password?</a></mat-hint>
         </mat-form-field>
-      
         <!-- BUTTON -->
         <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary"
           id="login-button">Login

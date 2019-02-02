@@ -28,12 +28,18 @@ const SurveySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client"
   },
+  incentive: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Incentive"
+  },
+  
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }
   ],
+
   meta: {
     type: [
       {
@@ -41,7 +47,6 @@ const SurveySchema = new mongoose.Schema({
         ref: "Meta"
       }
     ],
-    select: false,
     default: []
   },
   averageTime: {
@@ -59,13 +64,16 @@ const SurveySchema = new mongoose.Schema({
   lastSubmission: {
     type: Date,
   },
+  experationDate: {
+    type: Date
+  },
   active: {
     type: Boolean,
     default: true
   }
 }, {
-    timestamps: true
-  });
+  timestamps: true
+});
 
 SurveySchema.set('validateBeforeSave', false);
 

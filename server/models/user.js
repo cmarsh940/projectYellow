@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
     answers: [String],
     name: {
         type: String,
-        maxlength: [200, "First name cannot be greater then 200 characters"],
+        maxlength: [250, "Name cannot be greater then 250 characters"],
         lowercase: true,
         trim: true
     },
@@ -18,13 +18,6 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         maxlength: 12,
         lowercase: true,
-        validate: {
-            validator: function (phone) {
-                return /^\+?[1-9]\d{1,14}$/.test(phone);
-            },
-            message: "Please enter a valid phone number"
-        }
-        
     },
     textSent: {
         type: Boolean,
@@ -42,7 +35,10 @@ const UserSchema = new mongoose.Schema({
     submissionDate: {
         type: Date
     },
-
+    private: {
+        type: Boolean,
+        default: false
+    },
     _meta: { type: mongoose.Schema.Types.ObjectId, ref: "Meta" },
     surveyOwner: { type: mongoose.Schema.Types.ObjectId, ref: "Client" },
     _survey: { type: mongoose.Schema.Types.ObjectId, ref: "Survey" },

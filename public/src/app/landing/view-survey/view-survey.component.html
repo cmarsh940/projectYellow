@@ -199,13 +199,24 @@
                                         
                                             <input type="radio" id="r-5" [value]="1" formControlName="answers" [required]="survey?.questions[i]?.isRequired">
                                             <label for="r-5" matTooltip="1 Star"></label>
-                                        
                                         </div>
                                     </div>
 
                                     <!-- RATING -->
                                     <div *ngIf="survey?.questions[i]?.questionType === 'rate'">
                                         <mat-slider thumbLabel tickInterval="1" min="1" max="5" formControlName="answers" [required]="survey?.questions[i]?.isRequired"></mat-slider>
+                                    </div>
+
+                                    <!-- INCENTIVE -->
+                                    <div *ngIf="survey?.questions[i]?.questionType === 'incentive'">
+                                        <h5>For a chance at winning {{survey?.questions[i]?.option}}, Enter your email below.</h5>
+                                        <form [formGroup]="incentiveForm">
+                                            <mat-form-field>
+                                                <mat-label>Email</mat-label>
+                                                <input matInput formControlName="userEmail">
+                                            </mat-form-field>
+                                        </form>
+                                        
                                     </div>
 
                                 <!-- END QUESTION TYPES -->

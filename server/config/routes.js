@@ -4,6 +4,7 @@ const EmailSubs = require('../controllers/emailSubs');
 const Feedbacks = require('../controllers/feedbacks');
 const path = require('path');
 const Payments = require('../controllers/payments');
+const ResetRequests = require('../controllers/resetRequests');
 const Surveys = require('../controllers/surveys');
 const Texts = require('../controllers/texts');
 const Users = require('../controllers/users');
@@ -66,6 +67,11 @@ module.exports = function (app) {
     ]);
     app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
+
+
+    // PASSWORD RESET
+    app.post('/api/clients/requestReset', ResetRequests.create);
+    app.post('/api/clients/verifyReset', ResetRequests.verify);
 
     // EMAIL SUBSCRIPTION
     app.post('/api/add/emailSub', EmailSubs.create);

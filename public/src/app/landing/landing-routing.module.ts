@@ -11,6 +11,7 @@ import { VerifiedComponent } from './verified/verified.component';
 import { PrivateSurveyComponent } from './private-survey/private-survey.component';
 import { SuccessComponent } from './success/success.component';
 import { SurveyErrorComponent } from './survey-error/survey-error.component';
+import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,11 @@ const routes: Routes = [
         path: "pricing",
         pathMatch: "full",
         component: PricingComponent
+      },
+      {
+        path: "change-password",
+        pathMatch: "full",
+        component: ResetPasswordComponent
       },
       {
         path: "list_of_surveys",

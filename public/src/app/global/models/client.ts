@@ -4,7 +4,6 @@ export class Client {
     lastName: string;
     businessName?: string;
     email: any;
-    grt: any;
     phone: any;
     address: string;
     city: string;
@@ -19,8 +18,6 @@ export class Client {
     paymentToken: any;
     registerPlatform?: string;
     datesPaid: any;
-    permissionLevel: any;
-    billingCycle: any;
     _subscription: any;
     subscriptionId: any;
     subscriptionStatus: any;
@@ -29,6 +26,7 @@ export class Client {
     users: any;
     device?: any;
     agent?: any;
+    resetId?: any;
     platform?: any;
     platformAuth?: any;
     platformId?: any;

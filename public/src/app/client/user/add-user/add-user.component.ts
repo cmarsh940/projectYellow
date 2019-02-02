@@ -46,29 +46,24 @@ export class AddUserComponent implements OnInit {
     this.errors = [];
 
     console.log("Phone value is:", this.phoneFormControl.value);
+    let phone = '';
     if (!this.phoneFormControl.value) {
-      this.participant = {
-        'name': this.nameFormControl.value,
-        'email': this.emailFormControl.value,
-        'phone': this.phoneFormControl.value,
-        'surveyOwner': this.data.surveyOwner,
-        '_survey': this.data.survey,
-        'textSent': false,
-        'answeredSurvey': false
-      };
-
-    } else {
-
-      this.participant = {
-        'name': this.nameFormControl.value,
-        'email': this.emailFormControl.value,
-        'phone': `+1${this.phoneFormControl.value}`,
-        'surveyOwner': this.data.surveyOwner,
-        '_survey': this.data.survey,
-        'textSent': false,
-        'answeredSurvey': false
-      }
+      phone = this.phoneFormControl.value;
+    } 
+    else {
+      phone = `+1${this.phoneFormControl.value}`;
     }
+
+    this.participant = {
+      'name': this.nameFormControl.value,
+      'email': this.emailFormControl.value,
+      'phone': phone,
+      'surveyOwner': this.data.surveyOwner,
+      '_survey': this.data.survey,
+      'textSent': false,
+      'answeredSurvey': false
+    }
+    
 
     this._userService.addParticipant(this.participant).subscribe((data) => {
       if (data) {

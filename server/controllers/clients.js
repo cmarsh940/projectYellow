@@ -187,6 +187,12 @@ class ClientsController {
         console.log("____ AUTHENTICATE ERROR ____", err);
         return res.json("____ AUTHENTICATE ERROR ____" + err);
       }
+      console.log("******  REQUESTED RESET  *******", client.requestedReset);
+      if (client.requestedReset) {
+        console.log("____ CLIENT NEEDS TO RESET PASSWORK ____", err);
+        return res.json(err);
+      }
+
       if (client && client.authenticate(req.body.password)) {
 
         console.log("_____CLIENT LOGGING IN_____");

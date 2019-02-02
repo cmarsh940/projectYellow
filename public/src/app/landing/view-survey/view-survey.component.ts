@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, AfterViewInit, ViewChildren, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
 import { GenericValidator } from '../../global/validators/generic-validator';
 import { debounceTime } from 'rxjs/operators';
 
@@ -39,6 +39,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   time: number = 0;
   interval;
   timeAverage: any;
+  incentiveForm: FormGroup;
 
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
@@ -55,6 +56,9 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     return <FormArray>this.surveyForm.get('questions');
   }
 
+  private participant;
+
+  userEmail = new FormControl('');
 
   constructor(
     private fb: FormBuilder,
@@ -75,6 +79,10 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     // Define an instance of the validator for use with this form,
     // passing in this form's set of validation messages.
     this.genericValidator = new GenericValidator(this.validationMessages);
+
+    this.incentiveForm = fb.group({
+      userEmail: this.userEmail,
+    });
   }
 
   ngOnInit(): void {
@@ -125,7 +133,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-
   ngOnChanges() {
     this.rebuildForm();
   }
@@ -139,10 +146,27 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(
         (survey: Survey) => {
+          if(survey.private){
+            this._router.navigate(["/404error"]);
+          }
           console.log("RETURNED SURVEY IS:", survey)
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }
+          console.log("SURVEY INCENTIVE:", survey.incentive);
+          if (survey.incentive) {
+            console.log("INCENTIVE STARTED")
+            let incentiveQuestion = {
+              userEmail: '',
+              isRequired: false,
+              question: 'Survey Complete',
+              option: survey.incentive.name,
+              questionType: "incentive" 
+            }
+            survey.questions.push(incentiveQuestion)
+            console.log("NEW QUESTIONS W/ INCENTIVE:", survey.questions);
+          } 
+          console.log("SURVEY QUESTIONS:", survey.questions)
           this.onSurveyRetrieved(survey)
         },
         (error: any) => {
@@ -201,7 +225,8 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     }
   }
 
-  prepareSaveSurvey(): Survey {
+  prepareSaveSurvey() {
+  // prepareSaveSurvey(): Survey {
     let tempTotal = this.survey.totalAnswers + 1;
     let allTime = this.survey.surveyTime + this.interval
     this.timeAverage = allTime / tempTotal;
@@ -209,15 +234,19 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     // CANCEL INTERVALS
     clearInterval(this.interval);
     
-    console.log("FORM BEFORE", this.surveyForm);
     const formModel = this.surveyForm.value;
-    console.log("FORM SUB IS:", formModel);
 
+    this.participant = {
+      'email': this.userEmail.value,
+    };
+    console.log("PARTICIPANT IS:", this.participant);
+    if(this.survey.incentive) {
+      formModel.questions.pop();
+    }
     // deep copy of form model questions
     const questionsDeepCopy: Question[] = formModel.questions.map(
       (question: Question) => Object.assign({}, question)
     );
-
     // return new `Survey` object containing a combination of original survey value(s)
     // and deep copies of changed form model values
     const saveSurvey: Survey = {
@@ -228,7 +257,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       name: this.survey.name,
       private: this.survey.private,
       questions: questionsDeepCopy,
-      user: this.survey.user,
+      user: this.participant,
       averageTime: this.timeAverage,
       surveyTime: allTime,
       totalAnswers: this.survey.totalAnswers + 1,
@@ -236,6 +265,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       device: this.currentDevice,
       agent: this.agent, 
       platform: this.currentPlatform,
+      incentive: this.survey.incentive,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };

@@ -52,6 +52,7 @@ import { FeedbackComponent } from './layout/feedback/feedback.component';
 import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
 import { AuthInterceptor } from './global/interceptors/auth-interceptor';
 import { PageNotFoundComponent } from './layout/page-not-found/page-not-found.component';
+import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 
 
 
@@ -64,6 +65,7 @@ import { PageNotFoundComponent } from './layout/page-not-found/page-not-found.co
     FeedbackComponent,
     RegisterDialogComponent,
     PageNotFoundComponent,
+    ResetPasswordComponent,
   ],
 
   imports: [

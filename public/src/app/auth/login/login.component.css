@@ -72,6 +72,7 @@ form {
 
 #login-button {
     width:100%;
+    margin-top: 1em;
 }
 
 #bottom {
@@ -99,4 +100,8 @@ a {
 
 .mat-list-base .mat-list-item.mat-list-item-with-avatar, .mat-list-base .mat-list-option.mat-list-item-with-avatar {
     height: auto;
+}
+
+#reset {
+    color: red;
 }

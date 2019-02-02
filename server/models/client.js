@@ -53,7 +53,8 @@ const ClientSchema = new mongoose.Schema({
   },
 
   grt: {
-    type: String
+    type: String,
+    select: false
   },
 
   phone: {
@@ -147,21 +148,19 @@ const ClientSchema = new mongoose.Schema({
   },
 
   paymentToken: {
-    type: String
+    type: String,
+    select: false
   },
 
   datesPaid:{
-    type: Array
-  },
-  
-  permissionLevel: {
-    type: Number,
-    default: 1
+    type: Array,
+    select: false
   },
 
   billingCycle: {
     type: Number,
-    enum: [1, 12]
+    enum: [1, 12],
+    select: false
   },
 
   _subscription: {
@@ -204,6 +203,7 @@ const ClientSchema = new mongoose.Schema({
         ref: "Meta"
       }
     ],
+    select: false,
     default: []
   },
 
@@ -222,13 +222,25 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     default: false
   },
-  
-  resetRequest: {
+  resetId:{
+    type: String
+  },
+  requestedReset: {
     type: Boolean,
-    required: true,
+    select: false,
     default: false
   },
-  resetDates: { type: Array, "default": [] },
+  
+  _resetRequest: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ResetRequest"
+      }
+    ],
+    select: false,
+    default: []
+  },
 
 }, {
     timestamps: true

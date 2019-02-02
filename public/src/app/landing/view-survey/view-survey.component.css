@@ -152,3 +152,9 @@ strong {
     border: 1px solid #35300a91;
     margin: 1em 0;
 }
+
+.or {
+    margin: 1em auto;
+    width:100%;
+    text-align: center;
+}

@@ -41,8 +41,8 @@ export class AddSurveyComponent implements OnInit {
   errors = [];
 
   questionGroups = questionGroups;
-
-  checked = false;
+  checked: boolean;
+  reward: boolean;
 
   @Input() survey: Survey;
 
@@ -56,6 +56,8 @@ export class AddSurveyComponent implements OnInit {
     private _router: Router,
     private location: Location
   ) {
+    this.checked = false;
+    this.reward = false;
     this.createForm();
   }
 
@@ -113,6 +115,8 @@ export class AddSurveyComponent implements OnInit {
     this.surveyForm = this.fb.group({
       category: ["", Validators.required],
       name: ["", Validators.required],
+      experationDate: [""],
+      incentive: [""],
       private: [""],
       questions: this.fb.array([this.initQuestion()])
     });
@@ -213,6 +217,8 @@ export class AddSurveyComponent implements OnInit {
       name: formModel.name as string,
       submissionDates: [],
       lastSubmission: Date.now(),
+      experationDate: formModel.experationDate,
+      incentive: formModel.incentive,
       private: formModel.private,
       questions: questionsDeepCopy,
       user: "",
@@ -226,4 +232,9 @@ export class AddSurveyComponent implements OnInit {
   revert() {
     this.rebuildForm();
   }
+
+  OnChange($event) {
+    this.reward = $event.checked;
+  }
+
 }
