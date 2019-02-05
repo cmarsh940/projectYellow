@@ -52,6 +52,14 @@ export class AuthService {
     );
   }
 
+  resetPassword(asset: any): Observable<any> {
+    console.log('Entered AuthService Request Password Change');
+    let nameService = "resetPassword";
+    return this._httpClient.post<any>(`${this.actionUrl}${this.ns}/${nameService}`, asset).pipe(
+      map(this.extractData),
+      catchError(this.handleError('addParticipant', []))
+    );
+  }
   requestPasswordChange(asset: any): Observable<any> {
     console.log('Entered AuthService Request Password Change');
     let nameService = "requestReset";
@@ -60,6 +68,7 @@ export class AuthService {
       catchError(this.handleError('addParticipant', []))
     );
   }
+
   verifyPasswordChange(asset: any): Observable<any> {
     console.log('Entered AuthService Verify Password Change');
     let nameService = "verifyReset";

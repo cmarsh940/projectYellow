@@ -70,6 +70,7 @@ module.exports = function (app) {
 
 
     // PASSWORD RESET
+    app.post('/api/clients/resetPassword', ResetRequests.update);
     app.post('/api/clients/requestReset', ResetRequests.create);
     app.post('/api/clients/verifyReset', ResetRequests.verify);
 

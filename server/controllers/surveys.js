@@ -326,7 +326,17 @@ class SurveysController {
                     console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
                     return res.json(err);
                   }
-                  res.json(updatedSurvey);
+                  if (req.body.incentive) {     
+                    Incentive.findByIdAndUpdate(req.body.incentive._id, { $push: { participants: savedUser._id } }, { new: true }, (err, updatedIncentive) => {
+                      if (err) {
+                        console.log("___ FIND AND UPDATE INCENTIVE ERROR ___", err);
+                        return res.json(err);
+                      }
+                      res.json(updatedSurvey);
+                    })
+                  } else {
+                    res.json(updatedSurvey);
+                  }
                 })
               })
             }

@@ -10,14 +10,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent implements OnInit {
-  errors = [];
-  requestForm: FormGroup;
+  errors: any;
+  clientId = '';
+  requestId = '';
+
   requested: Boolean;
   verified: Boolean;
+
+  private participant;
+
+  requestForm: FormGroup;
   verifyForm: FormGroup;
   resetForm: FormGroup;
-  client: Client;
-  private participant;
 
   email = new FormControl('', Validators.required);
   number = new FormControl('', Validators.required);
@@ -53,6 +57,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.errors = null;
     this.requested = false;
     this.verified = false;
   }
@@ -74,40 +79,47 @@ export class ResetPasswordComponent implements OnInit {
           }
         } else {
           console.log("SUCCESS", data);
+          this.clientId = data._client;
+          console.log("RETURNED CLIENT IS:", this.clientId);
+          this.requestId = data._request;
+          console.log("RETURNED CLIENT IS:", this.requestId);
           this.requested = true;
           this.verified = false;
         }
       } else {
-        this.errors = data;
+        this.requested = false;
+        this.verified = false;
+        this.errors = "Error requesting password reset";
       }
     });
   }
 
   verify(form: any) {
     if (!this.requested) {
-      console.log("NEED TO REQUEST A RESET");
-      return false;
+      return this.errors.push("NEED TO REQUEST A RESET");
     }
     if (this.requested) {
       this.errors = null;
       this.verified = false;
       console.log("*** STARTING LOGIN ***")
       this.participant = {
+        'clientId': this.clientId,
+        'requestId': this.requestId,
         'number': this.number.value,
       };
 
       this._authService.verifyPasswordChange(this.participant).subscribe((data) => {
+        console.log("DATA", data);
         if (data) {
           if (data.errors) {
             console.log("___ LOGIN ERROR ___:");
             this.verified = false;
             for (const key of Object.keys(data.errors)) {
               const error = data.errors[key];
-              this.errors.push(error.message);
+              this.errors = error.message;
             }
           } else {
             console.log("SUCCESS", data);
-            this.client = data;
             this.verified = true
           }
         } else {
@@ -122,19 +134,19 @@ export class ResetPasswordComponent implements OnInit {
     this.errors = null;
     console.log("*** STARTING SEND RESET ***")
     this.participant = {
-      'id': this.client._id,
-      'resetId': this.client.resetId,
+      'id': this.clientId,
+      'resetId': this.requestId,
       'password': this.password.value,
       'confirm_pass': this.confirm_pass.value,
     };
 
-    this._authService.requestPasswordChange(this.participant).subscribe((data) => {
+    this._authService.resetPassword(this.participant).subscribe((data) => {
       if (data) {
         if (data.errors) {
           console.log("___ RESET ERROR ___:");
           for (const key of Object.keys(data.errors)) {
             const error = data.errors[key];
-            this.errors.push(error.message);
+            this.errors = error.message;
           }
         } else {
           console.log("SUCCESS", data);

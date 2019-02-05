@@ -7,3 +7,11 @@
 .success-body {
     padding: 1em;
 }
+
+.poweredBy {
+    width: 100%;
+    margin: 1em auto;
+    text-align: center;
+    font-size: smaller;
+    font-weight: 300;
+}
