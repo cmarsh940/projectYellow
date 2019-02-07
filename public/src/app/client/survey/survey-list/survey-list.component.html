@@ -64,6 +64,26 @@
             </mat-icon>
             <p>Survey Results</p>
           </button>
+          <div *ngIf="element.active">
+            <button mat-menu-item matTooltip="Close Survey" (click)="closeSurvey(element._id)">
+              <mat-icon>
+                <i class="material-icons">
+                  lock
+                </i>
+              </mat-icon>
+              <p>Close Survey</p>
+            </button>
+          </div>
+          <div *ngIf="!element.active">
+            <button mat-menu-item matTooltip="Close Survey" (click)="openSurvey(element._id)">
+              <mat-icon>
+                <i class="material-icons">
+                  lock_open
+                </i>
+              </mat-icon>
+              <p>Open Survey</p>
+            </button>
+          </div>
           <button mat-menu-item matTooltip="Remove Survey" (click)="destroySurvey(element._id)">
             <mat-icon color="warn">
               <i class="material-icons">

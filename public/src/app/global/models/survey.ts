@@ -1,5 +1,6 @@
 export class Survey {
     _id?: any;
+    active?:boolean;
     agent?: any;
     averageTime?: number;
     category?: string;

@@ -66,6 +66,42 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
       });
   }
 
+  closeSurvey(id: string) {
+    let r = window.confirm("Close Survey?");
+    if (r == true) {
+      this._surveyService.closeAsset(id).subscribe(res => {
+        console.log("CLOSED SURVEY");
+        if(!res){
+          window.close();
+        }
+        if (true) {
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
+  }
+
+  openSurvey(id: string) {
+    let r = window.confirm("Open Survey?");
+    if (r == true) {
+      return this._surveyService.openAsset(id).subscribe(res => {
+        if(!res){
+          window.close();
+        }
+        if (true) {
+          console.log("SURVEY OPENED");
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
+  }
+
   destroySurvey(id: string) {
     let r = window.confirm("Delete Survey?");
     if (r == true) {

@@ -146,8 +146,14 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.getAsset(this.surveyId)
       .subscribe(
         (survey: Survey) => {
+          if (!survey) {
+            this._router.navigate(["/404error"]);
+          }
           if(survey.private){
             this._router.navigate(["/404error"]);
+          }
+          if(!survey.active){
+            this._router.navigate(["/closed"]);
           }
           console.log("RETURNED SURVEY IS:", survey)
           for (let i = 0; i < survey.questions.length; i++) {
@@ -264,6 +270,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       creator: this.survey.creator,
       device: this.currentDevice,
       agent: this.agent, 
+      active: this.survey.active,
       platform: this.currentPlatform,
       incentive: this.survey.incentive,
       createdAt: this.survey.createdAt,

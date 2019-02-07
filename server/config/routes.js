@@ -120,6 +120,14 @@ module.exports = function (app) {
         validJWTNeeded,
         Surveys.update
     ]);
+    app.put('/api/close/surveys/:id', [
+        validJWTNeeded,
+        Surveys.close
+    ]);
+    app.put('/api/open/surveys/:id', [
+        validJWTNeeded,
+        Surveys.open
+    ]);
     app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
     app.put('/api/answer/pSurveys/:id', Surveys.answerPrivateSurvey);
 

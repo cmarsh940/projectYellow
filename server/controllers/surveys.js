@@ -113,6 +113,9 @@ class SurveysController {
       .populate("incentive")
       .populate({ path: 'meta', select: 'browser device loc', model: Meta})
       .exec((err, survey) => {
+        if(!survey) {
+          return res.json(false);
+        }
         if (err) {
           console.log("*** ERROR: FINDING SURVEY ***", err);
           return res.json(err);
@@ -134,6 +137,9 @@ class SurveysController {
         totalAnswers: req.body.totalAnswers,
         surveyTime: req.body.surveyTime
       } }, { new: true }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
       if (err) {
         console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);
@@ -262,6 +268,9 @@ class SurveysController {
         totalAnswers: req.body.totalAnswers,
         surveyTime: req.body.surveyTime
       } }, { new: true }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
       if (err) {
         console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);
@@ -406,8 +415,51 @@ class SurveysController {
     })
   }
 
+  close(req, res) {
+    console.log("#*#*#*# SERVER HIT CLOSE SURVEY #*#*#*#");
+    Survey.findByIdAndUpdate(req.params.id, { 
+      $set: {
+        active: false,
+      }
+    }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
+      if (err) {
+        console.log("*** ERROR: DELETING SURVEY=", err);
+        return res.json(err);
+      } else {
+        console.log("*** SURVEY CLOSED ***");
+        return res.json(true);
+      }
+    });
+  }
+
+  open(req, res) {
+    console.log("#*#*#*# SERVER HIT CLOSE SURVEY #*#*#*#");
+    Survey.findByIdAndUpdate(req.params.id, { 
+      $set: {
+        active: true,
+      }
+    }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
+      if (err) {
+        console.log("*** ERROR: DELETING SURVEY=", err);
+        return res.json(err);
+      } else {
+        console.log("*** SURVEY OPENED ***");
+        return res.json(true);
+      }
+    });
+  }
+
   delete(req, res) {
     Survey.findByIdAndRemove(req.params.id, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
       if (err) {
         console.log("*** ERROR: DELETING SURVEY=", err);
         return res.json(err);

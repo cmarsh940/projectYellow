@@ -257,9 +257,6 @@
         <div>
             <p class="text-center" [ngStyle]="{ 'color': 'red' }" *ngFor="let error of errors">{{ error }}</p>
         </div>
-        <div class="poweredBy">
-            <p>Powered by: <strong>Surveys by ME</strong></p>
-            <a (click)="openDialog()">Create your free survey today.</a>
-        </div>
+        <powered-by></powered-by>
     </div>
 </ng-template>

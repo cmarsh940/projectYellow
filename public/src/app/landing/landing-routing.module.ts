@@ -12,6 +12,7 @@ import { PrivateSurveyComponent } from './private-survey/private-survey.componen
 import { SuccessComponent } from './success/success.component';
 import { SurveyErrorComponent } from './survey-error/survey-error.component';
 import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
+import { SurveyClosedComponent } from './survey-closed/survey-closed.component';
 
 const routes: Routes = [
   {
@@ -57,6 +58,11 @@ const routes: Routes = [
         path: "pSurvey/:id/:id",
         pathMatch: "full",
         component: PrivateSurveyComponent
+      },
+      {
+        path: "closed",
+        pathMatch: "full",
+        component: SurveyClosedComponent
       },
       {
         path: "success",

@@ -65,7 +65,7 @@ import { ResetPasswordComponent } from './auth/reset-password/reset-password.com
     FeedbackComponent,
     RegisterDialogComponent,
     PageNotFoundComponent,
-    ResetPasswordComponent,
+    ResetPasswordComponent
   ],
 
   imports: [
