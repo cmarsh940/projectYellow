@@ -62,18 +62,16 @@ class ResetRequestsController {
                 return res.json(err);
             }
             let token = Math.floor((Math.random() * 10000) + 99999);
-            console.log("RESET TOKEN IS:", token);
             let reset = {
                 token: token,
                 finished: false,
                 _client: client._id
             }
             ResetRequest.create(reset, (err, request) => {
-                if (err) {
+                if (!request || err) {
                     console.log("___ ResetRequest ERROR ___", err);
                     return res.json(err);
                 }
-                console.log("___ CREATEDResetRequest ___", request);
                 client._resetRequest.push(request._id);
                 client.resetId = request._id;
                 client.requestedReset = true;
@@ -134,7 +132,6 @@ class ResetRequestsController {
     }
 
     update(req, res) {
-        console.log("___ SERVER HIT UPDATE PASSWORD ___", req.body);
         if (req.body.password != req.body.confirm_pass) {
             return res.json({
                 errors: {
