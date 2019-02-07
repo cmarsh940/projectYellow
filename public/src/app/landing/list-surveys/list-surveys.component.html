@@ -8,7 +8,7 @@
 
   <!-- Owner Column -->
   <ng-container matColumnDef="owner">
-    <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef> Creator </mat-header-cell>
     <mat-cell *matCellDef="let element"> 
         {{ element.creator.businessName }}
       <div *ngIf="!element.creator.businessName">

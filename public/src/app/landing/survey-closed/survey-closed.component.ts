@@ -10,32 +10,9 @@ import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-d
 })
 export class SurveyClosedComponent implements OnInit {
 
-  constructor(
-    public dialog: MatDialog,
-    private _router: Router,
-  ) { }
+  constructor() { }
 
   ngOnInit() {
-  }
-
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.closeOnNavigation = true;
-    dialogConfig.maxWidth = '22em'
-
-
-    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        console.log(`Dialog Error result:`);
-        console.log(result);
-      } else {
-        console.log(`Dialog result:`);
-        console.table(result);
-        this._router.navigateByUrl("/login");
-      }
-    });
   }
 
 }
