@@ -6,15 +6,13 @@ const uri = require('./config').uri;
 let models_path = __dirname + '/../models';
 
 
-mongoose.set('useNewUrlParser',true);
-mongoose.set('useCreateIndex',true);
-mongoose.connect(uri, { autoIndex: false })
-.then(connection => {
-  console.log('Connected to MongoDB')
-})
-.catch(error => {
-console.log(error.message)
-})
+mongoose.connect(uri, { useNewUrlParser: true, autoIndex: false });
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+    console.log("Connected to DB");
+});
 
 
 fs.readdirSync(models_path).forEach((file) => {

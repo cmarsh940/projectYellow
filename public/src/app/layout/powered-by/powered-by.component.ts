@@ -4,21 +4,21 @@ import { Router } from '@angular/router';
 import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
 
 @Component({
-  selector: 'app-pricing',
-  templateUrl: './pricing.component.html',
-  styleUrls: ['./pricing.component.css']
+  selector: 'powered-by',
+  templateUrl: './powered-by.component.html',
+  styleUrls: ['./powered-by.component.css']
 })
-export class PricingComponent implements OnInit {
+export class PoweredByComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private _router: Router
+    private _router: Router,
   ) { }
 
   ngOnInit() {
   }
 
-  registerDialog() {
+  openRegister() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.closeOnNavigation = true;
     dialogConfig.maxWidth = '22em'

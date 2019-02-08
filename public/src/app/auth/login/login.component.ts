@@ -90,7 +90,6 @@ export class LoginComponent implements OnInit {
         this.loginGoogleParticipant(client);
       }, function (error) {
         console.log("GOOGLE LOGIN ERROR",error)
-        // alert(JSON.stringify(error, undefined, 2));
       });
   }
 

@@ -1,9 +1,39 @@
 const mongoose = require('mongoose');
 
 const SurveySchema = new mongoose.Schema({
+  active: {
+    type: Boolean,
+    default: true
+  },
+  averageTime: {
+    type: Number
+  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category"
+  },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Client"
+  },
+  experationDate: {
+    type: Date
+  },
+  incentive: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Incentive"
+  },
+  lastSubmission: {
+    type: Date,
+  },
+  meta: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Meta"
+      }
+    ],
+    default: []
   },
   name: {
     type: String,
@@ -24,48 +54,24 @@ const SurveySchema = new mongoose.Schema({
     ],
     default: []
   },
-  creator: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Client"
+  submissionDates: [Date],
+  surveyTime: {
+    type: Number,
+    default: 0
+  },
+  totalAnswers: {
+    type: Number,
+    default: 0
   },
   users: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     }
-  ],
-  meta: {
-    type: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Meta"
-      }
-    ],
-    select: false,
-    default: []
-  },
-  averageTime: {
-    type: Number
-  },
-  totalAnswers: {
-    type: Number,
-    default: 0
-  },
-  surveyTime: {
-    type: Number,
-    default: 0
-  },
-  submissionDates: [Date],
-  lastSubmission: {
-    type: Date,
-  },
-  active: {
-    type: Boolean,
-    default: true
-  }
+  ]
 }, {
-    timestamps: true
-  });
+  timestamps: true
+});
 
 SurveySchema.set('validateBeforeSave', false);
 

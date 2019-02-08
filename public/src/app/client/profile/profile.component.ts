@@ -158,6 +158,29 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  closeAccount(id: string) {
+    let r = window.confirm("Are you sure?");
+    if (r == true) {
+      this._profileService.disableParticipant(id).subscribe(res => {
+        if (!res) {
+          window.close();
+        }
+        if (true) {
+          this._authService.logout((res) => {
+            if(!res){
+              console.log("ERROR");
+            }
+            console.log("Account Removed");
+            this.currentClient = null;
+            this._router.navigateByUrl('/');
+          });
+        }
+      });
+    } else {
+      window.close();
+    }
+  }
+
   openSnackBar() {
     const config = new MatSnackBarConfig();
     config.verticalPosition = this.verticalPosition;

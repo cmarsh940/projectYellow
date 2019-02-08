@@ -1,13 +1,7 @@
-.success-header {
-    width: 100;
-    text-align: center;
-    color: green;
+section {
+    width: 100%;
+    padding: 0;
 }
-
-.success-body {
-    padding: 1em;
-}
-
 .poweredBy {
     width: 100%;
     margin: 1em auto;

@@ -2,16 +2,12 @@ const mongoose = require('mongoose');
 
 const QuestionSchema = new mongoose.Schema({
     answers: { type: Array, "default": [] },
-    _survey: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Survey"
-    },
     isRequired: {
         type: Boolean,
         default: true
     },
-    question: {
-        type: String,
+    lastAnswered: {
+        type: Date
     },
     options:{
         type: [
@@ -21,11 +17,15 @@ const QuestionSchema = new mongoose.Schema({
             }
         ]
     },
+    question: {
+        type: String,
+    },
     questionType: {
         type: String
     },
-    lastAnswered: {
-        type: Date
+    _survey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Survey"
     }
 }, {
     timestamps: true

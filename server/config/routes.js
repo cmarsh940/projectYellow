@@ -4,6 +4,7 @@ const EmailSubs = require('../controllers/emailSubs');
 const Feedbacks = require('../controllers/feedbacks');
 const path = require('path');
 const Payments = require('../controllers/payments');
+const ResetRequests = require('../controllers/resetRequests');
 const Surveys = require('../controllers/surveys');
 const Texts = require('../controllers/texts');
 const Users = require('../controllers/users');
@@ -64,8 +65,18 @@ module.exports = function (app) {
         validJWTNeeded,
         Clients.update
     ]);
+    app.put('/api/disableC/:id', [
+        validJWTNeeded,
+        Clients.disable
+    ]);
     app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
+
+
+    // PASSWORD RESET
+    app.post('/api/clients/resetPassword', ResetRequests.update);
+    app.post('/api/clients/requestReset', ResetRequests.create);
+    app.post('/api/clients/verifyReset', ResetRequests.verify);
 
     // EMAIL SUBSCRIPTION
     app.post('/api/add/emailSub', EmailSubs.create);
@@ -112,6 +123,14 @@ module.exports = function (app) {
     app.put('/api/surveys/:id', [
         validJWTNeeded,
         Surveys.update
+    ]);
+    app.put('/api/close/surveys/:id', [
+        validJWTNeeded,
+        Surveys.close
+    ]);
+    app.put('/api/open/surveys/:id', [
+        validJWTNeeded,
+        Surveys.open
     ]);
     app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
     app.put('/api/answer/pSurveys/:id', Surveys.answerPrivateSurvey);

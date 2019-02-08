@@ -88,7 +88,6 @@
         </ng-container>
 
         <ng-container matColumnDef="action" stickyEnd>
-            
             <mat-header-cell *matHeaderCellDef>
                 <mat-icon class="action-icon">more_vert</mat-icon>
             </mat-header-cell>
@@ -124,7 +123,6 @@
 
                 </mat-menu>
             </mat-cell>
-
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{hovered: row.hovered}" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false" (click)="selection.toggle(row)"></mat-row>

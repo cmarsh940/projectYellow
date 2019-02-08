@@ -1,10 +1,9 @@
-
-button {
-    margin: 1em;
-}
-
 .spacer {
   flex: 1 1 auto;
+}
+
+#add-button {
+    margin: 1em;
 }
 
 .mat-paginator {
@@ -14,15 +13,9 @@ button {
     width: 100%;
 }
 
-
-.mat-icon {
-    padding: 0;
-    margin: 0 5px;
-}
-
-.mat-header-cell span {
-    width: 100%;
-    text-align: center;
+.mat-button, p {
+  display: inline-block;
+  margin: 0 3px;
 }
 
 #out {
@@ -31,15 +24,35 @@ button {
     text-align: center;
 }
 
+
+.mat-header-cell:last-of-type {
+    padding: 0;
+    max-width: 9%;
+}
+
 .mat-cell:last-of-type {
-    padding-right: 10px;
+    padding: 0;
+    max-width: 9%;
 }
 
-.action-icons {
-    position: absolute;
-    right: 0;
+#smsText {
+    width:100%;
+    margin: 1em;
 }
 
-.private-icon {
+.mat-row.hovered {
+  background-color: #ffd60033;
+}
+
+.action-button {
     display: inline-flex;
+    right: 0;
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+}
+
+.action-icon {
+    margin: auto;
+    width: 100%;
 }

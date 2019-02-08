@@ -130,27 +130,28 @@ class ClientsController {
           console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
           return res.json(err);
         } else {
-          console.log("CREATING META SUCCESS");
-          Client.findByIdAndUpdate(req.params.id, {
-            $push: { _meta: metas._id }
-          }, { new: true }, (err, updatedClient) => {
-            if (err) {
-              console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
-              return res.json(err);
-            }
-            else if (updatedClient.registerPlatform === "E") {
+          console.log("CREATED META SUCCESS");
+          // Client.findByIdAndUpdate(req.params.id, {
+          //   $push: { _meta: metas._id }
+          // }, { new: true }, (err, updatedClient) => {
+          //   if (err) {
+          //     console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
+          //     return res.json(err);
+          //   }
+          //   console.log("UPDATED CLIENT IS:", updatedClient)
+            if (client.registerPlatform === "E") {
               
               console.log("*** SERVER CLIENT CREATED");
               let email = {
-                client: updatedClient._id,
-                contact: updatedClient.email,
-                name: updatedClient.firstName,
-                message: updatedClient.grt
+                client: client._id,
+                contact: client.email,
+                name: client.firstName,
+                message: client.grt
               }
               sendVerificationEmail(email);
-              return res.json(updatedClient);
+              return res.json(client);
             }
-            else if (updatedClient.registerPlatform === "F" || updatedClient.registerPlatform === "G") {
+            else if (client.registerPlatform === "F" || client.registerPlatform === "G") {
               
               console.log("*** SERVER CLIENT CREATED");
 
@@ -171,9 +172,9 @@ class ClientsController {
               return res.json(req.session.client);
             }
             else {
-              return res.json(updatedClient);
+              return res.json(client);
             }
-          })
+          // }) 
         }
       })
     })
@@ -183,10 +184,17 @@ class ClientsController {
     console.log("___ SERVER HIT AUTHENTICATE ___");
 
     Client.findOne({ email: req.body.email }).select("+password").populate('_surveys').exec((err, client) => {
+      console.log("CLIENT IS", client);
       if (err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
         return res.json("____ AUTHENTICATE ERROR ____" + err);
       }
+      console.log("******  REQUESTED RESET  *******", client.requestedReset);
+      if (client.requestedReset || !client.a) {
+        console.log("____ CLIENT NEEDS TO RESET PASSWORK ____");
+        return res.json(false);
+      }
+
       if (client && client.authenticate(req.body.password)) {
 
         console.log("_____CLIENT LOGGING IN_____");
@@ -342,6 +350,22 @@ class ClientsController {
     );
   }
 
+  disable(req, res) {
+    Client.findByIdAndUpdate(
+      req.params.id,
+      { $set: { a: false } },
+      (err, client) => {
+        if (!client) {
+          return res.json(false);
+        }
+        if (err) {
+          return res.json(err);
+        }
+        return res.json(true);
+      }
+    );
+  }
+
   session(req, res) {
     if (req.session.client_id) {
       Client.findById(req.session.client_id, (err, client) => {
@@ -362,6 +386,9 @@ class ClientsController {
 
   delete(req, res) {
     Client.findByIdAndRemove(req.params.id, (err, client) => {
+      if (!client) {
+        return res.json(false);
+      }
       if (err) {
         return res.json(err);
       } else {

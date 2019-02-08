@@ -19,55 +19,56 @@
       <h1 class="mat-h1">Get Started</h1>
     </div>
 
-    <div *ngIf="errors" class="errors">
-      {{ errors }}
+    <div class="login-card">
+      <form [formGroup]="myForm">
+        <!-- ** EMAIL ** -->
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <span matPrefix>
+            <mat-icon>
+              email
+            </mat-icon>
+          </span>
+          <input matInput required formControlName="email" autocomplete="email">
+        </mat-form-field>
+      
+        <!-- **  PASSWORD ** -->
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <span matPrefix>
+            <mat-icon>
+              https
+            </mat-icon>
+          </span>
+          <input matInput type="password" formControlName="password" required autocomplete="new-password">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+          <mat-hint><a [routerLink]="[ '/change-password' ]" id="reset">forgot password?</a></mat-hint>
+        </mat-form-field>
+        <!-- BUTTON -->
+        <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary"
+          id="login-button">Login
+        </button>
+      </form>
     </div>
 
-    <div class="social">
-      <mat-list>
-          <button mat-list-item (click)="submitLogin()" id="FB-button">
-            <mat-icon mat-list-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
-            <span mat-line class="socialText">Continue with Facebook</span>
-          </button>
-          <button mat-list-item id="glogin">
-            <mat-icon mat-list-icon svgIcon="google" aria-label="Google Icon"></mat-icon>
-            <span mat-line class="socialText">Sign in with Google</span>
-          </button>
-      </mat-list>
+    <div *ngIf="errors" class="errors">
+      {{ errors }}
     </div>
 
     <mat-divider>
     </mat-divider>
 
-    <form [formGroup]="myForm">
-      <!-- ** EMAIL ** -->
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <span matPrefix>
-          <mat-icon>
-            email
-          </mat-icon>
-        </span>
-        <input matInput required formControlName="email" autocomplete="email">
-      </mat-form-field>
-
-      <!-- **  PASSWORD ** -->
-      <mat-form-field appearance="outline">
-        <mat-label>Password</mat-label>
-        <span matPrefix>
-          <mat-icon>
-            https
-          </mat-icon>
-        </span>
-        <input matInput type="password" formControlName="password" required autocomplete="new-password">
-        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
-      </mat-form-field>
-
-      <!-- BUTTON -->
-      <button mat-stroked-button type="submit" (click)="loginParticipant(myForm)" [disabled]="!myForm.valid" color="primary"
-        id="login-button">Login
+    <div class="social">
+      <button mat-raised-button (click)="submitLogin()" id="FB-button">
+        <mat-icon matPrefix svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
+        <span class="socialText">Sign in with Facebook</span>
       </button>
-    </form>
+      <button mat-raised-button id="glogin">
+        <mat-icon matPrefix svgIcon="google" aria-label="Google Icon"></mat-icon>
+        <span class="socialText">Sign in with Google</span>
+      </button>
+    </div>
+
   </div>
 </ng-template>
 

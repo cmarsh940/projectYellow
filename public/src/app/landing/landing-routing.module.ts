@@ -11,6 +11,8 @@ import { VerifiedComponent } from './verified/verified.component';
 import { PrivateSurveyComponent } from './private-survey/private-survey.component';
 import { SuccessComponent } from './success/success.component';
 import { SurveyErrorComponent } from './survey-error/survey-error.component';
+import { ResetPasswordComponent } from '../auth/reset-password/reset-password.component';
+import { SurveyClosedComponent } from './survey-closed/survey-closed.component';
 
 const routes: Routes = [
   {
@@ -38,6 +40,11 @@ const routes: Routes = [
         component: PricingComponent
       },
       {
+        path: "change-password",
+        pathMatch: "full",
+        component: ResetPasswordComponent
+      },
+      {
         path: "list_of_surveys",
         pathMatch: "full",
         component: ListSurveysComponent
@@ -51,6 +58,11 @@ const routes: Routes = [
         path: "pSurvey/:id/:id",
         pathMatch: "full",
         component: PrivateSurveyComponent
+      },
+      {
+        path: "closed",
+        pathMatch: "full",
+        component: SurveyClosedComponent
       },
       {
         path: "success",

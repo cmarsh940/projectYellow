@@ -6,6 +6,7 @@ const geoip = require('geoip-lite');
 const Survey = mongoose.model("Survey");
 const Category = mongoose.model('Category');
 const Client = mongoose.model('Client');
+const Incentive = mongoose.model('Incentive');
 const Meta = mongoose.model('Meta');
 const Question = mongoose.model('Question');
 const User = mongoose.model('User');
@@ -16,7 +17,6 @@ class SurveysController {
     Survey.find({}).lean()
     .populate({ path: "category", select: 'name', model: Category })
     .populate({ path: "creator", select: 'firstName lastName businessName', model: Client })
-    .populate("questions")
     .exec((err, surveys) => {
       if (err) {
         console.log("*** ERROR: FINDING SURVEYS=", err);
@@ -28,12 +28,12 @@ class SurveysController {
   }
 
   create(req, res) {
+    console.log("BODY IS:", req.body);
     Survey.create(req.body, (err, survey) => {
       if (err) {
         console.log("___ CREATE SURVEY ERROR ___", err);
         return res.json(err);
       }
-
       // PUSH SURVEY ID LINKING QUESTION TO THE SURVEY
       var array = req.body.questions;
       for (let index = 0; index < array.length; index++) {
@@ -60,19 +60,45 @@ class SurveysController {
               console.log("___ CREATE SURVEY CATEGORY ERROR ___", err);
               return res.json(err);
             } 
-
-            // PUSH QUESTIONS INTO SURVEY
-            for (let index = 0; index < questions.length; index++) {
-              survey.questions.push(questions[index]._id);
-            }
-            survey.save((err, survey) => {
-              if (err) {
-                console.log("___ CREATE SURVEY PUSH QUESTIONS ERROR ___", err);
-                return res.json(err);
+            if (req.body.incentive) {
+              let reward = {
+                name: req.body.incentive,
+                drawDate: req.body.experationDate,
+                _survey: survey._id
               }
-              console.log("___ CREATED SURVEY ___");
-              return res.json(survey);
-            })
+              Incentive.create(reward, function (err, incentives) {
+                if (err) {
+                  console.log("___ CREATE INCENTIVE ERROR ___", err);
+                  return res.json(err);
+                }
+                // PUSH QUESTIONS INTO SURVEY
+                for (let index = 0; index < questions.length; index++) {
+                  survey.questions.push(questions[index]._id);
+                }
+                survey.incentive = incentives._id;
+                survey.save((err, survey) => {
+                  if (err) {
+                    console.log("___ CREATE SURVEY PUSH QUESTIONS ERROR ___", err);
+                    return res.json(err);
+                  }
+                  console.log("___ CREATED SURVEY ___");
+                  return res.json(survey);
+                })
+              });
+            } else {
+              // PUSH QUESTIONS INTO SURVEY
+              for (let index = 0; index < questions.length; index++) {
+                survey.questions.push(questions[index]._id);
+              }
+              survey.save((err, survey) => {
+                if (err) {
+                  console.log("___ CREATE SURVEY PUSH QUESTIONS ERROR ___", err);
+                  return res.json(err);
+                }
+                console.log("___ CREATED SURVEY ___");
+                return res.json(survey);
+              })
+            }
           })
         })
       })
@@ -84,8 +110,12 @@ class SurveysController {
       .select("+meta")
       .populate({ path: 'creator', select: 'firstName', select: '_subscription', model: Client })
       .populate("questions")
+      .populate("incentive")
       .populate({ path: 'meta', select: 'browser device loc', model: Meta})
       .exec((err, survey) => {
+        if(!survey) {
+          return res.json(false);
+        }
         if (err) {
           console.log("*** ERROR: FINDING SURVEY ***", err);
           return res.json(err);
@@ -97,7 +127,7 @@ class SurveysController {
 
 
   answerSurvey(req, res) {
-    console.log("*** HIT SERVER UPDATE ANSWER ***");
+    console.log("*** HIT SERVER UPDATE ANSWER ***", req.body);
     
     Survey.findByIdAndUpdate(req.params.id, { 
       $push: { submissionDates: Date.now() },
@@ -107,56 +137,122 @@ class SurveysController {
         totalAnswers: req.body.totalAnswers,
         surveyTime: req.body.surveyTime
       } }, { new: true }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
       if (err) {
         console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);
       } else {
-        var arr = req.body.questions;
+        let arr = req.body.questions;
+        let userAnswers = [];
         for (let i = 0; i < arr.length; i++) {
           Question.findById(arr[i]._id, (err, question) => {
             if (err) {
               console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
               return res.json(err);
             }
+            userAnswers.push(arr[i].answers);
             question.answers.push(arr[i].answers)
             question.lastAnswered = Date.now();
             question.save((err, question) => {
               if (err) {
                 console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                 return res.json(err);
-              }
-              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`);
+              }  
             });
           })
         }
-        let geo = geoip.lookup(req.ip);
-        let meta = {
-          address: req.ip,
-          agent: req.body.agent,
-          device: req.body.device,
-          browser: req.body.platform, 
-          loc: geo,
-          metaName: os.userInfo().username,
-          referer: req.headers.referer,
-          _survey: survey._id
-        }
-        Meta.create(meta, function (err, metas) {
-          if (err) {
-            console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
-            return res.json(err);
-          } else {
-            console.log("CREATING META SUCCESS");
-            Survey.findByIdAndUpdate(req.params.id, {
-              $push: { meta: metas._id }
-            }, { new: true }, (err, updatedSurvey) => {
+        if (survey.incentive) {
+          console.log("GOING INCENTIVE WAY &&&&&&&&&&&&&&")
+          User.create(req.body.user, (err, user) => {
+            if (err) {
+              console.log(`___ CREATING USER ERROR ___`, err);
+              return res.json(err);
+            }
+            let geo = geoip.lookup(req.ip);
+            let meta = {
+              address: req.ip,
+              agent: req.body.agent,
+              device: req.body.device,
+              browser: req.body.platform,
+              loc: geo,
+              metaName: os.userInfo().username,
+              referer: req.headers.referer,
+              _survey: survey._id,
+              _user: user._id
+            }
+            Meta.create(meta, function (err, metas) {
               if (err) {
-                console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
+                console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
                 return res.json(err);
-              } 
-              res.json(updatedSurvey);
+              } else {
+                user.answers.push(userAnswers)
+                user.submissionDate = Date.now();
+                user.answeredSurvey = true;
+                user._meta = metas._id;
+                user.save((err, savedUser) => {
+                  if (err) {
+                    console.log(`___ SAVE USER ERROR ___`, err);
+                    return res.json(err);
+                  }
+                  console.log("SAVED USER");
+
+                  console.log("CREATING USER META SUCCESS");
+                  Survey.findByIdAndUpdate(req.params.id, {
+                    $push: { meta: metas._id }
+                  }, { new: true }, (err, updatedSurvey) => {
+                    if (err) {
+                      console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
+                      return res.json(err);
+                    }
+                    console.log("FINDING INCENTIVE")
+                    console.log("PUSHING SAVED USER", savedUser);
+                      Incentive.findByIdAndUpdate(req.body.incentive._id, { $push: { participants: savedUser._id } }, { new: true }, (err, updatedIncentive) => {
+                      if (err) {
+                        console.log("___ FIND AND UPDATE INCENTIVE ERROR ___", err);
+                        return res.json(err);
+                      }
+                      console.log("FOUND INCENTIVE AND UPDATED AND PASSING UPDATED SURVEY", updatedIncentive);
+                      return res.json(updatedSurvey);
+                    })
+                  })
+                })
+              }
             })
+          })
+        } else {
+
+          console.log("NOOOOO INCENTIVE WAYYYYYYY");
+          let geo = geoip.lookup(req.ip);
+          let meta = {
+            address: req.ip,
+            agent: req.body.agent,
+            device: req.body.device,
+            browser: req.body.platform, 
+            loc: geo,
+            metaName: os.userInfo().username,
+            referer: req.headers.referer,
+            _survey: survey._id
           }
-        })
+          Meta.create(meta, function (err, metas) {
+            if (err) {
+              console.log("___ CREATE META ERROR ___", err);
+              return res.json(err);
+            } else {
+              console.log("CREATING META SUCCESS");
+              Survey.findByIdAndUpdate(req.params.id, {
+                $push: { meta: metas._id }
+              }, { new: true }, (err, updatedSurvey) => {
+                if (err) {
+                  console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
+                  return res.json(err);
+                } 
+                return res.json(updatedSurvey);
+              })
+            }
+          })
+        }
       }
     })
   }
@@ -172,6 +268,9 @@ class SurveysController {
         totalAnswers: req.body.totalAnswers,
         surveyTime: req.body.surveyTime
       } }, { new: true }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
       if (err) {
         console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
         return res.json(err);
@@ -192,7 +291,6 @@ class SurveysController {
                 console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
                 return res.json(err);
               }
-              console.log(`___ UPDATED QUESTION[${i}] INSIDE LOOP ___`);
             });
           })
         }
@@ -237,7 +335,17 @@ class SurveysController {
                     console.log("___ UPDATE FINDING SURVEY ERROR ___", err);
                     return res.json(err);
                   }
-                  res.json(updatedSurvey);
+                  if (req.body.incentive) {     
+                    Incentive.findByIdAndUpdate(req.body.incentive._id, { $push: { participants: savedUser._id } }, { new: true }, (err, updatedIncentive) => {
+                      if (err) {
+                        console.log("___ FIND AND UPDATE INCENTIVE ERROR ___", err);
+                        return res.json(err);
+                      }
+                      res.json(updatedSurvey);
+                    })
+                  } else {
+                    res.json(updatedSurvey);
+                  }
                 })
               })
             }
@@ -307,8 +415,51 @@ class SurveysController {
     })
   }
 
+  close(req, res) {
+    console.log("#*#*#*# SERVER HIT CLOSE SURVEY #*#*#*#");
+    Survey.findByIdAndUpdate(req.params.id, { 
+      $set: {
+        active: false,
+      }
+    }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
+      if (err) {
+        console.log("*** ERROR: DELETING SURVEY=", err);
+        return res.json(err);
+      } else {
+        console.log("*** SURVEY CLOSED ***");
+        return res.json(true);
+      }
+    });
+  }
+
+  open(req, res) {
+    console.log("#*#*#*# SERVER HIT CLOSE SURVEY #*#*#*#");
+    Survey.findByIdAndUpdate(req.params.id, { 
+      $set: {
+        active: true,
+      }
+    }, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
+      if (err) {
+        console.log("*** ERROR: DELETING SURVEY=", err);
+        return res.json(err);
+      } else {
+        console.log("*** SURVEY OPENED ***");
+        return res.json(true);
+      }
+    });
+  }
+
   delete(req, res) {
     Survey.findByIdAndRemove(req.params.id, (err, survey) => {
+      if (!survey) {
+        return res.json(false);
+      }
       if (err) {
         console.log("*** ERROR: DELETING SURVEY=", err);
         return res.json(err);

@@ -46,6 +46,16 @@ export class SurveyService {
     return this.dataService.update(NAMESPACE, id, itemToUpdate);
   }
 
+  public closeAsset(id: any): Observable<Survey> {
+    let NAMESPACE = "close/surveys";
+    return this.dataService.cancel(NAMESPACE, id);
+  }
+
+  public openAsset(id: any): Observable<Survey> {
+    let NAMESPACE = "open/surveys";
+    return this.dataService.cancel(NAMESPACE, id);
+  }
+  
   public deleteAsset(id: any): Observable<Survey> {
     return this.dataService.delete(this.NAMESPACE, id);
   }

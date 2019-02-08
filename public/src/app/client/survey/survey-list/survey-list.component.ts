@@ -25,6 +25,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   pageSize = 10;
   currentPage = 0;
   totalSize = 0;
+  legth = 0;
   pageEvent;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -55,9 +56,50 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
         this.dataSource = new MatTableDataSource<Element>(response._surveys);
         this.dataSource.paginator = this.paginator;
         this.array = response._surveys;
-        this.totalSize = this.array.length;
+        if(!this.array){
+          this.totalSize = 0;
+        }
+        else {
+          this.totalSize = this.array.length;
+        }
         this.iterator();
       });
+  }
+
+  closeSurvey(id: string) {
+    let r = window.confirm("Close Survey?");
+    if (r == true) {
+      this._surveyService.closeAsset(id).subscribe(res => {
+        console.log("CLOSED SURVEY");
+        if(!res){
+          window.close();
+        }
+        if (true) {
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
+  }
+
+  openSurvey(id: string) {
+    let r = window.confirm("Open Survey?");
+    if (r == true) {
+      return this._surveyService.openAsset(id).subscribe(res => {
+        if(!res){
+          window.close();
+        }
+        if (true) {
+          console.log("SURVEY OPENED");
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
   }
 
   destroySurvey(id: string) {
@@ -91,10 +133,12 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   }
 
   private iterator() {
-    const end = (this.currentPage + 1) * this.pageSize;
-    const start = this.currentPage * this.pageSize;
-    const part = this.array.slice(start, end);
-    this.dataSource = part;
+    if (this.array) {
+      const end = (this.currentPage + 1) * this.pageSize;
+      const start = this.currentPage * this.pageSize;
+      const part = this.array.slice(start, end);
+      this.dataSource = part;
+    }
   }
   
 }

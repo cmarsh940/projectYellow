@@ -1,0 +1,10 @@
+.success-header {
+    width: 100;
+    text-align: center;
+    color: orange;
+}
+
+.success-body {
+    padding: 1em;
+    text-align: center;
+}

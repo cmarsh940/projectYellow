@@ -97,3 +97,8 @@ h5 #show {
 #cancel-subscription {
     margin: 0!important;
 }
+
+#disable {
+    color: red;
+    font-size: smaller;
+}

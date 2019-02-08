@@ -18,6 +18,8 @@ import { SubscriptionErrorComponent } from './subscription-error/subscription-er
 import { PrivateSurveyComponent } from './private-survey/private-survey.component';
 import { SuccessComponent } from './success/success.component';
 import { SurveyErrorComponent } from './survey-error/survey-error.component';
+import { SurveyClosedComponent } from './survey-closed/survey-closed.component';
+import { PoweredByComponent } from '../layout/powered-by/powered-by.component';
 
 @NgModule({
   imports: [
@@ -38,8 +40,9 @@ import { SurveyErrorComponent } from './survey-error/survey-error.component';
     ViewSurveyComponent, 
     ListSurveysComponent, 
     VerifiedComponent, 
-    SubscriptionErrorComponent, 
-    PrivateSurveyComponent, SuccessComponent, SurveyErrorComponent
+    SubscriptionErrorComponent,
+    PoweredByComponent, 
+    PrivateSurveyComponent, SuccessComponent, SurveyErrorComponent, SurveyClosedComponent
   ]
 })
 export class LandingModule { }

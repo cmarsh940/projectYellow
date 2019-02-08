@@ -32,7 +32,7 @@
       <div class="header-text">
         <h3>{{currentClient.firstName}} {{currentClient.lastName}}</h3>
         <h5>{{currentClient.businessName}}</h5>
-
+        <a (click)="closeAccount(currentClient._id)" id="disable">disable account</a>
       </div>
     </div>
     <div class="content">
