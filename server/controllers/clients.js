@@ -190,9 +190,9 @@ class ClientsController {
         return res.json("____ AUTHENTICATE ERROR ____" + err);
       }
       console.log("******  REQUESTED RESET  *******", client.requestedReset);
-      if (client.requestedReset) {
-        console.log("____ CLIENT NEEDS TO RESET PASSWORK ____", err);
-        return res.json(err);
+      if (client.requestedReset || !client.a) {
+        console.log("____ CLIENT NEEDS TO RESET PASSWORK ____");
+        return res.json(false);
       }
 
       if (client && client.authenticate(req.body.password)) {
