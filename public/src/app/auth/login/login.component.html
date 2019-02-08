@@ -59,16 +59,14 @@
     </mat-divider>
 
     <div class="social">
-      <mat-list>
-          <button mat-list-item (click)="submitLogin()" id="FB-button">
-            <mat-icon mat-list-icon svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
-            <span mat-line class="socialText">Continue with Facebook</span>
-          </button>
-          <button mat-list-item id="glogin">
-            <mat-icon mat-list-icon svgIcon="google" aria-label="Google Icon"></mat-icon>
-            <span mat-line class="socialText">Sign in with Google</span>
-          </button>
-      </mat-list>
+      <button mat-raised-button (click)="submitLogin()" id="FB-button">
+        <mat-icon matPrefix svgIcon="facebook" aria-label="Facebook Icon"></mat-icon>
+        <span class="socialText">Sign in with Facebook</span>
+      </button>
+      <button mat-raised-button id="glogin">
+        <mat-icon matPrefix svgIcon="google" aria-label="Google Icon"></mat-icon>
+        <span class="socialText">Sign in with Google</span>
+      </button>
     </div>
 
   </div>

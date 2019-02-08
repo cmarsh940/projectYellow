@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const IncentiveSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
     drawDate: {
         type: Date,
+        required: true
+    },
+    name: {
+        type: String,
         required: true
     },
     participants: {
@@ -19,16 +19,16 @@ const IncentiveSchema = new mongoose.Schema({
         select: false,
         default: []
     },
-    _survey: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Survey"
-    },
     winner: {
         type: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
         select: false
+    },
+    _survey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Survey"
     }
 }, { timestamps: true });
 

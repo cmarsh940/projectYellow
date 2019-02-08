@@ -65,6 +65,10 @@ module.exports = function (app) {
         validJWTNeeded,
         Clients.update
     ]);
+    app.put('/api/disableC/:id', [
+        validJWTNeeded,
+        Clients.disable
+    ]);
     app.put('/api/clients/verifyemail/:id', Clients.updateVerifiedEmail);
     app.get('/sessions', Clients.session);
 

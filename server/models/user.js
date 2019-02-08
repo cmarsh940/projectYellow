@@ -1,15 +1,27 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    answeredSurvey: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     answers: [String],
-    name: {
+    email: {
         type: String,
-        maxlength: [250, "Name cannot be greater then 250 characters"],
         lowercase: true,
         trim: true
     },
-    email: {
+    emailSent:{
+        type: Boolean,
+        default: false
+    },
+    messageSID: {
+        type: String
+    },
+    name: {
         type: String,
+        maxlength: [250, "Name cannot be greater then 250 characters"],
         lowercase: true,
         trim: true
     },
@@ -19,29 +31,21 @@ const UserSchema = new mongoose.Schema({
         maxlength: 12,
         lowercase: true,
     },
+    submissionDate: {
+        type: Date
+    },
+    surveyOwner: { type: mongoose.Schema.Types.ObjectId, ref: "Client" },
     textSent: {
         type: Boolean,
         required: true,
         default: false
-    },
-    answeredSurvey: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
-    messageSID: {
-        type: String
-    },
-    submissionDate: {
-        type: Date
     },
     private: {
         type: Boolean,
         default: false
     },
     _meta: { type: mongoose.Schema.Types.ObjectId, ref: "Meta" },
-    surveyOwner: { type: mongoose.Schema.Types.ObjectId, ref: "Client" },
-    _survey: { type: mongoose.Schema.Types.ObjectId, ref: "Survey" },
+    _survey: { type: mongoose.Schema.Types.ObjectId, ref: "Survey" }
 }, {
     timestamps: true
 });

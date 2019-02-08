@@ -78,51 +78,52 @@
         </mat-error>
       </mat-form-field>
         
+      <div class="input-container">
         <!-- PASSWORD -->
-        <div class="input-container">
-          <mat-hint align="start"><strong>8+ charactors, 1 uppercase, 1 number</strong> </mat-hint>
-          <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <input matInput type="password" [formControl]="passwordFormControl" [errorStateMatcher]="matcher" required autocomplete="new-password">
-            <mat-error *ngIf="passwordFormControl.hasError('required')">
-              Password is <strong>required</strong>
-            </mat-error>
-            <mat-error *ngIf="passwordFormControl.hasError('minlength')">
-              Password is to short
-            </mat-error>
-            <mat-error *ngIf="passwordFormControl.hasError('maxlength')">
-              Password cannot be longer then 250 charactors
-            </mat-error>
-          </mat-form-field>
-        
-          <!-- CONFIRM PASSWORD -->
-          <mat-form-field appearance="outline">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput type="password" formControlName="confirm_pass" required autocomplete="new-password-confirmation" >
-          </mat-form-field>
-        </div>
-
-        <div class="label">
-          <b class="text-center">Contact Info</b>
-        </div>
-
-        <!-- PHONE -->
         <mat-form-field appearance="outline">
-          <mat-label>Phone #</mat-label>
-          <input matInput type="tel" [formControl]="phoneFormControl"  [errorStateMatcher]="matcher" autocomplete='tel-national'>
-          <mat-error *ngIf="phoneFormControl.hasError('required')">
-            Phone number is <strong>required</strong>
+          <mat-hint align="start"><strong>8+ charactors, 1 uppercase, 1 number</strong> </mat-hint>
+          <mat-label>Password</mat-label>
+          <input matInput type="password" [formControl]="passwordFormControl" [errorStateMatcher]="matcher" required autocomplete="new-password">
+          <mat-error *ngIf="passwordFormControl.hasError('required')">
+            Password is <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="phoneFormControl.errors?.pattern">
-            Phone number cannot have letters or symbols in it.
+          <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+            Password is to short
           </mat-error>
-          <mat-error *ngIf="phoneFormControl.hasError('minlength')">
-            Please enter a valid phone number
-          </mat-error>
-          <mat-error *ngIf="phoneFormControl.hasError('maxlength')">
-            Please enter a valid phone number
+          <mat-error *ngIf="passwordFormControl.hasError('maxlength')">
+            Password cannot be longer then 250 charactors
           </mat-error>
         </mat-form-field>
+      
+        <!-- CONFIRM PASSWORD -->
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" formControlName="confirm_pass" required autocomplete="new-password-confirmation" >
+        </mat-form-field>
+      </div>
+
+      <div class="label">
+        <b class="text-center">Contact Info</b>
+      </div>
+
+      <!-- PHONE -->
+      <mat-form-field appearance="outline">
+        <mat-hint align="start"><strong>No spaces Example: 9408088285</strong> </mat-hint>
+        <mat-label>Phone #</mat-label>
+        <input matInput type="tel" [formControl]="phoneFormControl"  [errorStateMatcher]="matcher" autocomplete='tel-national'>
+        <mat-error *ngIf="phoneFormControl.hasError('required')">
+          Phone number is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="phoneFormControl.errors?.pattern">
+          Phone number cannot have letters or symbols in it.
+        </mat-error>
+        <mat-error *ngIf="phoneFormControl.hasError('minlength')">
+          Please enter a valid phone number
+        </mat-error>
+        <mat-error *ngIf="phoneFormControl.hasError('maxlength')">
+          Please enter a valid phone number
+        </mat-error>
+      </mat-form-field>
     
       <!-- ADDRESS -->
       <div class="input-container">

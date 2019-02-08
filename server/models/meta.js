@@ -22,6 +22,10 @@ const MetaSchema = new mongoose.Schema({
     referer: {
         type: String
     },
+    _client: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Client"
+    },
     _survey: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Survey"       
@@ -29,10 +33,6 @@ const MetaSchema = new mongoose.Schema({
     _user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-    },
-    _client: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Client"
     }
 }, { timestamps: true });
 

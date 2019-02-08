@@ -48,6 +48,7 @@ form {
     margin-top: 1em;
     background-color: #FFFFFF ;
     width: 100%;
+    display: flex;
 }
 
 .socialText {
@@ -56,7 +57,7 @@ form {
     color: #000000 / 0,0,0(54%);
 }
 
-#FB-button, #glogin {
+#FB-button {
     display: block;
 }
 
@@ -104,4 +105,8 @@ a {
 
 #reset {
     color: red;
+}
+
+#FB-button mat-icon, #glogin mat-icon {
+    margin: 0 1em 0 0;
 }

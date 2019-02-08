@@ -24,6 +24,11 @@ export class ProfileService {
     return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
   }
 
+  public disableParticipant(id: any): Observable<Client> {
+    let NAMESPACE = "disableC";
+    return this.dataService.cancel(NAMESPACE, id);
+  }
+
   public deleteParticipant(id: any): Observable<Client> {
     return this.dataService.delete(this.NAMESPACE, id);
   }

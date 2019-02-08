@@ -2,40 +2,31 @@ const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs");
 const unique = require('mongoose-unique-validator');
 
-const root = 'https://surveysbyme.s3.us-west-2.amazonaws.com/Profile/';
-
 const ClientSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: [true, 'First name cannot be blank'],
-    maxlength: [250, "Max characters reached. please stay below 250 characters"],
-    trim: true,
-    validate: {
-      validator: function (name) {
-        return /^[a-zA-Z]+$/.test(name);
-      },
-      message: "First name cannot contain numbers or symbols."
-    }
+  a: {
+    type: Boolean,
+    default: true
   },
-
-  lastName: {
+  address: {
     type: String,
-    required: [true, 'Last name cannot be blank'],
-    maxlength: [250, "Max characters reached. please stay below 250 characters"],
-    trim: true,
-    validate: {
-      validator: function (name) {
-        return /^[a-zA-Z]+$/.test(name);
-      },
-      message: "Last name cannot contain numbers or symbols."
-    }
   },
-
+  billingCycle: {
+    type: Number,
+    enum: [1, 12],
+    select: false
+  },
   businessName: {
     type: String,
-    trim:true
+    trim: true
   },
-
+  city: {
+    type: String,
+    trim: true
+  },
+  datesPaid: {
+    type: Array,
+    select: false
+  },
   email: {
     type: String,
     required: [true, 'Email cannot be blank'],
@@ -51,44 +42,40 @@ const ClientSchema = new mongoose.Schema({
       message: "Please enter a valid email"
     }
   },
-
+  firstName: {
+    type: String,
+    required: [true, 'First name cannot be blank'],
+    maxlength: [250, "Max characters reached. please stay below 250 characters"],
+    trim: true,
+    validate: {
+      validator: function (name) {
+        return /^[a-zA-Z]+$/.test(name);
+      },
+      message: "First name cannot contain numbers or symbols."
+    }
+  },
   grt: {
     type: String,
     select: false
   },
-
-  phone: {
+  lastName: {
     type: String,
+    required: [true, 'Last name cannot be blank'],
+    maxlength: [250, "Max characters reached. please stay below 250 characters"],
     trim: true,
-    minlength: 10,
-    maxlength: 12,
-    lowercase: true,
     validate: {
-      validator: function (phone) {
-        return /^\+?[1-9]\d{1,14}$/.test(phone);
+      validator: function (name) {
+        return /^[a-zA-Z]+$/.test(name);
       },
-      message: "Please enter a valid phone number"
+      message: "Last name cannot contain numbers or symbols."
     }
   },
-
-  address: {
-    type: String,
+  lastUseDate: {
+    type: Date
   },
-
-  city: {
-    type: String,
-    trim: true
+  paidThroughDate: {
+    type: Date
   },
-
-  state: {
-    type: String,
-    trim: true
-  },
-
-  zip: {
-    type: Number,
-  },
-
   password: {
     type: String,
     required: [true, "Password cannot be blank"],
@@ -102,20 +89,31 @@ const ClientSchema = new mongoose.Schema({
       message: "Password must have at least 1 number, and 1 uppercase"
     }
   },
-
+  paymentDate: {
+    type: Date,
+    required: true,
+    default: Date.now()
+  },
+  paymentToken: {
+    type: String,
+    select: false
+  },
+  phone: {
+    type: String,
+    trim: true,
+    minlength: 10,
+    maxlength: 12,
+    lowercase: true,
+    validate: {
+      validator: function (phone) {
+        return /^\+?[1-9]\d{1,14}$/.test(phone);
+      },
+      message: "Please enter a valid phone number"
+    }
+  },
   picture: {
     type: String,
   },
-
-  registerPlatform: {
-    type: String,
-    enum: ['E', 'F', 'G'],
-    required: true,
-    uppercase: true,
-    trim: true,
-    default: "E"
-  },
-
   platformId: {
     type: String
   },
@@ -123,7 +121,21 @@ const ClientSchema = new mongoose.Schema({
   platformAuth: {
     type: String
   },
-
+  registerPlatform: {
+    type: String,
+    enum: ['E', 'F', 'G'],
+    required: true,
+    uppercase: true,
+    trim: true,
+    default: 'E'
+  },
+  resetId: {
+    type: String
+  },
+  requestedReset: {
+    type: Boolean,
+    default: false
+  },
   role: {
     type: String,
     enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
@@ -132,69 +144,38 @@ const ClientSchema = new mongoose.Schema({
     trim: true,
     default: "CLIENT"
   },
-  
-  lastUseDate: {
-    type: Date
-  },
-  
-  paymentDate: {
-    type: Date,
-    required: true,
-    default: Date.now()
-  },
-
-  paidThroughDate: {
-    type: Date
-  },
-
-  paymentToken: {
+  state: {
     type: String,
-    select: false
+    trim: true
   },
-
-  datesPaid:{
-    type: Array,
-    select: false
-  },
-
-  billingCycle: {
-    type: Number,
-    enum: [1, 12],
-    select: false
-  },
-
-  _subscription: {
-    type: String,
-    enum: ['FREE', 'BASIC', 'PRO', 'ELITE', 'CANCELED'],
-    required: true,
-    uppercase: true,
-    trim: true,
-    default: 'FREE'
-  },
-
   subscriptionId: {
     type: String,
     default: ""
   },
-
   subscriptionStatus: {
     type: String,
     default: "Trial",
   },
-
   surveyCount: {
     type: Number,
     default: 5
   },
-  
-  _surveys: {
+  users: {
     type: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Survey"
+        ref: "User"
       }
     ],
     default: []
+  },
+  verified: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  zip: {
+    type: Number,
   },
   _meta: {
     type: [
@@ -206,31 +187,6 @@ const ClientSchema = new mongoose.Schema({
     select: false,
     default: []
   },
-
-  users: {
-    type: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-      }
-    ],
-    default: []
-  },
-
-  verified: {
-    type: Boolean,
-    required: true,
-    default: false
-  },
-  resetId:{
-    type: String
-  },
-  requestedReset: {
-    type: Boolean,
-    select: false,
-    default: false
-  },
-  
   _resetRequest: {
     type: [
       {
@@ -241,7 +197,23 @@ const ClientSchema = new mongoose.Schema({
     select: false,
     default: []
   },
-
+  _subscription: {
+    type: String,
+    enum: ['FREE', 'BASIC', 'PRO', 'ELITE', 'CANCELED'],
+    required: true,
+    uppercase: true,
+    trim: true,
+    default: 'FREE'
+  },
+  _surveys: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Survey"
+      }
+    ],
+    default: []
+  }
 }, {
     timestamps: true
   });
