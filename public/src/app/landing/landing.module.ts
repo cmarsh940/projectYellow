@@ -1,3 +1,4 @@
+import { MainFooterComponent } from '@shared/layouts/main-footer/main-footer.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -10,10 +11,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { VerifiedComponent } from './verified/verified.component';
 import { SuccessComponent } from './success/success.component';
-import { MainFooterComponent } from '@shared/layouts/main-footer/main-footer.component';
 import { PoweredByComponent } from '@shared/powered-by/powered-by.component';
 import { MaterialModule } from 'app/material/material.module';
 import { TranslateModule } from '@ngx-translate/core';
+import { SubscriptionErrorComponent } from './errors/subscription-error/subscription-error.component';
+import { SurveyErrorComponent } from './errors/survey-error/survey-error.component';
+import { SurveyClosedComponent } from './errors/survey-closed/survey-closed.component';
+import { MainNavComponent } from '@shared/layouts/main-nav/main-nav.component';
 
 @NgModule({
   imports: [
@@ -32,6 +36,11 @@ import { TranslateModule } from '@ngx-translate/core';
     HomeComponent,
     VerifiedComponent,
     PoweredByComponent,
+    MainNavComponent,
+    MainFooterComponent,
+    SubscriptionErrorComponent,
+    SurveyErrorComponent,
+    SurveyClosedComponent,
     SuccessComponent,
   ]
 })

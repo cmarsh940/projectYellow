@@ -6,45 +6,58 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingComponent } from './landing.component';
 import { PricingComponent } from './pricing/pricing.component';
 import { SuccessComponent } from './success/success.component';
+import { SurveyClosedComponent } from './errors/survey-closed/survey-closed.component';
+import { SurveyErrorComponent } from './errors/survey-error/survey-error.component';
+import { SubscriptionErrorComponent } from './errors/subscription-error/subscription-error.component';
+import { MetaGuard } from '@ngx-meta/core';
 
 
 const routes: Routes = [
   {
     path: '',
     component: LandingComponent,
-    data: {
-      meta: {
-        title: 'landing.title',
-        description: 'landing.text',
-        override: true,
-      },
-    },
+    canActivateChild: [MetaGuard],
     children: [
       {
         path: '',
-        pathMatch: "full",
+        pathMatch: 'full',
         component: HomeComponent
       },
       {
-        path: "about",
-        pathMatch: "full",
+        path: 'about',
+        pathMatch: 'full',
         component: AboutComponent
       },
       {
-        path: "rights",
-        pathMatch: "full",
+        path: 'rights',
+        pathMatch: 'full',
         component: RightsComponent
       },
       {
-        path: "pricing",
-        pathMatch: "full",
+        path: 'pricing',
+        pathMatch: 'full',
         component: PricingComponent
       },
       {
-        path: "success",
-        pathMatch: "full",
+        path: 'success',
+        pathMatch: 'full',
         component: SuccessComponent
-      }
+      },
+      {
+        path: 'closed-survey',
+        pathMatch: 'full',
+        component: SurveyClosedComponent
+      },
+      {
+        path: 'survey-error',
+        pathMatch: 'full',
+        component: SurveyErrorComponent
+      },
+      {
+        path: 'subscription-error',
+        pathMatch: 'full',
+        component: SubscriptionErrorComponent
+      },
     ]
   }
 ];

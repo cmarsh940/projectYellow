@@ -1,4 +1,3 @@
-import { MainFooterComponent } from '@shared/layouts/main-footer/main-footer.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -13,6 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule, MaterialModule],
-  declarations: [MainFooterComponent, FooterComponent, SidebarComponent, ToolbarComponent, WrapperComponent],
+  declarations: [ FooterComponent, SidebarComponent, ToolbarComponent, WrapperComponent],
 })
 export class LayoutsModule {}
