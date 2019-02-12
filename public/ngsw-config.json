@@ -5,10 +5,9 @@
     "installMode": "prefetch",
     "resources": {
       "files": [
-        "/favicon.ico",
+        "/favicon.png",
         "/index.html",
         "/*.css",
-        "/*.scss",
         "/*.js"
       ]
     }
@@ -18,8 +17,7 @@
     "updateMode": "prefetch",
     "resources": {
       "files": [
-        "/assets/**",
-        "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+        "/assets/**"
       ]
     }
   }]

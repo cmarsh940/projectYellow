@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 
+import { MetaService } from '@ngx-meta/core';
+
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  template: '<router-outlet></router-outlet>',
 })
 export class AppComponent {
-  title = 'Surveys by ME';
+  constructor(private readonly meta: MetaService) {
+    this.meta.setTag('og:title', 'home ctor');
+  }
 }

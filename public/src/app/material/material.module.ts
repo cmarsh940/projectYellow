@@ -37,11 +37,9 @@ import {
 } from '@angular/material';
 import { ObserversModule } from '@angular/cdk/observers';
 import { ScrollingModule, ScrollDispatchModule } from '@angular/cdk/scrolling';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
-    DragDropModule,
     MatAutocompleteModule,
     MatBottomSheetModule,
     MatButtonModule,
@@ -78,7 +76,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ScrollDispatchModule
   ],
   exports: [
-    DragDropModule,
     MatAutocompleteModule,
     MatBottomSheetModule,
     MatButtonModule,
@@ -115,14 +112,14 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ScrollDispatchModule
   ],
   providers: [
-    { 
+    {
       provide: MAT_CHECKBOX_CLICK_ACTION,
-      useValue: "check"
+      useValue: 'check'
     },
-    { 
-      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, 
-      useValue: { 
-        duration: 2500 
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        duration: 2500
       }
     }
   ]

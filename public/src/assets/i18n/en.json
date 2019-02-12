@@ -1,0 +1,34 @@
+{
+  "loading": "Loading",
+  "sidebar": {
+    "landing": "Landing",
+    "home": "Home",
+    "mock": "Mock",
+    "back-http": "Back http",
+    "static-back-http": "Static `Back http`",
+    "async-http": "http async"
+  },
+  "landing": {
+    "title": "Surveys by ME",
+    "text": "This is the surveys by ME Landing page!"
+  },
+  "home": {
+    "title": "Home page",
+    "text": "This is some text in English at home page"
+  },
+  "mock": {
+    "title": "Mock page",
+    "text": "This is some text in English at mock page"
+  },
+  "back-http": {
+    "title": "Http request page",
+    "text": "This is some text in English at back http page",
+    "delay": "delay back get 3 sec:",
+    "post": "POST request:",
+    "original-url": "Origin URL:"
+  },
+  "not-found": {
+    "title": "Not Found",
+    "text": "Page Not Found"
+  }
+}

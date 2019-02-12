@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { utils } from 'protractor';
 
 
 @Component({
@@ -9,7 +8,6 @@ import { utils } from 'protractor';
 })
 export class HomeComponent implements OnInit {
   step = 0;
-  location;
   
 
   setStep(index: number) {
@@ -28,7 +26,5 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('%c Welcome to Surveys by ME', 'color:orange; font-weight:bold;')
-    console.log("DEVICE", window.clientInformation.platform);
-    console.log("BROWSER", window.clientInformation.vendor);
   }
 }

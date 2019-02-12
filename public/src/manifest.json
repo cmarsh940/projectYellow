@@ -1,8 +1,8 @@
 {
-  "name": "Surveys by ME",
-  "short_name": "ME",
-  "theme_color": "#ffd600",
-  "background_color": "#000000",
+  "name": "public",
+  "short_name": "public",
+  "theme_color": "#FFD600",
+  "background_color": "#fafafa",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",

@@ -1,114 +1,45 @@
-import { AddUserComponent } from './client/user/add-user/add-user.component';
-
-// MODULES
-import { NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-import { ClientModule } from './client/client.module';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
-import { LandingModule } from './landing/landing.module';
 import { MaterialModule } from './material/material.module';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { OverviewModule } from './overview/overview.module';
-
-// COMPONENTS
+// angular
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+// libs
+import { CookieService, CookieModule } from 'ngx-cookie';
+import { TransferHttpCacheModule } from '@nguniversal/common';
+// shared
+import { SharedModule } from '@shared/shared.module';
+import { TranslatesService } from '@shared/translates';
+// components
+import { AppRoutes } from './app.routing';
 import { AppComponent } from './app.component';
-import { EditClientComponent } from './client/profile/edit-client/edit-client.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { RightsComponent } from './landing/rights/rights.component';
-import { SubscriptionOverlayComponent } from './client/profile/subscription-overlay/subscription-overlay.component';
+import { UniversalStorage } from '@shared/storage/universal.storage';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-// ENVIORMENTS
-import { environment } from '../environments/environment';
-
-// INTERCEPTORS
-import { httpInterceptorProviders } from './global/interceptors';
-
-// SERVICES
-import { AuthService } from './auth/auth.service';
-import { ClientService } from './client/client.service';
-import { HttpErrorHandler } from './global/services/http-error-handler.service';
-import { MessagesService } from './global/services/messages.service';
-import { OverviewService } from './overview/overview.service';
-import { RequestCache, RequestCacheWithMap } from './global/services/cache.service';
-import { SubscriptionService } from './overview/subscription-report/subscription.service';
-import { SurveyService } from './client/survey/survey.service';
-import { SurveyCategoryService } from './overview/survey-category-report/survey-category.service';
-import { UploadService } from './global/services/upload.service';
-import { UserService } from './client/user/user.service';
-
-
-// VALIDATORS
-import { ForbiddenValidatorDirective } from './global/validators/forbidden-name.directive';
-
-// GUARDS
-import { AuthGuard } from './global/guards/auth.guard';
-import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
-import { FeedbackComponent } from './layout/feedback/feedback.component';
-import { RegisterDialogComponent } from './auth/register-dialog/register-dialog.component';
-import { AuthInterceptor } from './global/interceptors/auth-interceptor';
-import { PageNotFoundComponent } from './layout/page-not-found/page-not-found.component';
-import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
-
-
+export function initLanguage(translateService: TranslatesService): Function {
+  return (): Promise<any> => translateService.initLanguage();
+}
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    ForbiddenValidatorDirective,
-    FeedbackComponent,
-    RegisterDialogComponent,
-    PageNotFoundComponent,
-    ResetPasswordComponent
-  ],
-
   imports: [
-    BrowserModule,
-    LandingModule,
-    ClientModule,
+    BrowserModule.withServerTransition({ appId: 'my-app' }),
+    TransferHttpCacheModule,
     HttpClientModule,
-    OverviewModule,
-    AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
-    BrowserAnimationsModule,
+    RouterModule,
+    AppRoutes,
     MaterialModule,
-    ServiceWorkerModule.register("/ngsw-worker.js", {
-      enabled: environment.production
-    })
+    BrowserAnimationsModule,
+    CookieModule.forRoot(),
+    SharedModule.forRoot(),
   ],
+  declarations: [AppComponent],
   providers: [
-    AuthGuard,
-    HttpErrorHandler,
-    AuthService,
-    MessagesService,
-    ClientService,
-    SurveyService,
-    SurveyCategoryService,
-    UserService,
-    UploadService,
-    OverviewService,
-    SubscriptionService,
-    { provide: RequestCache, useClass: RequestCacheWithMap },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
-    // httpInterceptorProviders,
+    CookieService,
+    UniversalStorage,
+    { provide: APP_INITIALIZER, useFactory: initLanguage, multi: true, deps: [TranslatesService] },
   ],
-  entryComponents: [
-    AddUserComponent,
-    EditClientComponent,
-    FeedbackComponent,
-    SubscriptionOverlayComponent,
-    RegisterDialogComponent,
-    RightsComponent,
-    UploadUsersComponent
-  ],
-  bootstrap: [AppComponent]
 })
 export class AppModule {}
