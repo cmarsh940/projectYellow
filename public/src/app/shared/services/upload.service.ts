@@ -3,19 +3,20 @@ import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from './http-error-handler.service';
 import { HttpClient } from '@angular/common/http';
+import { envUrl } from 'app/envUrl';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UploadService {
-  private actionUrl = '/api/';
+  private actionUrl = 'api/';
   private handleError: HandleError;
 
   constructor(
     private http: HttpClient,
     httpErrorHandler: HttpErrorHandler,
   ) {
-    this.actionUrl = `${this.actionUrl}`;
+    this.actionUrl = `${envUrl}${this.actionUrl}`;
     this.handleError = httpErrorHandler.createHandleError('UploadService');
   }
 

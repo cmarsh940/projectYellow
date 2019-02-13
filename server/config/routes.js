@@ -39,6 +39,7 @@ async function validJWTNeeded(req, res, next) {
     } 
     else {
         console.log("ELSE");
+        // return res.status(401).send();
         return next();
     }
 };

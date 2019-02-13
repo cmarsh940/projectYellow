@@ -19,23 +19,23 @@ const app = express();
 
 app.use(helmet());
 
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:* always');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('X-Content-Type-Options', 'nosniff');
-    res.header('X-Frame-Options', 'DENY');
-    res.header('Referrer-Policy', 'no-referrer-when-downgrade');
-    res.header('Content-Security-Policy', csp);
-    res.header('Strict-Transport-Security', 'max-age=7889238; includeSubDomains; preload');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.header('Access-Control-Expose-Headers', 'Content-Length');
-    res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range, X-XSRF-TOKEN');
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200); 
-    } else { 
-        return next(); 
-    }      
-});
+// app.use(function (req, res, next) {
+//     res.header('Access-Control-Allow-Origin', 'http://localhost:* always');
+//     res.header('Access-Control-Allow-Credentials', true);
+//     res.header('X-Content-Type-Options', 'nosniff');
+//     res.header('X-Frame-Options', 'DENY');
+//     res.header('Referrer-Policy', 'no-referrer-when-downgrade');
+//     res.header('Content-Security-Policy', csp);
+//     res.header('Strict-Transport-Security', 'max-age=7889238; includeSubDomains; preload');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.header('Access-Control-Expose-Headers', 'Content-Length');
+//     res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range, X-XSRF-TOKEN');
+//     if (req.method === 'OPTIONS') {
+//         return res.sendStatus(200); 
+//     } else { 
+//         return next(); 
+//     }      
+// });
 
 
 app.use(compression()); //Compress all routes
@@ -49,7 +49,7 @@ app.use(busboyBodyParser());
 // setup the logger
 app.use(morgan('dev'));
 
-app.set('trust proxy', true) // trust first proxy
+// app.set('trust proxy', true) // trust first proxy
 
 app.use(session({
     secret: config.secret,

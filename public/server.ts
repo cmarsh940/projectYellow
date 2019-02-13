@@ -101,6 +101,11 @@ app.engine(
 app.set('view engine', 'html');
 app.set('views', 'src');
 
+app.get('/api/*', (req, res) => {
+  console.log('req: %j, body: %j', req, req.body);
+  res.status(404).send('data requests are not supported');
+});
+
 app.get('*.*', express.static(path.join(__dirname, '.', 'dist')));
 app.get(ROUTES, express.static(path.join(__dirname, '.', 'static')));
 

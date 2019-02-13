@@ -4,6 +4,7 @@ import { catchError, map, retry } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 import { MessagesService } from './messages.service';
+import { envUrl } from 'app/envUrl';
 
 
 
@@ -13,7 +14,7 @@ import { MessagesService } from './messages.service';
 export class DataService<Type> {
 
   private resolveSuffix = '?resolve=true';
-  private actionUrl = '/api/';
+  private actionUrl = 'api/';
   private handleError: HandleError;
 
   constructor(
@@ -21,7 +22,7 @@ export class DataService<Type> {
     httpErrorHandler: HttpErrorHandler,
     private messageService: MessagesService,
   ) {
-    this.actionUrl = `${this.actionUrl}`;
+    this.actionUrl = `${envUrl}${this.actionUrl}`;
     this.handleError = httpErrorHandler.createHandleError('Dataservice');
   }
 

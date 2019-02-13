@@ -10,6 +10,7 @@ import { SurveyClosedComponent } from './errors/survey-closed/survey-closed.comp
 import { SurveyErrorComponent } from './errors/survey-error/survey-error.component';
 import { SubscriptionErrorComponent } from './errors/subscription-error/subscription-error.component';
 import { MetaGuard } from '@ngx-meta/core';
+import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 
 
 const routes: Routes = [
@@ -29,14 +30,19 @@ const routes: Routes = [
         component: AboutComponent
       },
       {
+        path: 'pricing',
+        pathMatch: 'full',
+        component: PricingComponent
+      },
+      {
         path: 'rights',
         pathMatch: 'full',
         component: RightsComponent
       },
       {
-        path: 'pricing',
+        path: 'subscription-error',
         pathMatch: 'full',
-        component: PricingComponent
+        component: SubscriptionErrorComponent
       },
       {
         path: 'success',
@@ -44,7 +50,7 @@ const routes: Routes = [
         component: SuccessComponent
       },
       {
-        path: 'closed-survey',
+        path: 'survey-closed',
         pathMatch: 'full',
         component: SurveyClosedComponent
       },
@@ -54,10 +60,10 @@ const routes: Routes = [
         component: SurveyErrorComponent
       },
       {
-        path: 'subscription-error',
+        path: 'survey-list',
         pathMatch: 'full',
-        component: SubscriptionErrorComponent
-      },
+        component: ListSurveysComponent
+      }
     ]
   }
 ];

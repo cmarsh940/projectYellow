@@ -10,6 +10,7 @@ import { environment } from '../../environments/environment';
 import { Client } from '@shared/models/client';
 import { HandleError, HttpErrorHandler } from '@shared/services/http-error-handler.service';
 import { MessagesService } from '@shared/services/messages.service';
+import { envUrl } from 'app/envUrl';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthService {
   currentClient: Client = null;
 
   private handleError: HandleError;
-  private actionUrl = '/api/';
+  private actionUrl = 'api/';
   private ns = 'clients';
 
   constructor(
@@ -28,6 +29,7 @@ export class AuthService {
     private _router: Router,
     private httpErrorHandler: HttpErrorHandler,
   ) {
+    this.actionUrl = `${envUrl}${this.actionUrl}`;
     this.handleError = httpErrorHandler.createHandleError('AuthService');
   }
 

@@ -18,9 +18,9 @@ export const environment = {
   clientId: '312754153788-acm4ot95aftnmc568nj6mg23fjfq01vh.apps.googleusercontent.com',
 
   // REDIRECTS
-  redirectUrl: 'http://localhost:8000/login',
-  redirectLoginUrl: 'http://localhost:8000/dashboard',
-  redirect404: 'http://localhost:8000/404error',
+  redirectUrl: 'http://localhost:4000/login',
+  redirectLoginUrl: 'http://localhost:4000/dashboard',
+  redirect404: 'http://localhost:4000/404error',
 
   host: 'http://localhost:4000',
 };

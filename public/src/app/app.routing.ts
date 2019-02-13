@@ -22,6 +22,10 @@ const routes: Routes = [
     component: PageNotFoundComponent
   },
   {
+    path: 'overview',
+    redirectTo: 'dashboard'
+  },
+  {
     path: 'dashboard',
     loadChildren: './client/client.module#ClientModule'
   },
@@ -29,6 +33,7 @@ const routes: Routes = [
     path: '',
     loadChildren: './landing/landing.module#LandingModule'
   },
+  { path: '**', redirectTo: '404error' },
 ];
 // must use {initialNavigation: 'enabled'}) - for one load page, without reload
 export const AppRoutes = RouterModule.forRoot(routes, { initialNavigation: 'enabled' });
