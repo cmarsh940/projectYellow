@@ -1,0 +1,22 @@
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-drawer-content {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+img {
+  height: auto;
+  width: 2em;
+}

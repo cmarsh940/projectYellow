@@ -1,30 +1,10 @@
-import { Injectable, Optional, Inject } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError, map, tap, retry } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, map, retry } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 import { MessagesService } from './messages.service';
 
-function getToken() {
-  if (localStorage.getItem('token') === null) {
-    const data = JSON.parse(localStorage.getItem('token'));
-    return data
-  }
-}
-
-function loadToken() {
-  if (localStorage.getItem('token') !== null) {
-    const data = JSON.parse(localStorage.getItem('token'));
-    return data
-  }
-}
-
-const httpOptions = {
-  headers: new HttpHeaders({ 
-    'Content-Type': 'application/json',
-    'Authorization': getToken()
-  })
-};
 
 
 @Injectable({
@@ -32,7 +12,7 @@ const httpOptions = {
 })
 export class DataService<Type> {
 
-  private resolveSuffix = "?resolve=true";
+  private resolveSuffix = '?resolve=true';
   private actionUrl = '/api/';
   private handleError: HandleError;
 
@@ -42,12 +22,11 @@ export class DataService<Type> {
     private messageService: MessagesService,
   ) {
     this.actionUrl = `${this.actionUrl}`;
-    this.handleError = httpErrorHandler.createHandleError("Dataservice");
-    httpOptions;
+    this.handleError = httpErrorHandler.createHandleError('Dataservice');
   }
 
   public getAll(ns: string): Observable<Type[]> {
-    console.log("*** GET ***");
+    console.log('*** GET ***');
     return this.http.get<Type[]>(`${this.actionUrl}${ns}`)
       .pipe(
         retry(3),
@@ -56,9 +35,9 @@ export class DataService<Type> {
   }
 
   public getClientsUsers(ns: string, id: string): Observable<any> {
-    console.log("*** GET CLIENTS USERS ***");
-    console.log("*** CLIENTS NAME SPACE ***", ns);
-    console.log("*** CLIENTS ID ***", id);
+    console.log('*** GET CLIENTS USERS ***');
+    console.log('*** CLIENTS NAME SPACE ***', ns);
+    console.log('*** CLIENTS ID ***', id);
     return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
       map(this.extractData),
       catchError(this.handleError('getSingle', []))
@@ -66,7 +45,7 @@ export class DataService<Type> {
   }
 
   public getSingle(ns: string, id: string): Observable<any> {
-    console.log("*** GET ***");
+    console.log('*** GET ***');
     return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
       catchError(this.handleError('getSingle', []))
     );
@@ -75,8 +54,8 @@ export class DataService<Type> {
   public add(ns: string, asset: any): Observable<any> {
     console.log('Entered DataService add');
     console.log('asset', asset);
-    console.log("*** POST ***");
-    
+    console.log('*** POST ***');
+
     return this.http.post<any>(this.actionUrl + ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('Add', []))
@@ -86,7 +65,7 @@ export class DataService<Type> {
   updateVerification(ns: string, id: string, itemToUpdate: Type): Observable<any> {
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
-    console.log("*** PUT ***");
+    console.log('*** PUT ***');
     return this.http.put<Type>(`${this.actionUrl}${ns}/verifyemail/${id}`, itemToUpdate)
       .pipe(
         catchError(this.handleError('Update Verification', []))
@@ -96,8 +75,8 @@ export class DataService<Type> {
   public update(ns: string, id: string, itemToUpdate: Type): Observable<any> {
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
-    console.log("*** PUT ***");
-    console.log(`${this.actionUrl}${ns}/${id}`)
+    console.log('*** PUT ***');
+    console.log(`${this.actionUrl}${ns}/${id}`);
     return this.http.put<Type>(`${this.actionUrl}${ns}/${id}`, itemToUpdate)
     .pipe(
       catchError(this.handleError('Update', []))
@@ -106,9 +85,9 @@ export class DataService<Type> {
   public uploadParticipants(ns: string, id: string, itemToUpdate: Type): Observable<any> {
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
-    console.log("*** PUT ***");
-    let nameService = "usersUpload";
-    console.log(`${this.actionUrl}${nameService}/${id}`)
+    console.log('*** PUT ***');
+    const nameService = 'usersUpload';
+    console.log(`${this.actionUrl}${nameService}/${id}`);
     return this.http.post<Type>(`${this.actionUrl}${nameService}/${id}`, itemToUpdate)
     .pipe(
       catchError(this.handleError('Upload', []))
@@ -118,9 +97,9 @@ export class DataService<Type> {
   public sendSMS(ns: string, id: string, itemToUpdate: Type): Observable<any> {
     console.log('what is the id?', id);
     console.log('what is the updated item?', itemToUpdate);
-    console.log("*** POST ***");
-    let nameService = "sendSMS";
-    console.log(`${this.actionUrl}${nameService}/${id}`)
+    console.log('*** POST ***');
+    const nameService = 'sendSMS';
+    console.log(`${this.actionUrl}${nameService}/${id}`);
     return this.http.post<Type>(`${this.actionUrl}${nameService}/${id}`, itemToUpdate)
     .pipe(
       catchError(this.handleError('Send SMS', []))
@@ -129,7 +108,7 @@ export class DataService<Type> {
 
   public delete(ns: string, id: string): Observable<any> {
     console.log('what is the id to delete?', id);
-    console.log("*** DELETE ***");
+    console.log('*** DELETE ***');
     return this.http.delete<any>(this.actionUrl + ns + '/' + id).pipe(
       catchError(this.handleError('Delete', []))
     );
@@ -137,15 +116,15 @@ export class DataService<Type> {
 
   public cancel(ns: string, id: string): Observable<any> {
     console.log('what is the id to delete?', id);
-    console.log("*** DELETE ***");
+    console.log('*** DELETE ***');
     return this.http.put<any>(this.actionUrl + ns + '/' + id, id).pipe(
       catchError(this.handleError('Delete', []))
     );
   }
 
   private extractData(res: Response) {
-    let body = res;
-    console.log("EXTRACTDATA ->", body);
+    const body = res;
+    console.log('EXTRACTDATA ->', body);
     return body || {};
   }
 

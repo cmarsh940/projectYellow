@@ -2,20 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from './http-error-handler.service';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-
-function getToken() {
-  if (localStorage.getItem('token') === null) {
-    const data = JSON.parse(localStorage.getItem('token'));
-    return data
-  }
-}
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'multipart/form-data',
-    'Authorization': getToken()
-  })
-};
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -29,16 +16,15 @@ export class UploadService {
     httpErrorHandler: HttpErrorHandler,
   ) {
     this.actionUrl = `${this.actionUrl}`;
-    this.handleError = httpErrorHandler.createHandleError("UploadService");
-    httpOptions;
+    this.handleError = httpErrorHandler.createHandleError('UploadService');
   }
 
   postPortfolio(formData, id: string): Observable<any> {
-    console.log("**** HIT SERVICE");
-    console.log("**** ID", id);
+    console.log('**** HIT SERVICE');
+    console.log('**** ID', id);
 
-    var URL = this.actionUrl + "upload/portfolio/" + id;
-    console.log("**** url", URL);
+    const URL = this.actionUrl + 'upload/portfolio/' + id;
+    console.log('**** url', URL);
     return this.http.post<any>(URL, formData).pipe(
       map(this.extractData),
       catchError(this.handleError('Upload', []))
@@ -46,20 +32,20 @@ export class UploadService {
   }
 
   addEmailSub(formData): Observable<any> {
-    console.log("**** HIT EMAIL SUB SERVICE");
+    console.log('**** HIT EMAIL SUB SERVICE');
 
-    var URL = this.actionUrl + "add/emailSub";
+    const URL = this.actionUrl + 'add/emailSub';
     return this.http.post<any>(URL, formData).pipe(
       map(this.extractData),
       catchError(this.handleError('Email Subscription', []))
     );
   }
-  
-  postFeedback(formData): Observable<any> {
-    console.log("**** HIT UPLOAD SERVICE FOR FEEDBACK");
 
-    var URL = this.actionUrl + "upload/feedback";
-    console.log("**** url", URL);
+  postFeedback(formData): Observable<any> {
+    console.log('**** HIT UPLOAD SERVICE FOR FEEDBACK');
+
+    const URL = this.actionUrl + 'upload/feedback';
+    console.log('**** url', URL);
     return this.http.post<any>(URL, formData).pipe(
       map(this.extractData),
       catchError(this.handleError('Upload', []))
@@ -67,7 +53,7 @@ export class UploadService {
   }
 
   deleteImage(id: any) {
-    var URL = this.actionUrl + "deleteImage";
+    const URL = this.actionUrl + 'deleteImage';
     return this.http.delete(URL, id).pipe(
       catchError(this.handleError('DELETE', []))
     );

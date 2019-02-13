@@ -1,0 +1,150 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+h4 {
+    font-weight: 400!important;
+}
+
+.loaded {
+    width: 100%;
+    margin: auto;
+}
+
+.mat-spinner {
+    margin: 5em auto;
+}
+
+#header {
+    width: 100%;
+    text-align: center;
+}
+
+#top {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+#top a {
+    font-size: x-small;
+}
+
+#volume-chart {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    max-height: 330px;
+    overflow-y: unset;
+    background: #000000d1;
+    color: white;
+    border-radius: 0;
+}
+
+#survey {
+    padding: 1em;
+}
+
+h5 {
+    margin: 0;
+}
+
+#button-group {
+    margin: 2em;
+}
+button {
+    width:100%;
+}
+
+.mat-divider {
+    margin: 1em 0;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+#title {
+    display: inline-flex;
+}
+
+#download-icon {
+    left: 0;
+    padding: 0 1em;
+    position: absolute;
+    display: inline-flex;
+}
+
+table {
+    width: 100%;    
+}
+
+th {
+    display: table-header-group;
+}
+
+td, th {
+    width:100%;
+    text-align: left;
+    padding: 8px;
+}
+
+.answers {
+    border-bottom: 1px solid #dddddd;
+}
+
+.answers .average {
+    width: 100%;
+    text-align: center;
+}
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  width:100%;
+  height: auto;
+}
+
+
+.booleanData {
+    width:100%;
+    display: flex;
+    border-bottom: 1px solid #00000040;
+    word-spacing: 1em;
+}
+
+.mat-card {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.mat-icon, p {
+    display: inline-block;
+}
+
+p{
+    margin: 0 0.5em;
+}
+.small-boxes {
+    width: 100%;
+}
+
+h5 h4 {
+    display: grid;
+}
+
+mat-chip {
+    margin: 1em 0!important;
+    font-weight: 400;
+    font-size: 14px;
+    opacity:1!important;
+}
+
+span {
+    margin-left: 5px;
+}
+
+mat-grid-list {
+    background-color: #2d2d2de3;
+}

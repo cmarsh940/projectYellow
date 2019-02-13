@@ -1,0 +1,207 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <a routerLink="/">
+      <img src="/assets/SurveysbyME.png" id="icon">
+    </a>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="container">
+  <div class="header">
+    <h2 class="mat-h2">Create Your free Account</h2>
+  </div>
+  <div class="form-container">
+    <form [formGroup]="myForm">
+      <div class="label">
+        <b class="text-center">Information</b>
+      </div>
+
+      <!-- FIRST NAME -->
+      <div class="input-container">
+        <mat-form-field appearance="outline" color="primary">
+          <mat-label>First Name</mat-label>
+          <input matInput type="text" [formControl]="firstNameFormControl" [errorStateMatcher]="matcher" required autocomplete="given-name">
+          <mat-error *ngIf="firstNameFormControl.hasError('required')">
+            First name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="firstNameFormControl.errors?.pattern">
+            First name cannot have numbers or symbols
+          </mat-error>
+          <mat-error *ngIf="firstNameFormControl.errors?.forbiddenName">
+            First name cannot be admin
+          </mat-error>
+          <mat-error *ngIf="firstNameFormControl.hasError('maxlength')">
+            First Name cannot be longer then 250 charactors
+          </mat-error>
+        </mat-form-field>
+
+        <!-- LAST NAME -->
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" [formControl]="lastNameFormControl" [errorStateMatcher]="matcher" required autocomplete="family-name">
+          <mat-error *ngIf="lastNameFormControl.hasError('required')">
+            Last name is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="lastNameFormControl.errors?.pattern">
+            Last name cannot have numbers or symbols
+          </mat-error>
+          <mat-error *ngIf="lastNameFormControl.errors?.forbiddenName">
+            last name cannot be admin
+          </mat-error>
+          <mat-error *ngIf="lastNameFormControl.hasError('maxlength')">
+            Last Name cannot be longer then 250 charactors
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- BUSINESS NAME -->
+      <mat-form-field appearance="outline">
+        <mat-label>Business Name <span>- optional</span></mat-label>
+        <input matInput type="text" formControlName="businessName">
+      </mat-form-field>
+
+      <div class="label">
+        <b class="text-center">Login Info</b>
+      </div>
+      
+      <!-- EMAIL -->
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Email" autocomplete="email" [formControl]="emailFormControl" [errorStateMatcher]="matcher">
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('maxlength')">
+          Email cannot be longer then 250 charactors
+        </mat-error>
+      </mat-form-field>
+        
+      <div class="input-container">
+        <!-- PASSWORD -->
+        <mat-form-field appearance="outline">
+          <mat-hint align="start"><strong>8+ charactors, 1 uppercase, 1 number</strong> </mat-hint>
+          <mat-label>Password</mat-label>
+          <input matInput type="password" [formControl]="passwordFormControl" [errorStateMatcher]="matcher" required autocomplete="new-password">
+          <mat-error *ngIf="passwordFormControl.hasError('required')">
+            Password is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+            Password is to short
+          </mat-error>
+          <mat-error *ngIf="passwordFormControl.hasError('maxlength')">
+            Password cannot be longer then 250 charactors
+          </mat-error>
+        </mat-form-field>
+      
+        <!-- CONFIRM PASSWORD -->
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" formControlName="confirm_pass" required autocomplete="new-password-confirmation" >
+        </mat-form-field>
+      </div>
+
+      <div class="label">
+        <b class="text-center">Contact Info</b>
+      </div>
+
+      <!-- PHONE -->
+      <mat-form-field appearance="outline">
+        <mat-hint align="start"><strong>No spaces Example: 9408088285</strong> </mat-hint>
+        <mat-label>Phone #</mat-label>
+        <input matInput type="tel" [formControl]="phoneFormControl"  [errorStateMatcher]="matcher" autocomplete='tel-national'>
+        <mat-error *ngIf="phoneFormControl.hasError('required')">
+          Phone number is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="phoneFormControl.errors?.pattern">
+          Phone number cannot have letters or symbols in it.
+        </mat-error>
+        <mat-error *ngIf="phoneFormControl.hasError('minlength')">
+          Please enter a valid phone number
+        </mat-error>
+        <mat-error *ngIf="phoneFormControl.hasError('maxlength')">
+          Please enter a valid phone number
+        </mat-error>
+      </mat-form-field>
+    
+      <!-- ADDRESS -->
+      <div class="input-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Address</mat-label>
+          <input matInput type="text" [formControl]="addressFormControl" [errorStateMatcher]="matcher"  required  autocomplete="street-address">
+          <mat-error *ngIf="addressFormControl.hasError('required')">
+            Address is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- CITY -->
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput type="text" [formControl]="cityFormControl" [errorStateMatcher]="matcher" required autocomplete="address-level2">
+          <mat-error *ngIf="cityFormControl.hasError('required')">
+            City is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="cityFormControl.errors?.pattern">
+            City name cannot have numbers or symbols in it.
+          </mat-error>
+          <mat-error *ngIf="cityFormControl.hasError('maxlength')">
+            Please enter a valid city name
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- STATE -->
+      <div class="input-container">
+        <mat-form-field appearance="outline">
+          <mat-select [formControl]="stateFormControl" [errorStateMatcher]="matcher" required autocomplete="state" placeholder="Select a State">
+            <mat-option *ngFor="let state of states" [value]="state.abbreviation">{{state.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="stateFormControl.hasError('required')">
+            State is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="stateFormControl.errors?.pattern">
+            State name cannot have numbers or symbols in it.
+          </mat-error>
+          <mat-error *ngIf="stateFormControl.hasError('maxlength')">
+            Please enter a valid state name
+          </mat-error>
+        </mat-form-field>
+
+        <!-- ZIP CODE -->
+        <mat-form-field appearance="outline">
+          <mat-label>Zip Code</mat-label>
+          <input matInput type="text" [formControl]="zipFormControl" [errorStateMatcher]="matcher" required autocomplete="postal-code">
+          <mat-error *ngIf="zipFormControl.hasError('required')">
+            Zip code is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="zipFormControl.errors?.pattern">
+            Zip code cannot have letters or symbols in it.
+          </mat-error>
+          <mat-error *ngIf="zipFormControl.hasError('maxlength')">
+            Please enter a valid zip code
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- SUBMIT BUTTON -->
+      <div class="text-center">
+        <button mat-stroked-button type="submit" color="primary" (click)="addParticipant(myForm)" [disabled]="!myForm.valid">Create Account</button>
+      </div>
+      <div *ngIf="errors.length > 0" class="errors">
+        {{ errors }}
+      </div>
+    </form>
+  </div>
+
+
+
+<mat-toolbar id="bottom" color="primary">
+  <div class="text-center">
+    <p class="mat-h5">Already have a account?
+      <a routerLink="/login" color="accent">Login</a>
+    </p>
+  </div>
+</mat-toolbar>

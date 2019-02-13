@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Router } from '@angular/router';
+import { RegisterDialogComponent } from 'app/auth/register-dialog/register-dialog.component';
 
 @Component({
-  selector: 'main-nav',
+  selector: 'app-main-nav',
   templateUrl: './main-nav.component.html',
   styleUrls: ['./main-nav.component.css']
 })
@@ -17,7 +18,7 @@ export class MainNavComponent {
     .pipe(
       map(result => result.matches)
     );
-    
+
   constructor(
     public dialog: MatDialog,
     private _router: Router,
@@ -25,23 +26,23 @@ export class MainNavComponent {
   ) {}
 
   openDialog() {
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.closeOnNavigation = true;
-    // dialogConfig.maxWidth = '22em'
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.maxWidth = '22em';
 
 
-    // const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if(!result) {
-    //     console.log(`Dialog Error result:`);
-    //     console.log(result);
-    //   } else {
-    //     console.log(`Dialog result:`);
-    //     console.table(result);
-    //     this._router.navigateByUrl("/login");
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) {
+        console.log(`Dialog Error result:`);
+        console.log(result);
+      } else {
+        console.log(`Dialog result:`);
+        console.table(result);
+        this._router.navigateByUrl('/login');
+      }
+    });
   }
-  
+
 }

@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+
+body { margin: 0; font-family: 'Roboto', sans-serif; }
+
+.logout-snackbar {
+  background: #ffd600;
+  color: #000;
+}
+
+.container {
+  padding: 0 0 5em 0!important;
+}
+
+.header {
+    width: 100%;
+    text-align: center;
+}
+
+.mat-tab-label {
+    min-width: 49%!important;
+}
+
+.icon-button {
+    height: 80%;
+    width: auto;
+}

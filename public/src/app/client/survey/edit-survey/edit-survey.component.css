@@ -1,0 +1,43 @@
+form {
+    margin: auto;
+    padding: 1em;
+}
+
+.mat-form-field {
+    display: block;
+}
+
+
+.top-card {
+    width: 100%;
+    display: inline-flex;
+    overflow: hidden;
+}
+
+.required, .clear-icon {
+    display: inline-flex;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-card-header {
+    display: block;
+}
+
+#submit-button {
+    width:100%;
+}
+
+button {
+    width: 100%;
+}
+
+#button-group {
+    margin: 2em 0;
+}
+
+.mat-card {
+    margin: 1em 0;
+}

@@ -1,3 +1,5 @@
+import { ViewSurveyComponent } from './view-survey/view-survey.component';
+import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 import { MainFooterComponent } from '@shared/layouts/main-footer/main-footer.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -42,6 +44,8 @@ import { MainNavComponent } from '@shared/layouts/main-nav/main-nav.component';
     SurveyErrorComponent,
     SurveyClosedComponent,
     SuccessComponent,
+    ListSurveysComponent,
+    ViewSurveyComponent
   ]
 })
 export class LandingModule { }

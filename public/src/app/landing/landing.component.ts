@@ -5,13 +5,13 @@ import { UniversalStorage } from '@shared/storage/universal.storage';
 import { isPlatformServer } from '@angular/common';
 
 @Component({
-  selector: "app-landing",
-  templateUrl: "./landing.component.html",
-  styleUrls: ["./landing.component.css"]
+  selector: 'app-landing',
+  templateUrl: './landing.component.html',
+  styleUrls: ['./landing.component.css']
 })
 export class LandingComponent implements OnInit {
 
-  
+
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

@@ -10,13 +10,15 @@ export type HandleError =
   <T> (operation?: string, result?: T) => (error: HttpErrorResponse) => Observable<T>;
 
 /** Handles HttpClient errors */
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class HttpErrorHandler {
   constructor(private messageService: MessagesService) { }
 
   /** Create curried handleError function that already knows the service name */
   createHandleError = (serviceName = '') => <T>
-    (operation = 'operation', result = {} as T) => this.handleError(serviceName, operation, result);
+    (operation = 'operation', result = {} as T) => this.handleError(serviceName, operation, result)
 
   /**
    * Returns a function that handles Http operation failures.
