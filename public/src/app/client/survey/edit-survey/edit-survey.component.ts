@@ -7,6 +7,8 @@ import { SurveyService } from '../survey.service';
 import { SurveyCategory } from '@shared/models/survey-category';
 import { questionGroups, Question } from '@shared/models/question-group';
 import { Survey } from '@shared/models/survey';
+import { AuthService } from 'app/auth/auth.service';
+import { GenericValidator } from '@shared/validators/generic-validator';
 
 
 
@@ -35,7 +37,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
-  // private genericValidator: GenericValidator;
+  private genericValidator: GenericValidator;
 
   get questions(): FormArray {
     return <FormArray>this.surveyForm.get('questions');
@@ -47,7 +49,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    // private _authService: AuthService,
+    private _authService: AuthService,
     // private _categoryService: SurveyCategoryService,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
@@ -67,7 +69,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
 
     // Define an instance of the validator for use with this form,
     // passing in this form's set of validation messages.
-    // this.genericValidator = new GenericValidator(this.validationMessages);
+    this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
   ngOnInit(): void {
@@ -87,27 +89,27 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-// tslint:disable-next-line: use-life-cycle-interface
+  // tslint:disable-next-line: use-life-cycle-interface
   ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
-    // const controlBlurs: Observable<any>[] = this.formInputElements
-    //   .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+    const controlBlurs: Observable<any>[] = this.formInputElements
+      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
 
-    // // Merge the blur event observable with the valueChanges observable
-    // merge(this.surveyForm.valueChanges, ...controlBlurs)
-    //   .pipe(debounceTime(800)).subscribe(value => {
-    //     this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
-    //   });
+    // Merge the blur event observable with the valueChanges observable
+    merge(this.surveyForm.valueChanges, ...controlBlurs)
+      .pipe(debounceTime(800)).subscribe(value => {
+        this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
+      });
   }
 
   checkPC() {
-    // this.pc = false;
-    // let checked = this._authService.checkPC();
-    // if (checked) {
-    //   this.pc = true
-    // } else {
-    //   this.pc = false;
-    // }
+    this.pc = false;
+    const checked = this._authService.checkPC();
+    if (checked) {
+      this.pc = true;
+    } else {
+      this.pc = false;
+    }
   }
 
   loadCategories() {
@@ -163,7 +165,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
   }
 
-// tslint:disable-next-line: use-life-cycle-interface
+  // tslint:disable-next-line: use-life-cycle-interface
   ngOnChanges() {
     this.rebuildForm();
   }

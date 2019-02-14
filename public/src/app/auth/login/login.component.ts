@@ -1,6 +1,6 @@
 import { AuthService } from './../auth.service';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatIconRegistry } from '@angular/material';
@@ -16,9 +16,7 @@ declare const gapi: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
-  FB: any;
-  gapi: any;
+export class LoginComponent implements OnInit, AfterViewInit {
   errors: string[] = [];
   client: Client;
   myForm: FormGroup;
@@ -72,7 +70,6 @@ export class LoginComponent implements OnInit {
     this.loaded = true;
   }
 
-// tslint:disable-next-line: use-life-cycle-interface
   ngAfterViewInit() {
     gapi.load('auth2', () => {
       this.auth2 = gapi.auth2.init({
@@ -110,7 +107,6 @@ export class LoginComponent implements OnInit {
     };
 
     (function (d, s, id) {
-// tslint:disable-next-line: prefer-const
       let js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
@@ -152,7 +148,6 @@ export class LoginComponent implements OnInit {
       'password': data.password
     };
 
-// tslint:disable-next-line: no-shadowed-variable
     this._authService.authenticate(this.participant).subscribe((data) => {
       if (data) {
         if (data.errors) {
@@ -176,7 +171,6 @@ export class LoginComponent implements OnInit {
       'password': data.password
     };
 
-// tslint:disable-next-line: no-shadowed-variable
     this._authService.authenticate(this.participant).subscribe((data) => {
       if (data) {
         if (data.errors) {
@@ -230,23 +224,23 @@ export class LoginComponent implements OnInit {
   }
 
   verified() {
-    this.loaded = false;
-    const data = this._authService.emailVerified();
-    if (data) {
-      console.log('VERIFIED');
-      this.alreadyLoggedIn();
-    } else {
-      console.log('Need to verify email');
-      return;
-    }
+    // this.loaded = false;
+    // const data = this._authService.emailVerified();
+    // if (data) {
+    //   console.log('VERIFIED');
+    //   this.alreadyLoggedIn();
+    // } else {
+    //   console.log('Need to verify email');
+    //   return;
+    // }
   }
 
   alreadyLoggedIn() {
-    const data = this._authService.checkLoggedIn();
-      if (data) {
-        this.openSnackBar();
-        this._router.navigateByUrl('/dashboard');
-      }
+    // const data = this._authService.checkLoggedIn();
+    //   if (data) {
+    //     this.openSnackBar();
+    //     this._router.navigateByUrl('/dashboard');
+    //   }
   }
 
   openSnackBar() {

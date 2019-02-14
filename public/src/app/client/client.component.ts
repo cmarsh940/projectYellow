@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBarConfig, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition, MatSnackBar } from '@angular/material';
+import { AuthService } from 'app/auth/auth.service';
 
 
 @Component({
@@ -14,47 +15,47 @@ export class ClientComponent implements OnInit {
     horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
     constructor(
-        // private _authService: AuthService,
+        private _authService: AuthService,
         private _router: Router,
         public snackBar: MatSnackBar
     ) { }
 
     ngOnInit() {
-        // this.isLoggedIn();
-        // this.activeSubscription();
-        // this.isValidated();
+        this.isLoggedIn();
+        this.activeSubscription();
+        this.isValidated();
     }
 
-    // isLoggedIn() {
-    //     let verify = this._authService.verify();
-    //     if (!verify) {
-    //         this.openSnackBar();
-    //         this._router.navigateByUrl('/login');
-    //     } else {
-    //         console.log("YOU ARE VERIFIED");
-    //     }
-    // }
+    isLoggedIn() {
+        const verify = this._authService.verify();
+        if (!verify) {
+            this.openSnackBar();
+            this._router.navigateByUrl('/login');
+        } else {
+            console.log('YOU ARE VERIFIED');
+        }
+    }
 
-    // activeSubscription() {
-    //     let subscribed = this._authService.subVerified();
-    //     console.log("SUBSCRIBED", subscribed);
-    //     if (!subscribed) {
-    //         this._router.navigateByUrl('/error');
-    //     } else {
-    //         console.log("YOUR SUBSCRIPTION IS ACTIVE");
-    //     }
-    // }
+    activeSubscription() {
+        const subscribed = this._authService.subVerified();
+        console.log('SUBSCRIBED', subscribed);
+        if (!subscribed) {
+            this._router.navigateByUrl('/error');
+        } else {
+            console.log('YOUR SUBSCRIPTION IS ACTIVE');
+        }
+    }
 
-    // isValidated() {
-    //     let verified = this._authService.emailVerified();
-    //     if (!verified) {
-    //         this.notValidatedSnackBar();
-    //         this._router.navigateByUrl('/login');
-    //     } else {
-    //         console.log("YOU ARE VALIDATED");
-    //     }
+    isValidated() {
+        const verified = this._authService.emailVerified();
+        if (!verified) {
+            this.notValidatedSnackBar();
+            this._router.navigateByUrl('/login');
+        } else {
+            console.log('YOU ARE VALIDATED');
+        }
 
-    // }
+    }
 
     openSnackBar() {
         const config = new MatSnackBarConfig();

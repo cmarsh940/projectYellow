@@ -1,0 +1,104 @@
+.info {
+    margin-top: 3em;
+    width: 100%;
+}
+.header{
+    display: flex;
+    padding: 1em;
+    justify-content: space-evenly;
+}
+.mat-tab-label {
+    min-width: 49%!important;
+}
+.header-image {
+  background-size: cover;
+}
+
+.header-text {
+    margin: 0 2em;
+    flex-direction: column;
+}
+
+.header-image, .header-text {
+    display: flex;
+    align-self: center;
+}
+
+img {
+    width: 7em;
+    height: 7em;
+    border-radius: 50%;
+    -ms-flex-align: center;
+    align-items: center;
+    image-rendering: -webkit-optimize-contrast;
+    object-fit: cover;
+    object-position: top;
+}
+
+.upload-form {
+    position: absolute;
+    align-self: center;
+}
+
+#hide-me {
+    opacity: 0.0;
+}
+#hide-me:hover {
+    opacity: 0.9;
+}
+
+.content {
+    margin: 1em 0;
+}
+.content-box {
+    display: inline-block;
+    margin: 1em 3em;
+}
+
+.content-body {
+    padding: 0 2em;
+}
+
+.content-body p {
+    margin: 0!important;
+}
+
+.content-bottom {
+    text-align: center;
+}
+
+.action button {
+    width: 100%;
+}
+.action button:first-child {
+    width: 100%;
+    margin: 2em auto 0;
+}
+.action button:last-child {
+    width: 100%;
+    margin: 0.5em auto;
+}
+
+.mat-button {
+    margin: 0 7px!important;
+}
+
+h5 {
+    margin:0;
+}
+
+h5 #show {
+    display: inline-block;
+    color: indianred;
+    font-size: smaller;
+    margin-left: 1em;
+}
+
+#cancel-subscription {
+    margin: 0!important;
+}
+
+#disable {
+    color: red;
+    font-size: smaller;
+}

@@ -6,7 +6,7 @@ import { SurveyService } from '../survey.service';
 import { Client } from '@shared/models/client';
 import { Survey } from '@shared/models/survey';
 
-// import { saveAs } from 'file-saver';
+import { ProfileService } from 'app/client/profile/profile.service';
 
 @Component({
   selector: 'app-survey-list',
@@ -34,7 +34,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    // private _profileService: ProfileService,
+    private _profileService: ProfileService,
     private _surveyService: SurveyService,
     private cdref: ChangeDetectorRef
   ) { }
@@ -48,78 +48,75 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   }
 
   getSurveys() {
-    // let surveyOwner = JSON.parse(sessionStorage.getItem('currentClient'));
-    // let id = surveyOwner._id;
-    // this._profileService.getparticipant(id)
-    //   .subscribe((response) => {
-    //     this.remaining = response.surveyCount;
-    //     this.dataSource = new MatTableDataSource<Element>(response._surveys);
-    //     this.dataSource.paginator = this.paginator;
-    //     this.array = response._surveys;
-    //     if(!this.array){
-    //       this.totalSize = 0;
-    //     }
-    //     else {
-    //       this.totalSize = this.array.length;
-    //     }
-    //     this.iterator();
-    //   });
+    const surveyOwner = JSON.parse(localStorage.getItem('currentClient'));
+    const id = surveyOwner._id;
+    this._profileService.getparticipant(id)
+      .subscribe((response) => {
+        this.remaining = response.surveyCount;
+        this.dataSource = new MatTableDataSource<Element>(response._surveys);
+        this.dataSource.paginator = this.paginator;
+        this.array = response._surveys;
+        if (!this.array) {
+          this.totalSize = 0;
+        } else {
+          this.totalSize = this.array.length;
+        }
+        this.iterator();
+      });
   }
 
   closeSurvey(id: string) {
-    // let r = window.confirm("Close Survey?");
-    // if (r == true) {
-    //   this._surveyService.closeAsset(id).subscribe(res => {
-    //     console.log("CLOSED SURVEY");
-    //     if(!res){
-    //       window.close();
-    //     }
-    //     if (true) {
-    //       this.getSurveys();
-    //       location.reload();
-    //     }
-    //   });
-    // } else {
-    //   window.close();
-    // }
+    const r = window.confirm('Close Survey?');
+    if (r === true) {
+      this._surveyService.closeAsset(id).subscribe(res => {
+        console.log('CLOSED SURVEY');
+        if (!res) {
+          window.close();
+        }
+        if (true) {
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
   }
 
   openSurvey(id: string) {
-    // let r = window.confirm("Open Survey?");
-    // if (r == true) {
-    //   return this._surveyService.openAsset(id).subscribe(res => {
-    //     if(!res){
-    //       window.close();
-    //     }
-    //     if (true) {
-    //       console.log("SURVEY OPENED");
-    //       this.getSurveys();
-    //       location.reload();
-    //     }
-    //   });
-    // } else {
-    //   window.close();
-    // }
+    const r = window.confirm('Open Survey?');
+    if (r === true) {
+      return this._surveyService.openAsset(id).subscribe(res => {
+        if (!res) {
+          window.close();
+        }
+        if (true) {
+          console.log('SURVEY OPENED');
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
   }
 
   destroySurvey(id: string) {
-    // let r = window.confirm("Delete Survey?");
-    // if (r == true) {
-    //   this._surveyService.deleteAsset(id).subscribe(res => {
-    //     console.log("DESTROY SURVEY");
-    //     if (true) {
-    //       this.getSurveys();
-    //       location.reload();
-    //     }
-    //   });
-    // } else {
-    //   window.close();
-    // }
+    const r = window.confirm('Delete Survey?');
+    if (r === true) {
+      this._surveyService.deleteAsset(id).subscribe(res => {
+        console.log('DESTROY SURVEY');
+        if (true) {
+          this.getSurveys();
+          location.reload();
+        }
+      });
+    } else {
+      window.close();
+    }
   }
 
-  download() {
-    // const blob = new Blob([JSON.stringify(this.dataSource)], { type: 'application/json' });
-    // saveAs(blob, 'surveys.json');
+  download(): void {
   }
 
   TrackById(index: number, survey: Survey) {

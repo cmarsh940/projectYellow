@@ -1,3 +1,4 @@
+import { FeedbackComponent } from './../feedback/feedback.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -12,6 +13,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, TranslateModule, MaterialModule],
-  declarations: [ FooterComponent, SidebarComponent, ToolbarComponent, WrapperComponent],
+  declarations: [FeedbackComponent, FooterComponent, SidebarComponent, ToolbarComponent, WrapperComponent],
 })
 export class LayoutsModule {}

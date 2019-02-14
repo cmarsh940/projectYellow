@@ -8,6 +8,7 @@ import { SurveyService } from '../survey.service';
 import { SurveyCategory } from '@shared/models/survey-category';
 import { questionGroups, Question } from '@shared/models/question-group';
 import { Survey } from '@shared/models/survey';
+import { AuthService } from 'app/auth/auth.service';
 
 
 
@@ -46,7 +47,7 @@ export class AddSurveyComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    // private _authService: AuthService,
+    private _authService: AuthService,
     // private _categoryService: SurveyCategoryService,
     private _surveyService: SurveyService,
     private _router: Router,
@@ -83,23 +84,23 @@ export class AddSurveyComponent implements OnInit {
   }
 
   checkCount() {
-    // const count = this._authService.checkCount();
-    // if (!count) {
-    //   console.log('reported');
-    //   this.location.back();
-    // } else {
-    //   console.log('COUNT');
-    // }
+    const count = this._authService.checkCount();
+    if (!count) {
+      console.log('reported');
+      this.location.back();
+    } else {
+      console.log('COUNT');
+    }
   }
 
   checkPC() {
-    // this.pc = false;
-    // const checked = this._authService.checkPC();
-    // if (checked) {
-    //   this.pc = true;
-    // } else {
-    //   this.pc = false;
-    // }
+    this.pc = false;
+    const checked = this._authService.checkPC();
+    if (checked) {
+      this.pc = true;
+    } else {
+      this.pc = false;
+    }
   }
 
   choice(qType) {
@@ -131,7 +132,7 @@ export class AddSurveyComponent implements OnInit {
     });
   }
 
-// tslint:disable-next-line: use-life-cycle-interface
+  // tslint:disable-next-line: use-life-cycle-interface
   ngOnChanges() {
     this.rebuildForm();
   }
@@ -219,7 +220,7 @@ export class AddSurveyComponent implements OnInit {
       private: formModel.private,
       questions: questionsDeepCopy,
       user: '',
-      creator: JSON.parse(sessionStorage.getItem('currentClient')),
+      creator: JSON.parse(localStorage.getItem('currentClient')),
       createdAt: Date.now(),
       updatedAt: Date.now()
     };

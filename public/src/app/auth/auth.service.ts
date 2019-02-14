@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http } from '@angular/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -85,7 +85,7 @@ export class AuthService {
     localStorage.setItem('token', token);
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
     localStorage.setItem('t940', JSON.stringify(client._id));
-    sessionStorage.setItem('currentClient', JSON.stringify(client));
+    localStorage.setItem('currentClient', JSON.stringify(client));
   }
 
   logout(callback) {
@@ -94,7 +94,7 @@ export class AuthService {
     return this._http.delete('/api/clients').subscribe(
       res => {
         this.currentClient = null;
-        sessionStorage.removeItem('currentClient');
+        localStorage.removeItem('currentClient');
         localStorage.removeItem('token');
         localStorage.removeItem('expires_at');
         localStorage.removeItem('t940');
@@ -105,7 +105,7 @@ export class AuthService {
   }
 
   verify() {
-    const data = sessionStorage.getItem('currentClient');
+    const data = localStorage.getItem('currentClient');
     if (data === undefined || data === null || data === '' ) {
       return false;
     } else {
@@ -114,7 +114,7 @@ export class AuthService {
   }
 
   subVerified() {
-    const data = JSON.parse(sessionStorage.getItem('currentClient'));
+    const data = JSON.parse(localStorage.getItem('currentClient'));
     const lastDateToUse = moment(new Date).isBefore(data.d);
     console.log('LAST USE DATE', lastDateToUse);
     if ((data.status === 'Active' || data.status === 'Trial')) {
@@ -139,7 +139,7 @@ export class AuthService {
   }
 
   emailVerified() {
-    const data = JSON.parse(sessionStorage.getItem('currentClient'));
+    const data = JSON.parse(localStorage.getItem('currentClient'));
     if (!data || data.v === null) {
       return false;
     }
@@ -151,7 +151,7 @@ export class AuthService {
   }
 
   checkPC() {
-    const data = JSON.parse(sessionStorage.getItem('currentClient'));
+    const data = JSON.parse(localStorage.getItem('currentClient'));
     if (data.b8o1 === 'FREE') {
       return false;
     } else {
@@ -159,7 +159,7 @@ export class AuthService {
     }
   }
   checkCount() {
-    const data = JSON.parse(sessionStorage.getItem('currentClient'));
+    const data = JSON.parse(localStorage.getItem('currentClient'));
     if (data.c8o1 === 0) {
       return false;
     } else {
@@ -168,7 +168,7 @@ export class AuthService {
   }
 
   authorize() {
-    const data = JSON.parse(sessionStorage.getItem('currentClient'));
+    const data = JSON.parse(localStorage.getItem('currentClient'));
     if (data) {
       if (data.a8o1 === 'CAPTAIN') {
         return true;
@@ -181,7 +181,7 @@ export class AuthService {
   }
 
   checkLoggedIn() {
-    const data = JSON.parse(sessionStorage.getItem('currentClient'));
+    const data = JSON.parse(localStorage.getItem('currentClient'));
     const check = JSON.parse(localStorage.getItem('t940'));
     if (!data) {
       return false;
@@ -218,9 +218,9 @@ export class AuthService {
   private extractData(res: Response): any {
     console.log('*** extractData: ***');
     if (!Error) {
-      if (!sessionStorage.getItem('currentClient')) {
+      if (!localStorage.getItem('currentClient')) {
         console.log('*** CLIENT NOT IN SESSION ***');
-        sessionStorage.setItem('currentClient', JSON.stringify(res));
+        localStorage.setItem('currentClient', JSON.stringify(res));
         return res;
       } else {
         console.log('*** CLIENT IN SESSION ***');

@@ -11,6 +11,16 @@ import { SurveyAnalyticsComponent } from './survey/survey-analytics/survey-analy
 import { AddSurveyComponent } from './survey/add-survey/add-survey.component';
 import { EditSurveyComponent } from './survey/edit-survey/edit-survey.component';
 import { ClientNavComponent } from '@shared/layouts/client-nav/client-nav.component';
+import { CheckoutComponent } from './checkout/checkout.component';
+import { UserComponent } from './user/user.component';
+import { AddUserComponent } from './user/add-user/add-user.component';
+import { EditUserComponent } from './user/edit-user/edit-user.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { UsersListComponent } from './user/users-list/users-list.component';
+import { ProfileComponent } from './profile/profile.component';
+import { EditClientComponent } from './profile/edit-client/edit-client.component';
+import { SubscriptionOverlayComponent } from './profile/subscription-overlay/subscription-overlay.component';
+import { UploadUsersComponent } from './user/upload-users/upload-users.component';
 
 @NgModule({
   imports: [
@@ -23,21 +33,21 @@ import { ClientNavComponent } from '@shared/layouts/client-nav/client-nav.compon
   declarations: [
     ClientComponent,
     ClientNavComponent,
-    // CheckoutComponent,
-    // UserComponent,
-    // AddUserComponent,
-    // EditUserComponent,
-    // DashboardComponent,
+    CheckoutComponent,
+    UserComponent,
+    AddUserComponent,
+    EditUserComponent,
+    DashboardComponent,
     SurveyComponent,
     AddSurveyComponent,
     EditSurveyComponent,
     SurveyListComponent,
     SurveyAnalyticsComponent,
-    // UsersListComponent,
-    // ProfileComponent,
-    // EditClientComponent,
-    // SubscriptionOverlayComponent,
-    // UploadUsersComponent
+    UsersListComponent,
+    ProfileComponent,
+    EditClientComponent,
+    SubscriptionOverlayComponent,
+    UploadUsersComponent
   ]
 })
 export class ClientModule {}

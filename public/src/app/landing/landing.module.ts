@@ -20,6 +20,7 @@ import { SubscriptionErrorComponent } from './errors/subscription-error/subscrip
 import { SurveyErrorComponent } from './errors/survey-error/survey-error.component';
 import { SurveyClosedComponent } from './errors/survey-closed/survey-closed.component';
 import { MainNavComponent } from '@shared/layouts/main-nav/main-nav.component';
+import { PrivateSurveyComponent } from './private-survey/private-survey.component';
 
 @NgModule({
   imports: [
@@ -31,20 +32,21 @@ import { MainNavComponent } from '@shared/layouts/main-nav/main-nav.component';
     ReactiveFormsModule
   ],
   declarations: [
-    LandingComponent,
-    RightsComponent,
     AboutComponent,
-    PricingComponent,
     HomeComponent,
-    VerifiedComponent,
-    PoweredByComponent,
+    LandingComponent,
+    ListSurveysComponent,
     MainNavComponent,
     MainFooterComponent,
+    PoweredByComponent,
+    PricingComponent,
+    PrivateSurveyComponent,
+    RightsComponent,
     SubscriptionErrorComponent,
     SurveyErrorComponent,
     SurveyClosedComponent,
     SuccessComponent,
-    ListSurveysComponent,
+    VerifiedComponent,
     ViewSurveyComponent
   ]
 })

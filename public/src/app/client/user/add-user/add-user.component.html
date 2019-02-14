@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="header">
+        <h1 class="mat-title">Add A User</h1>
+    </div>
+
+    <form [formGroup]="myForm">
+
+        <!-- NAME -->
+        <mat-form-field appearance="outline" color="primary">
+            <mat-label>Name</mat-label>
+            <input matInput type="text" [formControl]="nameFormControl">
+        </mat-form-field>
+
+
+        <!-- EMAIL -->
+        <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput [formControl]="emailFormControl" autocomplete="email">
+        </mat-form-field>
+
+
+        <!-- PHONE -->
+        <mat-form-field appearance="outline">
+            <mat-label>Phone #</mat-label>
+            <input matInput type="tel" [formControl]="phoneFormControl" autocomplete='tel-national'>
+            <mat-hint>*No Spaces or Dashes</mat-hint>
+        </mat-form-field>
+
+        
+
+        <!-- SUBMIT BUTTON -->
+        <div id="submit-button">
+            <button mat-raised-button type="submit" color="primary" (click)="addParticipant(myForm)" [disabled]="!myForm.valid">Add</button>
+        </div>
+        <div id="cancel-button">
+            <button mat-raised-button type="submit" color="warn" (click)="cancel()">Cancel</button>
+        </div>
+    </form>
+
+    <div *ngIf="errors?.length > 0 " class="errors">
+        {{ errors | json }}
+    </div>
+</div>

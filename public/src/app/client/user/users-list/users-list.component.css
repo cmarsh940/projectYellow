@@ -1,0 +1,83 @@
+.loading {
+    min-width: 100%;
+    min-height: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.mat-spinner {
+    margin: 5em auto;
+}
+
+#topBox {
+    width: 100%;
+    display: inline-flex;
+    overflow: hidden;
+}
+
+#addMenu, .export-button {
+    display: inline-flex;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.mat-header-cell span {
+    width: 100%;
+    text-align: center;
+}
+
+.view {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+.mat-paginator {
+    display: block;
+    position: fixed!important;
+    bottom: 0!important;
+    width: 100%;
+}
+
+.mat-button, p {
+  display: inline-block;
+  margin: 0 3px;
+}
+
+.mat-column-select {
+  overflow: initial;
+}
+
+.mat-header-cell:last-of-type {
+    padding: 0;
+    max-width: 9%;
+}
+
+.mat-cell:last-of-type {
+    padding: 0;
+    max-width: 9%;
+}
+
+#smsText {
+    width:100%;
+    margin: 1em;
+}
+
+.mat-row.hovered {
+  background-color: #ffd60033;
+}
+
+.action-button {
+    display: inline-flex;
+    right: 0;
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+}
+
+.action-icon {
+    margin: auto;
+    width: 100%;
+}

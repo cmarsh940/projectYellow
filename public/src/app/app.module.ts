@@ -24,6 +24,13 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { ResetPasswordComponent } from './auth/reset-password/reset-password.component';
 import { HttpModule } from '@angular/http';
+import { AddUserComponent } from './client/user/add-user/add-user.component';
+import { EditClientComponent } from './client/profile/edit-client/edit-client.component';
+import { FeedbackComponent } from '@shared/feedback/feedback.component';
+import { SubscriptionOverlayComponent } from './client/profile/subscription-overlay/subscription-overlay.component';
+import { RightsComponent } from './landing/rights/rights.component';
+import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
+import { AuthService } from './auth/auth.service';
 
 export function initLanguage(translateService: TranslatesService): Function {
   return (): Promise<any> => translateService.initLanguage();
@@ -33,8 +40,8 @@ export function initLanguage(translateService: TranslatesService): Function {
   imports: [
     BrowserModule.withServerTransition({ appId: 'my-app' }),
     TransferHttpCacheModule,
-    HttpClientModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
@@ -54,6 +61,7 @@ export function initLanguage(translateService: TranslatesService): Function {
     ResetPasswordComponent
   ],
   providers: [
+    AuthService,
     CookieService,
     SurveyService,
     UniversalStorage,
@@ -61,7 +69,13 @@ export function initLanguage(translateService: TranslatesService): Function {
     // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   entryComponents: [
-    RegisterDialogComponent
+    AddUserComponent,
+    EditClientComponent,
+    FeedbackComponent,
+    SubscriptionOverlayComponent,
+    RegisterDialogComponent,
+    RightsComponent,
+    UploadUsersComponent
   ]
 })
 export class AppModule {}

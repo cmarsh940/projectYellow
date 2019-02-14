@@ -6,12 +6,11 @@ import { Subscription } from 'rxjs';
 import { Survey } from '@shared/models/survey';
 import { Question } from '@shared/models/question-group';
 import { SurveyService } from '../survey.service';
-// import { saveAs } from 'file-saver';
 
 
-
-// import * as Chart from 'chart.js';
-// import * as moment from 'moment';
+import * as Chart from 'chart.js';
+import * as moment from 'moment';
+import { AuthService } from 'app/auth/auth.service';
 
 
 function flatten(arr) {
@@ -62,7 +61,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   @ViewChild('myCanvas') myCanvas: ElementRef;
   public context: CanvasRenderingContext2D;
 
-// tslint:disable-next-line: max-line-length
+  // tslint:disable-next-line: max-line-length
   colors = ['#ffd600', '#ffab00', '#ff6d00', '#ff3d00', '#c51162', '#536dfe', '#2979ff', '#0091ea', '#00b8d4', '#00bfa5', '#00c853', '#64dd17', '#aeea00'];
 
   displayedColumns = ['optionName', 'count', 'percentage'];
@@ -70,7 +69,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   constructor(
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
-    // private _authService: AuthService,
+    private _authService: AuthService,
     private _router: Router,
     private location: Location,
     public snackBar: MatSnackBar
@@ -92,136 +91,139 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   isLoggedIn() {
-    // let verify = this._authService.verify();
-    // if (!verify) {
-    //   this.openSnackBar();
-    //   this._router.navigateByUrl('/login');
-    // }
+    const verify = this._authService.verify();
+    if (!verify) {
+      this.openSnackBar();
+      this._router.navigateByUrl('/login');
+    }
   }
 
 
   getSurvey() {
-    // this._surveyService.getAsset(this.surveyId).subscribe(res => {
-    //   console.log("RES",res);
-    //   let alldates = res.submissionDates;
-    //   let answeredTempDates = {};
-    //   let tempDates = [];
+    this._surveyService.getAsset(this.surveyId).subscribe(res => {
+      console.log('RES', res);
+      const alldates = res.submissionDates;
+      const answeredTempDates = {};
+      const tempDates = [];
 
-    //   alldates.forEach((res) => {
-    //     let date = moment(res).format('l');
-    //     tempDates.push(date);
-    //   });
+      // tslint:disable-next-line: no-shadowed-variable
+      alldates.forEach((res) => {
+        const date = moment(res).format('l');
+        tempDates.push(date);
+      });
 
-    //   tempDates.forEach(function (x) {
-    //     answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
-    //   });
+      tempDates.forEach(function (x) {
+        answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
+      });
 
-    //   let dateValues = Object.values(answeredTempDates);
-    //   let dateNames = Object.keys(answeredTempDates);
-
-
-
-
-    //   // TODAYS DATE
-    //   let todaysDate = Date.now();
+      const dateValues = Object.values(answeredTempDates);
+      const dateNames = Object.keys(answeredTempDates);
 
 
-    //   let submissionTimeResults = moment(todaysDate).diff(moment(res.lastSubmission))
-
-    //   // LAST SUBMISSION IN HOURS
-    //   this.timeSinceLastSubmission = moment.duration(submissionTimeResults).as("hours");
-
-    //   // INITIALIZE CHART FROM HTML
-    //   this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
-
-    //   let gradient = this.context.createLinearGradient(0, 0, 320, 0);
-    //   gradient.addColorStop(0, '#ffd600');
-    //   gradient.addColorStop(0.4, '#ffff52');
-    //   gradient.addColorStop(0.9, '#ffd600');
-    //   gradient.addColorStop(1, '#ffff52');
-
-    //   this.context.fillStyle = gradient;
-
-    //   // GENERATE CHART AND COMPONENTS
-    //   this.chart = new Chart(this.context, {
-    //     type: 'line',
-    //     data: {
-    //       labels: dateNames,
-    //       datasets: [
-    //         {
-    //           data: dateValues,
-    //           label: 'Volume',
-    //           borderColor: gradient,
-    //           hoverBorderColor: '#ffff52',
-    //           backgroundColor: '#fdff0066',
-    //           fill: true
-    //         },
-    //       ]
-    //     },
-    //     options: {
-    //       legend: {
-    //         display: false,
-    //       },
-    //       animation: {
-    //         duration: 0, // general animation time
-    //       },
-    //       hover: {
-    //         animationDuration: 0, // duration of animations when hovering an item
-    //       },
-    //       responsiveAnimationDuration: 0, // animation duration after a resize
-    //       layout: {
-    //         padding: {
-    //           top: 20,
-    //           bottom: 0
-    //         }
-    //       },
-    //       scales: {
-    //         xAxes: [{
-    //           display: true,
-    //           gridLines: {
-    //             color: "#FFFFFF"
-    //           },
-    //           ticks: {
-    //             fontColor: '#FFFFFF'
-    //           },
-    //           type: 'time',
-    //           time: {
-    //             displayFormats: {
-    //               day: 'MMM DD'
-    //             }
-    //           }
-    //         }],
-    //         yAxes: [{
-    //           display: false
-    //         }]
-    //       }
-    //     }
-    //   });
-
-    //   // SET KEY ANALYTICS
-    //   this.title = res.name;
-    //   this.lvl = res.creator._subscription;
-    //   this.private = res.private;
-    //   this.total = res.totalAnswers;
-    //   this.timeTotal = `${res.surveyTime / 60 ^ 0}:` + res.surveyTime % 60;
-    //   this.surveyAvg = `${res.averageTime / 60 ^ 0}:` + res.averageTime % 60;
 
 
-    //   // SET QUESTIONS
-    //   this.survey = res.questions;
+      // TODAYS DATE
+      const todaysDate = Date.now();
 
-    //   // SET URL FOR CLIENT
-    //   this.url = `www.surveysbyme.com/takeSurvey/${this.surveyId}`;
 
-    //   // LOOP THROUGH QUESTIONS
-    //   this.loopThroughQuestions();
+      const submissionTimeResults = moment(todaysDate).diff(moment(res.lastSubmission));
 
-    // })
+      // LAST SUBMISSION IN HOURS
+      this.timeSinceLastSubmission = moment.duration(submissionTimeResults).as('hours');
+
+      // INITIALIZE CHART FROM HTML
+      this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
+
+      const gradient = this.context.createLinearGradient(0, 0, 320, 0);
+      gradient.addColorStop(0, '#ffd600');
+      gradient.addColorStop(0.4, '#ffff52');
+      gradient.addColorStop(0.9, '#ffd600');
+      gradient.addColorStop(1, '#ffff52');
+
+      this.context.fillStyle = gradient;
+
+      // GENERATE CHART AND COMPONENTS
+      this.chart = new Chart(this.context, {
+        type: 'line',
+        data: {
+          labels: dateNames,
+          datasets: [
+            {
+              data: dateValues,
+              label: 'Volume',
+              borderColor: gradient,
+              hoverBorderColor: '#ffff52',
+              backgroundColor: '#fdff0066',
+              fill: true
+            },
+          ]
+        },
+        options: {
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 0, // general animation time
+          },
+          hover: {
+            animationDuration: 0, // duration of animations when hovering an item
+          },
+          responsiveAnimationDuration: 0, // animation duration after a resize
+          layout: {
+            padding: {
+              top: 20,
+              bottom: 0
+            }
+          },
+          scales: {
+            xAxes: [{
+              display: true,
+              gridLines: {
+                color: '#FFFFFF'
+              },
+              ticks: {
+                fontColor: '#FFFFFF'
+              },
+              type: 'time',
+              time: {
+                displayFormats: {
+                  day: 'MMM DD'
+                }
+              }
+            }],
+            yAxes: [{
+              display: false
+            }]
+          }
+        }
+      });
+
+      // SET KEY ANALYTICS
+      this.title = res.name;
+      this.lvl = res.creator._subscription;
+      this.private = res.private;
+      this.total = res.totalAnswers;
+      // tslint:disable-next-line: no-bitwise
+      this.timeTotal = `${res.surveyTime / 60 ^ 0}:` + res.surveyTime % 60;
+      // tslint:disable-next-line: no-bitwise
+      this.surveyAvg = `${res.averageTime / 60 ^ 0}:` + res.averageTime % 60;
+
+
+      // SET QUESTIONS
+      this.survey = res.questions;
+
+      // SET URL FOR CLIENT
+      this.url = `www.surveysbyme.com/takeSurvey/${this.surveyId}`;
+
+      // LOOP THROUGH QUESTIONS
+      this.loopThroughQuestions();
+
+    });
   }
 
   loopThroughQuestions() {
     for (let i = 0; i < (<any>this.survey).length; i++) {
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
         let b = 0;
         const c = this.survey[i].answers.map(parseFloat);
@@ -238,7 +240,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         this.survey[i].answers = [];
         this.survey[i].answers.push(avg);
         this.questions.push(this.survey[i]);
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       } else if (this.survey[i].questionType === 'boolean' || this.survey[i].questionType === 'yesno' || this.survey[i].questionType === 'likeunlike' || this.survey[i].questionType === 'goodbad') {
         let percentE: number;
         let e = 0;
@@ -299,7 +301,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         // SET NEW OPTIONS AND PUTH THEM TO THE QUESTIONS ANSWERS
         this.survey[i].answers = options;
         this.questions.push(this.survey[i]);
-// tslint:disable-next-line: max-line-length
+      // tslint:disable-next-line: max-line-length
       } else if (this.survey[i].questionType === 'multiplechoice' || this.survey[i].questionType === 'multiplechoiceOther' || this.survey[i].questionType === 'dropDown') {
         const options = this.survey[i].options;
         const tempAnswers = this.survey[i].answers;
@@ -341,15 +343,11 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // downloadJson() {
-  //   const blob = new Blob([JSON.stringify(this.survey)], { type: 'application/json' });
-  //   saveAs(blob, 'survey.json');
-  // }
+  downloadJson(): void {
+  }
 
-  // downloadText() {
-  //   const blob = new Blob([JSON.stringify(this.survey)], { type: 'text/plain;charset=utf-8' });
-  //   saveAs(blob, 'survey.txt');
-  // }
+  downloadText(): void {
+  }
 
   openSnackBar() {
     const config = new MatSnackBarConfig();
