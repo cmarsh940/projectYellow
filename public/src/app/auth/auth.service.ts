@@ -91,7 +91,7 @@ export class AuthService {
   logout(callback) {
     console.log('*** SERVICE CLIENT LOGOUT ***');
     console.log('*** DELETE ***');
-    return this._http.delete('/api/clients').subscribe(
+    return this._http.delete(this.actionUrl + this.ns).subscribe(
       res => {
         this.currentClient = null;
         localStorage.removeItem('currentClient');

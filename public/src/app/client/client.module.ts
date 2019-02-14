@@ -1,3 +1,4 @@
+import { CheckoutService } from './checkout/checkout.service';
 import { ClientComponent } from './client.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -21,6 +22,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { EditClientComponent } from './profile/edit-client/edit-client.component';
 import { SubscriptionOverlayComponent } from './profile/subscription-overlay/subscription-overlay.component';
 import { UploadUsersComponent } from './user/upload-users/upload-users.component';
+import { ProfileService } from './profile/profile.service';
+import { ClientService } from './client.service';
 
 @NgModule({
   imports: [
@@ -48,6 +51,11 @@ import { UploadUsersComponent } from './user/upload-users/upload-users.component
     EditClientComponent,
     SubscriptionOverlayComponent,
     UploadUsersComponent
+  ],
+  providers: [
+    ProfileService,
+    ClientService,
+    CheckoutService
   ]
 })
 export class ClientModule {}

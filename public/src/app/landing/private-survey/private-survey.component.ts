@@ -230,7 +230,7 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
         }
       });
     if (!this.errors) {
-      this._router.navigate(['/list_of_surveys']);
+      this._router.navigate(['/survey-list']);
     }
   }
 

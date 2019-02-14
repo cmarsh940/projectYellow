@@ -11,6 +11,7 @@ import { SurveyErrorComponent } from './errors/survey-error/survey-error.compone
 import { SubscriptionErrorComponent } from './errors/subscription-error/subscription-error.component';
 import { MetaGuard } from '@ngx-meta/core';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
+import { ViewSurveyComponent } from './view-survey/view-survey.component';
 
 
 const routes: Routes = [
@@ -35,7 +36,7 @@ const routes: Routes = [
         component: PricingComponent
       },
       {
-        path: 'rights',
+        path: 'policy',
         pathMatch: 'full',
         component: RightsComponent
       },
@@ -63,6 +64,11 @@ const routes: Routes = [
         path: 'survey-list',
         pathMatch: 'full',
         component: ListSurveysComponent
+      },
+      {
+        path: 'takeSurvey/:id',
+        pathMatch: 'full',
+        component: ViewSurveyComponent
       }
     ]
   }

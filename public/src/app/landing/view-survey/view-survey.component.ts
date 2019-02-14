@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
-import { Subscription, Observable, fromEvent, merge } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { questionGroups, Question } from '@shared/models/question-group';
 import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
+import { RegisterDialogComponent } from 'app/auth/register-dialog/register-dialog.component';
 
 
 @Component({
@@ -214,7 +214,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this._surveyService.updateAnswer(this.survey._id, this.survey).subscribe(
       result => {
         alert('Thank you for taking our survey!');
-        this._router.navigate(['/list_of_surveys']);
+        this._router.navigate(['/survey-list']);
       },
       error => {
         console.log('___ERROR___:', error);
@@ -224,7 +224,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
         }
       });
     if (!this.errors) {
-      this._router.navigate(['/list_of_surveys']);
+      this._router.navigate(['/survey-list']);
     }
   }
 
@@ -280,25 +280,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       this.time++;
     }, 1000);
-  }
-
-  openDialog() {
-    // const dialogConfig = new MatDialogConfig();
-    // dialogConfig.closeOnNavigation = true;
-
-
-    // const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (!result) {
-    //     console.log(`Dialog Error result:`);
-    //     console.log(result);
-    //   } else {
-    //     console.log(`Dialog result:`);
-    //     console.table(result);
-    //     this._router.navigateByUrl('/login');
-    //   }
-    // });
   }
 
 }
