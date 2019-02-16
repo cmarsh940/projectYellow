@@ -4,7 +4,7 @@ import 'reflect-metadata';
 const domino = require('domino');
 const fs = require('fs');
 const path = require('path');
-const template = fs.readFileSync(path.join(__dirname, '.', 'dist', 'index.html')).toString();
+const template = fs.readFileSync(path.join(__dirname, '.', 'browser', 'index.html')).toString();
 const win = domino.createWindow(template);
 const files = fs.readdirSync(`${process.cwd()}/dist/server`);
 
@@ -34,7 +34,10 @@ const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require(`./dist/server/mai
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
 const PORT = process.env.PORT || 4000;
-import { ROUTES } from './static.paths';
+// import { ROUTES } from './static.paths';
+import { join } from 'path';
+const DIST_FOLDER = join(process.cwd(), 'dist');
+
 
 enableProdMode();
 
@@ -89,15 +92,17 @@ app.engine(
 );
 
 app.set('view engine', 'html');
-app.set('views', 'src');
+app.set('views', join(DIST_FOLDER, 'browser'));
 
 app.get('/api/*', (req, res) => {
   console.log('req: %j, body: %j', req, req.body);
   res.status(404).send('data requests are not supported');
 });
 
-app.get('*.*', express.static(path.join(__dirname, '.', 'dist')));
-app.get(ROUTES, express.static(path.join(__dirname, '.', 'static')));
+app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
+  maxAge: '1y'
+}));
+// app.get(ROUTES, express.static(path.join(__dirname, '.', 'static')));
 
 app.get('*', (req, res) => {
   global['navigator'] = req['headers']['user-agent'];
@@ -108,7 +113,7 @@ app.get('*', (req, res) => {
   // tslint:disable-next-line:no-console
   console.time(`GET: ${url}`);
   res.render(
-    '../dist/index',
+    'index',
     {
       req: req,
       res: res,

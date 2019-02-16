@@ -12,8 +12,8 @@
     "build:prerender": "npm run build:prod && npm run generate:prerender",
     "generate:prerender": "node prerender.js",
     "ssr": "npm run build:prod && npm run generate:prerender && npm run server",
-    "ssr:server": "nodemon server.js",
-    "server": "node server.js"
+    "ssr:server": "nodemon dist/server.js",
+    "server": "node dist/server.js"
   },
   "private": true,
   "dependencies": {

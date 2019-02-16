@@ -11,7 +11,7 @@ import {
 import { TranslatesServerLoaderService } from './translates-server-loader.service';
 
 export function translateFactory(transferState: TransferState): TranslatesServerLoaderService {
-  return new TranslatesServerLoaderService('./dist/assets/i18n', '.json', transferState);
+  return new TranslatesServerLoaderService('./dist/browser/assets/i18n', '.json', transferState);
 }
 
 @NgModule({
