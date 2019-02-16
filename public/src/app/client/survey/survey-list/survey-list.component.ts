@@ -7,6 +7,7 @@ import { Client } from '@shared/models/client';
 import { Survey } from '@shared/models/survey';
 
 import { ProfileService } from 'app/client/profile/profile.service';
+import { UniversalStorage } from '@shared/storage/universal.storage';
 
 @Component({
   selector: 'app-survey-list',
@@ -34,6 +35,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
+    private universalStorage: UniversalStorage,
     private _profileService: ProfileService,
     private _surveyService: SurveyService,
     private cdref: ChangeDetectorRef
@@ -68,7 +70,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   closeSurvey(id: string) {
     const r = window.confirm('Close Survey?');
     if (r === true) {
-      this._surveyService.closeAsset(id).subscribe(res => {
+      let sub2 = this._surveyService.closeAsset(id).subscribe(res => {
         console.log('CLOSED SURVEY');
         if (!res) {
           window.close();
@@ -86,7 +88,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   openSurvey(id: string) {
     const r = window.confirm('Open Survey?');
     if (r === true) {
-      return this._surveyService.openAsset(id).subscribe(res => {
+      let sub3 = this._surveyService.openAsset(id).subscribe(res => {
         if (!res) {
           window.close();
         }
@@ -104,7 +106,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   destroySurvey(id: string) {
     const r = window.confirm('Delete Survey?');
     if (r === true) {
-      this._surveyService.deleteAsset(id).subscribe(res => {
+      let sub4 = this._surveyService.deleteAsset(id).subscribe(res => {
         console.log('DESTROY SURVEY');
         if (true) {
           this.getSurveys();

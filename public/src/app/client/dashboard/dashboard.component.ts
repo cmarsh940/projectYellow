@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Location, isPlatformBrowser } from '@angular/common';
+import { Component, ViewChild, ElementRef, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig } from '@angular/material';
@@ -9,6 +9,7 @@ import * as Chart from 'chart.js';
 import * as moment from 'moment';
 import { Client } from '@shared/models/client';
 import { AuthService } from 'app/auth/auth.service';
+import { UniversalStorage } from '@shared/storage/universal.storage';
 
 
 
@@ -22,7 +23,7 @@ export class DashboardComponent implements OnInit {
   currentClient: Client = new Client;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  client = JSON.parse(localStorage.getItem('currentClient'));
+  client: any;
   length = 0;
 
   // CHART
@@ -33,108 +34,114 @@ export class DashboardComponent implements OnInit {
 
 
   constructor(
+    private universalStorage: UniversalStorage,
     private _authService: AuthService,
     private _profileService: ProfileService,
     private _router: Router,
     private location: Location,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: object
   ) { }
 
   ngOnInit() {
-    this.isLoggedIn();
-    if (this.client.s.length !== 0) {
-      this.length = this.client.s.length;
-    } else {
-      this.length = 0;
-    }
-
-    const allSurveys = this.client.s;
-    console.log('ALL SURVEYS', allSurveys);
-    const answeredTempDates = {};
-    const tempDates = [];
-
-    allSurveys.forEach((survey) => {
-      survey.submissionDates.forEach(element => {
-        const date = moment(element).format('l');
-        tempDates.push(date);
-      });
-    });
-    console.log(tempDates);
-
-    tempDates.forEach(function (x) {
-      answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
-    });
-    console.log('ANSWERED TEMP DATES', answeredTempDates);
-
-    const dateValues = Object.values(answeredTempDates);
-    const dateNames = Object.keys(answeredTempDates);
-
-    // INITIALIZE CHART FROM HTML
-    this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
-
-    const gradient = this.context.createLinearGradient(0, 0, 320, 0);
-    gradient.addColorStop(0, '#ffd600');
-    gradient.addColorStop(0.4, '#ffff52');
-    gradient.addColorStop(0.9, '#ffd600');
-    gradient.addColorStop(1, '#ffff52');
-
-    this.context.fillStyle = gradient;
-
-    // GENERATE CHART AND COMPONENTS
-    this.chart = new Chart(this.context, {
-      type: 'line',
-      data: {
-        labels: dateNames,
-        datasets: [
-          {
-            data: dateValues,
-            label: 'Volume',
-            borderColor: gradient,
-            hoverBorderColor: '#ffff52',
-            backgroundColor: '#fdff0066',
-            fill: true
-          },
-        ]
-      },
-      options: {
-        legend: {
-          display: false,
-        },
-        animation: {
-          duration: 0, // general animation time
-        },
-        hover: {
-          animationDuration: 0, // duration of animations when hovering an item
-        },
-        responsiveAnimationDuration: 0, // animation duration after a resize
-        layout: {
-          padding: {
-            top: 20,
-            bottom: 0
-          }
-        },
-        scales: {
-          xAxes: [{
-            display: true,
-            gridLines: {
-              color: '#FFFFFF'
-            },
-            ticks: {
-              fontColor: '#FFFFFF'
-            },
-            type: 'time',
-            time: {
-              displayFormats: {
-                day: 'MMM DD'
-              }
-            }
-          }],
-          yAxes: [{
-            display: false
-          }]
-        }
+    if (isPlatformBrowser(this.platformId)) {
+      this.client = JSON.parse(localStorage.getItem('currentClient'));
+      console.log('DASHBOARD CLIENT', this.client);
+      // this.isLoggedIn();
+      if (this.client.s.length !== 0) {
+        this.length = this.client.s.length;
+      } else {
+        this.length = 0;
       }
-    });
+
+      const allSurveys = this.client.s;
+      console.log('ALL SURVEYS', allSurveys);
+      const answeredTempDates = {};
+      const tempDates = [];
+
+      allSurveys.forEach((survey) => {
+        survey.submissionDates.forEach(element => {
+          const date = moment(element).format('l');
+          tempDates.push(date);
+        });
+      });
+      console.log(tempDates);
+
+      tempDates.forEach(function (x) {
+        answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
+      });
+      console.log('ANSWERED TEMP DATES', answeredTempDates);
+
+      const dateValues = Object.values(answeredTempDates);
+      const dateNames = Object.keys(answeredTempDates);
+
+      // INITIALIZE CHART FROM HTML
+      this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
+
+      const gradient = this.context.createLinearGradient(0, 0, 320, 0);
+      gradient.addColorStop(0, '#ffd600');
+      gradient.addColorStop(0.4, '#ffff52');
+      gradient.addColorStop(0.9, '#ffd600');
+      gradient.addColorStop(1, '#ffff52');
+
+      this.context.fillStyle = gradient;
+
+      // GENERATE CHART AND COMPONENTS
+      this.chart = new Chart(this.context, {
+        type: 'line',
+        data: {
+          labels: dateNames,
+          datasets: [
+            {
+              data: dateValues,
+              label: 'Volume',
+              borderColor: gradient,
+              hoverBorderColor: '#ffff52',
+              backgroundColor: '#fdff0066',
+              fill: true
+            },
+          ]
+        },
+        options: {
+          legend: {
+            display: false,
+          },
+          animation: {
+            duration: 0, // general animation time
+          },
+          hover: {
+            animationDuration: 0, // duration of animations when hovering an item
+          },
+          responsiveAnimationDuration: 0, // animation duration after a resize
+          layout: {
+            padding: {
+              top: 20,
+              bottom: 0
+            }
+          },
+          scales: {
+            xAxes: [{
+              display: true,
+              gridLines: {
+                color: '#FFFFFF'
+              },
+              ticks: {
+                fontColor: '#FFFFFF'
+              },
+              type: 'time',
+              time: {
+                displayFormats: {
+                  day: 'MMM DD'
+                }
+              }
+            }],
+            yAxes: [{
+              display: false
+            }]
+          }
+        }
+      });
+    }
   }
 
   isLoggedIn() {

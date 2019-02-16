@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { questionGroups, Question } from '@shared/models/question-group';
 import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
-import { RegisterDialogComponent } from 'app/auth/register-dialog/register-dialog.component';
+import { GenericValidator } from '@shared/validators/generic-validator';
+import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { RegisterDialogComponent } from 'app/auth/register-dialog/register-dialo
   templateUrl: './view-survey.component.html',
   styleUrls: ['./view-survey.component.css']
 })
-export class ViewSurveyComponent implements OnInit, OnDestroy {
+export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
   get questions(): FormArray {
     return <FormArray>this.surveyForm.get('questions');
@@ -25,7 +25,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    public dialog: MatDialog
   ) {
 
     // Defines all of the validation messages for the form.
@@ -38,7 +37,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
 
     // Define an instance of the validator for use with this form,
     // passing in this form's set of validation messages.
-    // this.genericValidator = new GenericValidator(this.validationMessages);
+    this.genericValidator = new GenericValidator(this.validationMessages);
 
     this.incentiveForm = fb.group({
       userEmail: this.userEmail,
@@ -72,7 +71,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   private participant;
 
   userEmail = new FormControl('');
-  // private genericValidator: GenericValidator;
+  private genericValidator: GenericValidator;
 
   weekdayFilter = (d: Date): boolean => {
     const day = d.getDay();
@@ -102,17 +101,16 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   }
 
 
-// tslint:disable-next-line: use-life-cycle-interface
   ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
-    // const controlBlurs: Observable<any>[] = this.formInputElements
-    //   .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+    const controlBlurs: Observable<any>[] = this.formInputElements
+      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
 
-    // // Merge the blur event observable with the valueChanges observable
-    // merge(this.surveyForm.valueChanges, ...controlBlurs)
-    //   .pipe(debounceTime(800)).subscribe(value => {
-    //     // this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
-    //   });
+    // Merge the blur event observable with the valueChanges observable
+    merge(this.surveyForm.valueChanges, ...controlBlurs)
+      .pipe(debounceTime(800)).subscribe(value => {
+        this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
+      });
   }
 
   addQuestion(): void {
@@ -129,7 +127,6 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     });
   }
 
-// tslint:disable-next-line: use-life-cycle-interface
   ngOnChanges() {
     this.rebuildForm();
   }
@@ -150,7 +147,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
             this._router.navigate(['/404error']);
           }
           if (!survey.active) {
-            this._router.navigate(['/closed']);
+            this._router.navigate(['/survey-closed']);
           }
           console.log('RETURNED SURVEY IS:', survey);
           for (let i = 0; i < survey.questions.length; i++) {

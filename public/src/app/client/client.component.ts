@@ -21,9 +21,9 @@ export class ClientComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.isLoggedIn();
-        this.activeSubscription();
-        this.isValidated();
+        // this.isLoggedIn();
+        // this.activeSubscription();
+        // this.isValidated();
     }
 
     isLoggedIn() {

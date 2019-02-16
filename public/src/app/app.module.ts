@@ -3,7 +3,7 @@ import { MaterialModule } from './material/material.module';
 // angular
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // libs
@@ -31,6 +31,8 @@ import { SubscriptionOverlayComponent } from './client/profile/subscription-over
 import { RightsComponent } from './landing/rights/rights.component';
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 import { AuthService } from './auth/auth.service';
+import { AuthInterceptor } from '@shared/interceptors/auth-interceptor';
+import { NgtUniversalModule } from '@ng-toolkit/universal';
 
 export function initLanguage(translateService: TranslatesService): Function {
   return (): Promise<any> => translateService.initLanguage();
@@ -39,6 +41,7 @@ export function initLanguage(translateService: TranslatesService): Function {
 @NgModule({
   imports: [
     BrowserModule.withServerTransition({ appId: 'my-app' }),
+    NgtUniversalModule,
     TransferHttpCacheModule,
     HttpModule,
     HttpClientModule,

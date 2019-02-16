@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Http } from '@angular/http';
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, Inject, Optional, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import * as moment from 'moment';
@@ -11,6 +11,8 @@ import { Client } from '@shared/models/client';
 import { HandleError, HttpErrorHandler } from '@shared/services/http-error-handler.service';
 import { MessagesService } from '@shared/services/messages.service';
 import { envUrl } from 'app/envUrl';
+import { UniversalStorage } from '@shared/storage/universal.storage';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -23,14 +25,16 @@ export class AuthService {
   private ns = 'clients';
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private _messageService: MessagesService,
     private _http: Http,
     private _httpClient: HttpClient,
     private _router: Router,
+    private universalStorage: UniversalStorage,
     private httpErrorHandler: HttpErrorHandler,
   ) {
     this.actionUrl = `${envUrl}${this.actionUrl}`;
-    this.handleError = httpErrorHandler.createHandleError('AuthService');
+    this.handleError = this.httpErrorHandler.createHandleError('AuthService');
   }
 
   authenticate(asset: Client): Observable<any> {
@@ -81,11 +85,12 @@ export class AuthService {
     const token = client.token;
     delete client.token;
     const expiresAt = moment().add(client.expiresIn, 'second');
-
-    localStorage.setItem('token', token);
-    localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
-    localStorage.setItem('t940', JSON.stringify(client._id));
-    localStorage.setItem('currentClient', JSON.stringify(client));
+    if (isPlatformBrowser(this.platformId)) {
+      this.universalStorage.setItem('token', token);
+      this.universalStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+      this.universalStorage.setItem('t940', client._id);
+      localStorage.setItem('currentClient', JSON.stringify(client));
+    }
   }
 
   logout(callback) {
@@ -93,140 +98,164 @@ export class AuthService {
     console.log('*** DELETE ***');
     return this._http.delete(this.actionUrl + this.ns).subscribe(
       res => {
+        if (isPlatformBrowser(this.platformId)) {
         this.currentClient = null;
-        localStorage.removeItem('currentClient');
-        localStorage.removeItem('token');
-        localStorage.removeItem('expires_at');
-        localStorage.removeItem('t940');
+        this.universalStorage.removeItem('token');
+        this.universalStorage.removeItem('expires_at');
+        this.universalStorage.removeItem('t940');
+        localStorage.clear();
         callback(res.json());
+        }
       },
       err => console.error(err)
     );
   }
 
   verify() {
-    const data = localStorage.getItem('currentClient');
-    if (data === undefined || data === null || data === '' ) {
-      return false;
-    } else {
-    return true;
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(this.universalStorage.getItem('t940'));
+      if (data === undefined || data === null || data === '' ) {
+        return false;
+      } else {
+      return true;
+      }
     }
   }
 
   subVerified() {
-    const data = JSON.parse(localStorage.getItem('currentClient'));
-    const lastDateToUse = moment(new Date).isBefore(data.d);
-    console.log('LAST USE DATE', lastDateToUse);
-    if ((data.status === 'Active' || data.status === 'Trial')) {
-      console.log('ACTIVE OR TRIAL STATUS');
-      console.log('DATA', data);
-      return true;
-    }
-    if ((data.status === 'Canceled')) {
-      console.log('ACTIVE OR TRIAL STATUS');
-      console.log('DATA', data);
-      if (lastDateToUse) {
-          console.log('STILL IN PAID DATES', lastDateToUse);
-          return true;
-        } else {
-          console.log('NOT IN PAID DATES', lastDateToUse);
-          return false;
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      const lastDateToUse = moment(new Date).isBefore(data.d);
+      console.log('LAST USE DATE', lastDateToUse);
+      if ((data.status === 'Active' || data.status === 'Trial')) {
+        console.log('ACTIVE OR TRIAL STATUS');
+        console.log('DATA', data);
+        return true;
       }
-    } else {
-      console.log('ERROR');
-      return false;
+      if ((data.status === 'Canceled')) {
+        console.log('ACTIVE OR TRIAL STATUS');
+        console.log('DATA', data);
+        if (lastDateToUse) {
+            console.log('STILL IN PAID DATES', lastDateToUse);
+            return true;
+          } else {
+            console.log('NOT IN PAID DATES', lastDateToUse);
+            return false;
+        }
+      } else {
+        console.log('ERROR');
+        return false;
+      }
     }
   }
 
   emailVerified() {
-    const data = JSON.parse(localStorage.getItem('currentClient'));
-    if (!data || data.v === null) {
-      return false;
-    }
-    if (data.v) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  checkPC() {
-    const data = JSON.parse(localStorage.getItem('currentClient'));
-    if (data.b8o1 === 'FREE') {
-      return false;
-    } else {
-      return true;
-    }
-  }
-  checkCount() {
-    const data = JSON.parse(localStorage.getItem('currentClient'));
-    if (data.c8o1 === 0) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  authorize() {
-    const data = JSON.parse(localStorage.getItem('currentClient'));
-    if (data) {
-      if (data.a8o1 === 'CAPTAIN') {
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      if (!data || data.v === null) {
+        return false;
+      }
+      if (data.v) {
         return true;
       } else {
         return false;
       }
-    } else {
-      window.location.href = environment.redirect404;
+    }
+  }
+
+  checkPC() {
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      if (data.b8o1 === 'FREE') {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+  checkCount() {
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      if (data.c8o1 === 0) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
+  authorize() {
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      if (data) {
+        if (data.a8o1 === 'CAPTAIN') {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        window.location.href = environment.redirect404;
+      }
     }
   }
 
   checkLoggedIn() {
-    const data = JSON.parse(localStorage.getItem('currentClient'));
-    const check = JSON.parse(localStorage.getItem('t940'));
-    if (!data) {
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(this.universalStorage.getItem('t940'));
+      if (!data) {
+        return false;
+      }
+      if (data) {
+        return moment().isBefore(this.getExpiration());
+      }
       return false;
     }
-    if (data._id === check) {
-      return moment().isBefore(this.getExpiration());
-    }
-    return false;
   }
 
   getAuthorizationToken() {
-    console.log('HIT GET AUTH TOKEN FROM AUTH SERVICE');
-    if (localStorage.getItem('token') === null) {
-      console.log('NO TOKEN HAS BEEN SET');
-      return false;
-    } else {
-      if (localStorage.getItem('token') === undefined) {
-        console.log('AUTHORIZATION FAILED');
+    if (isPlatformBrowser(this.platformId)) {
+      console.log('HIT GET AUTH TOKEN FROM AUTH SERVICE');
+      if (this.universalStorage.getItem('token') === null) {
+        console.log('NO TOKEN HAS BEEN SET');
         return false;
       } else {
-        const data = JSON.parse(localStorage.getItem('token'));
-        return data;
+        if (this.universalStorage.getItem('token') === undefined) {
+          console.log('AUTHORIZATION FAILED');
+          return false;
+        } else {
+          const data = JSON.parse(this.universalStorage.getItem('token'));
+          return data;
+        }
       }
     }
+    console.log('PLATFORM IS NOT BROWSER');
   }
 
   getExpiration() {
-    const expiration = localStorage.getItem('expires_at');
-    const expiresAt = JSON.parse(expiration);
-    return moment(expiresAt);
+    if (isPlatformBrowser(this.platformId)) {
+      const expiration = JSON.parse(this.universalStorage.getItem('expires_at'));
+      const expiresAt = expiration;
+      return moment(expiresAt);
+    }
   }
 
 
   private extractData(res: Response): any {
-    console.log('*** extractData: ***');
-    if (!Error) {
-      if (!localStorage.getItem('currentClient')) {
-        console.log('*** CLIENT NOT IN SESSION ***');
-        localStorage.setItem('currentClient', JSON.stringify(res));
-        return res;
-      } else {
-        console.log('*** CLIENT IN SESSION ***');
-        return res;
+    if (isPlatformBrowser(this.platformId)) {
+      console.log('*** extractData: ***');
+      if (!Error) {
+        if (!localStorage.getItem('currentClient')) {
+          console.log('*** CLIENT NOT IN SESSION ***');
+          localStorage.setItem('currentClient', JSON.stringify(res));
+          return res;
+        } else {
+          console.log('*** CLIENT IN SESSION ***');
+          return res;
+        }
       }
+      return res;
     }
+    console.log('PLATFORM IS NOT BROWSER');
     return res;
   }
 

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { TransferHttpService } from '@gorniv/ngx-transfer-http';
 import { MetaService } from '@ngx-meta/core';
 import { UniversalStorage } from '@shared/storage/universal.storage';
-import { isPlatformServer } from '@angular/common';
+import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-landing',
@@ -21,14 +21,13 @@ export class LandingComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    let resultCookie = this.universalStorage.getItem('test');
-    console.log('home resultCookie 0:', resultCookie);
-
-    this.universalStorage.setItem('landing', 'landing2');
-    resultCookie = this.universalStorage.getItem('landing');
-    console.log('home resultCookie 1:', resultCookie);
-    const t = window;
-    const t1 = document;
-    this.meta.setTag('description', 'Meta update from init on landing page');
+    if (isPlatformBrowser(this.platformId)) {
+      this.universalStorage.setItem('landing', JSON.stringify(Date.now()));
+      let resultCookie = this.universalStorage.getItem('landing');
+      console.log('landing resultCookie:', resultCookie);
+      const t = window;
+      const t1 = document;
+      this.meta.setTag('description', 'Meta update from init on landing page');
+    }
   }
 }

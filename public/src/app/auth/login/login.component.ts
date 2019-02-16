@@ -1,12 +1,13 @@
 import { AuthService } from './../auth.service';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatIconRegistry } from '@angular/material';
 import { environment } from './../../../environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Client } from '@shared/models/client';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 declare const FB: any;
 declare const gapi: any;
@@ -47,14 +48,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
     public snackBar: MatSnackBar,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-    fb: FormBuilder
+    fb: FormBuilder,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
-    iconRegistry.addSvgIcon(
-      'facebook',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
-    iconRegistry.addSvgIcon(
-      'google',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'));
+    // const svgFacebookUrl = 'assets/icons/facebookWhite.svg';
+    // const svgGoogleUrl = 'assets/icons/google.svg';
+    // const domain = (isPlatformServer(platformId)) ? 'http://localhost:4000/' : '';
+    // iconRegistry.addSvgIcon(
+    //   'facebook',
+    //   sanitizer.bypassSecurityTrustResourceUrl(domain + svgFacebookUrl));
+    // iconRegistry.addSvgIcon(
+    //   'google',
+    //   sanitizer.bypassSecurityTrustResourceUrl(domain + svgGoogleUrl));
 
     this.myForm = fb.group({
       email: this.email,
@@ -63,11 +68,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.errors = null;
-    this.loaded = false;
-    this.verified();
-    this.loadFacebook();
-    this.loaded = true;
+    if (isPlatformBrowser(this.platformId)) {
+      this.errors = null;
+      this.loaded = false;
+      this.verified();
+      this.loadFacebook();
+      this.loaded = true;
+    }
   }
 
   ngAfterViewInit() {
@@ -209,13 +216,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
           }
           // this.errors.push(data.errors);
         } else {
-          if (data.a8o1 === 'CAPTAIN') {
-            this._authService.setCurrentClient(data);
-            this._router.navigateByUrl('/overview');
-          } else {
+          // if (data.a8o1 === 'CAPTAIN') {
+          //   this._authService.setCurrentClient(data);
+          //   this._router.navigateByUrl('/overview');
+          // } else {
             this._authService.setCurrentClient(data);
             this._router.navigateByUrl('/dashboard');
-          }
+          // }
         }
       } else {
         this.errors = data;

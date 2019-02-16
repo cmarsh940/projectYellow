@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -9,6 +9,7 @@ import { SurveyCategory } from '@shared/models/survey-category';
 import { questionGroups, Question } from '@shared/models/question-group';
 import { Survey } from '@shared/models/survey';
 import { AuthService } from 'app/auth/auth.service';
+import { UniversalStorage } from '@shared/storage/universal.storage';
 
 
 
@@ -29,7 +30,7 @@ export interface Type {
   templateUrl: './add-survey.component.html',
   styleUrls: ['./add-survey.component.css']
 })
-export class AddSurveyComponent implements OnInit {
+export class AddSurveyComponent implements OnInit, OnChanges {
   selectedQType: any;
   surveyForm: FormGroup;
   nameChangeLog: string[] = [];
@@ -50,6 +51,7 @@ export class AddSurveyComponent implements OnInit {
     private _authService: AuthService,
     // private _categoryService: SurveyCategoryService,
     private _surveyService: SurveyService,
+    private universalStorage: UniversalStorage,
     private _router: Router,
     private location: Location
   ) {
@@ -132,7 +134,6 @@ export class AddSurveyComponent implements OnInit {
     });
   }
 
-  // tslint:disable-next-line: use-life-cycle-interface
   ngOnChanges() {
     this.rebuildForm();
   }

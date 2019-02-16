@@ -1,15 +1,17 @@
+import { AuthService } from './../../auth/auth.service';
 import { Injectable, Inject } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { LOCAL_STORAGE } from '@ng-toolkit/universal';
 
 import { Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    @Inject(LOCAL_STORAGE) private localStorage: any;
+
+    constructor(private auth: AuthService) { }
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-        const idToken = localStorage.getItem('token');
+        const idToken = this.auth.getAuthorizationToken();
 
         if (idToken) {
             const cloned = req.clone({

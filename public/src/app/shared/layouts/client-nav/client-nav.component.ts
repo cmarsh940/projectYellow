@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { LOCAL_STORAGE } from '@ng-toolkit/universal';
+import { UniversalStorage } from '@shared/storage/universal.storage';
 
 @Component({
   selector: 'app-client-nav',
@@ -14,8 +15,7 @@ import { LOCAL_STORAGE } from '@ng-toolkit/universal';
 })
 
 export class ClientNavComponent {
-  @Inject(LOCAL_STORAGE) private localStorage: any;
-  currentClient = JSON.parse(localStorage.getItem('t940'));
+  currentClient = this.universalStorage.getItem('t940');
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
   opened: boolean;
@@ -25,12 +25,13 @@ export class ClientNavComponent {
     .pipe(map(result => result.matches));
 
   constructor(
-
+    private universalStorage: UniversalStorage,
     private _authService: AuthService,
     private breakpointObserver: BreakpointObserver,
     private _router: Router,
     public snackBar: MatSnackBar
-  ) {}
+  ) {
+  }
 
   logout(): void {
     this._authService.logout((res) => {

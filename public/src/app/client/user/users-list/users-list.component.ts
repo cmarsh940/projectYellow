@@ -11,6 +11,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { User } from '@shared/models/user';
 import { UserService } from '../user.service';
 import { LOCAL_STORAGE } from '@ng-toolkit/universal';
+import { UniversalStorage } from '@shared/storage/universal.storage';
 
 type AOA = any[];
 @Component({
@@ -49,7 +50,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
   constructor(
-    @Inject(LOCAL_STORAGE) private localStorage: any,
+    private universalStorage: UniversalStorage,
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
@@ -114,7 +115,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     const dialogRef = this.dialog.open(UploadUsersComponent, {
       data: {
         survey: this.surveyId,
-        surveyOwner: JSON.parse(localStorage.getItem('t940'))
+        surveyOwner: JSON.parse(this.universalStorage.getItem('t940'))
       }
     });
 
@@ -128,7 +129,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     const addDialogRef = this.dialog.open(AddUserComponent, {
       data: {
         survey: this.surveyId,
-        surveyOwner: JSON.parse(localStorage.getItem('t940'))
+        surveyOwner: JSON.parse(this.universalStorage.getItem('t940'))
       }
     });
 
