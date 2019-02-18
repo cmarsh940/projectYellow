@@ -6,11 +6,11 @@
     "ng": "ng",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build": "ng build --prod --build-optimizer",
+    "build": "ng build --prod",
     "build:server": "ng run public:server:production",
     "build:prod": "ng run public:build:production && ng run public:server:production && webpack --progress --colors",
     "build:prerender": "npm run build:prod && npm run generate:prerender",
-    "generate:prerender": "node prerender.js",
+    "generate:prerender": "node dist/prerender.js",
     "ssr": "npm run build:prod && npm run generate:prerender && npm run server",
     "ssr:server": "nodemon dist/server.js",
     "server": "node dist/server.js"

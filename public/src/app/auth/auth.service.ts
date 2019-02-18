@@ -163,25 +163,10 @@ export class AuthService {
     }
   }
 
-  checkPC() {
-    if (isPlatformBrowser(this.platformId)) {
-      const data = JSON.parse(localStorage.getItem('currentUser'));
-      if (data.b8o1 === 'FREE') {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  }
-  checkCount() {
-    if (isPlatformBrowser(this.platformId)) {
-      const data = JSON.parse(localStorage.getItem('currentUser'));
-      if (data.c8o1 === 0) {
-        return false;
-      } else {
-        return true;
-      }
-    }
+  async check(id: any): Promise<any> {
+    console.log('*** check ID ***', id);
+    const nameService = 'info';
+    return await this._httpClient.get<any>(`${this.actionUrl}${this.ns}/${nameService}/${id}`, id).toPromise();
   }
 
   authorize() {

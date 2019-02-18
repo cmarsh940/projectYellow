@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormGroupDirective, FormBuilder, FormGroup, NgForm, Validators, FormArray } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { Location } from '@angular/common';
+import { Location, isPlatformBrowser } from '@angular/common';
 
 import { SurveyService } from '../survey.service';
 import { SurveyCategory } from '@shared/models/survey-category';
@@ -35,9 +35,10 @@ export class AddSurveyComponent implements OnInit, OnChanges {
   surveyForm: FormGroup;
   nameChangeLog: string[] = [];
   categories: SurveyCategory[];
+  clientId: any;
   type = '';
   errors = [];
-
+  count: any;
   questionGroups = questionGroups;
   checked: boolean;
   reward: boolean;
@@ -47,6 +48,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
   pc: boolean;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private fb: FormBuilder,
     private _authService: AuthService,
     // private _categoryService: SurveyCategoryService,
@@ -60,10 +62,13 @@ export class AddSurveyComponent implements OnInit, OnChanges {
     this.createForm();
   }
 
-  ngOnInit() {
-    this.checkCount();
-    this.loadCategories();
-    this.checkPC();
+  async ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.clientId = this.universalStorage.getItem('t940');
+      await this.check();
+      // this.loadCategories();
+      // this.checkPC();
+    }
   }
 
   loadCategories() {
@@ -85,24 +90,23 @@ export class AddSurveyComponent implements OnInit, OnChanges {
     // });
   }
 
-  checkCount() {
-    const count = this._authService.checkCount();
-    if (!count) {
-      console.log('reported');
-      this.location.back();
-    } else {
-      console.log('COUNT');
-    }
-  }
-
-  checkPC() {
+  check() {
     this.pc = false;
-    const checked = this._authService.checkPC();
-    if (checked) {
-      this.pc = true;
-    } else {
-      this.pc = false;
-    }
+    return this._authService.check(this.clientId).then(data => {
+      if (data.c801 <= 0) {
+        console.log('you dont have any more surveys', data.c801);
+        this.location.back();
+      } else {
+        console.log('count is good');
+        if (data.b801) {
+          console.log('Subscribed');
+          this.pc = true;
+        } else {
+          console.log('Trial');
+          this.pc = false;
+        }
+      }
+    });
   }
 
   choice(qType) {

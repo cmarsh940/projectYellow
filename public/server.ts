@@ -102,7 +102,6 @@ app.get('/api/*', (req, res) => {
 app.get('*.*', express.static(join(DIST_FOLDER, 'browser'), {
   maxAge: '1y'
 }));
-// app.get(ROUTES, express.static(path.join(__dirname, '.', 'static')));
 
 app.get('*', (req, res) => {
   global['navigator'] = req['headers']['user-agent'];

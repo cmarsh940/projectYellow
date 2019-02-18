@@ -322,6 +322,36 @@ class ClientsController {
       });
   }
 
+  info(req, res, next) {
+    console.log("HIT CLIENT INFO");
+    console.log('params', req.params);
+    console.log('body', req.body);
+    Client.findById({ _id: req.params.id }).lean()
+      .exec(function (err, client) {
+        if (!client) {
+          console.log('not client');
+          return res.json(false);
+        }
+        if (err) {
+          console.log('INFO ERROR', err);
+          return res.json(err);
+        }
+        console.log('client is:', client);
+        req.session.client = {
+          n: client.firstName + " " + client.lastName,
+          a8o1: client.role,
+          b8o1: client._subscription,
+          c8o1: client.surveyCount,
+          d: client.lastUseDate,
+          s: client._surveys,
+          status: client.subscriptionStatus,
+          v: client.verified
+        };
+        console.log('req.session is', req.session.client);
+        return res.json(req.session.client);
+      });
+  }
+
   updateVerifiedEmail(req, res) {
     Client.findByIdAndUpdate(
       req.params.id,

@@ -9,6 +9,7 @@ import { questionGroups, Question } from '@shared/models/question-group';
 import { Survey } from '@shared/models/survey';
 import { AuthService } from 'app/auth/auth.service';
 import { GenericValidator } from '@shared/validators/generic-validator';
+import { UniversalStorage } from '@shared/storage/universal.storage';
 
 
 
@@ -27,7 +28,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   errors = [];
   _routeSubscription: Subscription;
   categories: SurveyCategory[];
-
+  clientId: any;
   pc: boolean;
 
   questionGroups = questionGroups;
@@ -48,6 +49,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
 
 
   constructor(
+    private universalStorage: UniversalStorage,
     private fb: FormBuilder,
     private _authService: AuthService,
     // private _categoryService: SurveyCategoryService,
@@ -73,6 +75,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.clientId = this.universalStorage.getItem('t940');
     this.surveyForm = this.fb.group({
       name: ['', Validators.required],
       category: ['', Validators.required],
@@ -104,7 +107,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
 
   checkPC() {
     this.pc = false;
-    const checked = this._authService.checkPC();
+    const checked = this._authService.check(this.clientId);
     if (checked) {
       this.pc = true;
     } else {

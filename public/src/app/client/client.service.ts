@@ -22,6 +22,10 @@ export class ClientService {
   public getparticipant(id: any): Observable<Client> {
     return this.dataService.getSingle(this.NAMESPACE, id);
   }
+  public getInfo(id: any): Observable<Client> {
+    const NAMESPACE = 'clients/info';
+    return this.dataService.getSingle(NAMESPACE, id);
+  }
 
   public addParticipant(itemToAdd: any): Observable<Client> {
     return this.dataService.add(this.NAMESPACE, itemToAdd);
@@ -30,6 +34,7 @@ export class ClientService {
   public updateParticipant(id: any, itemToUpdate: any): Observable<Client> {
     return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
   }
+
   public updateVerification(id: any, itemToUpdate: any): Observable<Client> {
     return this.dataService.updateVerification(this.NAMESPACE, id, itemToUpdate);
   }

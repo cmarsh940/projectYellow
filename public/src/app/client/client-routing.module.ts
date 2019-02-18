@@ -19,11 +19,11 @@ import { EditUserComponent } from './user/edit-user/edit-user.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'dashboard',
     component: ClientComponent,
     children: [
       {
-        path: 'dashboard',
+        path: '',
         pathMatch: 'full',
         component: DashboardComponent
       },

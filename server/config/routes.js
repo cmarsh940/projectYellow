@@ -62,6 +62,10 @@ module.exports = function (app) {
         validJWTNeeded,
         Clients.show
     ]);
+    app.get('/api/clients/info/:id', [
+        validJWTNeeded,
+        Clients.info
+    ]);
     app.put('/api/clients/:id', [
         validJWTNeeded,
         Clients.update

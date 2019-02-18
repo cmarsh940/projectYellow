@@ -28,12 +28,12 @@ const routes: Routes = [
     component: PageNotFoundComponent
   },
   {
-    path: 'overview',
-    redirectTo: 'dashboard'
-  },
-  {
     path: 'dashboard',
     loadChildren: './client/client.module#ClientModule'
+  },
+  {
+    path: 'overview',
+    redirectTo: 'dashboard'
   },
   {
     path: '',

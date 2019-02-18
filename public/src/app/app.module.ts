@@ -1,3 +1,5 @@
+import { LandingModule } from './landing/landing.module';
+import { ClientModule } from './client/client.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialModule } from './material/material.module';
 // angular
@@ -41,6 +43,8 @@ export function initLanguage(translateService: TranslatesService): Function {
 @NgModule({
   imports: [
     BrowserModule.withServerTransition({ appId: 'my-app' }),
+    ClientModule,
+    LandingModule,
     NgtUniversalModule,
     TransferHttpCacheModule,
     HttpModule,
