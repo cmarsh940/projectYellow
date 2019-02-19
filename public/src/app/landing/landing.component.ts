@@ -27,7 +27,7 @@ export class LandingComponent implements OnInit {
       console.log('landing resultCookie:', resultCookie);
       const t = window;
       const t1 = document;
-      this.meta.setTag('description', 'Meta update from init on landing page');
+      this.meta.setTag('description', 'Surveys by ME is providing professional surveys, designed for simplicity and ease of use. We provide surveys for large corperations, small businesses, students, and many more. Create your free survey today.');
     }
   }
 }

@@ -1,12 +1,12 @@
+import { AuthService } from './../../auth/auth.service';
 import { Injectable, Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 import { MessagesService } from './messages.service';
 import { envUrl } from 'app/envUrl';
-
-
+import { UniversalStorage } from '@shared/storage/universal.storage';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,7 @@ export class DataService<Type> {
   private handleError: HandleError;
 
   constructor(
+    private universalStorage: UniversalStorage,
     private http: HttpClient,
     httpErrorHandler: HttpErrorHandler,
     private messageService: MessagesService,

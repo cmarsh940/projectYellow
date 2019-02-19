@@ -73,7 +73,7 @@ export function initLanguage(translateService: TranslatesService): Function {
     SurveyService,
     UniversalStorage,
     { provide: APP_INITIALIZER, useFactory: initLanguage, multi: true, deps: [TranslatesService] },
-    // { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   entryComponents: [
     AddUserComponent,

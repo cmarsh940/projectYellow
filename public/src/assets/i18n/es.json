@@ -6,9 +6,27 @@
         "pricing": "Precios",
         "surveyList": "Encuestas"
     },
-    "Home": {
+    "home": {
         "title": "Surveys by ME",
-        "text": "This is the surveys by ME Landing page!"
+        "text": "¿Por qué crear encuestas profesionales?",
+        "question1": "¿Sabes lo que realmente piensa tu cliente?",
+        "answer1": "Las encuestas permiten a sus clientes expresar su experiencia con sus servicios. Darle voz a sus clientes, le permitirá comprender mejor cómo puede hacer los cambios correctos que le darán una ventaja sobre su competencia.",
+        "question2": "¡Dale una voz a tus empleados!",
+        "answer2": "Deje que sus empleados expresen su opinión, de forma segura y segura.",
+        "question3": "¡Aprende lo que la gente piensa de tu negocio / servicio!",
+        "answer3a": "Compromiso del empleador",
+        "answer3b": "Educación y Escuelas",
+        "answer3c": "Investigación de mercado",
+        "answer3d": "La satisfacción del cliente",
+        "answer3e": "Evento planeado",
+        "question4": "Conoce tu trabajo #goals!",
+        "answer4": "Deje que sus empleados expresen su opinión de forma segura y segura.",
+        "question5": "¡Simplifica tu dirección de marketing!",
+        "answer5": "Deje que sus empleados expresen su opinión de forma segura y segura.",
+        "card1": "Móvil amigable",
+        "card2": "Datos en tiempo real",
+        "card3": "Seguro seguro",
+        "card4": "Fácil de usar"
     },
     "about": {
         "title": "Porque nosotros?",
@@ -23,7 +41,7 @@
         "ctitle1": "GRATIS",
         "ctitle2": "BASIC",
         "ctitle3": "PRO",
-        "ctitle4": "ELITE",
+        "ctitle4": "ÉLITE",
         "ctitle5": "Personalizado"
     },
     "surveyList": {
@@ -53,10 +71,5 @@
         "text10": "Estas marcas son identificadores de ME LLC Group y están registradas en los Estados Unidos y otros países. Para obtener información adicional sobre las marcas registradas y las marcas de servicio de ME LLC Group y su uso adecuado, comuníquese con ME LLC Group.",
         "title11": "Preguntas",
         "text11": "Para obtener más ayuda o información sobre las marcas registradas de ME LLC Group y los materiales con derechos de autor, puede comunicarse con ME LLC Group al: Teléfono: (940)808-8285 Correo electrónico: cam.marshall@mellcgroup.com Fecha efectiva: 1 de enero de 2019"
-    },
-    "not-found": {
-        "title": "Página no encontrada",
-        "text": "Parece que hay un problema. Para resolver esto lo antes posible, comuníquese con nuestro equipo de soporte e incluya la url que está tratando de contactar.",
-        "go-home": "Página de inicio"
     }
 }

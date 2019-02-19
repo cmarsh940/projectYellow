@@ -198,7 +198,6 @@ export class AuthService {
   }
 
   getAuthorizationToken() {
-    if (isPlatformBrowser(this.platformId)) {
       console.log('HIT GET AUTH TOKEN FROM AUTH SERVICE');
       if (this.universalStorage.getItem('token') === null) {
         console.log('NO TOKEN HAS BEEN SET');
@@ -208,17 +207,15 @@ export class AuthService {
           console.log('AUTHORIZATION FAILED');
           return false;
         } else {
-          const data = JSON.parse(this.universalStorage.getItem('token'));
+          const data = this.universalStorage.getItem('token');
           return data;
         }
       }
-    }
-    console.log('PLATFORM IS NOT BROWSER');
   }
 
   getExpiration() {
     if (isPlatformBrowser(this.platformId)) {
-      const expiration = JSON.parse(this.universalStorage.getItem('expires_at'));
+      const expiration = this.universalStorage.getItem('expires_at');
       const expiresAt = expiration;
       return moment(expiresAt);
     }

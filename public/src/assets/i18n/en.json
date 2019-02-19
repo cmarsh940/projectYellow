@@ -6,9 +6,27 @@
     "pricing": "Pricing",
     "surveyList": "Surveys"
   },
-  "Home": {
+  "home": {
     "title": "Surveys by ME",
-    "text": "This is the surveys by ME Landing page!"
+    "text": "Why create professional surveys?",
+    "question1": "Know what your customer really think?",
+    "answer1": "Surveys allow your customers to express their experience with your services. Giving your customers a voice, will allow you to better understand how you can make the correct changes that will give you an edge over your competition.",
+    "question2": "Give your employees a voice!",
+    "answer2": "Let your employees voice there opinion, safe and securely.",
+    "question3": "Learn what people think of your business/service!",
+    "answer3a": "Employer Engagement",
+    "answer3b": "Education & Schools",
+    "answer3c": "Market Research",
+    "answer3d": "Customer Satisfaction",
+    "answer3e": "Event Planning",
+    "question4": "Meet your working #goals!",
+    "answer4": "Let your employees voice their opinion, safe and securely.",
+    "question5": "Simplify your marketing direction!",
+    "answer5": "Let your employees voice there opinion, safe and securely.",
+    "card1": "Mobile Friendly",
+    "card2": "Real Time Data",
+    "card3": "Safe & Secure",
+    "card4": "User Friendly"
   },
   "about": {
     "title": "Why Us?",
@@ -53,11 +71,5 @@
     "text10": "These marks are identifiers of ME LLC Group and are registered in the United States and other countries. For additional information regarding ME LLC Group trademarks and service marks and their proper use, please contact ME LLC Group.",
     "title11": "Questions",
     "text11": "For further assistance or information regarding ME LLC Group trademarks and copyrighted materials, you may contact ME LLC Group at: Phone: (940)808-8285 E-mail: cam.marshall@mellcgroup.com Effective date: January 1, 2019"
-
-  },
-  "not-found": {
-    "title": "Page Not Found",
-    "text": "There seems to be a problem. To get this resolved as soon as possible, contact our support team and include the url you are trying to reach.",
-    "go-home": "Home page"
   }
 }
