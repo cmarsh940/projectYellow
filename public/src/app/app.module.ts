@@ -1,3 +1,4 @@
+import { OverviewModule } from './overview/overview.module';
 import { LandingModule } from './landing/landing.module';
 import { ClientModule } from './client/client.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -44,6 +45,7 @@ export function initLanguage(translateService: TranslatesService): Function {
   imports: [
     BrowserModule.withServerTransition({ appId: 'my-app' }),
     ClientModule,
+    OverviewModule,
     LandingModule,
     NgtUniversalModule,
     TransferHttpCacheModule,

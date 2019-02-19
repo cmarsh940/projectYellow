@@ -1,0 +1,61 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport="true"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [(opened)]="opened">
+    <mat-toolbar color="primary">Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="['/profile', currentClient]" routerLinkActive="active">
+        <mat-icon mat-list-icon>account_circle</mat-icon>
+        <h4 mat-line>Profile</h4>
+      </a>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/overview" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <h4 mat-line>Overview</h4>
+      </a>
+      <a mat-list-item routerLink="/dashboard" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <h4 mat-line>Dashboard</h4>
+      </a>
+      <a mat-list-item [routerLink]="['surveyReport']" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>assignment</mat-icon>
+        <h4 mat-line>Surveys</h4>
+      </a>
+      <a mat-list-item [routerLink]="['surveyCategoriesReport']" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>category</mat-icon>
+        <h4 mat-line>Survey Categories</h4>
+      </a>
+      <a mat-list-item [routerLink]="['clientReport']" (click)="drawer.toggle()"> 
+        <mat-icon mat-list-icon>group</mat-icon>
+        <h4 mat-line>Clients</h4>
+      </a>
+      <a mat-list-item [routerLink]="['subscriptionReport']" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>group</mat-icon>
+        <h4 mat-line>Subscriptions (SOON)</h4>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        *ngIf="isHandset$ | async">
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      
+      <span class="spacer">Overview</span>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="logout()" matTooltip="Logout" aria-label="logout button">
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>

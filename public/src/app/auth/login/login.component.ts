@@ -214,15 +214,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
             const error = data.errors[key];
             this.errors.push(error.message);
           }
-          // this.errors.push(data.errors);
+          this.errors.push(data.errors);
         } else {
-          // if (data.a8o1 === 'CAPTAIN') {
-          //   this._authService.setCurrentClient(data);
-          //   this._router.navigateByUrl('/overview');
-          // } else {
+          if (data.a8o1 === 'CAPTAIN') {
+            this._authService.setCurrentClient(data);
+            this._router.navigateByUrl('/overview');
+          } else {
             this._authService.setCurrentClient(data);
             this._router.navigateByUrl('/dashboard');
-          // }
+          }
         }
       } else {
         this.errors = data;

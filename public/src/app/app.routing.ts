@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: 'overview',
-    redirectTo: 'dashboard'
+    loadChildren: './overview/overview.module#OverviewModule'
   },
   {
     path: '',

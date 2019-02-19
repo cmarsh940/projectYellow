@@ -10,6 +10,7 @@ import { Survey } from '@shared/models/survey';
 import { AuthService } from 'app/auth/auth.service';
 import { GenericValidator } from '@shared/validators/generic-validator';
 import { UniversalStorage } from '@shared/storage/universal.storage';
+import { SurveyCategoryService } from 'app/overview/survey-category-report/survey-category.service';
 
 
 
@@ -52,7 +53,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     private universalStorage: UniversalStorage,
     private fb: FormBuilder,
     private _authService: AuthService,
-    // private _categoryService: SurveyCategoryService,
+    private _categoryService: SurveyCategoryService,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router
@@ -116,22 +117,22 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   }
 
   loadCategories() {
-    // this.errors = [];
-    // const tempList = [];
-    // return this._categoryService.getAll().toPromise().then((result) => {
-    //   this.errors = null;
-    //   result.forEach(asset => {
-    //     tempList.push(asset);
-    //   });
-    //   this.categories = tempList;
-    // }).catch((error) => {
-    //   if (error) {
-    //     for (const key of Object.keys(error)) {
-    //       const errors = error[key];
-    //       this.errors.push(errors.message);
-    //     }
-    //   }
-    // });
+    this.errors = [];
+    const tempList = [];
+    return this._categoryService.getAll().toPromise().then((result) => {
+      this.errors = null;
+      result.forEach(asset => {
+        tempList.push(asset);
+      });
+      this.categories = tempList;
+    }).catch((error) => {
+      if (error) {
+        for (const key of Object.keys(error)) {
+          const errors = error[key];
+          this.errors.push(errors.message);
+        }
+      }
+    });
   }
 
 
@@ -272,7 +273,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updateAsset(this.survey._id, this.survey).subscribe(
       result => {
-        this._router.navigate(['/survey']);
+        this._router.navigate(['/dashboard/survey']);
       },
       error => {
         console.log('___ERROR___:', error);
@@ -282,7 +283,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
         }
       });
     if (!this.errors) {
-      this._router.navigate(['/survey']);
+      this._router.navigate(['/dashboard/survey']);
     }
   }
 }

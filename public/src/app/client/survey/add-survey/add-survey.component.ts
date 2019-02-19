@@ -10,6 +10,7 @@ import { questionGroups, Question } from '@shared/models/question-group';
 import { Survey } from '@shared/models/survey';
 import { AuthService } from 'app/auth/auth.service';
 import { UniversalStorage } from '@shared/storage/universal.storage';
+import { SurveyCategoryService } from 'app/overview/survey-category-report/survey-category.service';
 
 
 
@@ -51,7 +52,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
     @Inject(PLATFORM_ID) private platformId: Object,
     private fb: FormBuilder,
     private _authService: AuthService,
-    // private _categoryService: SurveyCategoryService,
+    private _categoryService: SurveyCategoryService,
     private _surveyService: SurveyService,
     private universalStorage: UniversalStorage,
     private _router: Router,
@@ -66,28 +67,27 @@ export class AddSurveyComponent implements OnInit, OnChanges {
     if (isPlatformBrowser(this.platformId)) {
       this.clientId = this.universalStorage.getItem('t940');
       await this.check();
-      // this.loadCategories();
-      // this.checkPC();
+      this.loadCategories();
     }
   }
 
   loadCategories() {
-    // this.errors = [];
-    // const tempList = [];
-    // return this._categoryService.getAll().toPromise().then((result) => {
-    //   this.errors = null;
-    //   result.forEach(asset => {
-    //     tempList.push(asset);
-    //   });
-    //   this.categories = tempList;
-    // }).catch((error) => {
-    //   if (error) {
-    //     for (const key of Object.keys(error)) {
-    //       const errors = error[key];
-    //       this.errors.push(errors.message);
-    //     }
-    //   }
-    // });
+    this.errors = [];
+    const tempList = [];
+    return this._categoryService.getAll().toPromise().then((result) => {
+      this.errors = null;
+      result.forEach(asset => {
+        tempList.push(asset);
+      });
+      this.categories = tempList;
+    }).catch((error) => {
+      if (error) {
+        for (const key of Object.keys(error)) {
+          const errors = error[key];
+          this.errors.push(errors.message);
+        }
+      }
+    });
   }
 
   check() {
@@ -98,7 +98,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
         this.location.back();
       } else {
         console.log('count is good');
-        if (data.b801) {
+        if (data.b801 !== 'FREE') {
           console.log('Subscribed');
           this.pc = true;
         } else {
@@ -189,7 +189,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.addAsset(this.survey).subscribe(
       result => {
-        this._router.navigate(['/survey']);
+        this._router.navigate(['/dashboard/survey']);
       },
       error => {
         console.log('___ERROR___:', error);
@@ -200,7 +200,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
       });
       if (!this.errors) {
         this.rebuildForm();
-        this._router.navigate(['/survey']);
+        this._router.navigate(['/dashboard/survey']);
       }
     }
 

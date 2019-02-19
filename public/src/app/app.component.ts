@@ -8,6 +8,6 @@ import { MetaService } from '@ngx-meta/core';
 })
 export class AppComponent {
   constructor(private readonly meta: MetaService) {
-    this.meta.setTag('og:title', 'landing dynamic meta tag');
+    this.meta.setTag('og:title', 'Survey by ME');
   }
 }
