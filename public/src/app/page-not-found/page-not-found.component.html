@@ -1,15 +1,14 @@
 <div class="error-header">
-  <h2 mat-header>404 Error</h2>
+  <h2 class="mat-title">{{ "not-found.title" | translate }}</h2>
 </div>
 <div class="error-body">
   <h4>
-    There seems to be a problem. To get this resolved as soon as possible, contact our support
-    team and include the url you are trying to reach. <a href="mailto:suport@mellcgroup.com?Subject=Survey%20Error"
+    {{ "not-found.text" | translate }} <a href="mailto:suport@mellcgroup.com?Subject=Survey%20Error"
       target="_top">Contact Support</a>
   </h4>
   <div class="error-button">
     <button mat-raised-button routerLink="/" matTooltip="go home" aria-label="home button" color="primary">
-      Go back to home page
+      {{ "not-found.go-home" | translate }}
     </button>
   </div>
 </div>

@@ -9,3 +9,8 @@ section {
 a {
 color:  #c7a909;
 }
+
+.header {
+    width: 100%;
+    text-align: center;
+}

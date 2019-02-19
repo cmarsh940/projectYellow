@@ -15,3 +15,18 @@
   overflow-x: hidden;
   overflow-y: scroll;
 }
+
+.mat-form-field {
+    font-size: small!important;
+    font-weight: 100;
+    width: 5em;
+}
+
+h6 {
+  font-size: small!important;
+}
+
+.icon-button {
+    height: 70%;
+    width: auto;
+}

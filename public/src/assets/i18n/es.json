@@ -1,0 +1,62 @@
+{
+    "loading": "Cargando",
+    "sidebar": {
+        "home": "Casa",
+        "about": "Acerca de",
+        "pricing": "Precios",
+        "surveyList": "Encuestas"
+    },
+    "Home": {
+        "title": "Surveys by ME",
+        "text": "This is the surveys by ME Landing page!"
+    },
+    "about": {
+        "title": "Porque nosotros?",
+        "text": "Surveys by ME está dedicado a poner información en sus manos.",
+        "p1": "Nuestra plataforma facilita la creación, recopilación y análisis de cualquier información que lo ayude a usted o su empresa a obtener conocimiento y una ventaja sobre los demás.",
+        "p2": "Ofrecemos una amplia gama de servicios que se ajustan a las necesidades de cualquier persona. Nuestros servicios lo ayudarán y lo guiarán para que realice la encuesta perfecta, diseñada para optimizar las respuestas.",
+        "p3": "Ya que pasamos la mayor parte del día con nuestros teléfonos en nosotros. Construimos nuestra plataforma para un uso optimizado en un teléfono. Eso significa que no importa dónde se encuentre en el mundo, puede acceder a sus datos sin tener que girar el teléfono de lado o hacer zoom para ver sus datos."
+    },
+    "pricing": {
+        "title": "Precios",
+        "text": "Precios asequibles a la medida de sus necesidades.",
+        "ctitle1": "GRATIS",
+        "ctitle2": "BASIC",
+        "ctitle3": "PRO",
+        "ctitle4": "ELITE",
+        "ctitle5": "Personalizado"
+    },
+    "surveyList": {
+        "title": "Encuestas / encuestas públicas",
+        "text": "Participa en nuestras encuestas / encuestas públicas para tener la oportunidad de ganar cosas gratis"
+    },
+    "rights": {
+        "title1": "Privacidad / Derechos e información de uso",
+        "text1": "Al utilizar esta aplicación, usted acepta las condiciones que se detallan a continuación (este 'Acuerdo'). Si no está de acuerdo con alguna de las condiciones de este Acuerdo, no use esta aplicación. Nos reservamos el derecho de cambiar este Acuerdo en cualquier momento, así que verifique los cambios en este Acuerdo cada vez que utilice esta aplicación. Su uso continuado de este sitio después de la publicación de cambios a este Acuerdo significa que usted acepta esos cambios.",
+        "title2": "Licencias y Restricciones",
+        "text2": "Esta aplicación es propiedad y está operada por Marshall Evans LLC (en adelante, 'ME LLC Group', 'we', 'us' o un término similar). El material que se encuentra en esta aplicación (incluyendo imágenes, texto, pantallas, bases de datos, medios e información general) es de nuestra propiedad o está bajo nuestra licencia. A menos que se indique lo contrario, las personas pueden: publicar material de partes de esta aplicación en otro sitio web o en una red de computadoras para su uso personal y no comercial; y vea, descargue e imprima materiales de esta aplicación para su uso personal, no comercial. En este sentido, los materiales no pueden publicarse desde esta aplicación a otro sitio web. Además, los materiales de esta aplicación pueden ser reproducidos por el personal de los medios de comunicación para su uso en foros de noticias públicas tradicionales, a menos que se indique lo contrario. Cualquier otro uso de la información o los materiales que se encuentran en esta solicitud, incluido cualquier uso por parte de organizaciones o entidades legales, no está permitido sin nuestro permiso previo por escrito. (Consulte “Permiso para utilizar derechos de autor y marcas comerciales” a continuación.) No obstante lo anterior, nos reservamos la discreción y el derecho exclusivo de negar, revocar o limitar el uso de esta aplicación, incluida la reproducción y cualquier otro uso de cualquier material disponible a través de esta aplicación. No es nuestra responsabilidad, sin embargo, determinar qué significa 'uso justo' para las personas que desean utilizar los materiales de esta aplicación. Eso sigue siendo responsabilidad exclusiva de los usuarios individuales de esta aplicación. Además, no estamos obligados a proporcionar citas adicionales a la fuente, ni a garantizar que los materiales de esta solicitud estén autorizados para cualquier uso alternativo. Dicha responsabilidad también permanece en última instancia con los usuarios individuales de esta aplicación. Sin embargo, mantenemos el derecho de prevenir la infracción de los materiales del Grupo ME LLC e interpretar el 'uso justo' como entendemos la ley.",
+        "title3": "Permiso para utilizar derechos de autor y marcas registradas",
+        "text3": "Para solicitar permiso para el uso de material o marcas registradas de ME LLC Group, comuníquese con nosotros al teléfono: (940)808-8285 Correo electrónico: cam.marshall@mellcgroup.com",
+        "title4": "Solicitar permiso",
+        "text4": "Nota: El plazo aproximado para recibir una respuesta es de 45 días. Las solicitudes que involucran cantidades considerables de material pueden tomar más tiempo.",
+        "title5": "Código de Conduct",
+        "text5": "Usted acepta que no enviará ni publicará en esta aplicación información individual o, como parte de un esfuerzo colectivo, que pueda considerarse perjudicial u ofensivo para otros usuarios, ni se hará pasar por otro usuario para ocultar su identidad o implicar a otro en tales acciones Acepta no hacer nada que pueda interrumpir el flujo de datos hacia y desde esta aplicación, afectar el servicio o el rendimiento de esta aplicación, o burlar cualquiera de los controles o reglas de uso que hemos implementado. Comprende que el resultado de acciones dañinas u ofensivas puede incluir la revocación de su derecho a usar esta aplicación (incluido su derecho a usar cualquier material de esta aplicación) y acciones legales en su contra.",
+        "title6": "Enlace",
+        "text6": "Para su comodidad, esta aplicación puede contener enlaces a sitios web operados por otros. Dichos sitios de terceros no son mantenidos ni controlados por nosotros, y no somos responsables de su contenido. Si bien hemos realizado un esfuerzo de buena fe para vincularnos solo con sitios de buen gusto y apropiados, algunos pueden contener material inapropiado u objetable. Si encuentra dicho material mientras utiliza un sitio web al que accedió a través de un enlace en esta aplicación, notifíquenos de inmediato. Creemos que aquellos que hacen que la información esté disponible en Internet esperan que sea pública y ampliamente disponible. Por lo tanto, creemos que la vinculación a otros sitios es legalmente permisible y coherente con las expectativas de quienes usan Internet. Sin embargo, si el acceso a un sitio web en particular debe estar restringido, el operador de dicho sitio debe notificarnos de inmediato.",
+        "title7": "Jurisdicción y Ley Aplicable.",
+        "text7": "Este Acuerdo se regirá por las leyes del Estado de Texas, Estados Unidos de América, según se apliquen a los acuerdos celebrados y que se realizarán en su totalidad dentro del estado, sin dar efecto a ningún principio de conflicto de leyes. Cualquier acción que emprenda para hacer cumplir este Acuerdo o cualquier asunto relacionado con esta solicitud se presentará en los tribunales estatales o federales ubicados en Denton, Texas, y por la presente usted acepta y se somete a la jurisdicción personal de dichos tribunales con el fin de litigar a cualquier tal acción Si alguna disposición de este Acuerdo es ilegal, nula o inejecutable en su totalidad o en parte, las disposiciones restantes no se verán afectadas, a menos que determinemos que la disposición inválida o inaplicable es un término esencial del Acuerdo, en cuyo caso podemos a nuestra entera discreción enmendamos este Acuerdo.",
+        "title8": "Limitaciones de responsabilidad",
+        "text8": "No somos responsables de ningún daño especial o consecuente que resulte de su uso o de su incapacidad para utilizar esta aplicación o los materiales en esta aplicación o en cualquier sitio vinculado, incluidos, entre otros, la pérdida de beneficios, la interrupción del negocio y la pérdida. de programas u otros datos en su sistema de manejo de información. En ningún caso, nuestra responsabilidad total ante usted por todos los daños, pérdidas y causas de acción superará el monto pagado por usted, si corresponde, por acceder a esta aplicación o a cualquier sitio vinculado.",
+        "title9": "Renuncias",
+        "text9": "ESTA APLICACIÓN Y LOS MATERIALES EN ESTA SOLICITUD Y CUALQUIER SITIO VINCULADO SE PROPORCIONAN 'TAL CUAL' Y SIN GARANTÍAS DE NINGÚN TIPO, YA SEAN EXPRESAS O IMPLÍCITAS. EN LA MEDIDA MÁXIMA PERMITIDA DE CONFORMIDAD CON LA LEY APLICABLE, NEGAMOS TODAS LAS GARANTÍAS, EXPRESAS O IMPLÍCITAS, INCLUIDAS, PERO NO LIMITADAS A, GARANTÍAS DE TÍTULO Y GARANTÍAS IMPLÍCITAS DE COMERCIALIZACIÓN Y ADECUACIÓN PARA UN PARTICULAR NO GARANTIZAMOS QUE LAS FUNCIONES DE ESTA SOLICITUD SEA ININTERRUMPIDA O LIBRE DE ERRORES, QUE LOS DEFECTOS SE CORREGIRÁN, O QUE ESTA SOLICITUD O EL SERVIDOR QUE LO HACE DISPONIBLE ESTÁN LIBRES DE VIRUS U OTROS COMPONENTES PERJUDICIALES.",
+        "title10": "Marcas comerciales",
+        "text10": "Estas marcas son identificadores de ME LLC Group y están registradas en los Estados Unidos y otros países. Para obtener información adicional sobre las marcas registradas y las marcas de servicio de ME LLC Group y su uso adecuado, comuníquese con ME LLC Group.",
+        "title11": "Preguntas",
+        "text11": "Para obtener más ayuda o información sobre las marcas registradas de ME LLC Group y los materiales con derechos de autor, puede comunicarse con ME LLC Group al: Teléfono: (940)808-8285 Correo electrónico: cam.marshall@mellcgroup.com Fecha efectiva: 1 de enero de 2019"
+    },
+    "not-found": {
+        "title": "Página no encontrada",
+        "text": "Parece que hay un problema. Para resolver esto lo antes posible, comuníquese con nuestro equipo de soporte e incluya la url que está tratando de contactar.",
+        "go-home": "Página de inicio"
+    }
+}

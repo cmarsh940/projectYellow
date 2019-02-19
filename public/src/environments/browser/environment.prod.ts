@@ -4,6 +4,9 @@ export const environment = {
   // for prerender
   // BRAINTREE
   braintreeKey: 'sandbox_yddk3k3z_7ztv22wfy86bsspy',
+  checkoutUrl: 'http://localhost:8000/api/braintree/createpurchase',
+  paymentTokenUrl: 'http://localhost:8000/api/braintree/getclienttoken',
+  updatePurchaseUrl: 'http://localhost:8000/api/braintree/getclienttoken',
 
   // FACEBOOK
   facebookId: '2287097054898932',

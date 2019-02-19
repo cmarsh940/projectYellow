@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Survey } from '@shared/models/survey';
 import { SurveyService } from 'app/client/survey/survey.service';
@@ -25,8 +25,11 @@ export class ListSurveysComponent implements OnInit {
 
   constructor(
     // private _authService: AuthService,
-    private _surveyService: SurveyService
-  ) { }
+    private _surveyService: SurveyService,
+    @Inject('ORIGIN_URL') public baseUrl: string,
+  ) {
+    console.log(`ORIGIN_URL=${baseUrl}`);
+  }
 
   ngOnInit() {
     // this.checkLogedIn();

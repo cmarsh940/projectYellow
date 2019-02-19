@@ -7,34 +7,39 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'"
     [(opened)]="opened">
     <mat-toolbar color="primary">
-      <a mat-button routerLink="/" (click)="drawer.toggle()">Home</a>
+      <a mat-button routerLink="/" (click)="drawer.toggle()">
+        <h4 mat-line>Home</h4>
+      </a>
     </mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="/about" (click)="drawer.toggle()">About Us</a>
-      <a mat-list-item routerLink="/pricing" (click)="drawer.toggle()">Pricing</a>
-      <a mat-list-item routerLink="/survey-list" (click)="drawer.toggle()">View All Surveys</a>
-      <a mat-list-item (click)="openDialog()" (tap)="drawer.toggle()">Sign Up</a>
+      <div *ngFor="let item of links">
+        <a mat-list-item [routerLink]="[item.link]" [routerLinkActive]="['active']" (click)="drawer.toggle()">
+          <i mat-list-icon class="material-icons">{{ item.icon }}</i>
+          <h4 mat-line>{{ item.name | translate }}</h4>
+        </a>
+      </div>
+      <a mat-list-item (click)="openDialog()" (tap)="drawer.toggle()">
+        <i mat-list-icon class="material-icons">how_to_reg</i>
+        <h4 mat-line>Sign Up</h4>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()">
-          <img src="/assets/icons/menu.png" alt="menu icon" class="icon-button">
+      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+        <img src="/assets/icons/menu.png" alt="menu icon" class="icon-button">
       </button>
       <span class="spacer"></span>
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-          <img src="/assets/icons/apps.png" alt="apps icon" class="icon-button">
+      <mat-form-field>
+        <select matNativeControl (change)="changeLang($event.target.value)">
+          <option *ngFor="let lang of langList$ | async" [value]="lang.code" [selected]="lang.code === currentLang">
+            {{ lang.name }}
+          </option>
+        </select>
+      </mat-form-field>
+      <button mat-button routerLink="/login" matTooltip="Login">
+        <h6>Login</h6>
       </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="/login" matTooltip="Login">
-          <mat-icon>person_outline</mat-icon>
-          <span>Login</span>
-        </button>
-      </mat-menu>
     </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>

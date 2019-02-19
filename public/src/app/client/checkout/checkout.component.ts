@@ -24,7 +24,7 @@ import { Client } from '@shared/models/client';
 })
 export class CheckoutComponent implements OnDestroy, OnInit {
   subscriptionId: number;
-  paymentTokenURL = 'api/braintree/getclienttoken';
+  paymentTokenURL = environment.paymentTokenUrl;
   errors = [];
   plans = [];
   selectedPlan: any;
@@ -197,7 +197,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
           const currentClient = self.data.data;
           if (currentClient._subscription === 'FREE') {
             self.processing = true;
-            const checkoutURL = 'api/braintree/createpurchase';
+            const checkoutURL = environment.checkoutUrl;
             self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, currentClient).subscribe(res => {
               if (res.success === false) {
                 alert('YOUR PAYMENT WAS DECLINED');
@@ -211,7 +211,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
             );
           } else {
             self.processing = true;
-            const checkoutURL = 'api/braintree/updatepurchase';
+            const checkoutURL = environment.updatePurchaseUrl;
             self.paymentService.updateSub(checkoutURL, payload.nonce, self.selectedPlan, currentClient).subscribe(res => {
                 if (res.success === false) {
                   self.processing =  false;
