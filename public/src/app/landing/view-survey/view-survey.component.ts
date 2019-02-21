@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterVie
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
+
 import { questionGroups, Question } from '@shared/models/question-group';
 import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
@@ -16,33 +17,6 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
-  get questions(): FormArray {
-    return <FormArray>this.surveyForm.get('questions');
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private _surveyService: SurveyService,
-    private _activatedRoute: ActivatedRoute,
-    private _router: Router,
-  ) {
-
-    // Defines all of the validation messages for the form.
-    // These could instead be retrieved from a file or database.
-    this.validationMessages = {
-      answers: {
-        required: 'A answer is required.'
-      },
-    };
-
-    // Define an instance of the validator for use with this form,
-    // passing in this form's set of validation messages.
-    this.genericValidator = new GenericValidator(this.validationMessages);
-
-    this.incentiveForm = fb.group({
-      userEmail: this.userEmail,
-    });
-  }
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
   surveyId: string = '';
@@ -77,6 +51,33 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     const day = d.getDay();
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
+  }
+
+  get questions(): FormArray {
+    return <FormArray>this.surveyForm.get('questions');
+  }
+
+  constructor(
+    private fb: FormBuilder,
+    private _surveyService: SurveyService,
+    private _activatedRoute: ActivatedRoute,
+    private _router: Router,
+  ) {
+    // Defines all of the validation messages for the form.
+    // These could instead be retrieved from a file or database.
+    this.validationMessages = {
+      answers: {
+        required: 'A answer is required.'
+      },
+    };
+
+    // Define an instance of the validator for use with this form,
+    // passing in this form's set of validation messages.
+    this.genericValidator = new GenericValidator(this.validationMessages);
+
+    this.incentiveForm = fb.group({
+      userEmail: this.userEmail,
+    });
   }
 
   ngOnInit(): void {

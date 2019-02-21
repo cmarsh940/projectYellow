@@ -15,6 +15,7 @@ import { UserComponent } from './user/user.component';
 import { AddUserComponent } from './user/add-user/add-user.component';
 import { UploadUsersComponent } from './user/upload-users/upload-users.component';
 import { EditUserComponent } from './user/edit-user/edit-user.component';
+import { NotificationComponent } from './notification/notification.component';
 
 
 const routes: Routes = [
@@ -31,6 +32,11 @@ const routes: Routes = [
         path: 'checkout/:id/:id',
         pathMatch: 'full',
         component: CheckoutComponent,
+      },
+      {
+        path: 'notification',
+        pathMatch: 'full',
+        component: NotificationComponent
       },
       {
         path: 'profile/:id',

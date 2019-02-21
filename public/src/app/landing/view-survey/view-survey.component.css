@@ -10,6 +10,9 @@
 .mat-spinner {
     margin: 5em auto;
 }
+mat-step-label {
+    display: none !important;
+}
 
 form {
     margin: auto;

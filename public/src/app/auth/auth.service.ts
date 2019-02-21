@@ -113,7 +113,7 @@ export class AuthService {
 
   verify() {
     if (isPlatformBrowser(this.platformId)) {
-      const data = JSON.parse(this.universalStorage.getItem('t940'));
+      const data = this.universalStorage.getItem('t940');
       if (data === undefined || data === null || data === '' ) {
         return false;
       } else {
@@ -186,7 +186,7 @@ export class AuthService {
 
   checkLoggedIn() {
     if (isPlatformBrowser(this.platformId)) {
-      const data = JSON.parse(this.universalStorage.getItem('t940'));
+      const data = this.universalStorage.getItem('t940');
       if (!data) {
         return false;
       }

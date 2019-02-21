@@ -223,7 +223,7 @@
             </mat-list>
         </mat-card-content>
         <mat-card-footer>
-            <button mat-raised-button (click)="registerDialog()" color="accent" disabled> Contact Us </button>
+            <a mat-raised-button [href]='contactEmail' target='_top' color="accent" id="contact-button">Contact Us</a>
         </mat-card-footer>
     </mat-card>
 

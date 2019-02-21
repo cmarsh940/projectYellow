@@ -14,7 +14,7 @@ import { UniversalStorage } from '@shared/storage/universal.storage';
 
 const LANG_LIST: ILang[] = [
   { code: 'en', name: 'English', culture: 'en-US' },
-  { code: 'es', name: 'Spanish', culture: 'es-mx' },
+  { code: 'es', name: 'Spanish', culture: 'es-MX' },
 ];
 const LANG_DEFAULT: ILang = LANG_LIST[0];
 const STORAGE_LANG_NAME: string = 'langCode';

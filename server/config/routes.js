@@ -125,6 +125,10 @@ module.exports = function (app) {
         Surveys.delete
     ]);
     app.get('/api/surveys/:id', Surveys.show);
+    app.get('/api/surveys/slug/:slug', [
+        validJWTNeeded,
+        Surveys.findBySlug
+    ]);
     app.put('/api/surveys/:id', [
         validJWTNeeded,
         Surveys.update

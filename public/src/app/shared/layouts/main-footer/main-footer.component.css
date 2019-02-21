@@ -57,12 +57,12 @@ form {
 .mat-form-field {
     width: 100%;
     background-color: white;
-
+    color: black;
 }
 
 .emailSub {
     padding: 0 1em 0.1em;
-    margin-right: 1em;
+    margin: 0 1em;
 }
 
 .mat-form-field button {

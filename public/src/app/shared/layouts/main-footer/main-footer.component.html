@@ -3,7 +3,7 @@
     <!-- LEFT COLUMN -->
     <mat-grid-tile colspan="2" rowspan="4" id="left-column">
       <ul>
-        <li><h5>SUBSCRIBE</h5></li>
+        <li><h5>{{ "footer.left" | translate }}</h5></li>
         <li>
           <form [formGroup]="emailSubForm">
           <div *ngIf="errors" class="errors">
@@ -34,7 +34,7 @@
     <mat-grid-tile colspan="1" rowspan="4">
       <ul id="services-list">
         <li>
-          <h5>COMPANY</h5>
+          <h5>{{ "footer.right" | translate }}</h5>
         </li>
         <li>
           <a [href]='contactEmail' target='_top'>
@@ -58,7 +58,7 @@
     </mat-grid-tile>
     <!-- BOTTOM COPY RIGHT -->
     <mat-grid-tile colspan="3" rowspan="1">
-      <button mat-button (click)="openDialog()" id="copyright">&copy; 2019 ME LLC Group. All Rights Reserved.</button>
+      <button mat-button (click)="openDialog()" id="copyright">&copy; 2019 ME LLC Group. {{ "footer.copyright" | translate }}</button>
     </mat-grid-tile>
   </mat-grid-list>
 </footer>

@@ -24,6 +24,7 @@ import { SubscriptionOverlayComponent } from './profile/subscription-overlay/sub
 import { UploadUsersComponent } from './user/upload-users/upload-users.component';
 import { ProfileService } from './profile/profile.service';
 import { ClientService } from './client.service';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { ClientService } from './client.service';
     AddUserComponent,
     EditUserComponent,
     DashboardComponent,
+    NotificationComponent,
     SurveyComponent,
     AddSurveyComponent,
     EditSurveyComponent,

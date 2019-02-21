@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Survey } from '@shared/models/survey';
 import { SurveyService } from 'app/client/survey/survey.service';
+import { AuthService } from 'app/auth/auth.service';
 
 @Component({
   selector: 'app-list-surveys',
@@ -24,7 +25,7 @@ export class ListSurveysComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    // private _authService: AuthService,
+    private _authService: AuthService,
     private _surveyService: SurveyService,
     @Inject('ORIGIN_URL') public baseUrl: string,
   ) {
@@ -32,14 +33,14 @@ export class ListSurveysComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.checkLogedIn();
+    this.checkLogedIn();
     this.loadAll();
   }
 
-  // checkLogedIn() {
-  //   let response = this._authService.checkLoggedIn();
-  //   this.logedIn = response;
-  // }
+  checkLogedIn() {
+    let response = this._authService.checkLoggedIn();
+    this.logedIn = response;
+  }
 
   loadAll(): Promise<any> {
     const tempList = [];

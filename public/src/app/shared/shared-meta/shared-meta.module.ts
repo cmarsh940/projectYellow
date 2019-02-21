@@ -10,13 +10,14 @@ export function metaFactory(translate: TranslateService): MetaLoader {
     pageTitleSeparator: ' | ',
     applicationName: 'Surveys by ME',
     defaults: {
-      title: 'Default page title',
-      description: 'Default description',
+      title: 'Surveys by ME',
+      description: 'Surveys by ME is Providing professional surveys, designed for simplicity and ease of use. We provide surveys for large corperations, small businesses, students, and many more. Create your free survey today.',
       'og:site_name': 'Surveys by ME',
       'og:type': 'website',
       'og:locale': 'en-US',
       'og:locale:alternate': [
         { code: 'en', name: 'English', culture: 'en-US' },
+        { code: 'es', name: 'Spanish', culture: 'es-MX' },
       ]
         .map((lang: any) => lang.culture)
         .toString(),

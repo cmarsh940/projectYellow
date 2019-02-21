@@ -39,7 +39,7 @@ const routes: Routes = [
     path: '',
     loadChildren: './landing/landing.module#LandingModule'
   },
-  // { path: '**', redirectTo: '404error' },
+  { path: '**', redirectTo: '404error' },
 ];
 // must use {initialNavigation: 'enabled'}) - for one load page, without reload
 export const AppRoutes = RouterModule.forRoot(routes, { initialNavigation: 'enabled' });

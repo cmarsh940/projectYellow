@@ -21,6 +21,10 @@
         <mat-icon mat-list-icon>assignment</mat-icon> 
         <h4 mat-line>Surveys</h4>
       </a>
+      <a mat-list-item [routerLink]="['notification']" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>notification_important</mat-icon> 
+        <h4 mat-line>Notifications</h4>
+      </a>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

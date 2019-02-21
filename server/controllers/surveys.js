@@ -125,6 +125,14 @@ class SurveysController {
     });
   }
 
+  findBySlug(req, res) {
+    Survey.findOne({ slug: req.params.slug }, (err, survey) => {
+      if (err) {
+        return res.json(err);
+      }
+      return res.json(survey);
+    });
+  }
 
   answerSurvey(req, res) {
     console.log("*** HIT SERVER UPDATE ANSWER ***", req.body);
