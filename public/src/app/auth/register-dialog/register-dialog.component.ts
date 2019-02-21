@@ -17,6 +17,11 @@ declare const gapi: any;
   styleUrls: ['./register-dialog.component.css']
 })
 
+/**
+TODO:
+- [] change google and facebook to just icons
+*/
+
 export class RegisterDialogComponent implements OnInit, AfterViewInit {
 
   FB: any;

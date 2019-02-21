@@ -1,6 +1,6 @@
 export class Survey {
     _id?: any;
-    active?:boolean;
+    active?: boolean;
     agent?: any;
     averageTime?: number;
     category?: string;
@@ -12,6 +12,7 @@ export class Survey {
     name?: string;
     platform?: any;
     private?: boolean;
+    public?: boolean;
     questions?: any;
     submissionDates?: any;
     surveyTime?: number;

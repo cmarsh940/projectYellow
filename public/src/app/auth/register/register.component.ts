@@ -90,7 +90,7 @@ export class RegisterComponent implements OnInit {
     Validators.minLength(2),
     Validators.maxLength(5),
   ]);
-  zipFormControl = new FormControl('', [
+  postalCodeFormControl = new FormControl('', [
     Validators.required,
     Validators.pattern('[0-9]*'),
     Validators.minLength(5),
@@ -114,7 +114,7 @@ export class RegisterComponent implements OnInit {
       address: this.addressFormControl,
       city: this.cityFormControl,
       state: this.stateFormControl,
-      zip: this.zipFormControl,
+      postalCode: this.postalCodeFormControl,
     }, { updateOn: 'blur' });
   }
 
@@ -141,7 +141,7 @@ export class RegisterComponent implements OnInit {
       'address': this.addressFormControl.value,
       'city': this.cityFormControl.value,
       'state': this.stateFormControl.value,
-      'zip': this.zipFormControl.value,
+      'postalCode': this.postalCodeFormControl.value,
       'subscription': subscription
     };
 
@@ -167,7 +167,7 @@ export class RegisterComponent implements OnInit {
             'address': null,
             'city': null,
             'state': null,
-            'zip': null,
+            'postalCode': null,
           });
           this.openSnackBar();
           this._router.navigateByUrl('/login');

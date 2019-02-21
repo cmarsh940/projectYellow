@@ -93,12 +93,12 @@ export class AddSurveyComponent implements OnInit, OnChanges {
   check() {
     this.pc = false;
     return this._authService.check(this.clientId).then(data => {
-      if (data.c801 <= 0) {
-        console.log('you dont have any more surveys', data.c801);
+      if (data.c8o1 <= 0) {
+        console.log('you dont have any more surveys', data.c8o1);
         this.location.back();
       } else {
         console.log('count is good');
-        if (data.b801 !== 'FREE') {
+        if (data.b8o1 !== 'FREE') {
           console.log('Subscribed');
           this.pc = true;
         } else {
@@ -121,6 +121,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
       experationDate: [''],
       incentive: [''],
       private: [''],
+      public: [''],
       questions: this.fb.array([this.initQuestion()])
     });
   }
@@ -223,6 +224,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
       experationDate: formModel.experationDate,
       incentive: formModel.incentive,
       private: formModel.private,
+      public: formModel.public,
       questions: questionsDeepCopy,
       user: '',
       creator: JSON.parse(localStorage.getItem('currentClient')),

@@ -17,6 +17,11 @@ declare const gapi: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
+
+/**
+TODO:
+- [] change google and facebook to just icons
+*/
 export class LoginComponent implements OnInit, AfterViewInit {
   errors: string[] = [];
   client: Client;

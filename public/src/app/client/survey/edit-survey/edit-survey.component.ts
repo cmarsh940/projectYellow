@@ -163,7 +163,8 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this.surveyForm.patchValue({
       name: this.survey.name,
       category: this.survey.category,
-      private: this.survey.private
+      private: this.survey.private,
+      public: this.survey.public
     });
     this.surveyForm.setControl('questions',
       this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
@@ -258,6 +259,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       submissionDates: this.survey.submissionDates,
       lastSubmission: this.survey.lastSubmission,
       private: formModel.private,
+      public: formModel.public,
       questions: questionsDeepCopy,
       user: this.survey.user,
       creator: this.survey.creator,

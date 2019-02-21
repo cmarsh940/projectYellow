@@ -168,18 +168,18 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- ZIP CODE -->
+        <!-- Postal CODE -->
         <mat-form-field appearance="outline">
-          <mat-label>Zip Code</mat-label>
-          <input matInput type="text" [formControl]="zipFormControl" [errorStateMatcher]="matcher" required autocomplete="postal-code">
-          <mat-error *ngIf="zipFormControl.hasError('required')">
-            Zip code is <strong>required</strong>
+          <mat-label>Postal Code</mat-label>
+          <input matInput type="text" [formControl]="postalCodeFormControl" [errorStateMatcher]="matcher" required autocomplete="postal-code">
+          <mat-error *ngIf="postalCodeFormControl.hasError('required')">
+            postal code is <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="zipFormControl.errors?.pattern">
-            Zip code cannot have letters or symbols in it.
+          <mat-error *ngIf="postalCodeFormControl.errors?.pattern">
+            postal code cannot have letters or symbols in it.
           </mat-error>
-          <mat-error *ngIf="zipFormControl.hasError('maxlength')">
-            Please enter a valid zip code
+          <mat-error *ngIf="postalCodeFormControl.hasError('maxlength')">
+            Please enter a valid postal code
           </mat-error>
         </mat-form-field>
       </div>

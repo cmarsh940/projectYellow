@@ -8,6 +8,7 @@ import { Survey } from '@shared/models/survey';
 
 import { ProfileService } from 'app/client/profile/profile.service';
 import { UniversalStorage } from '@shared/storage/universal.storage';
+import { AuthService } from 'app/auth/auth.service';
 
 @Component({
   selector: 'app-survey-list',
@@ -17,7 +18,9 @@ import { UniversalStorage } from '@shared/storage/universal.storage';
 export class SurveyListComponent implements OnInit, AfterContentChecked {
   currentClient: Client;
   remaining: number;
+  pc: boolean;
   errorMessage;
+  id = this.universalStorage.getItem('t940');
 
   // PAGINATE
   dataSource: any;
@@ -36,6 +39,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
 
   constructor(
     private universalStorage: UniversalStorage,
+    private _authService: AuthService,
     private _profileService: ProfileService,
     private _surveyService: SurveyService,
     private cdref: ChangeDetectorRef
@@ -43,16 +47,28 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
 
   ngOnInit() {
     this.getSurveys();
+    this.check();
   }
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
   }
 
+  check() {
+    this.pc = false;
+    return this._authService.check(this.id).then(data => {
+        if (data.b8o1 !== 'FREE') {
+          console.log('Subscribed');
+          this.pc = true;
+        } else {
+          console.log('Trial');
+          this.pc = false;
+        }
+    });
+  }
+
   getSurveys() {
-    const surveyOwner = JSON.parse(localStorage.getItem('currentClient'));
-    const id = surveyOwner._id;
-    this._profileService.getparticipant(id)
+    this._profileService.getparticipant(this.id)
       .subscribe((response) => {
         this.remaining = response.surveyCount;
         this.dataSource = new MatTableDataSource<Element>(response._surveys);

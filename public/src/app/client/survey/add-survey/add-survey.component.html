@@ -294,8 +294,10 @@
     </div>
   </section>
   <section>
+    <h5>Public surveys / polls will be posted for anyone to view and answer.</h5>
+    <mat-slide-toggle formControlName="public">Make public</mat-slide-toggle>
     <div class="private-toggle" *ngIf="pc">
-      <h5>Private surveys can only be accessed by those you assign.</h5>
+      <h5>Private surveys can only be accessed by those you assign. <strong>Note:</strong> Do not mark public if you want your survey to be private.</h5>
       <mat-slide-toggle formControlName="private">Private Survey</mat-slide-toggle>
       <br>
       <mat-slide-toggle (change)="OnChange($event)">Add an incentive</mat-slide-toggle>

@@ -7,19 +7,12 @@ const ClientSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  address: {
-    type: String,
-  },
   billingCycle: {
     type: Number,
     enum: [1, 12],
     select: false
   },
   businessName: {
-    type: String,
-    trim: true
-  },
-  city: {
     type: String,
     trim: true
   },
@@ -144,10 +137,6 @@ const ClientSchema = new mongoose.Schema({
     trim: true,
     default: "CLIENT"
   },
-  state: {
-    type: String,
-    trim: true
-  },
   subscriptionId: {
     type: String,
     default: ""
@@ -174,8 +163,9 @@ const ClientSchema = new mongoose.Schema({
     required: true,
     default: false
   },
-  zip: {
-    type: Number,
+  _address: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address"
   },
   _meta: {
     type: [

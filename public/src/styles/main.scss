@@ -20,3 +20,26 @@ $custom-warn:    mat-palette($mat-red, 600);
 
 $custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
 @include angular-material-theme($custom-theme);
+
+.logout-snackbar {
+  background: #ffd600;
+  color: #000;
+}
+
+.container {
+  padding: 0 0 5em 0!important;
+}
+
+.header {
+    width: 100%;
+    text-align: center;
+}
+
+.mat-tab-label {
+    min-width: 49%!important;
+}
+
+.icon-button {
+    height: 80%;
+    width: auto;
+}

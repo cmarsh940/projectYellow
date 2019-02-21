@@ -20,6 +20,7 @@ import { UploadService } from '@shared/services/upload.service';
 export class ProfileComponent implements OnInit, OnDestroy {
   currentClient = new Client();
   clientId = '';
+  address: any;
   _routeSubscription: Subscription;
   id: String;
   errors = [];

@@ -8,6 +8,7 @@ const nodemailer = require('nodemailer');
 const os = require('os');
 
 const tempSub = require("../models/staticModels/subscription");
+const Address = mongoose.model('Address');
 const Client = mongoose.model('Client');
 const Meta = mongoose.model('Meta');
 
@@ -114,67 +115,83 @@ class ClientsController {
         console.log("*** SERVER CREATING ERROR", err);
         return res.json(err);
       }
-      let geo = geoip.lookup(req.ip);
-      let meta = {
-        address: req.ip,
-        agent: req.body.agent,
-        device: req.body.device,
-        browser: req.body.platform,
-        loc: geo,
-        metaName: os.userInfo().username,
-        referer: req.headers.referer,
+      let address = {
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        postalCode: req.body.postalCode,
         _client: client._id
       }
-      Meta.create(meta, function (err, metas) {
+      Address.create(address, function (err, address) {
         if (err) {
-          console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
+          console.log("___ CREATE CLIENT ADDRESS ERROR ___", err);
           return res.json(err);
         } else {
-          console.log("CREATED META SUCCESS");
-          // Client.findByIdAndUpdate(req.params.id, {
-          //   $push: { _meta: metas._id }
-          // }, { new: true }, (err, updatedClient) => {
-          //   if (err) {
-          //     console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
-          //     return res.json(err);
-          //   }
-          //   console.log("UPDATED CLIENT IS:", updatedClient)
-            if (client.registerPlatform === "E") {
-              
-              console.log("*** SERVER CLIENT CREATED");
-              let email = {
-                client: client._id,
-                contact: client.email,
-                name: client.firstName,
-                message: client.grt
-              }
-              sendVerificationEmail(email);
-              return res.json(client);
-            }
-            else if (client.registerPlatform === "F" || client.registerPlatform === "G") {
-              
-              console.log("*** SERVER CLIENT CREATED");
+          console.log("CREATED ADDRESS SUCCESS");
+          let geo = geoip.lookup(req.ip);
+          let meta = {
+            address: req.ip,
+            agent: req.body.agent,
+            device: req.body.device,
+            browser: req.body.platform,
+            loc: geo,
+            metaName: os.userInfo().username,
+            referer: req.headers.referer,
+            _client: client._id
+          }
+          Meta.create(meta, function (err, metas) {
+            if (err) {
+              console.log("___ CREATE CLIENT META ERROR ___", err);
+              return res.json(err);
+            } else {
+              console.log("CREATED META SUCCESS");
 
-              let token = jwt.sign({ client }, secret, { expiresIn: '1h' });
-              req.session.client = {
-                _id: client._id,
-                n: client.firstName + " " + client.lastName,
-                a8o1: client.role,
-                b8o1: client._subscription,
-                c8o1: client.surveyCount,
-                d: client.lastUseDate,
-                s: client._surveys,
-                status: client.subscriptionStatus,
-                token: token,
-                expiresIn: 604800,
-                v: client.verified
-              };
-              return res.json(req.session.client);
+              Client.findByIdAndUpdate(client._id, {
+                $push: { _meta: metas._id, _address: address._id }
+              }, { new: true }, (err, updatedClient) => {
+                if (err) {
+                  console.log("___ UPDATE FINDING CLIENT ERROR ___", err);
+                  return res.json(err);
+                }
+                console.log("UPDATED CLIENT IS:", updatedClient)
+                if (client.registerPlatform === "E") {
+                  
+                  console.log("*** SERVER CLIENT CREATED");
+                  let email = {
+                    client: client._id,
+                    contact: client.email,
+                    name: client.firstName,
+                    message: client.grt
+                  }
+                  sendVerificationEmail(email);
+                  return res.json(client);
+                }
+                else if (client.registerPlatform === "F" || client.registerPlatform === "G") {
+                  
+                  console.log("*** SERVER CLIENT CREATED");
+
+                  let token = jwt.sign({ client }, secret, { expiresIn: 604800 });
+                  req.session.client = {
+                    _id: client._id,
+                    n: client.firstName + " " + client.lastName,
+                    a8o1: client.role,
+                    b8o1: client._subscription,
+                    c8o1: client.surveyCount,
+                    d: client.lastUseDate,
+                    s: client._surveys,
+                    status: client.subscriptionStatus,
+                    token: token,
+                    expiresIn: 604800,
+                    v: client.verified
+                  };
+                  return res.json(req.session.client);
+                }
+                else {
+                  return res.json(client);
+                }
+              }) 
             }
-            else {
-              return res.json(client);
-            }
-          // }) 
+          })
         }
       })
     })
@@ -183,7 +200,7 @@ class ClientsController {
   authenticate(req, res) {
     console.log("___ SERVER HIT AUTHENTICATE ___");
 
-    Client.findOne({ email: req.body.email }).select("+password").populate('_surveys').exec((err, client) => {
+    Client.findOne({ email: req.body.email }).select("+password").exec((err, client) => {
       console.log("CLIENT IS", client);
       if (err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
@@ -198,9 +215,8 @@ class ClientsController {
       if (client && client.authenticate(req.body.password)) {
 
         console.log("_____CLIENT LOGGING IN_____");
-        const token = jwt.sign(client.toJSON(), config.jwt_secret, {
-          expiresIn: 604800 // 1 week
-        });
+        console.log("_____CLIENT IS::_____", client);
+        let token = jwt.sign({ client }, secret, { expiresIn: 604800 });
         console.log("_____CREATED TOKEN_____");
         // CHECK IF CLIENT IS IN TRIAL OR SUBSCRIPTION
         if (client.subscriptionStatus === 'Trial') {
@@ -313,6 +329,7 @@ class ClientsController {
     console.log("HIT CLIENT SHOW");
     Client.findById({ _id: req.params.id }).lean()
       .populate('_surveys')
+      .populate('_address')
       .populate('category')
       .exec(function (err, doc) {
         if (err) {

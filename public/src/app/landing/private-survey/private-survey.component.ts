@@ -278,24 +278,4 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
       this.time++;
     }, 1000);
   }
-
-
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.closeOnNavigation = true;
-
-
-    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        console.log(`Dialog Error result:`);
-        console.log(result);
-      } else {
-        console.log(`Dialog result:`);
-        console.table(result);
-        this._router.navigateByUrl('/login');
-      }
-    });
-  }
 }
