@@ -36,6 +36,10 @@ const routes: Routes = [
     loadChildren: './overview/overview.module#OverviewModule'
   },
   {
+    path: 'policies',
+    loadChildren: './policies/policies.module#PoliciesModule'
+  },
+  {
     path: '',
     loadChildren: './landing/landing.module#LandingModule'
   },

@@ -12,6 +12,7 @@ const LINKS: any[] = [
   { link: '/about', name: 'Why Us', icon: 'info_outline' },
   { link: '/pricing', name: 'Pricing', icon: 'attach_money' },
   { link: '/survey-list', name: 'Surveys', icon: 'ballot' },
+  { link: '/policies', name: 'Policies', icon: 'info' },
 ];
 
 @Component({

@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { RightsComponent } from 'app/landing/rights/rights.component';
 // tslint:disable-next-line: max-line-length
 import { MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatDialog, MatSnackBar, MatIconRegistry, MatSnackBarConfig } from '@angular/material';
+import { RightsComponent } from 'app/policies/rights/rights.component';
 
 
 @Component({

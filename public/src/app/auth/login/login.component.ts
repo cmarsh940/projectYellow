@@ -189,7 +189,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           console.log('___ LOGIN ERROR ___:', data.errors);
           for (const key of Object.keys(data.errors)) {
             const error = data.errors[key];
-            this.errors.push(error.message);
+            this.errors = error.message;
             return;
           }
         } else {
@@ -217,9 +217,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
           console.log('___ LOGIN ERROR ___:');
           for (const key of Object.keys(data.errors)) {
             const error = data.errors[key];
-            this.errors.push(error.message);
+            this.errors = error.message;
           }
-          this.errors.push(data.errors);
         } else {
           if (data.a8o1 === 'CAPTAIN') {
             this._authService.setCurrentClient(data);

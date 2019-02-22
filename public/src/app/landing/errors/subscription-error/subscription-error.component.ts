@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { RightsComponent } from 'app/landing/rights/rights.component';
+import { RightsComponent } from 'app/policies/rights/rights.component';
 
 @Component({
   selector: 'app-subscription-error',

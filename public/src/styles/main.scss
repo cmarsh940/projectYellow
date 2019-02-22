@@ -6,11 +6,7 @@
 // Core
 @import 'core/variables';
 @import 'core/base';
-// Layouts
-@import 'layouts/footer';
-@import 'layouts/sidebar';
-@import 'layouts/toolbar';
-@import 'layouts/wrapper';
+
 @import '~@angular/material/theming';
 @include mat-core();
 

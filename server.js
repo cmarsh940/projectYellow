@@ -40,7 +40,6 @@ app.use(function (req, res, next) {
 
 app.use(compression()); //Compress all routes
 app.use(cors());
-// app.use(express.static(path.join(__dirname + '/public/dist')));
 app.use(busboy());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));

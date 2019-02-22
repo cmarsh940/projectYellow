@@ -1,6 +1,5 @@
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
-import { RightsComponent } from './rights/rights.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LandingComponent } from './landing.component';
@@ -34,11 +33,6 @@ const routes: Routes = [
         path: 'pricing',
         pathMatch: 'full',
         component: PricingComponent
-      },
-      {
-        path: 'policy',
-        pathMatch: 'full',
-        component: RightsComponent
       },
       {
         path: 'subscription-error',

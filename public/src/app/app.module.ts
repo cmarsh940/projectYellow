@@ -1,3 +1,4 @@
+import { CookiesComponent } from './policies/cookies/cookies.component';
 import { OverviewModule } from './overview/overview.module';
 import { LandingModule } from './landing/landing.module';
 import { ClientModule } from './client/client.module';
@@ -31,11 +32,12 @@ import { AddUserComponent } from './client/user/add-user/add-user.component';
 import { EditClientComponent } from './client/profile/edit-client/edit-client.component';
 import { FeedbackComponent } from '@shared/feedback/feedback.component';
 import { SubscriptionOverlayComponent } from './client/profile/subscription-overlay/subscription-overlay.component';
-import { RightsComponent } from './landing/rights/rights.component';
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 import { AuthService } from './auth/auth.service';
 import { AuthInterceptor } from '@shared/interceptors/auth-interceptor';
 import { NgtUniversalModule } from '@ng-toolkit/universal';
+import { RightsComponent } from './policies/rights/rights.component';
+import { PoliciesModule } from './policies/policies.module';
 
 export function initLanguage(translateService: TranslatesService): Function {
   return (): Promise<any> => translateService.initLanguage();
@@ -47,6 +49,7 @@ export function initLanguage(translateService: TranslatesService): Function {
     ClientModule,
     OverviewModule,
     LandingModule,
+    PoliciesModule,
     NgtUniversalModule,
     TransferHttpCacheModule,
     HttpModule,
@@ -84,6 +87,7 @@ export function initLanguage(translateService: TranslatesService): Function {
     SubscriptionOverlayComponent,
     RegisterDialogComponent,
     RightsComponent,
+    CookiesComponent,
     UploadUsersComponent
   ]
 })

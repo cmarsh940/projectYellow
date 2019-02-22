@@ -5,7 +5,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { LandingRoutingModule } from './landing-routing.module';
-import { RightsComponent } from './rights/rights.component';
 import { AboutComponent } from './about/about.component';
 import { PricingComponent } from './pricing/pricing.component';
 import { LandingComponent } from './landing.component';
@@ -41,7 +40,6 @@ import { PrivateSurveyComponent } from './private-survey/private-survey.componen
     PoweredByComponent,
     PricingComponent,
     PrivateSurveyComponent,
-    RightsComponent,
     SubscriptionErrorComponent,
     SurveyErrorComponent,
     SurveyClosedComponent,

@@ -8,6 +8,10 @@ const AddressSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    country: {
+        type: String,
+        default: "united states"
+    },
     state: {
         type: String,
         trim: true

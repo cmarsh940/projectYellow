@@ -150,9 +150,9 @@ export class RegisterComponent implements OnInit {
         if (data.errors) {
           console.log('___ DATA ERROR ___:', data.errors);
           if (data.errors.password) {
-            this.errors.push(data.errors.password.message);
+            this.errors = data.errors.password.message;
           } else {
-            this.errors.push(data.errors);
+            this.errors = data.errors;
           }
         } else {
           this.errors = null;
