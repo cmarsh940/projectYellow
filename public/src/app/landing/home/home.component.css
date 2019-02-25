@@ -14,8 +14,11 @@
 
 #container-top {
   background-image: url("/assets/SurveysbyME.png");
-  background-position: center; 
-  background-size: cover;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-origin: content-box;
+  background-color: black;
   min-height: 300px;
   max-height: 300px;
   -webkit-clip-path: polygon(100% 0, 100% 85%, 72% 90%, 74% 87%, 0 100%, 0 0);
@@ -49,14 +52,16 @@
 }
 
 .mat-card {
-  min-width: 50%;
-  min-height: 15rem;
+  min-width: 45vw;
+  max-width: 45vw;
+  min-height: 35vh;
+  max-height: 35vh;
   margin: 1em;
   text-align: center;
 }
 
 .row {
-  margin: 5em 0;
+  margin: 5em 1.5em;
 }
 
 .row-header {
@@ -79,9 +84,9 @@
   text-align: center;
 }
 
-.mat-expansion-panel-header {
+/* .mat-expansion-panel-header {
   background: #efecec80;
-}
+} */
 
 #realTime {
   background-image: url("/assets/icons/realTime.svg");

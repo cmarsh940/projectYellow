@@ -10,6 +10,10 @@ import { ProfileService } from 'app/client/profile/profile.service';
 import { UniversalStorage } from '@shared/storage/universal.storage';
 import { AuthService } from 'app/auth/auth.service';
 
+/** 
+TODO:
+  - [] add ability to post survey to facebook
+*/
 @Component({
   selector: 'app-survey-list',
   templateUrl: './survey-list.component.html',
