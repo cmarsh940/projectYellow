@@ -202,7 +202,7 @@ class ClientsController {
 
     Client.findOne({ email: req.body.email }).select("+password").exec((err, client) => {
       console.log("CLIENT IS", client);
-      if (err) {
+      if (!client || err) {
         console.log("____ AUTHENTICATE ERROR ____", err);
         return res.json("____ AUTHENTICATE ERROR ____" + err);
       }
@@ -341,8 +341,6 @@ class ClientsController {
 
   info(req, res, next) {
     console.log("HIT CLIENT INFO");
-    console.log('params', req.params);
-    console.log('body', req.body);
     Client.findById({ _id: req.params.id }).lean()
       .exec(function (err, client) {
         if (!client) {

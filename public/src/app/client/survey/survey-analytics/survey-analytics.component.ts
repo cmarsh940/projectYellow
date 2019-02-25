@@ -1,16 +1,15 @@
-import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Location, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { Survey } from '@shared/models/survey';
 import { Question } from '@shared/models/question-group';
 import { SurveyService } from '../survey.service';
-
+import { AuthService } from 'app/auth/auth.service';
 
 import * as Chart from 'chart.js';
 import * as moment from 'moment';
-import { AuthService } from 'app/auth/auth.service';
 
 
 function flatten(arr) {
@@ -35,6 +34,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   survey: Survey = new Survey();
   questions: Question[] = [];
   surveyId = '';
+  surveyName: string;
   _routeSubscription: Subscription;
   errors = [];
   url: string;
@@ -49,6 +49,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   surveyAvg: any;
   title: string;
   lvl: any;
+  isBrowser: any;
 
   timeSinceLastSubmission: any;
 
@@ -72,8 +73,11 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _router: Router,
     private location: Location,
-    public snackBar: MatSnackBar
-  ) { }
+    public snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+   }
 
   ngOnInit() {
     this.loaded = false;
@@ -101,14 +105,15 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId).subscribe(res => {
-      console.log('RES', res);
+      this.surveyName = res.name;
       const alldates = res.submissionDates;
       const answeredTempDates = {};
       const tempDates = [];
+      const timeFormat = 'MM/DD/YYYY';
 
       // tslint:disable-next-line: no-shadowed-variable
       alldates.forEach((res) => {
-        const date = moment(res).format('l');
+        const date = moment(res).format(timeFormat);
         tempDates.push(date);
       });
 
@@ -116,15 +121,24 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
       });
 
+      let chartDates = [];
+      Object.entries(answeredTempDates).forEach(
+        ([key, value]) => {
+        let objectDate = {
+          x: new Date(key),
+          y: value
+        };
+        chartDates.push(objectDate);
+        }
+      );
+
       const dateValues = Object.values(answeredTempDates);
       const dateNames = Object.keys(answeredTempDates);
 
 
 
-
       // TODAYS DATE
-      const todaysDate = Date.now();
-
+      const todaysDate = moment().format();
 
       const submissionTimeResults = moment(todaysDate).diff(moment(res.lastSubmission));
 
@@ -149,12 +163,12 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           labels: dateNames,
           datasets: [
             {
-              data: dateValues,
-              label: 'Volume',
+              data: chartDates,
+              label: this.surveyName,
               borderColor: gradient,
               hoverBorderColor: '#ffff52',
               backgroundColor: '#fdff0066',
-              fill: true
+              fill: false
             },
           ]
         },
@@ -162,6 +176,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           legend: {
             display: false,
           },
+          responsive: true,
           animation: {
             duration: 0, // general animation time
           },
@@ -177,23 +192,32 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           },
           scales: {
             xAxes: [{
-              display: true,
-              gridLines: {
-                color: '#FFFFFF'
-              },
-              ticks: {
-                fontColor: '#FFFFFF'
-              },
               type: 'time',
               time: {
-                displayFormats: {
-                  day: 'MMM DD'
+                unit: 'day'
+              },
+              scaleLabel: {
+                display: true,
+                labelString: 'Date'
+              },
+              ticks: {
+                major: {
+                  fontStyle: 'bold',
+                  fontColor: '#FFF'
                 }
               }
             }],
             yAxes: [{
-              display: false
+              display: false,
+              scaleLabel: {
+                display: true,
+                labelString: 'Volume'
+              }
             }]
+          },
+          title: {
+            display: true,
+            text: 'Survey Volume'
           }
         }
       });

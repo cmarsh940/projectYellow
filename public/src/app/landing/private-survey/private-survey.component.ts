@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, ElementRef, Input, Inject, PLATFORM_ID, OnChanges, AfterViewInit } from '@angular/core';
 import { FormControlName, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,13 +9,14 @@ import { GenericValidator } from '@shared/validators/generic-validator';
 import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
 import { RegisterDialogComponent } from 'app/auth/register-dialog/register-dialog.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-private-survey',
   templateUrl: './private-survey.component.html',
   styleUrls: ['./private-survey.component.css']
 })
-export class PrivateSurveyComponent implements OnInit, OnDestroy {
+export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
   surveyId: string = '';
@@ -58,7 +59,8 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
 
     // Defines all of the validation messages for the form.
@@ -75,31 +77,32 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loaded = false;
+    if (isPlatformBrowser(this.platformId)) {
+      this.loaded = false;
 
-    // SET META INFO
-    this.currentDevice = window.clientInformation.platform;
-    this.currentPlatform = window.clientInformation.vendor;
-    this.agent = window.clientInformation.userAgent;
+      // SET META INFO
+      this.currentDevice = window.clientInformation.platform;
+      this.currentPlatform = window.clientInformation.vendor;
+      this.agent = window.clientInformation.userAgent;
 
-    this.surveyForm = this.fb.group({
-      questions: this.fb.array([this.buildQuestion()])
-    });
+      this.surveyForm = this.fb.group({
+        questions: this.fb.array([this.buildQuestion()])
+      });
 
-    this.userId = this._activatedRoute.snapshot.url[1].path;
+      this.userId = this._activatedRoute.snapshot.url[1].path;
 
-    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
-      this.surveyId = params['id'];
-      this.getSurvey();
-    });
+      this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+        this.surveyId = params['id'];
+        this.getSurvey();
+      });
 
-    setTimeout(() => {
-      this.loaded = true;
-      this.startTimer();
-    }, 1000);
+      setTimeout(() => {
+        this.loaded = true;
+        this.startTimer();
+      }, 1000);
+    }
   }
 
-// tslint:disable-next-line: use-life-cycle-interface
   ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
     const controlBlurs: Observable<any>[] = this.formInputElements
@@ -127,14 +130,13 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   }
 
 
-// tslint:disable-next-line: use-life-cycle-interface
   ngOnChanges() {
     this.rebuildForm();
   }
 
-  ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this._routeSubscription.unsubscribe();
+  // }
 
 
   getSurvey() {

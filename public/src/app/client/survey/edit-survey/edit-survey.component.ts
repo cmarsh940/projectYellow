@@ -89,7 +89,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.surveyId = params['id'];
       this.getSurvey();
-      this.checkPC();
+      this.check();
     });
   }
 
@@ -106,14 +106,17 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       });
   }
 
-  checkPC() {
+  check() {
     this.pc = false;
-    const checked = this._authService.check(this.clientId);
-    if (checked) {
-      this.pc = true;
-    } else {
-      this.pc = false;
-    }
+    return this._authService.check(this.clientId).then(data => {
+      if (data.b8o1 !== 'FREE') {
+        console.log('Subscribed');
+        this.pc = true;
+      } else {
+        console.log('Trial');
+        this.pc = false;
+      }
+    });
   }
 
   loadCategories() {

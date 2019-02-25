@@ -115,7 +115,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     const dialogRef = this.dialog.open(UploadUsersComponent, {
       data: {
         survey: this.surveyId,
-        surveyOwner: JSON.parse(this.universalStorage.getItem('t940'))
+        surveyOwner: this.universalStorage.getItem('t940')
       }
     });
 
@@ -129,7 +129,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     const addDialogRef = this.dialog.open(AddUserComponent, {
       data: {
         survey: this.surveyId,
-        surveyOwner: JSON.parse(this.universalStorage.getItem('t940'))
+        surveyOwner: this.universalStorage.getItem('t940')
       }
     });
 

@@ -20,6 +20,7 @@ declare const gapi: any;
 
 /**
 TODO:
+- [] remove localStorage or cookies if failed login
 - [] change google and facebook to just icons
 */
 export class LoginComponent implements OnInit, AfterViewInit {
@@ -56,15 +57,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
     fb: FormBuilder,
     @Inject(PLATFORM_ID) private platformId: object
   ) {
-    // const svgFacebookUrl = 'assets/icons/facebookWhite.svg';
-    // const svgGoogleUrl = 'assets/icons/google.svg';
-    // const domain = (isPlatformServer(platformId)) ? 'http://localhost:4000/' : '';
-    // iconRegistry.addSvgIcon(
-    //   'facebook',
-    //   sanitizer.bypassSecurityTrustResourceUrl(domain + svgFacebookUrl));
-    // iconRegistry.addSvgIcon(
-    //   'google',
-    //   sanitizer.bypassSecurityTrustResourceUrl(domain + svgGoogleUrl));
+    const svgFacebookUrl = 'assets/icons/facebookWhite.svg';
+    const svgGoogleUrl = 'assets/icons/google.svg';
+    const domain = (isPlatformServer(platformId)) ? 'http://localhost:4000/' : '';
+    iconRegistry.addSvgIcon(
+      'facebook',
+      sanitizer.bypassSecurityTrustResourceUrl(domain + svgFacebookUrl));
+    iconRegistry.addSvgIcon(
+      'google',
+      sanitizer.bypassSecurityTrustResourceUrl(domain + svgGoogleUrl));
 
     this.myForm = fb.group({
       email: this.email,

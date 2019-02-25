@@ -11,6 +11,7 @@ import { SubscriptionErrorComponent } from './errors/subscription-error/subscrip
 import { MetaGuard } from '@ngx-meta/core';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
+import { PrivateSurveyComponent } from './private-survey/private-survey.component';
 
 
 const routes: Routes = [
@@ -63,7 +64,12 @@ const routes: Routes = [
         path: 'takeSurvey/:id',
         pathMatch: 'full',
         component: ViewSurveyComponent
-      }
+      },
+      {
+        path: 'pSurvey/:id/:id',
+        pathMatch: 'full',
+        component: PrivateSurveyComponent
+      },
     ]
   }
 ];

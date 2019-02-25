@@ -22,7 +22,7 @@ async function validJWTNeeded(req, res, next) {
                 console.log("Not Valid");
                 return res.status(401).send();
             } else {
-                req.jwt = jwt.verify(Authorization[1], secret);
+                req.jwt = await jwt.verify(Authorization[1], secret);
                 console.log("NEXT");
                 return next();
             }

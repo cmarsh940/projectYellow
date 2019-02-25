@@ -37,19 +37,21 @@
         </button>
         <mat-menu #userAction="matMenu" class="action">
           <div *ngIf="element.private" class="private-icon">
-            <button mat-menu-item [routerLink]="['user', element._id]" matTooltip="Assign users to survey">
+            <button mat-menu-item routerLink="/dashboard/user/{{element._id}}" matTooltip="Assign users to survey">
               <mat-icon color="primary">
                 <img src="/assets/icons/sms.png" alt="apps icon" class="icon-button">
               </mat-icon>
               <p>Assigned Users</p>
             </button>
           </div>
-          <button mat-menu-item matTooltip="Take Survey" [routerLink]="['/takeSurvey', element._id]">
-            <mat-icon color="accent">
-              <i class="material-icons">visibility</i>
-            </mat-icon>
-            <p>Take Survey</p>
-          </button>
+          <div *ngIf="!element.private">
+            <button mat-menu-item matTooltip="Take Survey" [routerLink]="['/takeSurvey', element._id]">
+              <mat-icon color="accent">
+                <i class="material-icons">visibility</i>
+              </mat-icon>
+              <p>Take Survey</p>
+            </button>
+          </div>
           <button mat-menu-item matTooltip="Take Survey" [routerLink]="['edit', element._id]">
             <mat-icon matTooltip="Edit" color="accent">
               <i class="material-icons">

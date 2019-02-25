@@ -3,7 +3,7 @@
     <mat-card id="volume-chart">
       <mat-card-title>Survey Activities</mat-card-title>
       <mat-card-content>
-        <div class="chart-container">
+        <div class="chart-container" *ngIf="isBrowser">
           <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
         </div>
       </mat-card-content>
@@ -31,7 +31,6 @@
           </mat-card-actions>
         </mat-card>
       </mat-grid-tile> 
-
     </mat-grid-list>
   </div>
 </section>
