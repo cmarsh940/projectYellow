@@ -34,7 +34,7 @@ h4 {
     width: 100%;
     margin: 0;
     padding: 0;
-    max-height: 330px;
+    max-height: 100%;
     overflow-y: unset;
     background: #000000d1;
     color: white;
@@ -147,4 +147,17 @@ span {
 
 mat-grid-list {
     background-color: #2d2d2de3;
+}
+
+/* UPGRADE CARD */
+#upgrade-card {
+  margin: 1em
+}
+
+#upgrade-text {
+  font-size: small;
+}
+
+#upgrade-link, #upgrade-button {
+  color: mediumseagreen;
 }

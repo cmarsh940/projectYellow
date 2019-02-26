@@ -6,7 +6,6 @@ import { MaterialModule } from '../material/material.module';
 
 import { OverviewRoutingModule } from './overview-routing.module';
 import { OverviewComponent } from './overview.component';
-import { OverviewNavComponent } from '../layout/overview-nav/overview-nav.component';
 import { ReportComponent } from './report/report.component';
 import { SurveyReportComponent } from './survey-report/survey-report.component';
 import { ClientReportComponent } from './client-report/client-report.component';
@@ -14,6 +13,7 @@ import { UserReportComponent } from './user-report/user-report.component';
 import { SurveyCategoryReportComponent } from './survey-category-report/survey-category-report.component';
 import { SubscriptionReportComponent } from './subscription-report/subscription-report.component';
 import { EditCategoryComponent } from './survey-category-report/edit-category/edit-category.component';
+import { OverviewNavComponent } from '@shared/layouts/overview-nav/overview-nav.component';
 
 @NgModule({
   imports: [

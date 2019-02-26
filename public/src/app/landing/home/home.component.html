@@ -7,17 +7,17 @@
   <!-- expansion -->
   <div class="row">
     <div class="row-header">
-      <h3>Why create professional surveys?</h3>
+      <h3>{{ "home.text" | translate }}</h3>
     </div>
     <mat-accordion class="accordion">
       <!-- WHY -->
       <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <h4 mat-subheader>Know what your customer really think?</h4>
+            <h4 mat-subheader>{{ "home.question1" | translate }}</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
-          <h5>Surveys allow your customers to express their experience with your services. Giving your customers a voice, will allow you to better understand how you can make the correct changes that will give you an edge over your competition.</h5>
+          <h5>{{ "home.answer1" | translate }}</h5>
           <div class="center-button">
             <button mat-raised-button routerLink="/register" color="primary">Sign up for free</button>
           </div>
@@ -30,10 +30,10 @@
       <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <h4 mat-subheader>Give your employees a voice!</h4>
+            <h4 mat-subheader>{{ "home.question2" | translate }}</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <h5>Let your employees voice there opinion, safe and securely.</h5>
+        <h5>{{ "home.answer2" | translate }}</h5>
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" (click)="nextStep()">NEXT</button>
@@ -44,29 +44,29 @@
       <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <h4 mat-subheader>Learn what people think of your business/service!</h4>
+            <h4 mat-subheader>{{ "home.question3" | translate }}</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <mat-list>
           <mat-list-item>
             <img mat-list-icon src="/assets/icons/baseline.svg" alt="item icon">
-            <h4 mat-line>Employer Engagement</h4>
+            <h4 mat-line>{{ "home.answer3a" | translate }}</h4>
           </mat-list-item>
           <mat-list-item>
             <img mat-list-icon src="/assets/icons/baseline.svg" alt="item icon">
-            <h4 mat-line>Education & Schools</h4>
+            <h4 mat-line>{{ "home.answer3b" | translate }}</h4>
           </mat-list-item>
           <mat-list-item>
             <img mat-list-icon src="/assets/icons/baseline.svg" alt="item icon">
-            <h4 mat-line>Market Research</h4>
+            <h4 mat-line>{{ "home.answer3c" | translate }}</h4>
           </mat-list-item>
           <mat-list-item>
             <img mat-list-icon src="/assets/icons/baseline.svg" alt="item icon">
-            <h4 mat-line>Customer Satisfaction</h4>
+            <h4 mat-line>{{ "home.answer3d" | translate }}</h4>
           </mat-list-item>
           <mat-list-item>
             <img mat-list-icon src="/assets/icons/baseline.svg" alt="item icon">
-            <h4 mat-line>Event Planning</h4>
+            <h4 mat-line>{{ "home.answer3e" | translate }}</h4>
           </mat-list-item>
         </mat-list>
         <mat-action-row>
@@ -79,10 +79,10 @@
       <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <h4 mat-subheader>Meet your working #goals!</h4>
+            <h4 mat-subheader>{{ "home.question4" | translate }}</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
-  
+          <h5>{{ "home.answer4" | translate }}</h5>
   
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
@@ -94,11 +94,11 @@
       <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <h4 mat-subheader>Simplify your marketing direction!</h4>
+            <h4 mat-subheader>{{ "home.question5" | translate }}</h4>
           </mat-panel-title>
         </mat-expansion-panel-header>
   
-  
+          <h5>{{ "home.answer5" | translate }}</h5>
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
         </mat-action-row>
@@ -109,16 +109,16 @@
 
   <div id="cards">
     <mat-card id="mobileFriendly">
-      <h3>Mobile Friendly</h3>
+      <h3>{{ "home.card1" | translate }}</h3>
     </mat-card>
     <mat-card id="realTime">
-      <h3>Real Time Data</h3>
+      <h3>{{ "home.card2" | translate }}</h3>
     </mat-card>
     <mat-card id="secure">
-      <h3>Safe & Secure</h3>
+      <h3>{{ "home.card3" | translate }}</h3>
     </mat-card>
     <mat-card id="userFriendly">
-      <h3>User Friendly</h3>
+      <h3>{{ "home.card4" | translate }}</h3>
     </mat-card>
   </div>
 

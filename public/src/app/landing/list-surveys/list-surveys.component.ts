@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SurveyService } from '../../client/survey/survey.service';
-import { Survey } from '../../global/models/survey';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
-import { AuthService } from 'src/app/auth/auth.service';
+import { Survey } from '@shared/models/survey';
+import { SurveyService } from 'app/client/survey/survey.service';
+import { AuthService } from 'app/auth/auth.service';
 
 @Component({
   selector: 'app-list-surveys',
@@ -26,8 +26,11 @@ export class ListSurveysComponent implements OnInit {
 
   constructor(
     private _authService: AuthService,
-    private _surveyService: SurveyService
-  ) { }
+    private _surveyService: SurveyService,
+    @Inject('ORIGIN_URL') public baseUrl: string,
+  ) {
+    console.log(`ORIGIN_URL=${baseUrl}`);
+  }
 
   ngOnInit() {
     this.checkLogedIn();
@@ -46,7 +49,7 @@ export class ListSurveysComponent implements OnInit {
       .then((result) => {
         this.errorMessage = null;
         result.forEach(asset => {
-          if(!asset.private) {
+          if (!asset.private) {
             tempList.push(asset);
           }
         });

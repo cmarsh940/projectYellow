@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Survey } from '../../global/models/survey';
 import { SurveyService } from '../../client/survey/survey.service';
+import { Survey } from '@shared/models/survey';
 
 
 export interface Type {

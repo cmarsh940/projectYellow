@@ -2,26 +2,20 @@
 
 # compiled output
 /dist
-/dist/*
 /tmp
 /out-tsc
+/static
+server.js
+prerender.js
 
 # dependencies
-.DS_Store
-.idea
-.vagrant
-bootstrap.sh
-VagrantFile
-bower_components/
-node_modules
-package-lock.json
-yarn.lock
-yarn-error.log
+/node_modules
 
 # IDEs and editors
 /.idea
 .project
 .classpath
+.editorconfig
 .c9/
 *.launch
 .settings/
@@ -45,5 +39,5 @@ testem.log
 /typings
 
 # System Files
-.DS_Store
+**/.DS_Store
 Thumbs.db

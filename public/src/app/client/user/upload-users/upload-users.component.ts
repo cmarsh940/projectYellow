@@ -33,7 +33,7 @@ export class UploadUsersComponent {
     this.show = true;
     /* wire up file reader */
     const target: DataTransfer = <DataTransfer>(evt.target);
-    if (target.files.length !== 1) throw new Error('Cannot use multiple files');
+    if (target.files.length !== 1) { throw new Error('Cannot use multiple files'); }
     const reader: FileReader = new FileReader();
     reader.onload = (e: any) => {
       /* read workbook */
@@ -52,12 +52,10 @@ export class UploadUsersComponent {
 
   uploadUsers(): void {
     this.errors = [];
-    console.log("DATA", this.data);
-    console.log("UPLOADING USERS", this.uploadData);
 
-    let uploadedUsers = []
+    const uploadedUsers = [];
     for (let i = 1; i < this.uploadData.length - 1; i++) {
-      let user = this.uploadData[i];
+      const user = this.uploadData[i];
       this.participant = {
         'name': user[0],
         'email': user[1],
@@ -67,30 +65,30 @@ export class UploadUsersComponent {
         'textSent': false,
         'answeredSurvey': false
       };
-      uploadedUsers.push(this.participant)
-    };
-    console.log("UPLOADED USERS", uploadedUsers);
+      uploadedUsers.push(this.participant);
+    }
+    console.log('UPLOADED USERS', uploadedUsers);
     this._userService.uploadParticipants(this.data.survey, uploadedUsers).subscribe((data: any) => {
       if (data.errors) {
-        console.log("*** ERROR ***", data.errors)
+        console.log('*** ERROR ***', data.errors);
         for (const key of Object.keys(data.errors)) {
           const error = data.errors[key];
           this.errors.push(error.message);
         }
       } else {
         this.dialogRef.close();
-      } 
+      }
     });
-  } 
+  }
 
   cancel(): void {
     this.dialogRef.close();
   }
 
   export(): void {
-    let exportedUsers = [['name', 'email', 'phone']];
-  
-    console.log("Exported Users", exportedUsers);
+    const exportedUsers = [['name', 'email', 'phone']];
+
+    console.log('Exported Users', exportedUsers);
 
     /* generate worksheet */
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedUsers);

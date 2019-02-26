@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SurveyCategoryService } from '../survey-category.service';
 import { Location } from '@angular/common';
-import { SurveyCategory } from '../../../global/models/survey-category';
+import { SurveyCategory } from '@shared/models/survey-category';
 
 
 @Component({
@@ -11,10 +11,10 @@ import { SurveyCategory } from '../../../global/models/survey-category';
   templateUrl: './edit-category.component.html',
   styleUrls: ['./edit-category.component.css']
 })
-export class EditCategoryComponent implements OnInit {
+export class EditCategoryComponent implements OnInit, OnDestroy {
   category = new SurveyCategory();
   _routeSubscription: Subscription;
-  categoryId: string = "";
+  categoryId: string = '';
   errors = [];
 
   constructor(
@@ -38,8 +38,8 @@ export class EditCategoryComponent implements OnInit {
   getCategory() {
     this._categoryService.getAsset(this.categoryId)
       .subscribe(res => {
-        console.log("Category", res);
-        this.category = res
+        console.log('Category', res);
+        this.category = res;
       });
   }
 
@@ -53,7 +53,7 @@ export class EditCategoryComponent implements OnInit {
           this.errors.push(errors.message);
         }
       } else {
-        this._router.navigate(["/survey_categories"]);
+        this._router.navigate(['/survey_categories']);
       }
     });
   }

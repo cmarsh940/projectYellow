@@ -1,19 +1,19 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MessagesService } from './../global/services/messages.service';
-import { Client } from './../global/models/client';
 import { Http } from '@angular/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Optional, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { HandleError, HttpErrorHandler } from '../global/services/http-error-handler.service';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
+import { Client } from '@shared/models/client';
+import { HandleError, HttpErrorHandler } from '@shared/services/http-error-handler.service';
+import { MessagesService } from '@shared/services/messages.service';
+import { envUrl } from 'app/envUrl';
+import { UniversalStorage } from '@shared/storage/universal.storage';
+import { isPlatformBrowser } from '@angular/common';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
 @Injectable({
   providedIn: 'root'
 })
@@ -21,31 +21,33 @@ export class AuthService {
   currentClient: Client = null;
 
   private handleError: HandleError;
-  private actionUrl = '/api/';
+  private actionUrl = 'api/';
   private ns = 'clients';
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private _messageService: MessagesService,
     private _http: Http,
     private _httpClient: HttpClient,
     private _router: Router,
+    private universalStorage: UniversalStorage,
     private httpErrorHandler: HttpErrorHandler,
   ) {
-  this.handleError = httpErrorHandler.createHandleError("AuthService");
-    httpOptions;
+    this.actionUrl = `${envUrl}${this.actionUrl}`;
+    this.handleError = this.httpErrorHandler.createHandleError('AuthService');
   }
 
   authenticate(asset: Client): Observable<any> {
-    console.log("*** POST AUTHENTICATE ***");
+    console.log('*** POST AUTHENTICATE ***');
     return this._httpClient.post<any>(this.actionUrl + this.ns + '/login', asset).pipe(
       map(this.extractData),
       catchError(this.handleError('Authenticate', []))
     );
   }
-  
+
   addParticipant(asset: any): Observable<any> {
     console.log('Entered AuthService Create');
-    console.log("*** POST ***");
+    console.log('*** POST ***');
     return this._httpClient.post<any>(this.actionUrl + this.ns, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('addParticipant', []))
@@ -54,7 +56,7 @@ export class AuthService {
 
   resetPassword(asset: any): Observable<any> {
     console.log('Entered AuthService Request Password Change');
-    let nameService = "resetPassword";
+    const nameService = 'resetPassword';
     return this._httpClient.post<any>(`${this.actionUrl}${this.ns}/${nameService}`, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('addParticipant', []))
@@ -62,7 +64,7 @@ export class AuthService {
   }
   requestPasswordChange(asset: any): Observable<any> {
     console.log('Entered AuthService Request Password Change');
-    let nameService = "requestReset";
+    const nameService = 'requestReset';
     return this._httpClient.post<any>(`${this.actionUrl}${this.ns}/${nameService}`, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('addParticipant', []))
@@ -71,165 +73,169 @@ export class AuthService {
 
   verifyPasswordChange(asset: any): Observable<any> {
     console.log('Entered AuthService Verify Password Change');
-    let nameService = "verifyReset";
+    const nameService = 'verifyReset';
     return this._httpClient.post<any>(`${this.actionUrl}${this.ns}/${nameService}`, asset).pipe(
       map(this.extractData),
       catchError(this.handleError('addParticipant', []))
     );
   }
-  
+
   setCurrentClient(client) {
-    console.log("*** SERVICE SET CURRENT CLIENT ***")
-    let token = client.token;
+    console.log('*** SERVICE SET CURRENT CLIENT ***');
+    const token = client.token;
     delete client.token;
     const expiresAt = moment().add(client.expiresIn, 'second');
-
-    localStorage.setItem('token', token);
-    localStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()));
-    localStorage.setItem('t940', JSON.stringify(client._id));
-    sessionStorage.setItem('currentClient', JSON.stringify(client));
+    if (isPlatformBrowser(this.platformId)) {
+      this.universalStorage.setItem('token', token);
+      this.universalStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+      this.universalStorage.setItem('t940', client._id);
+      localStorage.setItem('currentClient', JSON.stringify(client));
+    }
   }
 
   logout(callback) {
-    console.log("*** SERVICE CLIENT LOGOUT ***");
-    console.log("*** DELETE ***");
-    return this._http.delete('/api/clients').subscribe(
+    console.log('*** SERVICE CLIENT LOGOUT ***');
+    console.log('*** DELETE ***');
+    return this._http.delete(this.actionUrl + this.ns).subscribe(
       res => {
+        if (isPlatformBrowser(this.platformId)) {
         this.currentClient = null;
-        sessionStorage.removeItem('currentClient');
-        localStorage.removeItem('token');
-        localStorage.removeItem('expires_at')
-        localStorage.removeItem('t940');
+        this.universalStorage.removeItem('token');
+        this.universalStorage.removeItem('expires_at');
+        this.universalStorage.removeItem('t940');
+        localStorage.clear();
         callback(res.json());
+        }
       },
       err => console.error(err)
     );
   }
 
   verify() {
-    let data = sessionStorage.getItem('currentClient');
-    if (data == undefined || data == null || data == '' ) {
-      return false;
-    } else {
-    return true;
+    if (isPlatformBrowser(this.platformId)) {
+      const data = this.universalStorage.getItem('t940');
+      if (data === undefined || data === null || data === '' ) {
+        return false;
+      } else {
+      return true;
+      }
     }
   }
 
   subVerified() {
-    let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    let lastDateToUse = moment(new Date).isBefore(data.d);
-    console.log("LAST USE DATE", lastDateToUse);
-    if ((data.status === "Active" || data.status === "Trial")) {
-      console.log("ACTIVE OR TRIAL STATUS")
-      console.log("DATA", data);
-      return true
-    } 
-    else if ((data.status === "Canceled")) {
-      console.log("ACTIVE OR TRIAL STATUS")
-      console.log("DATA", data);
-      if(lastDateToUse){
-          console.log("STILL IN PAID DATES", lastDateToUse);
-          return true
-        } else {
-          console.log("NOT IN PAID DATES", lastDateToUse);
-          return false
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      const lastDateToUse = moment(new Date).isBefore(data.d);
+      console.log('LAST USE DATE', lastDateToUse);
+      if ((data.status === 'Active' || data.status === 'Trial')) {
+        console.log('ACTIVE OR TRIAL STATUS');
+        return true;
       }
-    } else {
-      console.log("ERROR");
-      return false;
+      if ((data.status === 'Canceled')) {
+        console.log('ACTIVE OR TRIAL STATUS');
+        if (lastDateToUse) {
+            console.log('STILL IN PAID DATES', lastDateToUse);
+            return true;
+          } else {
+            console.log('NOT IN PAID DATES', lastDateToUse);
+            return false;
+        }
+      } else {
+        console.log('ERROR');
+        return false;
+      }
     }
   }
 
   emailVerified() {
-    let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if (!data || data.v === null) {
-      return false;
-    }
-    if (data.v) {
-      return true;
-    } else {
-      return false;
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      if (!data || data.v === null) {
+        return false;
+      }
+      if (data.v) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
-  checkPC() {
-    let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if (data.b8o1 === 'FREE') {
-      return false;
-    } else {
-      return true;
-    }
-  }
-  checkCount() {
-    let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if (data.c8o1 === 0) {
-      return false;
-    } else {
-      return true;
-    }
+  async check(id: any): Promise<any> {
+    console.log('*** check ID ***', id);
+    const nameService = 'info';
+    return await this._httpClient.get<any>(`${this.actionUrl}${this.ns}/${nameService}/${id}`, id).toPromise();
   }
 
   authorize() {
-    let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    if(data) {
-      if (data.a8o1 === 'CAPTAIN') {
-        return true;
+    if (isPlatformBrowser(this.platformId)) {
+      const data = JSON.parse(localStorage.getItem('currentUser'));
+      if (data) {
+        if (data.a8o1 === 'CAPTAIN') {
+          return true;
+        } else {
+          return false;
+        }
       } else {
-        return false
+        window.location.href = environment.redirect404;
       }
-    } else {
-      window.location.href = environment.redirect404;
     }
   }
 
   checkLoggedIn() {
-    let data = JSON.parse(sessionStorage.getItem('currentClient'));
-    let check = JSON.parse(localStorage.getItem('t940'));
-    if(!data) {
+    if (isPlatformBrowser(this.platformId)) {
+      const data = this.universalStorage.getItem('t940');
+      if (!data) {
+        return false;
+      }
+      if (data) {
+        return moment().isBefore(this.getExpiration());
+      }
       return false;
     }
-    if (data._id === check) {
-      return moment().isBefore(this.getExpiration());
-    } 
-    return false;
   }
 
   getAuthorizationToken() {
-    console.log("HIT GET AUTH TOKEN FROM AUTH SERVICE")
-    if (localStorage.getItem('token') === null) {
-      console.log("NO TOKEN HAS BEEN SET")
-      return false;
-    }
-    else {
-      if (localStorage.getItem('token') === undefined) {
-        console.log("AUTHORIZATION FAILED");
+      console.log('HIT GET AUTH TOKEN FROM AUTH SERVICE');
+      if (this.universalStorage.getItem('token') === null) {
+        console.log('NO TOKEN HAS BEEN SET');
         return false;
       } else {
-        const data = JSON.parse(localStorage.getItem('token')); 
-        return data
+        if (this.universalStorage.getItem('token') === undefined) {
+          console.log('AUTHORIZATION FAILED');
+          return false;
+        } else {
+          const data = this.universalStorage.getItem('token');
+          return data;
+        }
       }
-    }
   }
 
   getExpiration() {
-    const expiration = localStorage.getItem("expires_at");
-    const expiresAt = JSON.parse(expiration);
-    return moment(expiresAt);
+    if (isPlatformBrowser(this.platformId)) {
+      const expiration = this.universalStorage.getItem('expires_at');
+      const expiresAt = expiration;
+      return moment(expiresAt);
+    }
   }
 
-  
+
   private extractData(res: Response): any {
-    console.log("*** extractData: ***");
-    if (!Error) {
-      if (!sessionStorage.getItem('currentClient')) {
-        console.log("*** CLIENT NOT IN SESSION ***");
-        sessionStorage.setItem('currentClient', JSON.stringify(res));
-        return res;
-      } else {
-        console.log("*** CLIENT IN SESSION ***");
-        return res;
+    if (isPlatformBrowser(this.platformId)) {
+      console.log('*** extractData: ***');
+      if (!Error) {
+        if (!localStorage.getItem('currentClient')) {
+          console.log('*** CLIENT NOT IN SESSION ***');
+          localStorage.setItem('currentClient', JSON.stringify(res));
+          return res;
+        } else {
+          console.log('*** CLIENT IN SESSION ***');
+          return res;
+        }
       }
+      return res;
     }
+    console.log('PLATFORM IS NOT BROWSER');
     return res;
   }
 

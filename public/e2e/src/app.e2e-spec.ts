@@ -1,14 +1,14 @@
-import { AppPage } from './app.po';
+import { UniversalDemoPage } from './app.po';
 
-describe('workspace-project App', () => {
-  let page: AppPage;
+describe('public App', () => {
+  let page: UniversalDemoPage;
 
   beforeEach(() => {
-    page = new AppPage();
+    page = new UniversalDemoPage();
   });
 
   it('should display welcome message', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to public!');
+    expect(page.getParagraphText()).toEqual('Welcome to app!');
   });
 });

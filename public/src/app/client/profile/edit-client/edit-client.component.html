@@ -23,21 +23,21 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput name='address' [(ngModel)]="data.address" #address='ngModel' placeholder="Address" required>
+      <input matInput name='address' [(ngModel)]="data._address.address" #address='ngModel' placeholder="Address" required>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput name='city' [(ngModel)]="data.city" #city='ngModel' placeholder="City" required>
+      <input matInput name='city' [(ngModel)]="data._address.city" #city='ngModel' placeholder="City" required>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-select name='state' [(ngModel)]="data.state" #state='ngModel' required autocomplete="state" placeholder="Select a State">
+      <mat-select name='state' [(ngModel)]="data._address.state" #state='ngModel' required autocomplete="state" placeholder="Select a State">
         <mat-option *ngFor="let state of states" [value]="state.abbreviation">{{state.name}}</mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput name='zip' [(ngModel)]="data.zip" #zip='ngModel' placeholder="Zip Code" required>
+      <input matInput name='postalCode' [(ngModel)]="data._address.postalCode" #postalCode='ngModel' placeholder="Postal Code" required>
     </mat-form-field>
 
     <mat-dialog-actions>

@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, OnDestroy, AfterContentChecked, ChangeDetectorRef } from '@angular/core';
-import { UserService } from '../user.service';
-import { User } from 'src/app/global/models/user';
+import { Component, OnInit, ViewChild, OnDestroy, AfterContentChecked, ChangeDetectorRef, Inject } from '@angular/core';
+// tslint:disable-next-line: max-line-length
 import { MatPaginator, MatTableDataSource, MatDialog, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -9,10 +8,15 @@ import { UploadUsersComponent } from '../upload-users/upload-users.component';
 import * as XLSX from 'xlsx';
 import { AddUserComponent } from '../add-user/add-user.component';
 import { SelectionModel } from '@angular/cdk/collections';
+import { User } from '@shared/models/user';
+import { UserService } from '../user.service';
+import { LOCAL_STORAGE } from '@ng-toolkit/universal';
+import { UniversalStorage } from '@shared/storage/universal.storage';
+import { WarnDialogComponent } from 'app/client/warn-dialog/warn-dialog.component';
 
 type AOA = any[];
 @Component({
-  selector: 'users-list',
+  selector: 'app-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css']
 })
@@ -30,7 +34,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   private = false;
   loaded: Boolean;
 
-  _routeSubscription: Subscription
+  _routeSubscription: Subscription;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['select', 'name', 'email', 'phone', 'action'];
@@ -42,11 +46,12 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
   fileName: string = 'surveyUsers.xlsx';
 
-  
+
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
-  
+
   constructor(
+    private universalStorage: UniversalStorage,
     private _userService: UserService,
     private _activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
@@ -73,7 +78,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
 
   getUsers() {
     this.loaded = false;
-    let id = this.surveyId;
+    const id = this.surveyId;
     this._userService.getClientsUsers(id)
       .subscribe((response) => {
         this.dataSource = new MatTableDataSource<Element>(response.users);
@@ -82,7 +87,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
         this.array = response.users;
         this.totalSize = this.array.length;
         this.iterator();
-      })
+      });
       setTimeout(() => {
         this.loaded = true;
       }, 1000);
@@ -102,8 +107,8 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
       this.dataSource.forEach(row => this.selection.select(row));
   }
 
-  moreToggleOff(){
-    console.log("SELECTION IS", this.selection);
+  moreToggleOff() {
+    console.log('SELECTION IS', this.selection);
     this.selection.clear();
   }
 
@@ -111,7 +116,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     const dialogRef = this.dialog.open(UploadUsersComponent, {
       data: {
         survey: this.surveyId,
-        surveyOwner: JSON.parse(localStorage.getItem('t940'))
+        surveyOwner: this.universalStorage.getItem('t940')
       }
     });
 
@@ -125,7 +130,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     const addDialogRef = this.dialog.open(AddUserComponent, {
       data: {
         survey: this.surveyId,
-        surveyOwner: JSON.parse(localStorage.getItem('t940'))
+        surveyOwner: this.universalStorage.getItem('t940')
       }
     });
 
@@ -153,34 +158,35 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   }
 
   destroyUser(id: string) {
-    let r = window.confirm("Delete User?");
-    if (r == true) {
-      this._userService.deleteParticipant(id).subscribe(res => {
-        if (res) {
-          this.getUsers();
-          location.reload();
-        } else {
-          console.log("ERROR DELETING USER", res);
-          location.reload();
-        }
+    const dialogRef = this.dialog.open(WarnDialogComponent);
 
-      });
-    } else {
-      window.close();
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result is:', result);
+      if (result) {
+        this._userService.deleteParticipant(id).subscribe(res => {
+          if (res) {
+            this.getUsers();
+            location.reload();
+          }
+        });
+      }
+      if (!result) {
+        console.log('User not removed');
+      }
+    });
   }
 
   export(): void {
 
-    let exportedUsers = [['name', 'email', 'phone']];
+    const exportedUsers = [['name', 'email', 'phone']];
     for (const user of this.dataSource) {
-      let tempUser = [];
+      const tempUser = [];
       tempUser.push(user.name);
       tempUser.push(user.email);
       tempUser.push(user.phone);
       exportedUsers.push(tempUser);
     }
-    console.log("Exported Users", exportedUsers);
+    console.log('Exported Users', exportedUsers);
 
     /* generate worksheet */
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedUsers);
@@ -196,25 +202,25 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
 
   sendSMS(users: any): void {
     this.loaded = false;
-    console.log("HIT SEND SMS");
+    console.log('HIT SEND SMS');
     this.errors = [];
     this._userService.sendSMS(this.surveyId, users).subscribe((data: any) => {
-      if(data){
+      if (data) {
         if (data.errors) {
-          console.log("*** ERROR ***", data.errors)
+          console.log('*** ERROR ***', data.errors);
           for (const key of Object.keys(data.errors)) {
             const error = data.errors[key];
             this.errors.push(error.message);
           }
         } else {
-          console.log("HIT GET USERS")
+          console.log('HIT GET USERS');
           this.loaded = true;
           this.openSnackBar();
         }
       } else {
         this.loaded = true;
         this.errors = data;
-        console.log("ERROR SENDING MESSAGE", data);
+        console.log('ERROR SENDING MESSAGE', data);
       }
     });
   }
@@ -226,7 +232,7 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
     config.duration = 1500;
     config.panelClass = ['logout-snackbar'];
     this.loaded = true;
-    this.snackBar.open("Message Sent!", '', config);
+    this.snackBar.open('Message Sent!', '', config);
     this.getUsers();
   }
 }

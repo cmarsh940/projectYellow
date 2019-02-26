@@ -28,7 +28,7 @@ export class UserReportComponent implements OnInit {
       phone: this.phone,
       surveyOwner: this.surveyOwner
     });
-  };
+  }
 
   ngOnInit(): void {
     this.loadAll();
@@ -55,11 +55,11 @@ export class UserReportComponent implements OnInit {
       });
   }
 
-	/**
-   * Event handler for changing the checked state of a checkbox (handles array enumeration values)
-   * @param {String} name - the name of the participant field to update
-   * @param {any} value - the enumeration value for which to toggle the checked state
-   */
+/**
+ * Event handler for changing the checked state of a checkbox (handles array enumeration values)
+ * @param {String} name - the name of the participant field to update
+ * @param {any} value - the enumeration value for which to toggle the checked state
+ */
   changeArrayValue(name: string, value: any): void {
     const index = this[name].value.indexOf(value);
     if (index === -1) {
@@ -69,13 +69,13 @@ export class UserReportComponent implements OnInit {
     }
   }
 
-	/**
-	 * Checkbox helper, determining whether an enumeration value should be selected or not (for array enumeration values
-   * only). This is used for checkboxes in the participant updateDialog.
-   * @param {String} name - the name of the participant field to check
-   * @param {any} value - the enumeration value to check for
-   * @return {Boolean} whether the specified participant field contains the provided value
-   */
+/**
+ * Checkbox helper, determining whether an enumeration value should be selected or not (for array enumeration values
+ * only). This is used for checkboxes in the participant updateDialog.
+ * @param {String} name - the name of the participant field to check
+ * @param {any} value - the enumeration value to check for
+ * @return {Boolean} whether the specified participant field contains the provided value
+ */
   hasArrayValue(name: string, value: any): boolean {
     return this[name].value.indexOf(value) !== -1;
   }

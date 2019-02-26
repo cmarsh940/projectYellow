@@ -1,11 +1,12 @@
 import { AuthService } from './../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Client } from '../../global/models/client';
-import { states } from '../../global/models/states';
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
+// tslint:disable-next-line: max-line-length
 import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, ErrorStateMatcher } from '@angular/material';
-import { forbiddenNameValidator } from '../../global/validators/forbidden-name.directive';
+import { Client } from '@shared/models/client';
+import { states } from '@shared/models/states';
+import { forbiddenNameValidator } from '@shared/validators/forbidden-name.directive';
 
 
 
@@ -18,9 +19,9 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
-  selector: "app-register",
-  templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.css"]
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
 
 export class RegisterComponent implements OnInit {
@@ -53,51 +54,51 @@ export class RegisterComponent implements OnInit {
   ]);
   businessName = new FormControl('');
   emailFormControl = new FormControl('', [
-    Validators.required, 
+    Validators.required,
     Validators.email,
     Validators.maxLength(250),
   ]);
   passwordFormControl = new FormControl('', [
-    Validators.required, 
+    Validators.required,
     Validators.minLength(8),
     Validators.maxLength(250),
   ]);
   confirm_pass = new FormControl('', [
-    Validators.required, 
+    Validators.required,
     Validators.minLength(8),
     Validators.maxLength(250),
   ]);
   phoneFormControl = new FormControl('', [
-    Validators.required, 
+    Validators.required,
     Validators.pattern('[0-9]*'),
-    Validators.minLength(10), 
+    Validators.minLength(10),
     Validators.maxLength(12),
   ]);
   addressFormControl = new FormControl('', [
-    Validators.required, 
+    Validators.required,
     Validators.minLength(2),
   ]);
   cityFormControl = new FormControl('', [
-    Validators.required, 
+    Validators.required,
     Validators.pattern('[a-zA-Z ]*'),
     Validators.minLength(2),
     Validators.maxLength(150),
   ]);
   stateFormControl = new FormControl('', [
     Validators.required,
-    Validators.pattern('[a-zA-Z ]*'), 
+    Validators.pattern('[a-zA-Z ]*'),
     Validators.minLength(2),
     Validators.maxLength(5),
   ]);
-  zipFormControl = new FormControl('', [
-    Validators.required, 
+  postalCodeFormControl = new FormControl('', [
+    Validators.required,
     Validators.pattern('[0-9]*'),
     Validators.minLength(5),
     Validators.maxLength(18),
   ]);
 
   constructor(
-    private _authService: AuthService, 
+    private _authService: AuthService,
     private _router: Router,
     public snackBar: MatSnackBar,
     fb: FormBuilder
@@ -113,8 +114,8 @@ export class RegisterComponent implements OnInit {
       address: this.addressFormControl,
       city: this.cityFormControl,
       state: this.stateFormControl,
-      zip: this.zipFormControl,
-    },{ updateOn: 'blur' });
+      postalCode: this.postalCodeFormControl,
+    }, { updateOn: 'blur' });
   }
 
   ngOnInit() {
@@ -126,7 +127,7 @@ export class RegisterComponent implements OnInit {
 
   addParticipant(form: any) {
     this.errors = [];
-    const subscription = "FREE";
+    const subscription = 'FREE';
     const platform = 'EMAIL';
     this.participant = {
       'firstName': this.firstNameFormControl.value,
@@ -140,18 +141,18 @@ export class RegisterComponent implements OnInit {
       'address': this.addressFormControl.value,
       'city': this.cityFormControl.value,
       'state': this.stateFormControl.value,
-      'zip': this.zipFormControl.value,
+      'postalCode': this.postalCodeFormControl.value,
       'subscription': subscription
     };
 
     this._authService.addParticipant(this.participant).subscribe((data) => {
-      if(data) {
+      if (data) {
         if (data.errors) {
-          console.log("___ DATA ERROR ___:", data.errors);
+          console.log('___ DATA ERROR ___:', data.errors);
           if (data.errors.password) {
-            this.errors.push(data.errors.password.message);
+            this.errors = data.errors.password.message;
           } else {
-            this.errors.push(data.errors);
+            this.errors = data.errors;
           }
         } else {
           this.errors = null;
@@ -166,13 +167,13 @@ export class RegisterComponent implements OnInit {
             'address': null,
             'city': null,
             'state': null,
-            'zip': null,
+            'postalCode': null,
           });
           this.openSnackBar();
-          this._router.navigateByUrl("/login");
+          this._router.navigateByUrl('/login');
         }
       }
-    })
+    });
   }
 
   openSnackBar() {
@@ -180,8 +181,8 @@ export class RegisterComponent implements OnInit {
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
     config.duration = 10500;
-    config.panelClass = ['logout-snackbar']
-    this.snackBar.open("Thank you for registering. Please verify your email to get started", '', config);
+    config.panelClass = ['logout-snackbar'];
+    this.snackBar.open('Thank you for registering. Please verify your email to get started', '', config);
   }
-  
+
 }

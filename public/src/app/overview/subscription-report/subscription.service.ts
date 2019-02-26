@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { DataService } from '../../global/services/data.service';
 import { Observable } from 'rxjs';
-import { Subscription } from '../../global/models/subscription';
+import { DataService } from '@shared/services/data.service';
+import { Subscription } from '@shared/models/subscription';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class SubscriptionService {
 
   constructor(
     private dataService: DataService<Subscription>
-  ) {};
+  ) {}
 
   public getAll(): Observable<Subscription[]> {
     return this.dataService.getAll(this.NAMESPACE);

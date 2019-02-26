@@ -168,26 +168,28 @@
           </mat-error>
         </mat-form-field>
 
-        <!-- ZIP CODE -->
+        <!-- Postal CODE -->
         <mat-form-field appearance="outline">
-          <mat-label>Zip Code</mat-label>
-          <input matInput type="text" [formControl]="zipFormControl" [errorStateMatcher]="matcher" required autocomplete="postal-code">
-          <mat-error *ngIf="zipFormControl.hasError('required')">
-            Zip code is <strong>required</strong>
+          <mat-label>Postal Code</mat-label>
+          <input matInput type="text" [formControl]="postalCodeFormControl" [errorStateMatcher]="matcher" required autocomplete="postal-code">
+          <mat-error *ngIf="postalCodeFormControl.hasError('required')">
+            postal code is <strong>required</strong>
           </mat-error>
-          <mat-error *ngIf="zipFormControl.errors?.pattern">
-            Zip code cannot have letters or symbols in it.
+          <mat-error *ngIf="postalCodeFormControl.errors?.pattern">
+            postal code cannot have letters or symbols in it.
           </mat-error>
-          <mat-error *ngIf="zipFormControl.hasError('maxlength')">
-            Please enter a valid zip code
+          <mat-error *ngIf="postalCodeFormControl.hasError('maxlength')">
+            Please enter a valid postal code
           </mat-error>
         </mat-form-field>
       </div>
 
-      <mat-divider></mat-divider>
+      <mat-divider id="bottomDivider"></mat-divider>
+
+      <mat-checkbox required><strong>* I have read and agree to the <a routerLink='/policies/usage' id='termsLink'>terms of Service</a></strong> </mat-checkbox>
 
       <!-- SUBMIT BUTTON -->
-      <div class="text-center">
+      <div class="text-center" id="submitButton">
         <button mat-stroked-button type="submit" color="primary" (click)="addParticipant(myForm)" [disabled]="!myForm.valid">Create Account</button>
       </div>
       <div *ngIf="errors.length > 0" class="errors">
@@ -201,7 +203,7 @@
 <mat-toolbar id="bottom" color="primary">
   <div class="text-center">
     <p class="mat-h5">Already have a account?
-      <a routerLink="/login" color="accent">Login</a>
+      <a routerLink="/login" id="loginLink">Login</a>
     </p>
   </div>
 </mat-toolbar>

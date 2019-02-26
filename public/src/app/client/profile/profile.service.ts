@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { DataService } from '@shared/services/data.service';
+import { Client } from '@shared/models/client';
 
-import { Client } from './../../global/models/client';
-import { DataService } from './../../global/services/data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +25,7 @@ export class ProfileService {
   }
 
   public disableParticipant(id: any): Observable<Client> {
-    let NAMESPACE = "disableC";
+    const NAMESPACE = 'disableC';
     return this.dataService.cancel(NAMESPACE, id);
   }
 
@@ -33,7 +33,7 @@ export class ProfileService {
     return this.dataService.delete(this.NAMESPACE, id);
   }
   public cancelSubscription(id: any): Observable<Client> {
-    let ns = "payment/cancel"
+    const ns = 'payment/cancel';
     return this.dataService.cancel(ns, id);
   }
 }

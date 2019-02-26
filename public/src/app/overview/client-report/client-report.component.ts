@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClientService } from '../../client/client.service';
-import { Client } from '../../global/models/client';
+import { Client } from '@shared/models/client';
 
 @Component({
   selector: 'app-client-report',

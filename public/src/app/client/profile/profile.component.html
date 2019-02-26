@@ -32,7 +32,7 @@
       <div class="header-text">
         <h3>{{currentClient.firstName}} {{currentClient.lastName}}</h3>
         <h5>{{currentClient.businessName}}</h5>
-        <a (click)="closeAccount(currentClient._id)" id="disable">disable account</a>
+        <a (click)="openDisableAccountDialog()" id="disable">disable account</a>
       </div>
     </div>
     <div class="content">
@@ -52,12 +52,12 @@
         <!-- <p class="content-bottom">{{ currentClient.users?.length }}</p> -->
       </div>
       <div class="content-body">
-        <h5>Email: {{currentClient.email}}</h5>
-        <h5>Phone: {{currentClient.phone}}</h5>
-        <h5>Address: {{ currentClient.address }}</h5>
-        <h5>City: {{ currentClient.city }}</h5>
-        <h5>State: {{ currentClient.state }}</h5>
-        <h5>Zip: {{ currentClient.zip }}</h5>
+        <h5>Email: {{ currentClient.email }}</h5>
+        <h5>Phone: {{ currentClient.phone }}</h5>
+        <h5>Address: {{ currentClient?._address?.address }}</h5>
+        <h5>City: {{ currentClient?._address?.city }}</h5>
+        <h5>State: {{ currentClient?._address?.state }}</h5>
+        <h5>Postal Code: {{ currentClient?._address?.postalCode }}</h5>
         <h5 id="subscription">
           Subscription: {{ currentClient._subscription | titlecase }}
           <div *ngIf="currentClient._subscription !== 'FREE'" id="show">

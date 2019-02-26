@@ -45,6 +45,10 @@ const SurveySchema = new mongoose.Schema({
     required: [true, "Survey privacy cannot be blank"],
     default: false
   },
+  public: {
+    type: Boolean,
+    default: false
+  },
   questions: {
     type: [
       {
@@ -53,6 +57,9 @@ const SurveySchema = new mongoose.Schema({
       }
     ],
     default: []
+  },
+  slug: {
+    type: String,
   },
   submissionDates: [Date],
   surveyTime: {

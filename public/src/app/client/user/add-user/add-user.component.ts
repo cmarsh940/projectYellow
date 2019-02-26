@@ -4,22 +4,22 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import { ErrorStateMatcher, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
-import { User } from '../../../global/models/user';
 import { UserService } from '../user.service';
+import { User } from '@shared/models/user';
 
 
 
 @Component({
-  selector: "app-add-user",
-  templateUrl: "./add-user.component.html",
-  styleUrls: ["./add-user.component.css"]
+  selector: 'app-add-user',
+  templateUrl: './add-user.component.html',
+  styleUrls: ['./add-user.component.css']
 })
 
 export class AddUserComponent implements OnInit {
   errors: string[] = [];
   newUser: User = new User();
   myForm: FormGroup;
-  surveyId: string = "";
+  surveyId: string = '';
 
   private participant;
 
@@ -45,12 +45,11 @@ export class AddUserComponent implements OnInit {
   addParticipant(form: any) {
     this.errors = [];
 
-    console.log("Phone value is:", this.phoneFormControl.value);
+    console.log('Phone value is:', this.phoneFormControl.value);
     let phone = '';
     if (!this.phoneFormControl.value) {
       phone = this.phoneFormControl.value;
-    } 
-    else {
+    } else {
       phone = `+1${this.phoneFormControl.value}`;
     }
 
@@ -62,14 +61,14 @@ export class AddUserComponent implements OnInit {
       '_survey': this.data.survey,
       'textSent': false,
       'answeredSurvey': false
-    }
-    
+    };
+
 
     this._userService.addParticipant(this.participant).subscribe((data) => {
       if (data) {
-        console.log("RETURNED DATA", data);
+        console.log('RETURNED DATA', data);
         if (data.errors) {
-          console.log("___ DATA ERROR ___:", data.errors);
+          console.log('___ DATA ERROR ___:', data.errors);
           this.errors.push(data.errors);
         } else {
           this.errors = null;
@@ -82,7 +81,7 @@ export class AddUserComponent implements OnInit {
           // this._router.navigate(['../'], { relativeTo: this._activatedRoute });
         }
       }
-    })
+    });
   }
 
   cancel(): void {

@@ -1,6 +1,10 @@
-section {
-  width:100%;
-  height: 100%;
+.loaded {
+    width: 100%;
+    margin: auto;
+}
+
+.mat-spinner {
+    margin: 5em auto;
 }
 
 .title {
@@ -11,9 +15,16 @@ section {
   text-align: center;
 }
 
+#upgrade-card {
+  margin: 1em
+}
 
-.grid-container {
-  margin: 20px;
+#upgrade-text {
+  font-size: small;
+}
+
+#upgrade-link, #upgrade-button {
+  color: mediumseagreen;
 }
 
 .dashboard-card {
@@ -69,7 +80,6 @@ section {
   width: 100%;
   margin: 0;
   padding: 0;
-  max-height: 330px;
   overflow-y: unset;
   background: #000000d1;
   color: white;

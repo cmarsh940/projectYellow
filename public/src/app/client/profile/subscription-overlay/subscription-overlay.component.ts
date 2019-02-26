@@ -16,7 +16,7 @@ export class SubscriptionOverlayComponent {
   ) { }
 
   openLink(event: MouseEvent, subscriptionId: any): void {
-    console.log("DATA IS", this.data)
+    console.log('DATA IS', this.data);
     this.bottomSheetRef.dismiss();
     event.preventDefault();
     console.log(subscriptionId);
@@ -24,7 +24,7 @@ export class SubscriptionOverlayComponent {
   }
 
   openCheckout(subscriptionId: any) {
-    console.log("NEW DATA TRANSFER", this.data)
+    console.log('NEW DATA TRANSFER', this.data);
     const checkoutRef = this.checkoutDialog.open(CheckoutComponent, {
       data: {
         data: this.data,

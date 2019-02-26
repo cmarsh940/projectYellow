@@ -1,0 +1,25 @@
+<mat-toolbar color="primary">
+</mat-toolbar>
+<div class="error-header">
+  <h2 mat-header>Subscription Error</h2>
+</div>
+<div class="error-body">
+  <h4>
+    There seems to be a problem with your subscription.  To get this resolved as soon as possible, contact our support team with your name, and email you used to signup with. <a href="mailto:suport@mellcgroup.com?Subject=Hello%20again" target="_top">Contact Support</a>
+  </h4>
+  <div class="error-button">
+    <button mat-raised-button (click)="logout()" matTooltip="go home" aria-label="home button" color="primary">
+      Go back to home page
+    </button>
+  </div>
+</div>
+
+<app-powered-by></app-powered-by>
+
+
+
+<mat-toolbar id="footer" color="primary">
+  <div class="row">
+    <button mat-button (click)="openDialog()">&copy; 2019 ME LLC Group. All Rights Reserved.</button>
+  </div>
+</mat-toolbar>

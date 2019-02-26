@@ -97,7 +97,7 @@
                 </button>
                 <mat-menu #userAction="matMenu" class="user-action">
                     <div *ngIf="element.textSent && !element.answeredSurvey">
-                        <button mat-menu-item matTooltip="Take Survey as user" routerLink="/pSurvey/{{element._id}}/{{surveyId}}">
+                        <button mat-menu-item matTooltip="Resend text message" (click)="sendSMS(selection)">
                             <mat-icon color="primary">
                                 <i class="material-icons">textsms</i>
                             </mat-icon>

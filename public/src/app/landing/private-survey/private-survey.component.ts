@@ -1,25 +1,25 @@
-import { Component, OnInit, OnDestroy, ViewChildren, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, ElementRef, Input, Inject, PLATFORM_ID, OnChanges, AfterViewInit } from '@angular/core';
 import { FormControlName, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
-import { questionGroups } from 'src/app/global/models/question-group';
-import { GenericValidator } from 'src/app/global/validators/generic-validator';
-import { SurveyService } from 'src/app/client/survey/survey.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
-import { Survey } from 'src/app/global/models/survey';
-import { Question } from 'src/app/global/models/question';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
+import { questionGroups, Question } from '@shared/models/question-group';
+import { GenericValidator } from '@shared/validators/generic-validator';
+import { SurveyService } from 'app/client/survey/survey.service';
+import { Survey } from '@shared/models/survey';
+import { RegisterDialogComponent } from 'app/auth/register-dialog/register-dialog.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-private-survey',
   templateUrl: './private-survey.component.html',
   styleUrls: ['./private-survey.component.css']
 })
-export class PrivateSurveyComponent implements OnInit, OnDestroy {
+export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
-  surveyId: string = "";
+  surveyId: string = '';
   errors = [];
   _routeSubscription: Subscription;
   questionGroup = questionGroups;
@@ -59,7 +59,8 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
 
     // Defines all of the validation messages for the form.
@@ -76,28 +77,30 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loaded = false;
+    if (isPlatformBrowser(this.platformId)) {
+      this.loaded = false;
 
-    // SET META INFO
-    this.currentDevice = window.clientInformation.platform;
-    this.currentPlatform = window.clientInformation.vendor;
-    this.agent = window.clientInformation.userAgent;
+      // SET META INFO
+      this.currentDevice = window.clientInformation.platform;
+      this.currentPlatform = window.clientInformation.vendor;
+      this.agent = window.clientInformation.userAgent;
 
-    this.surveyForm = this.fb.group({
-      questions: this.fb.array([this.buildQuestion()])
-    });
+      this.surveyForm = this.fb.group({
+        questions: this.fb.array([this.buildQuestion()])
+      });
 
-    this.userId = this._activatedRoute.snapshot.url[1].path;
+      this.userId = this._activatedRoute.snapshot.url[1].path;
 
-    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
-      this.surveyId = params['id'];
-      this.getSurvey();
-    });
+      this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+        this.surveyId = params['id'];
+        this.getSurvey();
+      });
 
-    setTimeout(() => {
-      this.loaded = true;
-      this.startTimer();
-    }, 1000);
+      setTimeout(() => {
+        this.loaded = true;
+        this.startTimer();
+      }, 1000);
+    }
   }
 
   ngAfterViewInit() {
@@ -131,9 +134,9 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     this.rebuildForm();
   }
 
-  ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
-  }
+  // ngOnDestroy() {
+  //   this._routeSubscription.unsubscribe();
+  // }
 
 
   getSurvey() {
@@ -143,7 +146,7 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
           this.assigned = false;
 
           // CHECK IF SURVEY IS PRIVATE
-          if(survey.private) {
+          if (survey.private) {
 
             // SET ANSWERS TO EMPTY []
             for (let i = 0; i < survey.questions.length; i++) {
@@ -152,10 +155,10 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
             this.assigned = false;
 
             // CHECK IF USER IS ASSIGNED TO SURVEY
-            let tempArray = survey.users;
+            const tempArray = survey.users;
 
             tempArray.forEach(user => {
-              if(user === this.userId) {
+              if (user === this.userId) {
                 // IF USER IS IN THE LIST ASSIGN VALUE TO TRUE
                 this.assigned = true;
               }
@@ -163,18 +166,18 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
 
             // IF ASSIGNED THEN START TO DISPLAY SURVEY
             if (this.assigned) {
-              this.onSurveyRetrieved(survey)
+              this.onSurveyRetrieved(survey);
             } else {
 
               // IF NOT ASSIGNED THEN REDIRECT TO SURVEY ERROR
-              console.warn("ERROR USER NOT ASSIGENED TO SURVEY");
-              this._router.navigate(["/surveyError"]);
+              console.warn('ERROR USER NOT ASSIGENED TO SURVEY');
+              this._router.navigate(['/surveyError']);
             }
           } else {
 
             // IF SURVEY NOT PRIVATE REDIRECT TO SURVEY ERROR
-            console.warn("ERROR SURVEY IS NOT PRIVATE");
-            this._router.navigate(["/surveyError"]);
+            console.warn('ERROR SURVEY IS NOT PRIVATE');
+            this._router.navigate(['/surveyError']);
           }
         },
         (error: any) => {
@@ -218,24 +221,24 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updatePrivateAnswer(this.survey._id, this.survey).subscribe(
       result => {
-        console.log("Thank you for taking our survey!");
-        this._router.navigate(["/success"]);
+        console.log('Thank you for taking our survey!');
+        this._router.navigate(['/success']);
       },
       error => {
-        console.log("___ERROR___:", error);
+        console.log('___ERROR___:', error);
         for (const key of Object.keys(error)) {
           const errors = error[key];
           this.errors.push(errors.message);
         }
       });
     if (!this.errors) {
-      this._router.navigate(["/list_of_surveys"]);
+      this._router.navigate(['/survey-list']);
     }
   }
 
   prepareSaveSurvey(): Survey {
-    let tempTotal = this.survey.totalAnswers + 1;
-    let allTime = this.survey.surveyTime + this.interval
+    const tempTotal = this.survey.totalAnswers + 1;
+    const allTime = this.survey.surveyTime + this.interval;
     this.timeAverage = allTime / tempTotal;
 
     // CANCEL INTERVALS
@@ -275,26 +278,6 @@ export class PrivateSurveyComponent implements OnInit, OnDestroy {
   startTimer() {
     this.interval = setInterval(() => {
       this.time++;
-    }, 1000)
-  }
-
-
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.closeOnNavigation = true;
-
-
-    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        console.log(`Dialog Error result:`);
-        console.log(result);
-      } else {
-        console.log(`Dialog result:`);
-        console.table(result);
-        this._router.navigateByUrl("/login");
-      }
-    });
+    }, 1000);
   }
 }

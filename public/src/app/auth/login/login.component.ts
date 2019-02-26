@@ -1,11 +1,13 @@
 import { AuthService } from './../auth.service';
-import { FormControl, Validators, FormGroup, FormBuilder } from "@angular/forms";
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { Client } from "../../global/models/client";
+import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Router } from '@angular/router';
+// tslint:disable-next-line: max-line-length
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatIconRegistry } from '@angular/material';
 import { environment } from './../../../environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Client } from '@shared/models/client';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 declare const FB: any;
 declare const gapi: any;
@@ -15,7 +17,13 @@ declare const gapi: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+
+/**
+TODO:
+- [] remove localStorage or cookies if failed login
+- [] change google and facebook to just icons
+*/
+export class LoginComponent implements OnInit, AfterViewInit {
   errors: string[] = [];
   client: Client;
   myForm: FormGroup;
@@ -23,7 +31,7 @@ export class LoginComponent implements OnInit {
   errorMessage;
   loaded: Boolean;
   hide = true;
-  auth2: any
+  auth2: any;
 
   private participant;
 
@@ -35,25 +43,29 @@ export class LoginComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
   getErrorMessage() {
-    return this.email.hasError("required")
-      ? "You must enter a value"
-      : this.email.hasError("email") ? "Not a valid email" : "";
+    return this.email.hasError('required')
+      ? 'You must enter a value'
+      : this.email.hasError('email') ? 'Not a valid email' : '';
   }
 
   constructor(
-    private _authService: AuthService, 
+    private _authService: AuthService,
     private _router: Router,
-    public snackBar: MatSnackBar, 
+    public snackBar: MatSnackBar,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-    fb: FormBuilder
+    fb: FormBuilder,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
+    const svgFacebookUrl = 'assets/icons/facebookWhite.svg';
+    const svgGoogleUrl = 'assets/icons/google.svg';
+    const domain = (isPlatformServer(platformId)) ? 'http://localhost:4000/' : '';
     iconRegistry.addSvgIcon(
       'facebook',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
+      sanitizer.bypassSecurityTrustResourceUrl(domain + svgFacebookUrl));
     iconRegistry.addSvgIcon(
       'google',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'));
+      sanitizer.bypassSecurityTrustResourceUrl(domain + svgGoogleUrl));
 
     this.myForm = fb.group({
       email: this.email,
@@ -62,11 +74,13 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.errors = null;
-    this.loaded = false;
-    this.verified();
-    this.loadFacebook();
-    this.loaded = true
+    if (isPlatformBrowser(this.platformId)) {
+      this.errors = null;
+      this.loaded = false;
+      this.verified();
+      this.loadFacebook();
+      this.loaded = true;
+    }
   }
 
   ngAfterViewInit() {
@@ -83,13 +97,13 @@ export class LoginComponent implements OnInit {
   attachSignin(element) {
     this.auth2.attachClickHandler(element, {},
       (data) => {
-        console.log("LOGGEDINUSER:",data);
-        let client = new Client();
-        client.email = data.w3.U3
+        console.log('LOGGEDINUSER:', data);
+        const client = new Client();
+        client.email = data.w3.U3;
         client.password = `Google${data.w3.Eea}`;
         this.loginGoogleParticipant(client);
       }, function (error) {
-        console.log("GOOGLE LOGIN ERROR",error)
+        console.log('GOOGLE LOGIN ERROR', error);
       });
   }
 
@@ -106,10 +120,10 @@ export class LoginComponent implements OnInit {
     };
 
     (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
+      let js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
   }
@@ -121,28 +135,27 @@ export class LoginComponent implements OnInit {
         console.table(response);
         if (response.authResponse) {
           FB.api('/me', { fields: 'email, first_name, last_name, picture' }, (data: any) => {
-            let client = new Client();
-            client.email = data.email
+            const client = new Client();
+            client.email = data.email;
             client.password = `Facebook${data.id}`;
-            resolve(client)
+            resolve(client);
             this.loginFacebookParticipant(client);
           });
-        }
-        else {
+        } else {
           console.log('User login failed');
           reject('User cancelled login or did not fully authorize.');
         }
-      }, { scope: 'email,public_profile' })
+      }, { scope: 'email,public_profile' });
       setTimeout(() => {
         this.loaded = true;
-        this._router.navigateByUrl("/dashboard");
+        this._router.navigateByUrl('/dashboard');
       }, 5000);
-    })
+    });
   }
 
   loginGoogleParticipant(data: any) {
     this.errors = null;
-    console.log("*** STARTING GOOGLE LOGIN ***", data)
+    console.log('*** STARTING GOOGLE LOGIN ***', data);
     this.participant = {
       'email': data.email,
       'password': data.password
@@ -151,7 +164,7 @@ export class LoginComponent implements OnInit {
     this._authService.authenticate(this.participant).subscribe((data) => {
       if (data) {
         if (data.errors) {
-          console.log("___ LOGIN ERROR ___:", data.errors);
+          console.log('___ LOGIN ERROR ___:', data.errors);
           this.errors = data;
         } else {
           this._authService.setCurrentClient(data);
@@ -165,7 +178,7 @@ export class LoginComponent implements OnInit {
   }
   loginFacebookParticipant(data: any) {
     this.errors = null;
-    console.log("*** STARTING FACEBOOK LOGIN ***", data)
+    console.log('*** STARTING FACEBOOK LOGIN ***', data);
     this.participant = {
       'email': data.email,
       'password': data.password
@@ -174,10 +187,10 @@ export class LoginComponent implements OnInit {
     this._authService.authenticate(this.participant).subscribe((data) => {
       if (data) {
         if (data.errors) {
-          console.log("___ LOGIN ERROR ___:", data.errors);
+          console.log('___ LOGIN ERROR ___:', data.errors);
           for (const key of Object.keys(data.errors)) {
             const error = data.errors[key];
-            this.errors.push(error.message);
+            this.errors = error.message;
             return;
           }
         } else {
@@ -193,28 +206,27 @@ export class LoginComponent implements OnInit {
 
   loginParticipant(form: any) {
     this.errors = null;
-    console.log("*** STARTING LOGIN ***")
+    console.log('*** STARTING LOGIN ***');
     this.participant = {
       'email': this.email.value,
       'password': this.password.value
     };
 
     this._authService.authenticate(this.participant).subscribe((data) => {
-      if(data) {
+      if (data) {
         if (data.errors) {
-          console.log("___ LOGIN ERROR ___:");
+          console.log('___ LOGIN ERROR ___:');
           for (const key of Object.keys(data.errors)) {
             const error = data.errors[key];
-            this.errors.push(error.message);
+            this.errors = error.message;
           }
-          // this.errors.push(data.errors);
         } else {
-          if (data.a8o1 === "CAPTAIN") {
+          if (data.a8o1 === 'CAPTAIN') {
             this._authService.setCurrentClient(data);
-            this._router.navigateByUrl("/overview");
+            this._router.navigateByUrl('/overview');
           } else {
-            this._authService.setCurrentClient(data); 
-            this._router.navigateByUrl("/dashboard");
+            this._authService.setCurrentClient(data);
+            this._router.navigateByUrl('/dashboard');
           }
         }
       } else {
@@ -224,23 +236,23 @@ export class LoginComponent implements OnInit {
   }
 
   verified() {
-    this.loaded = false;
-    let data = this._authService.emailVerified();
-    if (data) {
-      console.log("VERIFIED");
-      this.alreadyLoggedIn();
-    } else {
-      console.log("Need to verify email");
-      return;
-    }
+    // this.loaded = false;
+    // const data = this._authService.emailVerified();
+    // if (data) {
+    //   console.log('VERIFIED');
+    //   this.alreadyLoggedIn();
+    // } else {
+    //   console.log('Need to verify email');
+    //   return;
+    // }
   }
 
   alreadyLoggedIn() {
-    let data = this._authService.checkLoggedIn();
-      if (data) {
-        this.openSnackBar();
-        this._router.navigateByUrl("/dashboard");
-      }
+    // const data = this._authService.checkLoggedIn();
+    //   if (data) {
+    //     this.openSnackBar();
+    //     this._router.navigateByUrl('/dashboard');
+    //   }
   }
 
   openSnackBar() {
@@ -248,16 +260,16 @@ export class LoginComponent implements OnInit {
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
     config.duration = 2500;
-    config.panelClass = ['logout-snackbar']
-    this.snackBar.open("You are already logged in!", '', config);
+    config.panelClass = ['logout-snackbar'];
+    this.snackBar.open('You are already logged in!', '', config);
   }
   openFacebookSnackBar() {
     const config = new MatSnackBarConfig();
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
     config.duration = 2500;
-    config.panelClass = ['logout-snackbar']
-    this.snackBar.open("You are already logged in!", '', config);
-    this._router.navigateByUrl("/dashboard");
+    config.panelClass = ['logout-snackbar'];
+    this.snackBar.open('You are already logged in!', '', config);
+    this._router.navigateByUrl('/dashboard');
   }
 }

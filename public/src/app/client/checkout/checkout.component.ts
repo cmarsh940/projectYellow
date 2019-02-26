@@ -3,18 +3,18 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { CheckoutService } from './checkout.service';
 
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from "@angular/common";
+import { Location } from '@angular/common';
 
 import { HttpClient } from '@angular/common/http';
-import { subscription } from 'src/app/global/models/subscription';
 import { ProfileService } from '../profile/profile.service';
-import { Client } from 'src/app/global/models/client';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { client, hostedFields } from 'braintree-web';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { EditClientComponent } from '../profile/edit-client/edit-client.component';
+import { subscription } from '@shared/models/subscription';
+import { Client } from '@shared/models/client';
 
 
 @Component({
@@ -22,9 +22,9 @@ import { EditClientComponent } from '../profile/edit-client/edit-client.componen
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
-export class CheckoutComponent implements OnDestroy, OnInit{
+export class CheckoutComponent implements OnDestroy, OnInit {
   subscriptionId: number;
-  paymentTokenURL = 'api/braintree/getclienttoken';
+  paymentTokenURL = environment.paymentTokenUrl;
   errors = [];
   plans = [];
   selectedPlan: any;
@@ -55,12 +55,12 @@ export class CheckoutComponent implements OnDestroy, OnInit{
 
   ngOnInit() {
     this.processing = false;
-    console.log("CHECKOUT DATA", this.data)
+    console.log('CHECKOUT DATA', this.data);
     // GET SUBSCRIPTION ID
-    
+
     // SET CURRENT CLIENT
     const currentClient = this.data.data;
-    console.log("CURRENT CLIENT", this.currentClient);
+    console.log('CURRENT CLIENT', this.currentClient);
 
     // SUBSCRIPTION ID
     this.subscriptionId = this.data.subscriptionId;
@@ -74,19 +74,19 @@ export class CheckoutComponent implements OnDestroy, OnInit{
       next: res => {
         this.loaded = false;
         this.clientToken = res.token;
-        console.log("Client Token ", this.clientToken);
+        console.log('Client Token ', this.clientToken);
 
         this.plans = res.plans.plans;
-        console.log("PLANS ", this.plans);
-        for (let plan of this.plans) {
+        console.log('PLANS ', this.plans);
+        for (const plan of this.plans) {
           if (this.subscriptionId === plan.id) {
             this.selectedPlan = plan;
           }
         }
-        console.log("SELECTED PLAN", this.selectedPlan);
+        console.log('SELECTED PLAN', this.selectedPlan);
       },
       error: err => {
-        console.log("api error" + err);
+        console.log('api error' + err);
       },
       complete: () => {
         this.loaded = false;
@@ -98,7 +98,7 @@ export class CheckoutComponent implements OnDestroy, OnInit{
 
   }
 
-  
+
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
@@ -107,7 +107,7 @@ export class CheckoutComponent implements OnDestroy, OnInit{
 
   createPayment() {
     this.loaded = true;
-    var self = this;
+    const self = this;
     client.create({
       authorization: environment.braintreeKey
     },
@@ -121,7 +121,7 @@ export class CheckoutComponent implements OnDestroy, OnInit{
   }
 
   createHostedFields(clientInstance) {
-    var self = this;
+    const self = this;
     hostedFields.create({
       client: clientInstance,
       styles: {
@@ -175,11 +175,11 @@ export class CheckoutComponent implements OnDestroy, OnInit{
           return;
         }
         self.handleHostedFields(hostedFieldsInstance);
-      })
+      });
   }
 
   handleHostedFields(hostedFieldsInstance) {
-    var self = this;
+    const self = this;
 
     document.querySelector('#cardForm').addEventListener('submit',
       function (event) {
@@ -189,36 +189,36 @@ export class CheckoutComponent implements OnDestroy, OnInit{
           self.processing = true;
           if (tokenizeErr) {
             self.processing = false;
-            alert("Some payment input fields are invalid.");
+            alert('Some payment input fields are invalid.');
             console.error(tokenizeErr);
             return;
           }
           console.log('Got a nonce: ' + payload.nonce);
-          let currentClient = self.data.data;
-          if (currentClient._subscription === "FREE") {
+          const currentClient = self.data.data;
+          if (currentClient._subscription === 'FREE') {
             self.processing = true;
-            const checkoutURL = 'api/braintree/createpurchase';
+            const checkoutURL = environment.checkoutUrl;
             self.paymentService.checkout(checkoutURL, payload.nonce, self.selectedPlan, currentClient).subscribe(res => {
               if (res.success === false) {
-                alert("YOUR PAYMENT WAS DECLINED");
+                alert('YOUR PAYMENT WAS DECLINED');
                 self.processing = false;
-                console.error("api error", res);
+                console.error('api error', res);
               } else {
-                alert("Thank you for your subscription");
+                alert('Thank you for your subscription');
                 window.location.reload();
               }
             }
             );
           } else {
             self.processing = true;
-            const checkoutURL = 'api/braintree/updatepurchase';
+            const checkoutURL = environment.updatePurchaseUrl;
             self.paymentService.updateSub(checkoutURL, payload.nonce, self.selectedPlan, currentClient).subscribe(res => {
                 if (res.success === false) {
                   self.processing =  false;
-                  alert("YOUR PAYMENT WAS DECLINED");
-                  console.error("api error", res);
+                  alert('YOUR PAYMENT WAS DECLINED');
+                  console.error('api error', res);
                 } else {
-                  alert("Thank you for your subscription");
+                  alert('Thank you for your subscription');
                   window.location.reload();
                 }
               }

@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+// Resets
+@import 'resets/normalize';
+@import 'resets/print';
+// Core
+@import 'core/variables';
+@import 'core/base';
+
+@import '~@angular/material/theming';
+@include mat-core();
+
+$custom-primary: mat-palette($mat-grey, 900);
+$custom-accent:  mat-palette($mat-yellow, A700);
+$custom-warn:    mat-palette($mat-red, 600);
+
+$custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
+@include angular-material-theme($custom-theme);
+
+.logout-snackbar {
+  background: #ffd600;
+  color: #000;
+}
+.cookie-snackbar {
+  background: #ffd600;
+  color: #000;
+  width: 100%!important;
+}
+
+.cookie-snackbar .mat-simple-snackbar-action button {
+  color: red!important;
+}
+
+.container {
+  padding: 0 0 5em 0!important;
+}
+
+.header {
+    width: 100%;
+    text-align: center;
+}
+
+.mat-tab-label {
+    min-width: 49%!important;
+}
+
+.icon-button {
+    height: 80%;
+    width: auto;
+}

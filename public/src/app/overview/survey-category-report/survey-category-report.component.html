@@ -1,4 +1,4 @@
-<button mat-stroked-button routerLink="/addCategory" color="primary" id="add-button">Add Category</button>
+<app-add-category></app-add-category>
 
 <!-- TABLE -->
 <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -19,7 +19,7 @@
     <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
     <mat-cell *matCellDef="let element">
       <!-- EDIT -->
-      <button mat-icon-button color="accent" [routerLink]="['/category', 'edit', element._id]">
+      <button mat-icon-button color="accent" [routerLink]="['/overview','category', 'edit', element._id]">
         <mat-icon aria-label="icon-button to edit category">
           <i class="material-icons">&#xE3C9;</i>
         </mat-icon>

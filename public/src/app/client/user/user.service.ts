@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { DataService } from '@shared/services/data.service';
+import { User } from '@shared/models/user';
 
-import { DataService } from '../../global/services/data.service';
-import { User } from './../../global/models/user';
-import { Survey } from 'src/app/global/models/survey';
+
 
 
 @Injectable({
@@ -16,15 +16,15 @@ export class UserService {
   constructor(
     private dataService: DataService<User>
   ) {
-  };
+  }
 
   public getAll(): Observable<User[]> {
     return this.dataService.getAll(this.NAMESPACE);
   }
 
   public getClientsUsers(id: any): Observable<any> {
-    console.log("HIT SERVICE GET CLIENTS USERS");
-    console.log("*** ID ***", id);
+    console.log('HIT SERVICE GET CLIENTS USERS');
+    console.log('*** ID ***', id);
     return this.dataService.getClientsUsers(this.NAMESPACE, id);
   }
 

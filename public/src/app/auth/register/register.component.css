@@ -46,7 +46,7 @@ button {
     bottom: 0;
 }
 
-a {
+#loginLink {
     color: #FFD600;
 }
 
@@ -63,6 +63,22 @@ a {
 
 .mat-hint {
     font-size: xx-small;
+}
+
+#acceptCheckbox {
+    margin: 0 1em;
+}
+
+#termsLink {
+    color: bule!important;
+}
+
+#submitButton {
+    margin-top: 2em;
+}
+
+#bottomDivider {
+    margin-bottom: 2em;
 }
 
 

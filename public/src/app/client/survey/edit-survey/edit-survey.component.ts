@@ -1,20 +1,22 @@
-import { questionGroups } from './../../../global/models/question-group';
-import { SurveyCategory } from './../../../global/models/survey-category';
 import { Component, OnInit, OnDestroy, Input, AfterViewInit, ViewChildren, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName } from '@angular/forms';
-import { Location } from '@angular/common';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { debounceTime } from 'rxjs/operators';
-import { GenericValidator } from '../../../global/validators/generic-validator';
 import { SurveyService } from '../survey.service';
-import { Survey } from '../../../global/models/survey';
-import { SurveyCategoryService } from '../../../overview/survey-category-report/survey-category.service';
-import { Question } from '../../../global/models/question';
-import { AuthService } from 'src/app/auth/auth.service';
+import { SurveyCategory } from '@shared/models/survey-category';
+import { questionGroups, Question } from '@shared/models/question-group';
+import { Survey } from '@shared/models/survey';
+import { AuthService } from 'app/auth/auth.service';
+import { GenericValidator } from '@shared/validators/generic-validator';
+import { UniversalStorage } from '@shared/storage/universal.storage';
+import { SurveyCategoryService } from 'app/overview/survey-category-report/survey-category.service';
 
 
+/**
+TODO:
+  - [] fix options not displaying
+*/
 
 @Component({
   selector: 'app-edit-survey',
@@ -26,11 +28,11 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class EditSurveyComponent implements OnInit, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
-  surveyId: string = "";
+  surveyId: string = '';
   errors = [];
   _routeSubscription: Subscription;
   categories: SurveyCategory[];
-
+  clientId: any;
   pc: boolean;
 
   questionGroups = questionGroups;
@@ -51,6 +53,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
 
 
   constructor(
+    private universalStorage: UniversalStorage,
     private fb: FormBuilder,
     private _authService: AuthService,
     private _categoryService: SurveyCategoryService,
@@ -76,6 +79,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.clientId = this.universalStorage.getItem('t940');
     this.surveyForm = this.fb.group({
       name: ['', Validators.required],
       category: ['', Validators.required],
@@ -88,10 +92,11 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this._routeSubscription = this._activatedRoute.params.subscribe(params => {
       this.surveyId = params['id'];
       this.getSurvey();
-      this.checkPC();
+      this.check();
     });
   }
 
+  // tslint:disable-next-line: use-life-cycle-interface
   ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
     const controlBlurs: Observable<any>[] = this.formInputElements
@@ -104,14 +109,17 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       });
   }
 
-  checkPC() {
+  check() {
     this.pc = false;
-    let checked = this._authService.checkPC();
-    if (checked) {
-      this.pc = true
-    } else {
-      this.pc = false;
-    }
+    return this._authService.check(this.clientId).then(data => {
+      if (data.b8o1 !== 'FREE') {
+        console.log('Subscribed');
+        this.pc = true;
+      } else {
+        console.log('Trial');
+        this.pc = false;
+      }
+    });
   }
 
   loadCategories() {
@@ -138,8 +146,8 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   initQuestion() {
     return this.fb.group({
       isRequired: false,
-      questionType: ["", Validators.required],
-      question: ["", Validators.required],
+      questionType: ['', Validators.required],
+      question: ['', Validators.required],
       options: this.fb.array([this.initOption()])
     });
   }
@@ -147,7 +155,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
   initOption() {
     return this.fb.group({
       isRequired: false,
-      optionName: [""],
+      optionName: [''],
     });
   }
 
@@ -161,12 +169,14 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this.surveyForm.patchValue({
       name: this.survey.name,
       category: this.survey.category,
-      private: this.survey.private
+      private: this.survey.private,
+      public: this.survey.public
     });
     this.surveyForm.setControl('questions',
       this.fb.array((this.survey.questions || []).map((x) => this.fb.group(x))));
   }
 
+  // tslint:disable-next-line: use-life-cycle-interface
   ngOnChanges() {
     this.rebuildForm();
   }
@@ -183,7 +193,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }
-          this.onSurveyRetrieved(survey)
+          this.onSurveyRetrieved(survey);
         },
         (error: any) => {
           if (error) {
@@ -203,25 +213,25 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
 
 
   get question(): FormArray {
-    return this.surveyForm.get("question") as FormArray;
+    return this.surveyForm.get('question') as FormArray;
   }
   get option(): FormArray {
-    return this.surveyForm.get("option") as FormArray;
+    return this.surveyForm.get('option') as FormArray;
   }
 
   setQuestions(questions: Question[]) {
     const questionFGs = questions.map(question => this.fb.group(question));
     const questionFormArray = this.fb.array(questionFGs);
-    this.surveyForm.setControl("questions", questionFormArray);
+    this.surveyForm.setControl('questions', questionFormArray);
   }
 
   addQuestion() {
-    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
+    const questionsControl = <FormArray>this.surveyForm.controls['questions'];
     questionsControl.push(this.initQuestion());
   }
 
   addOption() {
-    const optionsControl = <FormArray>this.surveyForm.controls["options"];
+    const optionsControl = <FormArray>this.surveyForm.controls['options'];
     optionsControl.push(this.initOption());
   }
 
@@ -229,11 +239,11 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     control.push(
       this.fb.group({
         optionName: ['']
-      }))
+      }));
   }
 
   removeQuestion(i) {
-    const questionsControl = <FormArray>this.surveyForm.controls["questions"];
+    const questionsControl = <FormArray>this.surveyForm.controls['questions'];
     questionsControl.removeAt(i);
   }
 
@@ -255,6 +265,7 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
       submissionDates: this.survey.submissionDates,
       lastSubmission: this.survey.lastSubmission,
       private: formModel.private,
+      public: formModel.public,
       questions: questionsDeepCopy,
       user: this.survey.user,
       creator: this.survey.creator,
@@ -270,17 +281,17 @@ export class EditSurveyComponent implements OnInit, OnDestroy {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updateAsset(this.survey._id, this.survey).subscribe(
       result => {
-        this._router.navigate(["/survey"]);
+        this._router.navigate(['/dashboard/survey']);
       },
       error => {
-        console.log("___ERROR___:", error);
+        console.log('___ERROR___:', error);
         for (const key of Object.keys(error)) {
           const errors = error[key];
           this.errors.push(errors.message);
         }
       });
     if (!this.errors) {
-      this._router.navigate(["/survey"]);
+      this._router.navigate(['/dashboard/survey']);
     }
   }
 }

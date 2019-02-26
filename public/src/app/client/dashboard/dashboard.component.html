@@ -1,22 +1,31 @@
 <section>
-  <div class="grid-container">
-    <div class="title">
-      <h2 class="mat-h2">Dashboard</h2>
+  <header>
+    <div *ngIf="client._subscription !== 'FREE'">
+      <mat-card id="volume-chart">
+        <mat-card-title>Survey Activities</mat-card-title>
+        <mat-card-content>
+          <div class="chart-container" *ngIf="isBrowser">
+            <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
-    
+    <div *ngIf="client._subscription === 'FREE'">
+      <mat-card id="upgrade-card">
+        <mat-card-content>
+          <p id="upgrade-text"><a (click)="openBottomSheet()" id="upgrade-link">Upgrade</a> to receive inhansed security and tools.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="openBottomSheet()" id="upgrade-button">Upgrade now</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </header>
+</section>
+<section>
+  <div class="grid-container">   
     <mat-grid-list cols="1" rowHeight="2:2">
-
       <!-- SURVEYS CARD -->
-      <mat-grid-tile>
-        <mat-card id="volume-chart">
-          <mat-card-title>Survey Activities</mat-card-title>
-          <mat-card-content>
-            <div class="chart-container">
-              <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </mat-grid-tile> 
       <mat-grid-tile>
         <mat-card class="dashboard-card">
           <mat-card-title>
@@ -28,13 +37,12 @@
             </div>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-raised-button aria-label="View all surveys" routerLink="/survey" color="primary">
+            <button mat-raised-button aria-label="View all surveys" routerLink="/dashboard/survey" color="primary">
               View Surveys
             </button>
           </mat-card-actions>
         </mat-card>
       </mat-grid-tile> 
-
     </mat-grid-list>
   </div>
 </section>

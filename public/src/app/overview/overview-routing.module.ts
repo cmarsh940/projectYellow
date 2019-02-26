@@ -12,47 +12,47 @@ import { EditCategoryComponent } from './survey-category-report/edit-category/ed
 
 const routes: Routes = [
   {
-    path: "",
+    path: 'overview',
     component: OverviewComponent,
     children: [
       {
-        path: "overview",
-        pathMatch: "full",
+        path: '',
+        pathMatch: 'full',
         component: ReportComponent
       },
       {
-        path: "clientReport",
-        pathMatch: "full",
+        path: 'clientReport',
+        pathMatch: 'full',
         component: ClientReportComponent
       },
       {
-        path: "surveyReport",
-        pathMatch: "full",
+        path: 'surveyReport',
+        pathMatch: 'full',
         component: SurveyReportComponent
       },
       {
-        path: "surveyCategoriesReport",
-        pathMatch: "full",
+        path: 'surveyCategoriesReport',
+        pathMatch: 'full',
         component: SurveyCategoryReportComponent
       },
       {
-        path: "addCategory",
-        pathMatch: "full",
+        path: 'addCategory',
+        pathMatch: 'full',
         component: AddCategoryComponent
       },
       {
-        path: "editCategory/:id",
-        pathMatch: "full",
+        path: 'category/edit/:id',
+        pathMatch: 'full',
         component: EditCategoryComponent
       },
       {
-        path: "userReport",
-        pathMatch: "full",
+        path: 'userReport',
+        pathMatch: 'full',
         component: UserReportComponent
       },
       {
-        path: "subscriptionReport",
-        pathMatch: "full",
+        path: 'subscriptionReport',
+        pathMatch: 'full',
         component: SubscriptionReportComponent
       },
     ]

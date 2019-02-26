@@ -22,7 +22,7 @@ async function validJWTNeeded(req, res, next) {
                 console.log("Not Valid");
                 return res.status(401).send();
             } else {
-                req.jwt = jwt.verify(Authorization[1], secret);
+                req.jwt = await jwt.verify(Authorization[1], secret);
                 console.log("NEXT");
                 return next();
             }
@@ -39,6 +39,7 @@ async function validJWTNeeded(req, res, next) {
     } 
     else {
         console.log("ELSE");
+        // return res.status(401).send();
         return next();
     }
 };
@@ -60,6 +61,10 @@ module.exports = function (app) {
     app.get('/api/clients/:id', [
         validJWTNeeded,
         Clients.show
+    ]);
+    app.get('/api/clients/info/:id', [
+        validJWTNeeded,
+        Clients.info
     ]);
     app.put('/api/clients/:id', [
         validJWTNeeded,
@@ -120,6 +125,10 @@ module.exports = function (app) {
         Surveys.delete
     ]);
     app.get('/api/surveys/:id', Surveys.show);
+    app.get('/api/surveys/slug/:slug', [
+        validJWTNeeded,
+        Surveys.findBySlug
+    ]);
     app.put('/api/surveys/:id', [
         validJWTNeeded,
         Surveys.update
@@ -188,7 +197,7 @@ module.exports = function (app) {
     ]);
 
     // CATCH ALL
-    app.all('*', (req, res, next) => {
-        res.sendFile(path.resolve('./public/dist/index.html'));
-    })
+    // app.all('*', (req, res, next) => {
+    //     res.sendFile(path.resolve('./public/dist/index.html'));
+    // })
 }

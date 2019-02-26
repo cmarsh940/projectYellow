@@ -20,7 +20,7 @@ const app = express();
 app.use(helmet());
 
 app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:* always');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', true);
     res.header('X-Content-Type-Options', 'nosniff');
     res.header('X-Frame-Options', 'DENY');
@@ -40,7 +40,6 @@ app.use(function (req, res, next) {
 
 app.use(compression()); //Compress all routes
 app.use(cors());
-app.use(express.static(path.join(__dirname + '/public/dist')));
 app.use(busboy());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -49,7 +48,7 @@ app.use(busboyBodyParser());
 // setup the logger
 app.use(morgan('dev'));
 
-app.set('trust proxy', true) // trust first proxy
+// app.set('trust proxy', true) // trust first proxy
 
 app.use(session({
     secret: config.secret,
@@ -68,15 +67,17 @@ app.use(function (req, res, next) {
 });
 
 
-app.set('port', port);
 const server = http.createServer(app);
 
+const apiRouter = express.Router();
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/index.html'));
+app.use('/api', apiRouter);
+
+apiRouter.get('/', (req, res) => {
+    res.json({ name: 'Surveys by ME', date: Date.now(), version: 1.5 });
 });
 
-server.listen(port, () => console.log(`listening in port ${port}...`));
+app.listen(port, () => console.log(`listening in port ${port}...`));
 
 /**
  * Normalize a port into a number, string, or false.

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
-import { SurveyCategory } from '../../global/models/survey-category';
 import { SurveyCategoryService } from './survey-category.service';
+import { SurveyCategory } from '@shared/models/survey-category';
 
 @Component({
   selector: 'app-survey-category-report',
@@ -47,7 +47,7 @@ export class SurveyCategoryReportComponent implements OnInit {
 
   destroy(id: string) {
     this._surveyCategory.deleteAsset(id).subscribe(res => {
-      console.log("DESTROY SURVEY", res);
+      console.log('DESTROY SURVEY', res);
       if (true) {
         this.loadAll();
         location.reload();

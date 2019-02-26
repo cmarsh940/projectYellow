@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SurveyCategory } from '../../global/models/survey-category';
-import { DataService } from '../../global/services/data.service';
-
-
-
+import { DataService } from '@shared/services/data.service';
+import { SurveyCategory } from '@shared/models/survey-category';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class SurveyCategoryService {
 
-  private NAMESPACE = "survey-categories";
+  private NAMESPACE = 'survey-categories';
 
   constructor(private dataService: DataService<SurveyCategory>) { }
 

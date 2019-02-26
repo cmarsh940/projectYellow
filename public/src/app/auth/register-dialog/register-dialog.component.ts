@@ -1,13 +1,14 @@
 import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+// tslint:disable-next-line: max-line-length
 import { MatDialogRef, MAT_DIALOG_DATA, MatIconRegistry, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { environment } from './../../../environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { Client } from 'src/app/global/models/client';
 import { Subject } from 'rxjs';
+import { Client } from '@shared/models/client';
 
-declare var FB: any;
+declare const FB: any;
 declare const gapi: any;
 
 @Component({
@@ -16,12 +17,19 @@ declare const gapi: any;
   styleUrls: ['./register-dialog.component.css']
 })
 
+/**
+TODO:
+- [] change google and facebook to just icons
+*/
+
 export class RegisterDialogComponent implements OnInit, AfterViewInit {
 
+  FB: any;
+  gapi: any;
   errors = [];
-  responseData:any;
+  responseData: any;
   private participant;
-  auth2:any;
+  auth2: any;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
@@ -35,7 +43,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
     sanitizer: DomSanitizer,
     public dialogRef: MatDialogRef<RegisterDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any
-  ) { 
+  ) {
     iconRegistry.addSvgIcon(
       'facebook',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
@@ -62,13 +70,13 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   attachSignin(element) {
     this.auth2.attachClickHandler(element, {},
       (data) => {
-        const subscription = "FREE";
+        const subscription = 'FREE';
         const registerPlatform = 'G';
-        let authResponse = data.Zi;
-        console.log("LOGEDINUSER:", data);
-        let client = new Client();
-        client.platformId = data.El
-        client.email = data.w3.U3
+        const authResponse = data.Zi;
+        console.log('LOGEDINUSER:', data);
+        const client = new Client();
+        client.platformId = data.El;
+        client.email = data.w3.U3;
         client.firstName = data.w3.ofa;
         client.lastName = data.w3.wea;
         client.password = `Google${data.w3.Eea}`;
@@ -79,9 +87,9 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
         client.platformAuth = authResponse.id_token;
 
         this.addGoogleParticipant(client);
-        console.log("ADDED AND RETURNING");
+        console.log('ADDED AND RETURNING');
       }, function (error) {
-        console.log("GOOGLE LOGIN ERROR", error)
+        console.log('GOOGLE LOGIN ERROR', error);
       });
   }
 
@@ -98,26 +106,27 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
     };
 
     (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
+      // tslint:disable-next-line: prefer-const
+      let js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
   }
 
   submitLogin() {
     return new Promise((resolve, reject) => {
-      const subscription = "FREE";
+      const subscription = 'FREE';
       const registerPlatform = 'F';
       FB.login((response: any) => {
         console.table(response);
         if (response.authResponse) {
-          let authResponse = response.authResponse;
+          const authResponse = response.authResponse;
           FB.api('/me', { fields: 'email, first_name, last_name, picture' }, (data: any) => {
-            let client = new Client();
-            client.platformId = data.id
-            client.email = data.email
+            const client = new Client();
+            client.platformId = data.id;
+            client.email = data.email;
             client.firstName = data.first_name;
             client.lastName = data.last_name;
             client.password = `Facebook${data.id}`;
@@ -126,18 +135,17 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
             client._subscription = subscription;
             client.registerPlatform = registerPlatform;
             client.platformAuth = authResponse.accessToken;
-            resolve(client)
+            resolve(client);
             this.addParticipant(client);
           });
-        }
-        else {
+        } else {
           console.log('User login failed');
           reject('User cancelled login or did not fully authorize.');
         }
-      }, { scope: 'email,public_profile' })
+      }, { scope: 'email,public_profile' });
       this.openSnackBar();
       this.dialogRef.close();
-    })
+    });
   }
 
 
@@ -148,35 +156,35 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   addParticipant(response: any) {
     this.errors = [];
     this.participant = response;
-    console.log("ADDING PARTICIPANT:", this.participant);
+    console.log('ADDING PARTICIPANT:', this.participant);
     this._authService.addParticipant(this.participant).subscribe((data) => {
       if (data.errors) {
-        console.log("ERROR", data);
+        console.log('ERROR', data);
         this.errors.push(data.message);
-        return data
+        return data;
       } else {
-        console.log("ADDED DATA", data)
+        console.log('ADDED DATA', data);
         this._authService.setCurrentClient(data);
         window.location.href = environment.redirectLoginUrl;
       }
-    })
+    });
   }
 
   addGoogleParticipant(response: any) {
     this.errors = [];
     this.participant = response;
-    console.log("ADDING PARTICIPANT:", this.participant);
+    console.log('ADDING PARTICIPANT:', this.participant);
     this._authService.addParticipant(this.participant).subscribe((data) => {
       if (data.errors) {
-        console.log("ERROR", data);
+        console.log('ERROR', data);
         this.errors.push(data.message);
       } else {
-        console.log("ADDED DATA", data)
+        console.log('ADDED DATA', data);
         this._authService.setCurrentClient(data);
-        console.log("RETURNING FROM ADDING GOOGLE CLIENT");
+        console.log('RETURNING FROM ADDING GOOGLE CLIENT');
         window.location.href = environment.redirectUrl;
       }
-    })
+    });
   }
 
   openSnackBar() {
@@ -184,7 +192,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
     config.duration = 3500;
-    config.panelClass = ['logout-snackbar']
-    this.snackBar.open("Thank you for registering", '', config);
+    config.panelClass = ['logout-snackbar'];
+    this.snackBar.open('Thank you for registering', '', config);
   }
 }

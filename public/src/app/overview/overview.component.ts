@@ -16,8 +16,8 @@ export class OverviewComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.Authorized();
-        this.isValidated();
+        // this.Authorized();
+        // this.isValidated();
     }
 
     Authorized() {
@@ -25,7 +25,7 @@ export class OverviewComponent implements OnInit {
         if (!authorized) {
             this._router.navigate(['/404error']);
         } else {
-            console.log("YOU ARE Authorized");
+            console.log('YOU ARE Authorized');
         }
     }
 
@@ -34,7 +34,7 @@ export class OverviewComponent implements OnInit {
         if (!verified) {
             this._router.navigate(['/404error']);
         } else {
-            console.log("YOU ARE VALIDATED");
+            console.log('YOU ARE VALIDATED');
         }
     }
 

@@ -37,19 +37,21 @@
         </button>
         <mat-menu #userAction="matMenu" class="action">
           <div *ngIf="element.private" class="private-icon">
-            <button mat-menu-item [routerLink]="['/user', element._id]" matTooltip="Assign users to survey">
+            <button mat-menu-item routerLink="/dashboard/user/{{element._id}}" matTooltip="Assign users to survey">
               <mat-icon color="primary">
                 <img src="/assets/icons/sms.png" alt="apps icon" class="icon-button">
               </mat-icon>
               <p>Assigned Users</p>
             </button>
           </div>
-          <button mat-menu-item matTooltip="Take Survey" [routerLink]="['/takeSurvey', element._id]">
-            <mat-icon color="accent">
-              <i class="material-icons">visibility</i>
-            </mat-icon>
-            <p>Take Survey</p>
-          </button>
+          <div *ngIf="!element.private">
+            <button mat-menu-item matTooltip="Take Survey" [routerLink]="['/takeSurvey', element._id]">
+              <mat-icon color="accent">
+                <i class="material-icons">visibility</i>
+              </mat-icon>
+              <p>Take Survey</p>
+            </button>
+          </div>
           <button mat-menu-item matTooltip="Take Survey" [routerLink]="['edit', element._id]">
             <mat-icon matTooltip="Edit" color="accent">
               <i class="material-icons">
@@ -64,25 +66,27 @@
             </mat-icon>
             <p>Survey Results</p>
           </button>
-          <div *ngIf="element.active">
-            <button mat-menu-item matTooltip="Close Survey" (click)="closeSurvey(element._id)">
-              <mat-icon>
-                <i class="material-icons">
-                  lock
-                </i>
-              </mat-icon>
-              <p>Close Survey</p>
-            </button>
-          </div>
-          <div *ngIf="!element.active">
-            <button mat-menu-item matTooltip="Close Survey" (click)="openSurvey(element._id)">
-              <mat-icon>
-                <i class="material-icons">
-                  lock_open
-                </i>
-              </mat-icon>
-              <p>Open Survey</p>
-            </button>
+          <div *ngIf="pc">
+            <div *ngIf="element.active">
+              <button mat-menu-item matTooltip="Close Survey" (click)="closeSurvey(element._id)">
+                <mat-icon>
+                  <i class="material-icons">
+                    lock
+                  </i>
+                </mat-icon>
+                <p>Close Survey</p>
+              </button>
+            </div>
+            <div *ngIf="!element.active">
+              <button mat-menu-item matTooltip="Close Survey" (click)="openSurvey(element._id)">
+                <mat-icon>
+                  <i class="material-icons">
+                    lock_open
+                  </i>
+                </mat-icon>
+                <p>Open Survey</p>
+              </button>
+            </div>
           </div>
           <button mat-menu-item matTooltip="Remove Survey" (click)="destroySurvey(element._id)">
             <mat-icon color="warn">
@@ -92,7 +96,6 @@
             </mat-icon>
             <p>Remove Survey</p>
           </button>
-    
         </mat-menu>
       </mat-cell>
     </ng-container>

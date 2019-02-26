@@ -1,28 +1,28 @@
-import { Component, OnInit, OnDestroy, Input, AfterViewInit, ViewChildren, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, OnChanges } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
-import { GenericValidator } from '../../global/validators/generic-validator';
+import { Subscription, Observable, fromEvent, merge } from 'rxjs';
+
+import { questionGroups, Question } from '@shared/models/question-group';
+import { SurveyService } from 'app/client/survey/survey.service';
+import { Survey } from '@shared/models/survey';
+import { GenericValidator } from '@shared/validators/generic-validator';
 import { debounceTime } from 'rxjs/operators';
 
-import { SurveyService } from '../../client/survey/survey.service';
-import { Survey } from '../../global/models/survey';
-import { Subscription, Observable, fromEvent, merge } from 'rxjs';
-import { Question } from '../../global/models/question';
-import { questionGroups } from '../../global/models/question-group';
-import { Platform } from '@angular/cdk/platform';
-import { MatDialog, MatDialogConfig } from '@angular/material';
-import { RegisterDialogComponent } from 'src/app/auth/register-dialog/register-dialog.component';
-
-
+/**
+TODO:
+  - [] fix options not returning to array
+*/
 @Component({
   selector: 'app-view-survey',
   templateUrl: './view-survey.component.html',
   styleUrls: ['./view-survey.component.css']
 })
-export class ViewSurveyComponent implements OnInit, OnDestroy {
+export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
-  surveyId: string = "";
+  surveyId: string = '';
   errors = [];
   _routeSubscription: Subscription;
   questionGroup = questionGroups;
@@ -44,6 +44,10 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
+
+  private participant;
+
+  userEmail = new FormControl('');
   private genericValidator: GenericValidator;
 
   weekdayFilter = (d: Date): boolean => {
@@ -56,18 +60,12 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     return <FormArray>this.surveyForm.get('questions');
   }
 
-  private participant;
-
-  userEmail = new FormControl('');
-
   constructor(
     private fb: FormBuilder,
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
-    public dialog: MatDialog
   ) {
-
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
@@ -105,7 +103,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       this.loaded = true;
     }, 1000);
   }
-  
+
 
   ngAfterViewInit() {
     // Watch for the blur event from any input element on the form.
@@ -147,33 +145,33 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       .subscribe(
         (survey: Survey) => {
           if (!survey) {
-            this._router.navigate(["/404error"]);
+            this._router.navigate(['/404error']);
           }
-          if(survey.private){
-            this._router.navigate(["/404error"]);
+          if (survey.private) {
+            this._router.navigate(['/404error']);
           }
-          if(!survey.active){
-            this._router.navigate(["/closed"]);
+          if (!survey.active) {
+            this._router.navigate(['/survey-closed']);
           }
-          console.log("RETURNED SURVEY IS:", survey)
+          console.log('RETURNED SURVEY IS:', survey);
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }
-          console.log("SURVEY INCENTIVE:", survey.incentive);
+          console.log('SURVEY INCENTIVE:', survey.incentive);
           if (survey.incentive) {
-            console.log("INCENTIVE STARTED")
-            let incentiveQuestion = {
+            console.log('INCENTIVE STARTED');
+            const incentiveQuestion = {
               userEmail: '',
               isRequired: false,
               question: 'Survey Complete',
               option: survey.incentive.name,
-              questionType: "incentive" 
-            }
-            survey.questions.push(incentiveQuestion)
-            console.log("NEW QUESTIONS W/ INCENTIVE:", survey.questions);
-          } 
-          console.log("SURVEY QUESTIONS:", survey.questions)
-          this.onSurveyRetrieved(survey)
+              questionType: 'incentive'
+            };
+            survey.questions.push(incentiveQuestion);
+            console.log('NEW QUESTIONS W/ INCENTIVE:', survey.questions);
+          }
+          console.log('SURVEY QUESTIONS:', survey.questions);
+          this.onSurveyRetrieved(survey);
         },
         (error: any) => {
           if (error) {
@@ -216,37 +214,37 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updateAnswer(this.survey._id, this.survey).subscribe(
       result => {
-        alert("Thank you for taking our survey!");
-        this._router.navigate(["/list_of_surveys"]);
+        alert('Thank you for taking our survey!');
+        this._router.navigate(['/survey-list']);
       },
       error => {
-        console.log("___ERROR___:", error);
+        console.log('___ERROR___:', error);
         for (const key of Object.keys(error)) {
           const errors = error[key];
           this.errors.push(errors.message);
         }
       });
     if (!this.errors) {
-      this._router.navigate(["/list_of_surveys"]);
+      this._router.navigate(['/survey-list']);
     }
   }
 
   prepareSaveSurvey() {
   // prepareSaveSurvey(): Survey {
-    let tempTotal = this.survey.totalAnswers + 1;
-    let allTime = this.survey.surveyTime + this.interval
+    const tempTotal = this.survey.totalAnswers + 1;
+    const allTime = this.survey.surveyTime + this.interval;
     this.timeAverage = allTime / tempTotal;
 
     // CANCEL INTERVALS
     clearInterval(this.interval);
-    
+
     const formModel = this.surveyForm.value;
 
     this.participant = {
       'email': this.userEmail.value,
     };
-    console.log("PARTICIPANT IS:", this.participant);
-    if(this.survey.incentive) {
+    console.log('PARTICIPANT IS:', this.participant);
+    if (this.survey.incentive) {
       formModel.questions.pop();
     }
     // deep copy of form model questions
@@ -269,7 +267,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
       totalAnswers: this.survey.totalAnswers + 1,
       creator: this.survey.creator,
       device: this.currentDevice,
-      agent: this.agent, 
+      agent: this.agent,
       active: this.survey.active,
       platform: this.currentPlatform,
       incentive: this.survey.incentive,
@@ -282,26 +280,7 @@ export class ViewSurveyComponent implements OnInit, OnDestroy {
   startTimer() {
     this.interval = setInterval(() => {
       this.time++;
-    }, 1000)
-  }
-
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.closeOnNavigation = true;
-
-
-    const dialogRef = this.dialog.open(RegisterDialogComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        console.log(`Dialog Error result:`);
-        console.log(result);
-      } else {
-        console.log(`Dialog result:`);
-        console.table(result);
-        this._router.navigateByUrl("/login");
-      }
-    });
+    }, 1000);
   }
 
 }

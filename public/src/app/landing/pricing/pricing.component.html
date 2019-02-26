@@ -1,13 +1,14 @@
 <div class="container">
     <div class="header">
-        <h2 class="mat-h2">Affordable prices customized for your needs.</h2>
+        <h2 class="mat-title">{{ "pricing.title" | translate }}</h2>
+        <p>{{ "pricing.text" | translate }}</p>
     </div>
 
     <!-- FREE CARD -->
     <mat-card class="dashboard-card">
         <mat-card-header>
             <mat-card-title>
-                <h3 class="mat-subheading-2">FREE</h3>
+                <h3 class="mat-subheading-2">{{ "pricing.ctitle1" | translate }}</h3>
                 <mat-divider></mat-divider>
             </mat-card-title>
         </mat-card-header>
@@ -48,7 +49,7 @@
     <mat-card class="dashboard-card">
         <mat-card-header>
             <mat-card-title>
-                <h3 class="mat-subheading-2">BASIC</h3>
+                <h3 class="mat-subheading-2">{{ "pricing.ctitle2" | translate }}</h3>
                 <mat-divider></mat-divider>
             </mat-card-title>
         </mat-card-header>
@@ -97,7 +98,7 @@
     <mat-card class="dashboard-card">
         <mat-card-header>
             <mat-card-title>
-                <h3 class="mat-subheading-2">PRO</h3>
+                <h3 class="mat-subheading-2">{{ "pricing.ctitle3" | translate }}</h3>
                 <mat-divider></mat-divider>
             </mat-card-title>
         </mat-card-header>
@@ -154,7 +155,7 @@
     <mat-card class="dashboard-card">
         <mat-card-header>
             <mat-card-title>
-                <h3 class="mat-subheading-2">ELITE</h3>
+                <h3 class="mat-subheading-2">{{ "pricing.ctitle4" | translate }}</h3>
                 <mat-divider></mat-divider>
             </mat-card-title>
         </mat-card-header>
@@ -204,6 +205,25 @@
         </mat-card-content>
         <mat-card-footer>
             <button mat-raised-button (click)="registerDialog()" color="accent" disabled> $99 / month </button>
+        </mat-card-footer>
+    </mat-card>
+    <mat-card class="dashboard-card">
+        <mat-card-header>
+            <mat-card-title>
+                <h3 class="mat-subheading-2">{{ "pricing.ctitle5" | translate }}</h3>
+                <mat-divider></mat-divider>
+            </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+            <mat-list>
+                <mat-list-item>
+                    <img mat-list-icon src="/assets/icons/star.svg" alt="Star icon" />
+                    <h4 mat-line>Contact us for more details</h4>
+                </mat-list-item>
+            </mat-list>
+        </mat-card-content>
+        <mat-card-footer>
+            <a mat-raised-button [href]='contactEmail' target='_top' color="accent" id="contact-button">Contact Us</a>
         </mat-card-footer>
     </mat-card>
 

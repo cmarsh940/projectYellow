@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { DataService } from '@shared/services/data.service';
+import { Survey } from '@shared/models/survey';
 
-import { Survey } from './../../global/models/survey';
-import { DataService } from '../../global/services/data.service';
 
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class SurveyService {
-  private NAMESPACE = "surveys";
+  private NAMESPACE = 'surveys';
 
   constructor(private dataService: DataService<Survey>) { }
 
@@ -26,36 +26,36 @@ export class SurveyService {
   }
 
   public updateAsset(id: any, itemToUpdate: any): Observable<Survey> {
-    console.log("HIT SERVICE UPDATE ASSET");
-    console.log("*** ID ***", id);
-    console.log("*** ITEM TO UPDATE ***", itemToUpdate);
+    console.log('HIT SERVICE UPDATE ASSET');
+    console.log('*** ID ***', id);
+    console.log('*** ITEM TO UPDATE ***', itemToUpdate);
     return this.dataService.update(this.NAMESPACE, id, itemToUpdate);
   }
   public updateAnswer(id: any, itemToUpdate: any): Observable<Survey> {
-    console.log("HIT SERVICE UPDATE ANSWER");
-    console.log("*** ID ***", id);
-    console.log("*** ITEM TO UPDATE ***", itemToUpdate);
-    let NAMESPACE = "answer/surveys";
+    console.log('HIT SERVICE UPDATE ANSWER');
+    console.log('*** ID ***', id);
+    console.log('*** ITEM TO UPDATE ***', itemToUpdate);
+    const NAMESPACE = 'answer/surveys';
     return this.dataService.update(NAMESPACE, id, itemToUpdate);
   }
   public updatePrivateAnswer(id: any, itemToUpdate: any): Observable<Survey> {
-    console.log("HIT SERVICE UPDATE ANSWER");
-    console.log("*** ID ***", id);
-    console.log("*** ITEM TO UPDATE ***", itemToUpdate);
-    let NAMESPACE = "answer/pSurveys";
+    console.log('HIT SERVICE UPDATE ANSWER');
+    console.log('*** ID ***', id);
+    console.log('*** ITEM TO UPDATE ***', itemToUpdate);
+    const NAMESPACE = 'answer/pSurveys';
     return this.dataService.update(NAMESPACE, id, itemToUpdate);
   }
 
   public closeAsset(id: any): Observable<Survey> {
-    let NAMESPACE = "close/surveys";
+    const NAMESPACE = 'close/surveys';
     return this.dataService.cancel(NAMESPACE, id);
   }
 
   public openAsset(id: any): Observable<Survey> {
-    let NAMESPACE = "open/surveys";
+    const NAMESPACE = 'open/surveys';
     return this.dataService.cancel(NAMESPACE, id);
   }
-  
+
   public deleteAsset(id: any): Observable<Survey> {
     return this.dataService.delete(this.NAMESPACE, id);
   }
