@@ -2,7 +2,7 @@ import { Location, isPlatformBrowser } from '@angular/common';
 import { Component, ViewChild, ElementRef, OnInit, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig } from '@angular/material';
+import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, MatBottomSheet } from '@angular/material';
 import { ProfileService } from '../profile/profile.service';
 
 import * as Chart from 'chart.js';
@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { Client } from '@shared/models/client';
 import { AuthService } from 'app/auth/auth.service';
 import { UniversalStorage } from '@shared/storage/universal.storage';
+import { SubscriptionOverlayComponent } from '../profile/subscription-overlay/subscription-overlay.component';
 
 /**
 TODO:
@@ -45,14 +46,17 @@ export class DashboardComponent implements OnInit {
     private _router: Router,
     private location: Location,
     public snackBar: MatSnackBar,
+    private bottomSheet: MatBottomSheet,
     @Inject(PLATFORM_ID) private platformId: object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
    }
 
   ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
       this.loaded = true;
       this.getClient();
+    }
   }
 
   isLoggedIn() {
@@ -61,6 +65,12 @@ export class DashboardComponent implements OnInit {
       this.openSnackBar();
       this._router.navigateByUrl('/login');
     }
+  }
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(SubscriptionOverlayComponent, {
+      data: this.client,
+    });
   }
 
   getClient() {
@@ -75,106 +85,106 @@ export class DashboardComponent implements OnInit {
       } else {
         this.length = 0;
       }
-      for (let i = 0; i < this.allSurveys.length; i++) {
-        const element = this.allSurveys[i];
-        for (let j = 0; j < element.submissionDates.length; j++) {
-          const temp = element.submissionDates[j];
-          const date = moment(temp).format(timeFormat);
-          tempDates.push(date);
-        }
-      }
-
-      console.log(tempDates);
-
-      tempDates.forEach(function (x) {
-          answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
-      });
-
-      let chartDates = [];
-      Object.entries(answeredTempDates).forEach(
-        ([key, value]) => {
-          let objectDate = {
-            x: new Date(key),
-            y: value
-          };
-          chartDates.push(objectDate);
-        }
-      );
-
-      const dateValues = Object.values(answeredTempDates);
-      const dateNames = Object.keys(answeredTempDates);
-
-      // INITIALIZE CHART FROM HTML
-      this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
-
-      const gradient = this.context.createLinearGradient(0, 0, 320, 0);
-      gradient.addColorStop(0, '#ffd600');
-      gradient.addColorStop(0.4, '#ffff52');
-      gradient.addColorStop(0.9, '#ffd600');
-      gradient.addColorStop(1, '#ffff52');
-
-      this.context.fillStyle = gradient;
-
-      // GENERATE CHART AND COMPONENTS
-      this.chart = new Chart(this.context, {
-        type: 'line',
-        data: {
-          labels: dateNames,
-          datasets: [
-            {
-              data: chartDates,
-              label: 'Volume',
-              borderColor: gradient,
-              hoverBorderColor: '#ffff52',
-              backgroundColor: '#fdff0066',
-              fill: false
-            },
-          ]
-        },
-        options: {
-          legend: {
-            display: false,
-          },
-          animation: {
-            duration: 0, // general animation time
-          },
-          hover: {
-            animationDuration: 0, // duration of animations when hovering an item
-          },
-          responsiveAnimationDuration: 0, // animation duration after a resize
-          layout: {
-            padding: {
-              top: 20,
-              bottom: 0
-            }
-          },
-          scales: {
-            xAxes: [{
-              type: 'time',
-              time: {
-                unit: 'day'
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Date'
-              },
-              ticks: {
-                major: {
-                  fontStyle: 'bold',
-                  fontColor: '#FFF'
-                }
-              }
-            }],
-            yAxes: [{
-              display: false,
-              scaleLabel: {
-                display: true,
-                labelString: 'Volume'
-              }
-            }]
+      if (res._subscription !== 'FREE') {
+        for (let i = 0; i < this.allSurveys.length; i++) {
+          const element = this.allSurveys[i];
+          for (let j = 0; j < element.submissionDates.length; j++) {
+            const temp = element.submissionDates[j];
+            const date = moment(temp).format(timeFormat);
+            tempDates.push(date);
           }
         }
-      });
+
+        console.log(tempDates);
+
+        tempDates.forEach(function (x) {
+            answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
+        });
+
+        let chartDates = [];
+        Object.entries(answeredTempDates).forEach(
+          ([key, value]) => {
+            let objectDate = {
+              x: new Date(key),
+              y: value
+            };
+            chartDates.push(objectDate);
+          }
+        );
+
+        const dateValues = Object.values(answeredTempDates);
+        const dateNames = Object.keys(answeredTempDates);
+
+        // INITIALIZE CHART FROM HTML
+        this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
+
+        const gradient = this.context.createLinearGradient(0, 0, 320, 0);
+        gradient.addColorStop(0, '#ffd600');
+        gradient.addColorStop(0.4, '#ffff52');
+        gradient.addColorStop(0.9, '#ffd600');
+        gradient.addColorStop(1, '#ffff52');
+
+        this.context.fillStyle = gradient;
+
+        // GENERATE CHART AND COMPONENTS
+        this.chart = new Chart(this.context, {
+          type: 'line',
+          data: {
+            labels: dateNames,
+            datasets: [
+              {
+                data: chartDates,
+                label: 'Volume',
+                borderColor: gradient,
+                hoverBorderColor: '#ffff52',
+                backgroundColor: '#fdff0066',
+                fill: false
+              },
+            ]
+          },
+          options: {
+            legend: {
+              display: false,
+            },
+            animation: {
+              duration: 0, // general animation time
+            },
+            hover: {
+              animationDuration: 0, // duration of animations when hovering an item
+            },
+            responsiveAnimationDuration: 0, // animation duration after a resize
+            layout: {
+              padding: {
+                top: 20,
+                bottom: 0
+              }
+            },
+            scales: {
+              xAxes: [{
+                type: 'time',
+                time: {
+                  unit: 'day'
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Date'
+                },
+                ticks: {
+                  fontColor: '#FFFFFF'
+                },
+                gridLines: {
+                  color: '#FFFFFF'
+                }
+              }],
+              yAxes: [{
+                display: false,
+              }]
+            }
+          }
+        });
+      } else {
+        console.log('Free account');
+      }
     });
   }
 

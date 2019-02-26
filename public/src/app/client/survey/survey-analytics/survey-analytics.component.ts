@@ -80,14 +80,16 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-    this.loaded = false;
-    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
-      this.surveyId = params['id'];
-      this.getSurvey();
-    });
-    setTimeout(() => {
-      this.loaded = true;
-    }, 3000);
+    if (isPlatformBrowser(this.platformId)) {
+      this.loaded = false;
+      this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+        this.surveyId = params['id'];
+        this.getSurvey();
+      });
+      setTimeout(() => {
+        this.loaded = true;
+      }, 3000);
+    }
   }
 
   ngOnDestroy() {
@@ -110,121 +112,122 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       const answeredTempDates = {};
       const tempDates = [];
       const timeFormat = 'MM/DD/YYYY';
+      this.lvl = res.creator._subscription;
+      if (this.lvl !== 'FREE') {
+        // tslint:disable-next-line: no-shadowed-variable
+        alldates.forEach((res) => {
+          const date = moment(res).format(timeFormat);
+          tempDates.push(date);
+        });
 
-      // tslint:disable-next-line: no-shadowed-variable
-      alldates.forEach((res) => {
-        const date = moment(res).format(timeFormat);
-        tempDates.push(date);
-      });
+        tempDates.forEach(function (x) {
+          answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
+        });
 
-      tempDates.forEach(function (x) {
-        answeredTempDates[x] = (answeredTempDates[x] || 0) + 1;
-      });
-
-      let chartDates = [];
-      Object.entries(answeredTempDates).forEach(
-        ([key, value]) => {
-        let objectDate = {
-          x: new Date(key),
-          y: value
-        };
-        chartDates.push(objectDate);
-        }
-      );
-
-      const dateValues = Object.values(answeredTempDates);
-      const dateNames = Object.keys(answeredTempDates);
-
-
-
-      // TODAYS DATE
-      const todaysDate = moment().format();
-
-      const submissionTimeResults = moment(todaysDate).diff(moment(res.lastSubmission));
-
-      // LAST SUBMISSION IN HOURS
-      this.timeSinceLastSubmission = moment.duration(submissionTimeResults).as('hours');
-
-      // INITIALIZE CHART FROM HTML
-      this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
-
-      const gradient = this.context.createLinearGradient(0, 0, 320, 0);
-      gradient.addColorStop(0, '#ffd600');
-      gradient.addColorStop(0.4, '#ffff52');
-      gradient.addColorStop(0.9, '#ffd600');
-      gradient.addColorStop(1, '#ffff52');
-
-      this.context.fillStyle = gradient;
-
-      // GENERATE CHART AND COMPONENTS
-      this.chart = new Chart(this.context, {
-        type: 'line',
-        data: {
-          labels: dateNames,
-          datasets: [
-            {
-              data: chartDates,
-              label: this.surveyName,
-              borderColor: gradient,
-              hoverBorderColor: '#ffff52',
-              backgroundColor: '#fdff0066',
-              fill: false
-            },
-          ]
-        },
-        options: {
-          legend: {
-            display: false,
-          },
-          responsive: true,
-          animation: {
-            duration: 0, // general animation time
-          },
-          hover: {
-            animationDuration: 0, // duration of animations when hovering an item
-          },
-          responsiveAnimationDuration: 0, // animation duration after a resize
-          layout: {
-            padding: {
-              top: 20,
-              bottom: 0
-            }
-          },
-          scales: {
-            xAxes: [{
-              type: 'time',
-              time: {
-                unit: 'day'
-              },
-              scaleLabel: {
-                display: true,
-                labelString: 'Date'
-              },
-              ticks: {
-                major: {
-                  fontStyle: 'bold',
-                  fontColor: '#FFF'
-                }
-              }
-            }],
-            yAxes: [{
-              display: false,
-              scaleLabel: {
-                display: true,
-                labelString: 'Volume'
-              }
-            }]
-          },
-          title: {
-            display: true,
-            text: 'Survey Volume'
+        let chartDates = [];
+        Object.entries(answeredTempDates).forEach(
+          ([key, value]) => {
+          let objectDate = {
+            x: new Date(key),
+            y: value
+          };
+          chartDates.push(objectDate);
           }
-        }
-      });
+        );
+
+        const dateValues = Object.values(answeredTempDates);
+        const dateNames = Object.keys(answeredTempDates);
+
+
+
+        // TODAYS DATE
+        const todaysDate = moment().format();
+
+        const submissionTimeResults = moment(todaysDate).diff(moment(res.lastSubmission));
+
+        // LAST SUBMISSION IN HOURS
+        this.timeSinceLastSubmission = moment.duration(submissionTimeResults).as('hours');
+
+        // INITIALIZE CHART FROM HTML
+        this.context = (<HTMLCanvasElement>this.myCanvas.nativeElement).getContext('2d');
+
+        const gradient = this.context.createLinearGradient(0, 0, 320, 0);
+        gradient.addColorStop(0, '#ffd600');
+        gradient.addColorStop(0.4, '#ffff52');
+        gradient.addColorStop(0.9, '#ffd600');
+        gradient.addColorStop(1, '#ffff52');
+
+        this.context.fillStyle = gradient;
+
+        // GENERATE CHART AND COMPONENTS
+        this.chart = new Chart(this.context, {
+          type: 'line',
+          data: {
+            labels: dateNames,
+            datasets: [
+              {
+                data: chartDates,
+                label: this.surveyName,
+                borderColor: gradient,
+                hoverBorderColor: '#ffff52',
+                backgroundColor: '#fdff0066',
+                fill: false
+              },
+            ]
+          },
+          options: {
+            legend: {
+              display: false,
+            },
+            responsive: true,
+            animation: {
+              duration: 0, // general animation time
+            },
+            hover: {
+              animationDuration: 0, // duration of animations when hovering an item
+            },
+            responsiveAnimationDuration: 0, // animation duration after a resize
+            layout: {
+              padding: {
+                top: 20,
+                bottom: 0
+              }
+            },
+            scales: {
+              xAxes: [{
+                type: 'time',
+                time: {
+                  unit: 'day'
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Date'
+                },
+                ticks: {
+                  fontColor: '#FFFFFF'
+                },
+                gridLines: {
+                  color: '#FFFFFF'
+                }
+              }],
+              yAxes: [{
+                display: false,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Volume'
+                }
+              }]
+            },
+            title: {
+              display: true,
+              text: 'Survey Volume'
+            }
+          }
+        });
+      }
 
       // SET KEY ANALYTICS
       this.title = res.name;
-      this.lvl = res.creator._subscription;
       this.private = res.private;
       this.total = res.totalAnswers;
       // tslint:disable-next-line: no-bitwise

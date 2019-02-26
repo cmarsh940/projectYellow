@@ -170,12 +170,12 @@
 
                                     <!-- SATISFACTION -->
                                     <div *ngIf="survey?.questions[i]?.questionType === 'satisfaction'">
-                                        <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
-                                            <mat-radio-button [value]="1">Terrible</mat-radio-button>
-                                            <mat-radio-button [value]="2">Bad</mat-radio-button>
-                                            <mat-radio-button [value]="3">Ok</mat-radio-button>
-                                            <mat-radio-button [value]="4">Good</mat-radio-button>
-                                            <mat-radio-button [value]="5">Great</mat-radio-button>
+                                        <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired" class="satisfaction-group">
+                                            <mat-radio-button class="satisfaction-button" [value]="1">Terrible</mat-radio-button>
+                                            <mat-radio-button class="satisfaction-button" [value]="2">Bad</mat-radio-button>
+                                            <mat-radio-button class="satisfaction-button" [value]="3">Ok</mat-radio-button>
+                                            <mat-radio-button class="satisfaction-button" [value]="4">Good</mat-radio-button>
+                                            <mat-radio-button class="satisfaction-button" [value]="5">Great</mat-radio-button>
                                         </mat-radio-group>
                                     </div>
 

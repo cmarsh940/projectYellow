@@ -1,3 +1,4 @@
+import { WarnDialogComponent } from './warn-dialog/warn-dialog.component';
 import { CheckoutService } from './checkout/checkout.service';
 import { ClientComponent } from './client.component';
 import { NgModule } from '@angular/core';
@@ -25,6 +26,7 @@ import { UploadUsersComponent } from './user/upload-users/upload-users.component
 import { ProfileService } from './profile/profile.service';
 import { ClientService } from './client.service';
 import { NotificationComponent } from './notification/notification.component';
+import { DisableAccountComponent } from './profile/disable-account/disable-account.component';
 
 @NgModule({
   imports: [
@@ -52,7 +54,9 @@ import { NotificationComponent } from './notification/notification.component';
     ProfileComponent,
     EditClientComponent,
     SubscriptionOverlayComponent,
-    UploadUsersComponent
+    UploadUsersComponent,
+    DisableAccountComponent,
+    WarnDialogComponent,
   ],
   providers: [
     ProfileService,

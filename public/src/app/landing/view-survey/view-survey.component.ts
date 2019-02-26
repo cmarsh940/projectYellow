@@ -9,7 +9,10 @@ import { Survey } from '@shared/models/survey';
 import { GenericValidator } from '@shared/validators/generic-validator';
 import { debounceTime } from 'rxjs/operators';
 
-
+/**
+TODO:
+  - [] fix options not returning to array
+*/
 @Component({
   selector: 'app-view-survey',
   templateUrl: './view-survey.component.html',

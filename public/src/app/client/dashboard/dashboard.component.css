@@ -15,6 +15,18 @@
   text-align: center;
 }
 
+#upgrade-card {
+  margin: 1em
+}
+
+#upgrade-text {
+  font-size: small;
+}
+
+#upgrade-link, #upgrade-button {
+  color: mediumseagreen;
+}
+
 .dashboard-card {
   position: absolute;
   top: 15px;

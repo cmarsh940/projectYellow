@@ -1,3 +1,4 @@
+import { DisableAccountComponent } from './client/profile/disable-account/disable-account.component';
 import { CookiesComponent } from './policies/cookies/cookies.component';
 import { OverviewModule } from './overview/overview.module';
 import { LandingModule } from './landing/landing.module';
@@ -38,6 +39,7 @@ import { AuthInterceptor } from '@shared/interceptors/auth-interceptor';
 import { NgtUniversalModule } from '@ng-toolkit/universal';
 import { RightsComponent } from './policies/rights/rights.component';
 import { PoliciesModule } from './policies/policies.module';
+import { WarnDialogComponent } from './client/warn-dialog/warn-dialog.component';
 
 export function initLanguage(translateService: TranslatesService): Function {
   return (): Promise<any> => translateService.initLanguage();
@@ -82,13 +84,15 @@ export function initLanguage(translateService: TranslatesService): Function {
   ],
   entryComponents: [
     AddUserComponent,
+    DisableAccountComponent,
     EditClientComponent,
     FeedbackComponent,
     SubscriptionOverlayComponent,
     RegisterDialogComponent,
     RightsComponent,
     CookiesComponent,
-    UploadUsersComponent
+    UploadUsersComponent,
+    WarnDialogComponent
   ]
 })
 export class AppModule {}

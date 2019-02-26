@@ -1,0 +1,18 @@
+.container-dialog {
+    text-align: center;
+}
+
+.button-group {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-evenly;
+}
+
+.dialog-button {
+    font-size: small;
+    margin: 0 1em;
+}
+
+#warning {
+    color:red;
+}

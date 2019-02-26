@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
 
 
 import { SurveyService } from '../survey.service';
@@ -9,8 +9,9 @@ import { Survey } from '@shared/models/survey';
 import { ProfileService } from 'app/client/profile/profile.service';
 import { UniversalStorage } from '@shared/storage/universal.storage';
 import { AuthService } from 'app/auth/auth.service';
+import { WarnDialogComponent } from 'app/client/warn-dialog/warn-dialog.component';
 
-/** 
+/**
 TODO:
   - [] add ability to post survey to facebook
 */
@@ -25,6 +26,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   pc: boolean;
   errorMessage;
   id = this.universalStorage.getItem('t940');
+  dialogResult: any;
 
   // PAGINATE
   dataSource: any;
@@ -42,6 +44,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
+    public dialog: MatDialog,
     private universalStorage: UniversalStorage,
     private _authService: AuthService,
     private _profileService: ProfileService,
@@ -88,54 +91,60 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   }
 
   closeSurvey(id: string) {
-    const r = window.confirm('Close Survey?');
-    if (r === true) {
-      let sub2 = this._surveyService.closeAsset(id).subscribe(res => {
-        console.log('CLOSED SURVEY');
-        if (!res) {
-          window.close();
-        }
-        if (true) {
-          this.getSurveys();
-          location.reload();
-        }
-      });
-    } else {
-      window.close();
-    }
+    const dialogRef = this.dialog.open(WarnDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result is:', result);
+      if (result) {
+        this._surveyService.closeAsset(id).subscribe(res => {
+          if (res) {
+            this.getSurveys();
+            location.reload();
+          }
+        });
+      }
+      if (!result) {
+        console.log('Survey not closed');
+      }
+    });
   }
 
   openSurvey(id: string) {
-    const r = window.confirm('Open Survey?');
-    if (r === true) {
-      let sub3 = this._surveyService.openAsset(id).subscribe(res => {
-        if (!res) {
-          window.close();
-        }
-        if (true) {
-          console.log('SURVEY OPENED');
-          this.getSurveys();
-          location.reload();
-        }
-      });
-    } else {
-      window.close();
-    }
+    const dialogRef = this.dialog.open(WarnDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result is:', result);
+      if (result) {
+        this._surveyService.openAsset(id).subscribe(res => {
+          if (res) {
+            this.getSurveys();
+            location.reload();
+          }
+        });
+      }
+      if (!result) {
+        console.log('Survey not opened');
+      }
+    });
   }
 
   destroySurvey(id: string) {
-    const r = window.confirm('Delete Survey?');
-    if (r === true) {
-      let sub4 = this._surveyService.deleteAsset(id).subscribe(res => {
-        console.log('DESTROY SURVEY');
-        if (true) {
-          this.getSurveys();
-          location.reload();
-        }
-      });
-    } else {
-      window.close();
-    }
+    const dialogRef = this.dialog.open(WarnDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result is:', result);
+      if (result) {
+        this._surveyService.deleteAsset(id).subscribe(res => {
+          if (res) {
+            this.getSurveys();
+            location.reload();
+          }
+        });
+      }
+      if (!result) {
+        console.log('Survey not deleted');
+      }
+    });
   }
 
   download(): void {

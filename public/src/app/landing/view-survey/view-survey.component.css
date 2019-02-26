@@ -26,6 +26,9 @@ form {
 .mat-card-header {
     margin: 1em 0;
 }
+.mat-card-header-text {
+    margin: 0!important;
+}
 
 #question-input {
     width: 100%;
@@ -160,4 +163,15 @@ strong {
     margin: 1em auto;
     width:100%;
     text-align: center;
+}
+
+.satisfaction-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+.satisfaction-button {
+    margin: 0 1em!important;
 }

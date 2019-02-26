@@ -148,3 +148,16 @@ span {
 mat-grid-list {
     background-color: #2d2d2de3;
 }
+
+/* UPGRADE CARD */
+#upgrade-card {
+  margin: 1em
+}
+
+#upgrade-text {
+  font-size: small;
+}
+
+#upgrade-link, #upgrade-button {
+  color: mediumseagreen;
+}

@@ -1,0 +1,13 @@
+<div class="header">
+  <h4 id="warning">Warning</h4>
+</div>
+
+<mat-dialog-content class="container-dialog">
+  <h5>Are you sure?</h5>
+  <div class="button-group">
+    <button mat-stroked-button [mat-dialog-close]="true" class="dialog-button">
+      Yes
+    </button>
+    <button mat-stroked-button [mat-dialog-close]="false" color='warn' class="dialog-button">No</button>
+  </div>
+</mat-dialog-content>

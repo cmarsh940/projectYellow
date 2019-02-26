@@ -12,6 +12,7 @@ import { User } from '@shared/models/user';
 import { UserService } from '../user.service';
 import { LOCAL_STORAGE } from '@ng-toolkit/universal';
 import { UniversalStorage } from '@shared/storage/universal.storage';
+import { WarnDialogComponent } from 'app/client/warn-dialog/warn-dialog.component';
 
 type AOA = any[];
 @Component({
@@ -157,21 +158,22 @@ export class UsersListComponent implements OnInit, OnDestroy, AfterContentChecke
   }
 
   destroyUser(id: string) {
-    const r = window.confirm('Delete User?');
-    if (r === true) {
-      this._userService.deleteParticipant(id).subscribe(res => {
-        if (res) {
-          this.getUsers();
-          location.reload();
-        } else {
-          console.log('ERROR DELETING USER', res);
-          location.reload();
-        }
+    const dialogRef = this.dialog.open(WarnDialogComponent);
 
-      });
-    } else {
-      window.close();
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result is:', result);
+      if (result) {
+        this._userService.deleteParticipant(id).subscribe(res => {
+          if (res) {
+            this.getUsers();
+            location.reload();
+          }
+        });
+      }
+      if (!result) {
+        console.log('User not removed');
+      }
+    });
   }
 
   export(): void {

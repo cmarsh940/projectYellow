@@ -10,6 +10,8 @@ import { SubscriptionOverlayComponent } from './subscription-overlay/subscriptio
 import { CheckoutComponent } from '../checkout/checkout.component';
 import { Client } from '@shared/models/client';
 import { UploadService } from '@shared/services/upload.service';
+import { DisableAccountComponent } from './disable-account/disable-account.component';
+import { WarnDialogComponent } from '../warn-dialog/warn-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -69,6 +71,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
+  openDisableAccountDialog() {
+    const dialogRef = this.dialog.open(DisableAccountComponent, {
+      data: this.currentClient,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.closeAccount(this.currentClient._id);
+      }
+      if (!result) {
+        console.log('!result');
+      }
+    });
+  }
+
   openBottomSheet(): void {
     this.bottomSheet.open(SubscriptionOverlayComponent, {
       data: this.currentClient,
@@ -87,18 +104,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   cancelSubscription(id: string) {
-      const r = window.confirm('Are you sure you want to cancel your subscription');
-      if (r === true) {
+    const dialogRef = this.dialog.open(WarnDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result is:', result);
+      if (result) {
         this._profileService.cancelSubscription(id).subscribe(res => {
-          console.log('DESTROY SURVEY');
-          if (true) {
+          if (res) {
             this.getClient();
           }
         });
-      } else {
-        window.close();
-        this.getClient();
       }
+      if (!result) {
+        console.log('Subscription not canceled');
+      }
+    });
   }
 
 
@@ -161,27 +181,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   closeAccount(id: string) {
-    const r = window.confirm('Are you sure?');
-    if (r === true) {
-      this._profileService.disableParticipant(id).subscribe(res => {
-        if (!res) {
-          window.close();
-        }
-        if (true) {
-          // tslint:disable-next-line: no-shadowed-variable
-          this._authService.logout((res: any) => {
-            if (!res) {
-              console.log('ERROR');
-            }
-            console.log('Account Removed');
-            this.currentClient = null;
-            this._router.navigateByUrl('/');
-          });
-        }
-      });
-    } else {
-      window.close();
-    }
+    const dialogRef = this.dialog.open(WarnDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('result is:', result);
+      if (result) {
+        this._profileService.disableParticipant(id).subscribe(res => {
+          if (res) {
+            this._authService.logout((res: any) => {
+              if (!res) {
+                console.log('ERROR');
+              }
+              console.log('Account Removed');
+              this.currentClient = null;
+              this._router.navigateByUrl('/');
+            });
+          }
+        });
+      }
+      if (!result) {
+        console.log('Account not closed');
+      }
+    });
   }
 
   openSnackBar() {

@@ -13,7 +13,10 @@ import { UniversalStorage } from '@shared/storage/universal.storage';
 import { SurveyCategoryService } from 'app/overview/survey-category-report/survey-category.service';
 
 
-
+/**
+TODO:
+  - [] fix options not displaying
+*/
 
 @Component({
   selector: 'app-edit-survey',

@@ -1,13 +1,25 @@
 <section>
   <header>
-    <mat-card id="volume-chart">
-      <mat-card-title>Survey Activities</mat-card-title>
-      <mat-card-content>
-        <div class="chart-container" *ngIf="isBrowser">
-          <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <div *ngIf="client._subscription !== 'FREE'">
+      <mat-card id="volume-chart">
+        <mat-card-title>Survey Activities</mat-card-title>
+        <mat-card-content>
+          <div class="chart-container" *ngIf="isBrowser">
+            <canvas #myCanvas aria-label="Chart Image" role="img">{{ chart }}</canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div *ngIf="client._subscription === 'FREE'">
+      <mat-card id="upgrade-card">
+        <mat-card-content>
+          <p id="upgrade-text"><a (click)="openBottomSheet()" id="upgrade-link">Upgrade</a> to receive inhansed security and tools.</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button (click)="openBottomSheet()" id="upgrade-button">Upgrade now</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </header>
 </section>
 <section>

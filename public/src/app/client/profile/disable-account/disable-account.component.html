@@ -1,0 +1,24 @@
+<div class="header">
+  <h4>Are you sure?</h4>
+</div>
+
+<mat-dialog-content class="container-dialog">
+  <div *ngIf="data._subscription === 'FREE'">
+    <h5>Are you sure you want to disable your account?</h5>
+    <div class="button-group">
+      <button mat-stroked-button [mat-dialog-close]="true" class="dialog-button">
+        Disable Account
+      </button>
+      <button mat-stroked-button [mat-dialog-close]="false" color='warn' class="dialog-button">Cancel</button>
+    </div>
+  </div>
+  <div *ngIf="data._subscription !== 'FREE'">
+    <h5><strong>*NOTE*</strong> disabling account will remove subscription if you have one.</h5>
+    <div class="button-group">
+      <button mat-stroked-button (click)="cancelSubscription(data.subscriptionId)" class="dialog-button">
+        Disable Account
+      </button>
+      <button mat-stroked-button [mat-dialog-close]="false" color='warn' class="dialog-button">Cancel</button>
+    </div>
+  </div>
+</mat-dialog-content>

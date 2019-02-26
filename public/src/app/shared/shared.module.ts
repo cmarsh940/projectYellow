@@ -8,6 +8,7 @@ import { SharedMetaModule } from './shared-meta';
 @NgModule({
   exports: [LayoutsModule, SharedMetaModule, TransferHttpModule],
   providers: [],
+  declarations: [],
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
