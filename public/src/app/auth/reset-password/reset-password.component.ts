@@ -108,7 +108,6 @@ export class ResetPasswordComponent implements OnInit {
       };
 
       this._authService.verifyPasswordChange(this.participant).subscribe((data) => {
-        console.log('DATA', data);
         if (data) {
           if (data.errors) {
             console.log('___ LOGIN ERROR ___:');

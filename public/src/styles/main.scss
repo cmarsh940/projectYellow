@@ -21,6 +21,15 @@ $custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
   background: #ffd600;
   color: #000;
 }
+.cookie-snackbar {
+  background: #ffd600;
+  color: #000;
+  width: 100%!important;
+}
+
+.cookie-snackbar .mat-simple-snackbar-action button {
+  color: red!important;
+}
 
 .container {
   padding: 0 0 5em 0!important;

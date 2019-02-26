@@ -52,8 +52,6 @@ export class UploadUsersComponent {
 
   uploadUsers(): void {
     this.errors = [];
-    console.log('DATA', this.data);
-    console.log('UPLOADING USERS', this.uploadData);
 
     const uploadedUsers = [];
     for (let i = 1; i < this.uploadData.length - 1; i++) {

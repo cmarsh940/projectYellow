@@ -129,12 +129,10 @@ export class AuthService {
       console.log('LAST USE DATE', lastDateToUse);
       if ((data.status === 'Active' || data.status === 'Trial')) {
         console.log('ACTIVE OR TRIAL STATUS');
-        console.log('DATA', data);
         return true;
       }
       if ((data.status === 'Canceled')) {
         console.log('ACTIVE OR TRIAL STATUS');
-        console.log('DATA', data);
         if (lastDateToUse) {
             console.log('STILL IN PAID DATES', lastDateToUse);
             return true;

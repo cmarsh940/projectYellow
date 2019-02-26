@@ -51,7 +51,6 @@ export class ClientComponent implements OnInit {
             const lastDateToUse = moment(new Date).isBefore(data.d);
             if ((data.status === 'Canceled')) {
                 console.log('CANCELED STATUS');
-                console.log('DATA', data);
                 if (lastDateToUse) {
                     console.log('STILL IN PAID DATES', lastDateToUse);
                 } else {
@@ -61,7 +60,6 @@ export class ClientComponent implements OnInit {
             }
             if ((data.status === 'Active' || data.status === 'Trial')) {
                 console.log('ACTIVE OR TRIAL STATUS');
-                console.log('DATA', data);
             } else {
                 console.log('ERROR');
                 this._router.navigateByUrl('/login');
