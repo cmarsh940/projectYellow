@@ -13,6 +13,21 @@
   <div class="form-container">
     <form [formGroup]="myForm">
       <div class="label">
+        <b class="text-center">Account</b>
+      </div>
+
+      <!-- ACCOUNT TYPE -->
+      <mat-form-field>
+        <mat-select placeholder="Account Type" [formControl]="accountType">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let type of accountTypes" [value]="type.name">
+            {{type.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      
+      <div class="label">
         <b class="text-center">Information</b>
       </div>
 

@@ -39,7 +39,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
   currentPlatform: any;
   agent: any;
   errors = [];
-
+  accountTypes = [
+    {
+      name: 'Business'
+    },
+    {
+      name: 'Personal'
+    },
+    {
+      name: 'School'
+    },
+    {
+      name: 'Other'
+    }
+  ];
   private participant;
   private unsubscribe$ = new Subject();
 
@@ -56,6 +69,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     Validators.maxLength(250),
   ]);
   businessName = new FormControl('');
+  accountType = new FormControl('');
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
@@ -109,6 +123,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.myForm = fb.group({
       firstName: this.firstNameFormControl,
       lastName: this.lastNameFormControl,
+      accountType: this.accountType,
       businessName: this.businessName,
       email: this.emailFormControl,
       password: this.passwordFormControl,
@@ -139,6 +154,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     const subscription = 'FREE';
     const platform = 'EMAIL';
     this.participant = {
+      'accountType': this.accountType.value,
       'firstName': this.firstNameFormControl.value,
       'lastName': this.lastNameFormControl.value,
       'businessName': this.businessName.value,
@@ -166,6 +182,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         } else {
           this.errors = null;
           this.myForm.setValue({
+            'accountType': null,
             'firstName': null,
             'lastName': null,
             'businessName': null,

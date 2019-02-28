@@ -7,6 +7,10 @@ const ClientSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  accountType: {
+    type: String,
+  },
+
   billingCycle: {
     type: Number,
     enum: [1, 12],
