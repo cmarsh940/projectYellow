@@ -5,7 +5,7 @@ export class Feedback {
     phone?: string;
     message: string;
     rating?: any;
-    screenshot?: any; 
+    screenshot?: any;
     createdAt?: any;
     updatedAt?: any;
 }

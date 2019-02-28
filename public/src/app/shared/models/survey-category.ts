@@ -1,5 +1,5 @@
 export class SurveyCategory {
-    _id:any;
+    _id: any;
     name: string;
     surveys: any;
     createdAt: any;

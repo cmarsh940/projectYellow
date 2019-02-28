@@ -26,6 +26,16 @@ const SurveySchema = new mongoose.Schema({
   lastSubmission: {
     type: Date,
   },
+  layout: {
+    type: String,
+    enum: ['STEPS', 'PAGE'],
+    required: true,
+    uppercase: true,
+    trim: true,
+  },
+  logo: {
+    type: String,
+  },
   meta: {
     type: [
       {
