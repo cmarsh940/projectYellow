@@ -1,5 +1,5 @@
 import { AuthService } from './../auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 // tslint:disable-next-line: max-line-length
@@ -7,6 +7,8 @@ import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition
 import { Client } from '@shared/models/client';
 import { states } from '@shared/models/states';
 import { forbiddenNameValidator } from '@shared/validators/forbidden-name.directive';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 
@@ -24,7 +26,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./register.component.css']
 })
 
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   myForm: FormGroup;
   newClient: Client = new Client();
   password_confirmation: string;
@@ -39,6 +41,7 @@ export class RegisterComponent implements OnInit {
   errors = [];
 
   private participant;
+  private unsubscribe$ = new Subject();
 
   firstNameFormControl = new FormControl('', [
     Validators.required,
@@ -124,6 +127,12 @@ export class RegisterComponent implements OnInit {
     this.agent = window.clientInformation.userAgent;
   }
 
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
+  }
 
   addParticipant(form: any) {
     this.errors = [];
@@ -145,7 +154,7 @@ export class RegisterComponent implements OnInit {
       'subscription': subscription
     };
 
-    this._authService.addParticipant(this.participant).subscribe((data) => {
+    this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data) {
         if (data.errors) {
           console.log('___ DATA ERROR ___:', data.errors);

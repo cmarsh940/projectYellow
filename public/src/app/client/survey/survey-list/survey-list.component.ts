@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked, OnDestroy } from '@angular/core';
+import { MatPaginator, MatTableDataSource, MatDialog, MatBottomSheet } from '@angular/material';
 
 
 import { SurveyService } from '../survey.service';
@@ -10,6 +10,9 @@ import { ProfileService } from 'app/client/profile/profile.service';
 import { UniversalStorage } from '@shared/storage/universal.storage';
 import { AuthService } from 'app/auth/auth.service';
 import { WarnDialogComponent } from 'app/client/warn-dialog/warn-dialog.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { SubscriptionOverlayComponent } from 'app/client/profile/subscription-overlay/subscription-overlay.component';
 
 /**
 TODO:
@@ -20,7 +23,7 @@ TODO:
   templateUrl: './survey-list.component.html',
   styleUrls: ['./survey-list.component.css']
 })
-export class SurveyListComponent implements OnInit, AfterContentChecked {
+export class SurveyListComponent implements OnInit, AfterContentChecked, OnDestroy {
   currentClient: Client;
   remaining: number;
   pc: boolean;
@@ -38,6 +41,8 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   legth = 0;
   pageEvent;
 
+  private unsubscribe$ = new Subject();
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['created', 'name', 'action'];
 
@@ -49,6 +54,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
     private _authService: AuthService,
     private _profileService: ProfileService,
     private _surveyService: SurveyService,
+    private bottomSheet: MatBottomSheet,
     private cdref: ChangeDetectorRef
   ) { }
 
@@ -59,6 +65,13 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
   }
 
   check() {
@@ -75,8 +88,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   }
 
   getSurveys() {
-    this._profileService.getparticipant(this.id)
-      .subscribe((response) => {
+    this._profileService.getparticipant(this.id).pipe(takeUntil(this.unsubscribe$)).subscribe((response) => {
         this.remaining = response.surveyCount;
         this.dataSource = new MatTableDataSource<Element>(response._surveys);
         this.dataSource.paginator = this.paginator;
@@ -167,6 +179,12 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
       const part = this.array.slice(start, end);
       this.dataSource = part;
     }
+  }
+
+  openBottomSheet(): void {
+    this.bottomSheet.open(SubscriptionOverlayComponent, {
+      data: this.currentClient,
+    });
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, OnDestroy } from '@angular/core';
 // tslint:disable-next-line: max-line-length
 import { MatDialogRef, MAT_DIALOG_DATA, MatIconRegistry, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { environment } from './../../../environments/environment';
@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Client } from '@shared/models/client';
+import { takeUntil } from 'rxjs/operators';
 
 declare const FB: any;
 declare const gapi: any;
@@ -22,7 +23,7 @@ TODO:
 - [] change google and facebook to just icons
 */
 
-export class RegisterDialogComponent implements OnInit, AfterViewInit {
+export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   FB: any;
   gapi: any;
@@ -33,7 +34,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
-  private ngUnsubscribe = new Subject();
+  private unsubscribe$ = new Subject();
 
   constructor(
     private _authService: AuthService,
@@ -65,6 +66,13 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
       });
       this.attachSignin(document.getElementById('glogin'));
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
   }
 
   attachSignin(element) {
@@ -156,14 +164,12 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   addParticipant(response: any) {
     this.errors = [];
     this.participant = response;
-    console.log('ADDING PARTICIPANT:', this.participant);
-    this._authService.addParticipant(this.participant).subscribe((data) => {
+    this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data.errors) {
         console.log('ERROR', data);
         this.errors.push(data.message);
         return data;
       } else {
-        console.log('ADDED DATA', data);
         this._authService.setCurrentClient(data);
         window.location.href = environment.redirectLoginUrl;
       }
@@ -173,16 +179,13 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   addGoogleParticipant(response: any) {
     this.errors = [];
     this.participant = response;
-    console.log('ADDING PARTICIPANT:', this.participant);
-    this._authService.addParticipant(this.participant).subscribe((data) => {
+    this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data.errors) {
         console.log('ERROR', data);
         this.errors.push(data.message);
       } else {
-        console.log('ADDED DATA', data);
         this._authService.setCurrentClient(data);
-        console.log('RETURNING FROM ADDING GOOGLE CLIENT');
-        window.location.href = environment.redirectUrl;
+        window.location.href = environment.redirectLoginUrl;
       }
     });
   }

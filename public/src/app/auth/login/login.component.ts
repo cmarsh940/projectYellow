@@ -1,6 +1,7 @@
+import { takeUntil } from 'rxjs/operators';
 import { AuthService } from './../auth.service';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Inject, PLATFORM_ID, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 // tslint:disable-next-line: max-line-length
 import { MatSnackBarConfig, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBar, MatIconRegistry } from '@angular/material';
@@ -8,6 +9,7 @@ import { environment } from './../../../environments/environment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Client } from '@shared/models/client';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { Subject } from 'rxjs';
 
 declare const FB: any;
 declare const gapi: any;
@@ -23,7 +25,7 @@ TODO:
 - [] remove localStorage or cookies if failed login
 - [] change google and facebook to just icons
 */
-export class LoginComponent implements OnInit, AfterViewInit {
+export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   errors: string[] = [];
   client: Client;
   myForm: FormGroup;
@@ -34,7 +36,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   auth2: any;
 
   private participant;
-
+  private unsubscribe$ = new Subject();
 
   email = new FormControl('', Validators.required);
   password = new FormControl('', Validators.required);
@@ -92,6 +94,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
       });
       this.attachSignin(document.getElementById('glogin'));
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
   }
 
   attachSignin(element) {
@@ -161,7 +170,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       'password': data.password
     };
 
-    this._authService.authenticate(this.participant).subscribe((data) => {
+    this._authService.authenticate(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data) {
         if (data.errors) {
           console.log('___ LOGIN ERROR ___:', data.errors);
@@ -184,7 +193,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       'password': data.password
     };
 
-    this._authService.authenticate(this.participant).subscribe((data) => {
+    this._authService.authenticate(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data) {
         if (data.errors) {
           console.log('___ LOGIN ERROR ___:', data.errors);
@@ -212,7 +221,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       'password': this.password.value
     };
 
-    this._authService.authenticate(this.participant).subscribe((data) => {
+    const email = this._authService.authenticate(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data) {
         if (data.errors) {
           console.log('___ LOGIN ERROR ___:');

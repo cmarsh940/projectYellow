@@ -4,6 +4,7 @@ import { MetaService } from '@ngx-meta/core';
 import { UniversalStorage } from '@shared/storage/universal.storage';
 import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig } from '@angular/material';
+import { CookieOptions } from 'ngx-cookie';
 
 @Component({
   selector: 'app-landing',
@@ -14,6 +15,8 @@ export class LandingComponent implements OnInit {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
+  exp = (new Date(Date.now() + 86400 * 1000)).toUTCString();
+  cookieOptions = { expires: this.exp } as CookieOptions;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -47,7 +50,7 @@ export class LandingComponent implements OnInit {
     config.panelClass = ['cookie-snackbar'];
     let snackBarRef = this.snackBar.open(message, action ? actionButtonLabel : undefined, config);
     snackBarRef.onAction().subscribe(() => {
-      this.universalStorage.setItem('c0a', JSON.stringify(Date.now()));
+      this.universalStorage.setItem('c0a', JSON.stringify(Date.now()), this.cookieOptions);
     });
   }
 }

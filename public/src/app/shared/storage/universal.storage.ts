@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie';
+import { CookieService, CookieOptions } from 'ngx-cookie';
 
 @Injectable()
 export class UniversalStorage implements Storage {
@@ -26,7 +26,7 @@ export class UniversalStorage implements Storage {
     this.cookieService.remove(key);
   }
 
-  public setItem(key: string, data: string): void {
-    this.cookieService.put(key, data);
+  public setItem(key: string, data: string, options?: CookieOptions): void {
+    this.cookieService.put(key, data, options);
   }
 }

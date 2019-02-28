@@ -93,7 +93,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
+    if (this._routeSubscription) {
+      this._routeSubscription.unsubscribe();
+    }
   }
 
   isLoggedIn() {
