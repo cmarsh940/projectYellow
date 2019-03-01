@@ -265,7 +265,9 @@
                             <div [formGroupName]="i">
                                 <mat-card class="page-card">
                                     <mat-card-header>
-                                        <textarea matInput readonly="true" matTextareaAutosize="true" formControlName="question" id="question-input"></textarea>
+                                        <div class="mat-card-header-text">
+                                            <textarea matInput readonly="true" matTextareaAutosize="true" formControlName="question" id="question-input"></textarea>
+                                        </div>
                                     </mat-card-header>
                                     <mat-divider></mat-divider>
                                     <mat-card-content>

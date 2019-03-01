@@ -32,10 +32,15 @@ form {
 
 .mat-card-header {
     margin: 1em 0;
+    display: block;
+    height: auto;
 }
+
 .mat-card-header-text {
     margin: 0!important;
+    width: 100%;
 }
+
 
 #question-input {
     width: 100%;

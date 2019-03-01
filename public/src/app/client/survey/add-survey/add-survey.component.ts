@@ -43,6 +43,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
   questionGroups = questionGroups;
   checked: boolean;
   reward: boolean;
+  layout: boolean;
 
   @Input() survey: Survey;
 
