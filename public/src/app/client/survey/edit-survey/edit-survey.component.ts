@@ -171,6 +171,9 @@ export class EditSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     this.surveyForm.patchValue({
       name: this.survey.name,
       category: this.survey.category,
+      experationDate: this.survey.experationDate,
+      incentive: this.survey.incentive,
+      layout: this.survey.layout,
       private: this.survey.private,
       public: this.survey.public
     });
@@ -266,8 +269,11 @@ export class EditSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
       _id: this.survey._id,
       category: formModel.category as string,
       name: formModel.name as string,
+      experationDate: formModel.experationDate,
       submissionDates: this.survey.submissionDates,
+      incentive: formModel.incentive,
       lastSubmission: this.survey.lastSubmission,
+      layout: formModel.layout,
       private: formModel.private,
       public: formModel.public,
       questions: questionsDeepCopy,

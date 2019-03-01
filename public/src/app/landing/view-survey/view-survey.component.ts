@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
@@ -8,6 +8,7 @@ import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
 import { GenericValidator } from '@shared/validators/generic-validator';
 import { debounceTime } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 /**
 TODO:
@@ -18,7 +19,7 @@ TODO:
   templateUrl: './view-survey.component.html',
   styleUrls: ['./view-survey.component.css']
 })
-export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
@@ -65,6 +66,7 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
@@ -84,24 +86,26 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
   }
 
   ngOnInit(): void {
-    this.loaded = false;
-    this.currentDevice = window.clientInformation.platform;
-    this.currentPlatform = window.clientInformation.vendor;
-    this.agent = window.clientInformation.userAgent;
+    if (isPlatformBrowser(this.platformId)) {
+      this.loaded = false;
+      this.currentDevice = window.clientInformation.platform;
+      this.currentPlatform = window.clientInformation.vendor;
+      this.agent = window.clientInformation.userAgent;
 
-    this.startTimer();
-    this.surveyForm = this.fb.group({
-      questions: this.fb.array([this.buildQuestion()])
-    });
+      this.startTimer();
+      this.surveyForm = this.fb.group({
+        questions: this.fb.array([this.buildQuestion()])
+      });
 
-    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
-      this.surveyId = params['id'];
-      this.getSurvey();
-    });
+      this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+        this.surveyId = params['id'];
+        this.getSurvey();
+      });
 
-    setTimeout(() => {
-      this.loaded = true;
-    }, 1000);
+      setTimeout(() => {
+        this.loaded = true;
+      }, 1000);
+    }
   }
 
 
@@ -131,9 +135,6 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     });
   }
 
-  ngOnChanges() {
-    this.rebuildForm();
-  }
 
   ngOnDestroy() {
     this._routeSubscription.unsubscribe();
@@ -177,7 +178,7 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
           if (error) {
             for (const key of Object.keys(error)) {
               const errors = error[key];
-              this.errors.push(errors.message);
+              this.errors = errors.message;
             }
           }
         }
@@ -221,7 +222,7 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
         console.log('___ERROR___:', error);
         for (const key of Object.keys(error)) {
           const errors = error[key];
-          this.errors.push(errors.message);
+          this.errors = errors.message;
         }
       });
     if (!this.errors) {

@@ -56,7 +56,7 @@ import { DisableAccountComponent } from './profile/disable-account/disable-accou
     SubscriptionOverlayComponent,
     UploadUsersComponent,
     DisableAccountComponent,
-    WarnDialogComponent,
+    WarnDialogComponent
   ],
   providers: [
     ProfileService,

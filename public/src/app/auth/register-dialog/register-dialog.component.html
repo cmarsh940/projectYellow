@@ -21,4 +21,7 @@
     </button>
     <button mat-stroked-button mat-dialog-close color='warn'>Cancel</button>
   </mat-dialog-actions>
+  <div *ngIf="errors" class="errors">
+    {{ errors }}
+  </div>
 </mat-dialog-content>

@@ -4,6 +4,17 @@
 
 <form [formGroup]="surveyForm" (ngSubmit)="submitForm()" class="form">
   <section>
+    <!-- LAYOUT TYPE -->
+    <mat-form-field>
+      <mat-select placeholder="Page layout" formControlName="layout" required>
+        <mat-option value="PAGE">Single page</mat-option>
+        <mat-option value="STEPS">
+          1 Question at a time
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- CATEGORY -->
     <mat-form-field>
       <mat-select placeholder="Survey Category" formControlName="category">
         <mat-option *ngFor="let category of categories" [value]="category">
@@ -11,6 +22,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+
     <!-- SURVEY NAME -->
     <mat-form-field appearance="outline">
       <mat-label>Survey Name:</mat-label>

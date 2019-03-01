@@ -120,6 +120,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
       name: ['', Validators.required],
       experationDate: [''],
       incentive: [''],
+      layout: ['', Validators.required],
       private: [''],
       public: [''],
       questions: this.fb.array([this.initQuestion()])
@@ -190,7 +191,11 @@ export class AddSurveyComponent implements OnInit, OnChanges {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.addAsset(this.survey).subscribe(
       result => {
-        this._router.navigate(['/dashboard/survey']);
+        if (result) {
+          this._router.navigate(['/dashboard/survey']);
+        } else {
+          console.log('ADDING SURVEY ERRO', result);
+        }
       },
       error => {
         console.log('___ERROR___:', error);
@@ -223,6 +228,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
       lastSubmission: Date.now(),
       experationDate: formModel.experationDate,
       incentive: formModel.incentive,
+      layout: formModel.layout,
       private: formModel.private,
       public: formModel.public,
       questions: questionsDeepCopy,

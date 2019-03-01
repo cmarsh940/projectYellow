@@ -21,6 +21,16 @@ $custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
   background: #ffd600;
   color: #000;
 }
+
+.success-snackbar {
+  background-color: green;
+  color: #fff;
+}
+.error-snackbar {
+  background-color: red;
+  color: #000;
+}
+
 .cookie-snackbar {
   background: #ffd600;
   color: #000;

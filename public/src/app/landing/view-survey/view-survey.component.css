@@ -1,3 +1,10 @@
+.container {
+    width: 100%;
+    max-width: 70em;
+    height: 100%;
+    margin: auto;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
@@ -174,4 +181,17 @@ strong {
 
 .satisfaction-button {
     margin: 0 1em!important;
+}
+
+.page-card {
+    margin: 1em 0!important;
+}
+
+.submit-button {
+    width: 100%;
+    text-align: center;
+}
+
+#sub-but {
+    width: 100%;
 }

@@ -33,6 +33,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
   auth2: any;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  errorData: boolean;
 
   private unsubscribe$ = new Subject();
 
@@ -54,6 +55,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnInit() {
+    this.errorData = false;
     this.loadFacebook();
   }
 
@@ -98,6 +100,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
         console.log('ADDED AND RETURNING');
       }, function (error) {
         console.log('GOOGLE LOGIN ERROR', error);
+        this.errors = error;
       });
   }
 
@@ -151,8 +154,12 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
           reject('User cancelled login or did not fully authorize.');
         }
       }, { scope: 'email,public_profile' });
-      this.openSnackBar();
-      this.dialogRef.close();
+      if (this.errorData) {
+        console.log('error with errorData');
+      } else {
+        this.openSnackBar();
+        this.dialogRef.close();
+      }
     });
   }
 
@@ -162,13 +169,17 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   addParticipant(response: any) {
+    this.errorData = false;
+    console.log('response is:', response);
     this.errors = [];
     this.participant = response;
     this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+      console.log('add participant data', data);
       if (data.errors) {
         console.log('ERROR', data);
-        this.errors.push(data.message);
-        return data;
+        let dataError = data.message;
+        this.errorData = true;
+        this.errorSnackBar(dataError);
       } else {
         this._authService.setCurrentClient(data);
         window.location.href = environment.redirectLoginUrl;
@@ -177,12 +188,15 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   addGoogleParticipant(response: any) {
+    this.errorData = false;
+    console.log('response is:', response);
     this.errors = [];
     this.participant = response;
     this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data.errors) {
         console.log('ERROR', data);
-        this.errors.push(data.message);
+        this.errors = data.message;
+        this.errorData = true;
       } else {
         this._authService.setCurrentClient(data);
         window.location.href = environment.redirectLoginUrl;
@@ -194,8 +208,17 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
     const config = new MatSnackBarConfig();
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
-    config.duration = 3500;
+    config.duration = 2500;
     config.panelClass = ['logout-snackbar'];
     this.snackBar.open('Thank you for registering', '', config);
+  }
+
+  errorSnackBar(data: any) {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 2500;
+    config.panelClass = ['error-snackbar'];
+    this.snackBar.open(data, '', config);
   }
 }
