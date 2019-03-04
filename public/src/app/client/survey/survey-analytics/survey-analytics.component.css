@@ -161,3 +161,21 @@ mat-grid-list {
 #upgrade-link, #upgrade-button {
   color: mediumseagreen;
 }
+
+
+/* SCORE COLORS */
+.good {
+  background-color: green; /* For browsers that do not support gradients */
+  background-image: radial-gradient(circle, green, mediumseagreen, lightgreen);
+  border-radius: 8%;
+}
+.bad {
+  background-color: red; /* For browsers that do not support gradients */
+  background-image: radial-gradient(circle, red, rgb(235, 93, 93), rgb(236, 163, 163));
+  border-radius: 8%;
+}
+.nutural {
+  background-color: yellow; /* For browsers that do not support gradients */
+  background-image: radial-gradient(circle, yellow, rgb(235, 93, 93), rgb(236, 163, 163));
+  border-radius: 8%;
+}
