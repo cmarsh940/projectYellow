@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, Inject, PLATFORM_ID, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
 import { Subscription, Observable, fromEvent, merge } from 'rxjs';
@@ -9,6 +9,8 @@ import { Survey } from '@shared/models/survey';
 import { GenericValidator } from '@shared/validators/generic-validator';
 import { debounceTime } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
+import { MatDialog } from '@angular/material';
+import { SubmitSurveyDialogComponent } from '../submit-survey-dialog/submit-survey-dialog.component';
 
 /**
 TODO:
@@ -19,7 +21,7 @@ TODO:
   templateUrl: './view-survey.component.html',
   styleUrls: ['./view-survey.component.css']
 })
-export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
@@ -33,6 +35,8 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   agent: any;
 
   other = 'Other';
+  userOther: any;
+  checked: boolean;
 
   @Input() survey: any;
 
@@ -66,8 +70,11 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
+    public dialog: MatDialog,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
+    this.checked = false;
+
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
@@ -121,6 +128,10 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  ngOnChanges() {
+    this.rebuildForm();
+  }
+
   addQuestion(): void {
     this.questions.push(this.buildQuestion());
   }
@@ -130,8 +141,8 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.fb.group({
       answers: ['',  Validators.required],
       isRequired: [''],
-      question: ['', { disabled: true }, Validators.required],
-      options: this.fb.array([])
+      question: ['', { disabled: true, value: null }, Validators.required],
+      options: this.fb.array([]),
     });
   }
 
@@ -215,8 +226,7 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updateAnswer(this.survey._id, this.survey).subscribe(
       result => {
-        alert('Thank you for taking our survey!');
-        this._router.navigate(['/survey-list']);
+        this.submittedDialog();
       },
       error => {
         console.log('___ERROR___:', error);
@@ -225,9 +235,6 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
           this.errors = errors.message;
         }
       });
-    if (!this.errors) {
-      this._router.navigate(['/survey-list']);
-    }
   }
 
   prepareSaveSurvey() {
@@ -284,4 +291,16 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     }, 1000);
   }
 
+  OnChange($event) {
+    console.log($event);
+    this.userOther = $event.target.value;
+  }
+
+  submittedDialog() {
+    const dialogRef = this.dialog.open(SubmitSurveyDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this._router.navigate(['/survey-list']);
+    });
+  }
 }

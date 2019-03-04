@@ -83,7 +83,6 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
         const subscription = 'FREE';
         const registerPlatform = 'G';
         const authResponse = data.Zi;
-        console.log('LOGEDINUSER:', data);
         const client = new Client();
         client.platformId = data.El;
         client.email = data.w3.U3;
@@ -131,7 +130,6 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
       const subscription = 'FREE';
       const registerPlatform = 'F';
       FB.login((response: any) => {
-        console.table(response);
         if (response.authResponse) {
           const authResponse = response.authResponse;
           FB.api('/me', { fields: 'email, first_name, last_name, picture' }, (data: any) => {
@@ -170,7 +168,6 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
 
   addParticipant(response: any) {
     this.errorData = false;
-    console.log('response is:', response);
     this.errors = [];
     this.participant = response;
     this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
@@ -189,7 +186,6 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
 
   addGoogleParticipant(response: any) {
     this.errorData = false;
-    console.log('response is:', response);
     this.errors = [];
     this.participant = response;
     this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {

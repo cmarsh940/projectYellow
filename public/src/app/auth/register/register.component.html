@@ -201,7 +201,11 @@
 
       <mat-divider id="bottomDivider"></mat-divider>
 
-      <mat-checkbox required><strong>* I have read and agree to the <a routerLink='/policies/usage' id='termsLink'>terms of Service</a></strong> </mat-checkbox>
+      <mat-checkbox [formControl]="acceptFormControl" required><strong>* I have read and agree to the <a routerLink='/policies/usage' id='termsLink'>terms of Service</a></strong> 
+        <mat-error *ngIf="acceptFormControl.hasError('required')">
+          Accepting terms of service is <strong>required</strong>
+        </mat-error>
+      </mat-checkbox>
 
       <!-- SUBMIT BUTTON -->
       <div class="text-center" id="submitButton">
@@ -212,6 +216,7 @@
       </div>
     </form>
   </div>
+</div>
 
 
 

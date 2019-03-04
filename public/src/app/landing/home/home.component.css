@@ -45,10 +45,13 @@
   overflow-x: scroll;
   scroll-behavior: smooth;
   display: flex;
+  justify-content: space-between;
 }
 
 #cards .mat-card {
   scroll-snap-align: center;
+  max-width: 18em;
+  min-width: 18em;
 }
 
 .mat-card {

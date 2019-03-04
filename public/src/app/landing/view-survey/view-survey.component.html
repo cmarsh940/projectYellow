@@ -315,17 +315,16 @@
                                             </div>
 
                                             <!-- MULTI CHOICE WITH OPTION -->
-                                            <div *ngIf="survey?.questions[i]?.questionType === 'multiplechoiceOther'">
+                                            <!-- <div *ngIf="survey?.questions[i]?.questionType === 'multiplechoiceOther'">
                                                 <mat-radio-group formControlName="answers" [required]="survey?.questions[i]?.isRequired" id="multichoiceOption">
                                                     <mat-radio-button *ngFor="let option of survey?.questions[i]?.options" [value]="option.optionName">
                                                         {{option.optionName}}
                                                     </mat-radio-button>
-                                                    <mat-radio-button [value]="OPTION.value"> Other
+                                                    <mat-radio-button [value]="other.value">
+                                                        <input type='text' #other/>
                                                     </mat-radio-button>
                                                 </mat-radio-group>
-                                                <textarea matInput #OPTION placeholder="Leave a comment"></textarea>
-                                                {{OPTION.value}}
-                                            </div>
+                                            </div> -->
 
                                             <!-- DATE -->
                                             <div *ngIf="survey?.questions[i]?.questionType === 'date'">

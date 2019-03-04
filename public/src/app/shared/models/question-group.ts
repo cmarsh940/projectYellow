@@ -37,7 +37,7 @@ export const questionGroups: QuestionGroup[] = [
         name: 'Multiple Choice',
         group: [
             { value: 'multiplechoice', viewValue: 'Multiple Choice (Single answer)' },
-            { value: 'multiplechoiceOther', viewValue: 'Multiple Choice W/ optional user input (one answer)' },
+            // { value: 'multiplechoiceOther', viewValue: 'Multiple Choice W/ optional user input (one answer)' },
         ]
     },
     {

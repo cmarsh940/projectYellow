@@ -7,10 +7,13 @@ import { Survey } from '@shared/models/survey';
 import { Question } from '@shared/models/question-group';
 import { SurveyService } from '../survey.service';
 import { AuthService } from 'app/auth/auth.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import * as Chart from 'chart.js';
 import * as moment from 'moment';
+import * as XLSX from 'xlsx';
 
+type AOA = any[];
 
 function flatten(arr) {
   return [].concat(...arr);
@@ -31,7 +34,7 @@ function deepFlatten(arr) {
   styleUrls: ['./survey-analytics.component.css']
 })
 export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
-  survey: Survey = new Survey();
+  survey: any;
   questions: Question[] = [];
   surveyId = '';
   surveyName: string;
@@ -56,8 +59,11 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   chart: any;
   barChart: any;
 
+
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+
+  downloadJsonHref: any;
 
   @ViewChild('myCanvas') myCanvas: ElementRef;
   public context: CanvasRenderingContext2D;
@@ -67,6 +73,11 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   displayedColumns = ['optionName', 'count', 'percentage'];
 
+  // EXCEL
+  uploadData: AOA = [];
+  wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
+  fileName: string = 'surveyQuestions.xlsx';
+
   constructor(
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
@@ -74,6 +85,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     private _router: Router,
     private location: Location,
     public snackBar: MatSnackBar,
+    private sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -373,9 +385,77 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   downloadJson(): void {
+    let theJSON = JSON.stringify(this.survey);
+    let blob = new Blob([theJSON], { type: 'text/json' });
+    let url = window.URL.createObjectURL(blob);
+    let uri: SafeUrl = this.sanitizer.bypassSecurityTrustUrl(url);
+    this.downloadJsonHref = uri;
   }
 
   downloadText(): void {
+  }
+
+  exportExcel(): void {
+    console.log('HIT EXPORT', this.survey);
+
+    let tempSurvey = [];
+    tempSurvey.push(this.survey);
+    console.log('temp survey is:', tempSurvey);
+
+    const exportedQuestions = [['question', 'questionType', 'lastAnswered', 'answers']];
+    console.log('exported questions are:', exportedQuestions);
+
+    for (let i = 0; i < this.survey.length; i++) {
+      let tempQuestion = [];
+      const element = this.survey[i];
+      console.log('element is:', element);
+      tempQuestion.push(element.question);
+      tempQuestion.push(element.questionType);
+      tempQuestion.push(element.lastAnswered);
+      if (element.questionType === 'multiplechoice' || element.questionType === 'dropDown' || element.questionType === 'dropDownMultiple') {
+        for (let j = 0; j < element.answers.length - 1; j++) {
+          const answer = element.answers[j];
+          if (!answer.count) {
+            console.log('no answer for this option');
+          } else {
+            console.log('answer for this option is:', answer.optionName);
+            tempQuestion.push(answer.optionName);
+            tempQuestion.push(answer.count);
+          }
+        }
+      } else {
+        tempQuestion.push(element.answers);
+      }
+      exportedQuestions.push(tempQuestion);
+      console.log('EXPORT', exportedQuestions);
+    }
+
+    // tempSurvey.forEach(question => {
+    //   let tempQuestion = [];
+    //   console.log('quesiton is:', question);
+    //   for (const element of question) {
+    //     console.log('element is:', element);
+    //     tempQuestion.push(element.question);
+    //     tempQuestion.push(element.questionType);
+    //     tempQuestion.push(element.lastAnswered);
+    //     tempQuestion.push(element.answers);
+    //     exportedQuestions.push(tempQuestion);
+    //     console.log('EXPORT', exportedQuestions);
+    //   }
+
+    // });
+    console.log('Exported Questions', exportedQuestions);
+
+    /* generate worksheet */
+    // const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedQuestions);
+
+    // /* generate workbook and add the worksheet */
+    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // /* save to file */
+    // console.log('WRITING FILE');
+    // XLSX.writeFile(wb, this.fileName);
   }
 
   openSnackBar() {

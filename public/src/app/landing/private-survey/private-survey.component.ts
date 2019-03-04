@@ -8,8 +8,8 @@ import { questionGroups, Question } from '@shared/models/question-group';
 import { GenericValidator } from '@shared/validators/generic-validator';
 import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
-import { RegisterDialogComponent } from 'app/auth/register-dialog/register-dialog.component';
 import { isPlatformBrowser } from '@angular/common';
+import { SubmitSurveyDialogComponent } from '../submit-survey-dialog/submit-survey-dialog.component';
 
 @Component({
   selector: 'app-private-survey',
@@ -279,5 +279,13 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
     this.interval = setInterval(() => {
       this.time++;
     }, 1000);
+  }
+
+  submittedDialog() {
+    const dialogRef = this.dialog.open(SubmitSurveyDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this._router.navigate(['/success']);
+    });
   }
 }

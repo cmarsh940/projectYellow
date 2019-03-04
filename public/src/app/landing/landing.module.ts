@@ -20,6 +20,7 @@ import { SurveyErrorComponent } from './errors/survey-error/survey-error.compone
 import { SurveyClosedComponent } from './errors/survey-closed/survey-closed.component';
 import { MainNavComponent } from '@shared/layouts/main-nav/main-nav.component';
 import { PrivateSurveyComponent } from './private-survey/private-survey.component';
+import { SubmitSurveyDialogComponent } from './submit-survey-dialog/submit-survey-dialog.component';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import { PrivateSurveyComponent } from './private-survey/private-survey.componen
     SurveyClosedComponent,
     SuccessComponent,
     VerifiedComponent,
-    ViewSurveyComponent
+    ViewSurveyComponent,
+    SubmitSurveyDialogComponent
   ]
 })
 export class LandingModule { }

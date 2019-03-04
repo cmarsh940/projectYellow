@@ -1,5 +1,5 @@
 import { AuthService } from './../auth.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 // tslint:disable-next-line: max-line-length
@@ -9,6 +9,7 @@ import { states } from '@shared/models/states';
 import { forbiddenNameValidator } from '@shared/validators/forbidden-name.directive';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 
 
@@ -70,6 +71,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ]);
   businessName = new FormControl('');
   accountType = new FormControl('');
+  acceptFormControl = new FormControl('', [
+    Validators.required,
+  ]);
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
@@ -118,11 +122,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private _authService: AuthService,
     private _router: Router,
     public snackBar: MatSnackBar,
-    fb: FormBuilder
+    fb: FormBuilder,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
     this.myForm = fb.group({
       firstName: this.firstNameFormControl,
       lastName: this.lastNameFormControl,
+      accept: this.acceptFormControl,
       accountType: this.accountType,
       businessName: this.businessName,
       email: this.emailFormControl,
@@ -137,9 +143,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.currentDevice = window.clientInformation.platform;
-    this.currentPlatform = window.clientInformation.vendor;
-    this.agent = window.clientInformation.userAgent;
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentDevice = window.clientInformation.platform;
+      this.currentPlatform = window.clientInformation.vendor;
+      this.agent = window.clientInformation.userAgent;
+    }
   }
 
   ngOnDestroy(): void {
@@ -185,6 +193,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
             'accountType': null,
             'firstName': null,
             'lastName': null,
+            'accept': false,
             'businessName': null,
             'email': null,
             'password': null,

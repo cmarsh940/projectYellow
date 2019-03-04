@@ -10,7 +10,6 @@ import { AddUserComponent } from '../add-user/add-user.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { User } from '@shared/models/user';
 import { UserService } from '../user.service';
-import { LOCAL_STORAGE } from '@ng-toolkit/universal';
 import { UniversalStorage } from '@shared/storage/universal.storage';
 import { WarnDialogComponent } from 'app/client/warn-dialog/warn-dialog.component';
 

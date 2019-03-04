@@ -142,7 +142,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
           'color': 'red'
         },
         'input.valid': {
-          'color': 'green'
+          'color': 'mediumseagreen'
         },
         // placeholder styles need to be individually adjusted
         '::-webkit-input-placeholder': {

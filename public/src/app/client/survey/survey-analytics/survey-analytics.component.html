@@ -15,11 +15,14 @@
       <p>Download results</p>
     </button>
     <mat-menu #downloadMenu="matMenu">
-      <button mat-menu-item (click)="downloadJson()">
+      <a mat-menu-item (click)="downloadJson()" [href]="downloadJsonHref" download="survey.json">
         Json file
-      </button>
+      </a>
       <button mat-menu-item (click)="downloadText()">
         Text file
+      </button>
+      <button mat-menu-item (click)="exportExcel()">
+        Excel file
       </button>
     </mat-menu>
     <br>
