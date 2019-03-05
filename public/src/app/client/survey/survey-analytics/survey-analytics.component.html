@@ -228,14 +228,14 @@
                   <h3>Average</h3>
                 </div>
               </div>
-              <div *ngIf="answer > 3 && answer < 4" class="nutuarl">
+              <div *ngIf="answer > 2 && answer < 4" class="nutuarl">
                 <div class="average">
                   <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
                   <h1>{{answer | number }}</h1>
                   <h3>Average</h3>
                 </div>
               </div>
-              <div *ngIf="answer > 4" class="good">
+              <div *ngIf="answer >= 4" class="good">
                 <div class="average">
                   <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
                   <h1>{{answer | number }}</h1>

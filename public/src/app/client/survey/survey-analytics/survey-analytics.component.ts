@@ -267,21 +267,38 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       // tslint:disable-next-line: max-line-length
       if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
         let b = 0;
+        // COLLECT ARRAY OF ANSWERS
         const c = this.survey[i].answers.map(parseFloat);
-        const d = 0;
+        // REMOVE NAN FROM THE ARRAY
+        const d = c.filter(value => !Number.isNaN(value));
+        // SET NUMBER TO COUNT NUMBER OF UNANSWERED QUESTIONS(NaN)
+        let e = 0;
+
+        // LOOP THROUGH UNFILTERED ARRAY AND COUNT NAN SO OUR AVERAGE WONT COUNT UNANSWERED QUESTIONS
+        c.forEach(element => {
+          if (!element) {
+            e += 1;
+          }
+        });
+
+        // SET NEW LENGTH THAT TAKES OF UNANSWERED
+        let answersLength = this.survey[i].answers.length - e;
 
         // TOTAL NUMBER OF ANSWERS TO CALCULATE
-        this.countAvgAnswers = this.survey[i].answers.length;
+        this.countAvgAnswers = answersLength;
 
-        for (let a = 0; a < this.survey[i].answers.length; a++) {
-          b += c[a];
+        // LOOP THROUGH AND CALCULATE AVERAGE
+        for (let a = 0; a < answersLength; a++) {
+          b += d[a];
         }
-        this.average = b / this.survey[i].answers.length;
+
+        this.average = b / answersLength;
         const avg = this.average.toString();
+
+        // SET ANSWERS TO EMPTY ARRAY FOR NEW ANSWERS
         this.survey[i].answers = [];
         this.survey[i].answers.push(avg);
         this.questions.push(this.survey[i]);
-      // tslint:disable-next-line: max-line-length
       } else if (this.survey[i].questionType === 'boolean' || this.survey[i].questionType === 'yesno' || this.survey[i].questionType === 'likeunlike' || this.survey[i].questionType === 'goodbad') {
         let percentE: number;
         let e = 0;
