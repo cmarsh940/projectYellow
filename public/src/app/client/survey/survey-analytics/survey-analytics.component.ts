@@ -34,6 +34,7 @@ function deepFlatten(arr) {
   styleUrls: ['./survey-analytics.component.css']
 })
 export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
+  // SURVEY TOOLS
   survey: any;
   questions: Question[] = [];
   surveyId = '';
@@ -53,25 +54,21 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   title: string;
   lvl: any;
   isBrowser: any;
-
   timeSinceLastSubmission: any;
+  subscription: string;
 
-  chart: any;
-  barChart: any;
-
-
+  // SNACKBAR
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
+  // TEXT FILE
   downloadJsonHref: any;
 
+  // CHART
+  chart: any;
   @ViewChild('myCanvas') myCanvas: ElementRef;
   public context: CanvasRenderingContext2D;
-
-  // tslint:disable-next-line: max-line-length
   colors = ['#ffd600', '#ffab00', '#ff6d00', '#ff3d00', '#c51162', '#536dfe', '#2979ff', '#0091ea', '#00b8d4', '#00bfa5', '#00c853', '#64dd17', '#aeea00'];
-
-  displayedColumns = ['optionName', 'count', 'percentage'];
 
   // EXCEL
   uploadData: AOA = [];
@@ -121,7 +118,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId).subscribe(res => {
+      console.log(res);
       this.surveyName = res.name;
+      this.subscription = res.creator._subscription;
       const alldates = res.submissionDates;
       const answeredTempDates = {};
       const tempDates = [];
@@ -225,7 +224,6 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
                 }
               }],
               yAxes: [{
-                display: false,
                 scaleLabel: {
                   display: true,
                   labelString: 'Volume'
@@ -293,7 +291,10 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
         }
 
         this.average = b / answersLength;
-        const avg = this.average.toString();
+        const avg = {
+          avg: this.average.toString(),
+          notAnswered: e
+        };
 
         // SET ANSWERS TO EMPTY ARRAY FOR NEW ANSWERS
         this.survey[i].answers = [];
@@ -413,19 +414,14 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   exportExcel(): void {
-    console.log('HIT EXPORT', this.survey);
-
     let tempSurvey = [];
     tempSurvey.push(this.survey);
-    console.log('temp survey is:', tempSurvey);
 
     const exportedQuestions = [['question', 'questionType', 'lastAnswered', 'answers']];
-    console.log('exported questions are:', exportedQuestions);
 
     for (let i = 0; i < this.survey.length; i++) {
       let tempQuestion = [];
       const element = this.survey[i];
-      console.log('element is:', element);
       tempQuestion.push(element.question);
       tempQuestion.push(element.questionType);
       tempQuestion.push(element.lastAnswered);
@@ -434,45 +430,33 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
           const answer = element.answers[j];
           if (!answer.count) {
             console.log('no answer for this option');
+            tempQuestion.push(element.answers);
           } else {
             console.log('answer for this option is:', answer.optionName);
             tempQuestion.push(answer.optionName);
             tempQuestion.push(answer.count);
           }
         }
+      }
+      if (element.questionType === 'smilieFaces' || element.questionType === 'satisfaction' || element.questionType === 'rate' || element.questionType === 'star') {
+        element.answers.forEach(answer => {
+          tempQuestion.push(answer.avg);
+        });
       } else {
         tempQuestion.push(element.answers);
       }
       exportedQuestions.push(tempQuestion);
-      console.log('EXPORT', exportedQuestions);
     }
 
-    // tempSurvey.forEach(question => {
-    //   let tempQuestion = [];
-    //   console.log('quesiton is:', question);
-    //   for (const element of question) {
-    //     console.log('element is:', element);
-    //     tempQuestion.push(element.question);
-    //     tempQuestion.push(element.questionType);
-    //     tempQuestion.push(element.lastAnswered);
-    //     tempQuestion.push(element.answers);
-    //     exportedQuestions.push(tempQuestion);
-    //     console.log('EXPORT', exportedQuestions);
-    //   }
-
-    // });
-    console.log('Exported Questions', exportedQuestions);
-
     /* generate worksheet */
-    // const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedQuestions);
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedQuestions);
 
-    // /* generate workbook and add the worksheet */
-    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-    // /* save to file */
-    // console.log('WRITING FILE');
-    // XLSX.writeFile(wb, this.fileName);
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
 
   openSnackBar() {

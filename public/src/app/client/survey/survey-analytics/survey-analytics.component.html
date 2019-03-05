@@ -48,7 +48,7 @@
   </div>
 </div>
 
-<div class="small-boxes" *ngIf="private">
+<div class="small-boxes" *ngIf="subscription !=='FREE'">
   <mat-grid-list cols="3" rowHeight="100px">
     <mat-grid-tile >
       <mat-grid-tile-header>Total Answers</mat-grid-tile-header>
@@ -186,22 +186,58 @@
           
             <!-- FACES -->
             <ng-container *ngSwitchCase="'smilieFaces'">
-              <h4>
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
-                  <h1>{{answer | number }}</h1>
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </h4>
+              </div>
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
+              <div *ngIf="answer.avg >= 4" class="good">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
             </ng-container>
           
             <!-- SATISFACTION -->
             <ng-container *ngSwitchCase="'satisfaction'">
-              <h4>
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
-                  <h1>{{answer | number }}</h1>
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </h4>
+              </div>
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
+              <div *ngIf="answer.avg >= 4" class="good">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
             </ng-container>
           
             <!-- SLIDE -->
@@ -211,34 +247,55 @@
           
             <!-- SLIDE RATE -->
             <ng-container *ngSwitchCase="'rate'">
-              <h4>
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
-                  <h1>{{answer | number }}</h1>
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </h4>
+              </div>
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
+              <div *ngIf="answer.avg >= 4" class="good">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
             </ng-container>
 
             <!-- STAR RATING -->
             <ng-container *ngSwitchCase="'star'">
-              <div *ngIf="answer > 0 && answer <= 2" class="bad">
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
                   <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
-                  <h1>{{answer | number }}</h1>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
               </div>
-              <div *ngIf="answer > 2 && answer < 4" class="nutuarl">
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
                 <div class="average">
                   <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
-                  <h1>{{answer | number }}</h1>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
               </div>
-              <div *ngIf="answer >= 4" class="good">
+              <div *ngIf="answer.avg >= 4" class="good">
                 <div class="average">
                   <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
-                  <h1>{{answer | number }}</h1>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
               </div>
@@ -275,7 +332,6 @@
       </mat-card-content>
   </mat-card>
 </div>
-
 
 <div id="button-group">
   <button mat-raised-button (tap)="back()" color="primary">Back to Surveys</button>
