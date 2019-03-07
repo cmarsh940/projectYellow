@@ -34,6 +34,8 @@ export class EditSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
   categories: SurveyCategory[];
   clientId: any;
   pc: boolean;
+  checked: boolean;
+  reward: boolean;
 
   questionGroups = questionGroups;
 
@@ -84,9 +86,11 @@ export class EditSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     this.surveyForm = this.fb.group({
       name: ['', Validators.required],
       category: ['', Validators.required],
+      experationDate: [''],
+      incentive: [''],
+      layout: ['', Validators.required],
       private: [''],
       public: [''],
-      experationDate: [''],
       questions: this.fb.array([this.initQuestion()])
     });
 
@@ -304,5 +308,9 @@ export class EditSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     if (!this.errors) {
       this._router.navigate(['/dashboard/survey']);
     }
+  }
+
+  OnChange($event) {
+    this.reward = $event.checked;
   }
 }

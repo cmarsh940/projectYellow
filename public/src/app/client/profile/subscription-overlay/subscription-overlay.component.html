@@ -2,22 +2,82 @@
   <mat-tab-group>
     <mat-tab label="Monthly">
       <ng-template matTabContent>
-        <button mat-stroked-button (click)="openLink($event, '1')" matTooltip="Basic Subscription"
+        <div *ngIf="data._subscription ==='BASIC' && data.bCycle === 1">
+          <button mat-stroked-button matTooltip="Basic Subscription"
+          color="primary" disabled>current - Basic Subscription $30</button>
+        </div>
+        <div *ngIf="data._subscription !=='BASIC'">
+          <button mat-stroked-button (click)="openLink($event, '1')" matTooltip="Basic Subscription"
           color="primary">Basic Subscription $30</button>
-        <button mat-stroked-button (click)="openLink($event, '2')" matTooltip="Pro Subscription"
+        </div>
+        <div *ngIf="data._subscription ==='BASIC' && data.bCycle !== 1">
+          <button mat-stroked-button (click)="openLink($event, '1')" matTooltip="Basic Subscription"
+          color="primary">Basic Subscription $30</button>
+        </div>
+        <div *ngIf="data._subscription ==='PRO' && data.bCycle === 1">
+          <button mat-stroked-button matTooltip="Pro Subscription"
+          color="primary" disabled>current -  Pro Subscription $35</button>
+        </div>
+        <div *ngIf="data._subscription !=='PRO'">
+          <button mat-stroked-button (click)="openLink($event, '2')" matTooltip="Pro Subscription"
           color="primary">Pro Subscription $35</button>
-        <button mat-stroked-button (click)="openLink($event, '3')" matTooltip="Elite Subscription"
+        </div>
+        <div *ngIf="data._subscription ==='PRO' && data.bCycle !== 1">
+          <button mat-stroked-button (click)="openLink($event, '2')" matTooltip="Pro Subscription"
+          color="primary">Pro Subscription $35</button>
+        </div>
+        <div *ngIf="data._subscription ==='ELITE' && data.bCycle === 1">
+          <button mat-stroked-button matTooltip="Elite Subscription"
+          color="primary" disabled>current -  Elite Subscription $99</button>
+        </div>
+        <div *ngIf="data._subscription !=='ELITE'">
+          <button mat-stroked-button (click)="openLink($event, '3')" matTooltip="Elite Subscription"
           color="primary">Elite Subscription $99</button>
+        </div>
+        <div *ngIf="data._subscription ==='ELITE' && data.bCycle !== 1">
+          <button mat-stroked-button (click)="openLink($event, '3')" matTooltip="Elite Subscription"
+          color="primary">Elite Subscription $99</button>
+        </div>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Anually">
+    <mat-tab label="Annually">
       <ng-template matTabContent>
-        <button mat-stroked-button (click)="openLink($event, '4')" matTooltip="Basic Subscription"
+        <div *ngIf="data._subscription ==='BASIC' && data.bCycle === 12">
+          <button mat-stroked-button matTooltip="Basic Subscription"
+          color="primary" disabled>current - Basic Subscription $360</button>
+        </div>
+        <div *ngIf="data._subscription ==='BASIC' && data.bCycle !== 12">
+          <button mat-stroked-button (click)="openLink($event, '4')" matTooltip="Basic Subscription"
           color="primary">Basic Subscription $360</button>
-        <button mat-stroked-button (click)="openLink($event, '5')" matTooltip="Pro Subscription"
+        </div>
+        <div *ngIf="data._subscription !=='BASIC'">
+          <button mat-stroked-button (click)="openLink($event, '4')" matTooltip="Basic Subscription"
+          color="primary">Basic Subscription $360</button>
+        </div>
+        <div *ngIf="data._subscription ==='PRO' && data.bCycle === 12">
+          <button mat-stroked-button matTooltip="Pro Subscription"
+          color="primary" disabled>current - Pro Subscription $420</button>
+        </div>
+        <div *ngIf="data._subscription ==='PRO' && data.bCycle !== 12">
+          <button mat-stroked-button (click)="openLink($event, '5')" matTooltip="Pro Subscription"
           color="primary">Pro Subscription $420</button>
-        <button mat-stroked-button (click)="openLink($event, '6')" matTooltip="Elite Subscription"
+        </div>
+        <div *ngIf="data._subscription !=='PRO'">
+          <button mat-stroked-button (click)="openLink($event, '5')" matTooltip="Pro Subscription"
+          color="primary">Pro Subscription $420</button>
+        </div>
+        <div *ngIf="data._subscription ==='ELITE' && data.bCycle === 12">
+          <button mat-stroked-button matTooltip="Elite Subscription"
+          color="primary" disabled>current - Elite Subscription $1,188</button>
+        </div>
+        <div *ngIf="data._subscription ==='ELITE' && data.bCycle !== 12">
+          <button mat-stroked-button (click)="openLink($event, '6')" matTooltip="Elite Subscription"
           color="primary">Elite Subscription $1,188</button>
+        </div>
+        <div *ngIf="data._subscription !=='ELITE'">
+          <button mat-stroked-button (click)="openLink($event, '6')" matTooltip="Elite Subscription"
+          color="primary">Elite Subscription $1,188</button>
+        </div>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

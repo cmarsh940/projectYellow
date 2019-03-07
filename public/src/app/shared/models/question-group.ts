@@ -50,6 +50,7 @@ export const questionGroups: QuestionGroup[] = [
     {
         name: 'Satisfaction',
         group: [
+            { value: 'likelyUnlikely', viewValue: 'Likely or Unlikely 1-10' },
             { value: 'smilieFaces', viewValue: 'Satisfaction (images)' },
             { value: 'satisfaction', viewValue: 'Satisfaction (text)' },
         ]

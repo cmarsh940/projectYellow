@@ -302,6 +302,11 @@
             </ng-container>
           
             <!-- LIKE UNLIKE -->
+            <ng-container *ngSwitchCase="'likelyUnlikely'">
+              {{answer | json}}
+            </ng-container>
+
+            <!-- LIKE UNLIKE -->
             <ng-container *ngSwitchCase="'likeunlike'">
               <h4 class="booleanData">Like 
                 <span class="spacer"></span> 

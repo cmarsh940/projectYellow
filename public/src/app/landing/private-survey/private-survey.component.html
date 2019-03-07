@@ -172,6 +172,23 @@
                     </mat-button-toggle-group>
                   </div>
 
+                  <!-- LIKELY UNLIKELY -->
+                  <div *ngIf="survey?.questions[i]?.questionType === 'likelyUnlikely'">
+                      <mat-chip-list formControlName="answers" class="likelyUnlikely"
+                      [required]="survey?.questions[i]?.isRequired">
+                        <mat-chip color="warn" selected value='1'>1</mat-chip>
+                        <mat-chip selected value='2'>2</mat-chip>
+                        <mat-chip selected value='3'>3</mat-chip>
+                        <mat-chip selected value='4'>4</mat-chip>
+                        <mat-chip color="primary" selected value='5'>5</mat-chip>
+                        <mat-chip selected value='6'>6</mat-chip>
+                        <mat-chip selected value='7'>7</mat-chip>
+                        <mat-chip selected value='8'>8</mat-chip>
+                        <mat-chip selected value='9'>9</mat-chip>
+                        <mat-chip color="accent" selected value='10'>10</mat-chip>
+                      </mat-chip-list>
+                  </div>
+
                   <!-- LIKE UNLIKE -->
                   <div *ngIf="survey?.questions[i]?.questionType === 'likeunlike'">
                     <mat-button-toggle-group formControlName="answers" class="likeunlike"

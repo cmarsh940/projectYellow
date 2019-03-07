@@ -104,6 +104,7 @@ class PaymentsController {
                                     }
                                     subscribedClient._subscription = subObject.name;
                                     subscribedClient.surveyCount = subObject.surveyCount; 
+                                    subscribedClient.bCycle = subObject.billingCycle; 
                                     subscribedClient.subscriptionId = newSubscriptionResult.subscription.id; 
                                     subscribedClient.paymentToken = paymentToken; 
                                     subscribedClient.paidThroughDate = newSubscriptionResult.subscription.paidThroughDate; 
@@ -189,6 +190,7 @@ class PaymentsController {
                                     }
                                     subscribedClient._subscription = subObject.name;
                                     subscribedClient.surveyCount = subObject.surveyCount;
+                                    subscribedClient.bCycle = subObject.billingCycle; 
                                     subscribedClient.subscriptionId = newSubscriptionResult.subscription.id;
                                     subscribedClient.paymentToken = paymentToken;
                                     subscribedClient.paidThroughDate = newSubscriptionResult.subscription.paidThroughDate;

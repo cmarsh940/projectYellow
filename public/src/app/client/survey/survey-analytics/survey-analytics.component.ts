@@ -263,7 +263,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   loopThroughQuestions() {
     for (let i = 0; i < (<any>this.survey).length; i++) {
       // tslint:disable-next-line: max-line-length
-      if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
+      if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star' || this.survey[i].questionType === 'likelyUnlikely') {
         let b = 0;
         // COLLECT ARRAY OF ANSWERS
         const c = this.survey[i].answers.map(parseFloat);

@@ -408,6 +408,47 @@
                                                 </mat-button-toggle-group>
                                             </div>
 
+                                            <!-- LIKELY UNLIKELY -->
+                                            <div *ngIf="survey?.questions[i]?.questionType === 'likelyUnlikely'">
+                                                <div id="like-text">
+                                                    <h6>*unlikely</h6>
+                                                    <span class="spacer"></span>
+                                                    <h6>*likely</h6>
+                                                </div>
+                                                <mat-button-toggle-group formControlName="answers" [required]="survey?.questions[i]?.isRequired">
+                                                    <mat-button-toggle class="like-button" value="1">
+                                                        1
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="2">
+                                                        2
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="3">
+                                                        3
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="4">
+                                                        4
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="5">
+                                                        5
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="6">
+                                                        6
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="7">
+                                                        7
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="8">
+                                                        8
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="9">
+                                                        9
+                                                    </mat-button-toggle>
+                                                    <mat-button-toggle class="like-button" value="10">
+                                                        10
+                                                    </mat-button-toggle>
+                                                </mat-button-toggle-group>
+                                            </div>
+
                                             <!-- LIKE UNLIKE -->
                                             <div *ngIf="survey?.questions[i]?.questionType === 'likeunlike'">
                                                 <mat-button-toggle-group formControlName="answers" class="likeunlike" [required]="survey?.questions[i]?.isRequired" id="thumbs">

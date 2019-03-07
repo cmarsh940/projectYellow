@@ -54,6 +54,7 @@ form {
     width: 100%;
     text-align: center;
     margin: 2em 0;
+    padding: 1em 0;
 }
 
 .mat-radio-button {
@@ -71,6 +72,26 @@ form {
 
 .mat-card {
     margin: 5em 0;
+    padding: 1em 0!important;
+}
+
+.mat-button-toggle-group {
+    max-width: 100%;
+}
+
+#like-text {
+    width: 100%;
+    display: inline-flex;
+    padding: 0 1em;
+    height: 1em;
+}
+
+#like-text, h6 {
+
+}
+
+.like-button {
+    width: 9vw;
 }
 
 .button-group {
@@ -199,4 +220,9 @@ strong {
 
 #sub-but {
     width: 100%;
+}
+
+/* MAT CHIPS */
+.mat-chip {
+    margin:1px!important;
 }

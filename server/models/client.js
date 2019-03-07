@@ -11,10 +11,9 @@ const ClientSchema = new mongoose.Schema({
     type: String,
   },
 
-  billingCycle: {
+  bCycle: {
     type: Number,
     enum: [1, 12],
-    select: false
   },
   businessName: {
     type: String,

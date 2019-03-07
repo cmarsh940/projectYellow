@@ -41,7 +41,7 @@ module.exports = [
     },
     {
         "id": "4",
-        "name": "BASIC",
+        "name": "BASIC ANNUALLY",
         "price": 360.00,
         "surveyCount": 1200,
         "billingCycle": 12,
@@ -51,7 +51,7 @@ module.exports = [
     },
     {
         "id": "5",
-        "name": "PRO",
+        "name": "PRO ANNUALLY",
         "price": 420.00,
         "surveyCount": 99999,
         "billingCycle": 12,
@@ -61,7 +61,7 @@ module.exports = [
     },
     {
         "id": "6",
-        "name": "ELITE",
+        "name": "ELITE ANNUALLY",
         "price": 1188.00,
         "surveyCount": 99999,
         "billingCycle": 12,
