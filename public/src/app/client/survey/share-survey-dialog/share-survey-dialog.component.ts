@@ -26,7 +26,9 @@ export class ShareSurveyDialogComponent implements OnInit {
    }
 
   ngOnInit() {
-    this.userLink = `https://surveysbyme.com/takeSurvey/${this.data}`;
+    console.log('data is:', this.data);
+    this.userLink = `https://surveysbyme.com/takeSurvey/${this.data.id}`;
+    console.log(this.userLink);
     this.loadFacebook();
   }
 

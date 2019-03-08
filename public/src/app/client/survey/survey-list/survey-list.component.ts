@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked, OnDestroy } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatDialog, MatBottomSheet } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatDialog, MatBottomSheet, MatDialogConfig } from '@angular/material';
 import { environment } from '../../../../environments/environment';
 
 import { SurveyService } from '../survey.service';
@@ -195,9 +195,14 @@ export class SurveyListComponent implements OnInit, AfterContentChecked, OnDestr
   }
 
   facebookPost(id: any) {
-      const postRef = this.postDialog.open(ShareSurveyDialogComponent, {
-        data: id,
-      });
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.width = '22em';
+    dialogConfig.data = {
+      id: id,
+    };
+
+      const postRef = this.postDialog.open(ShareSurveyDialogComponent, dialogConfig);
 
       postRef.afterClosed().subscribe(result => {
         if (result) {

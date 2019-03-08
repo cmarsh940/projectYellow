@@ -1,3 +1,7 @@
+button {
+    width: 100%;
+    margin: auto;
+}
 #facebook-button {
     background-color: #4267b2;
     color: #fff;
@@ -6,6 +10,7 @@
 .socialText {
     font: Roboto-Medium;
     size: 14px;
+    margin-left: 1em;
     color: #000000 / 0,0,0(54%);
 }
 
