@@ -1,0 +1,16 @@
+#facebook-button {
+    background-color: #4267b2;
+    color: #fff;
+}
+
+.socialText {
+    font: Roboto-Medium;
+    size: 14px;
+    color: #000000 / 0,0,0(54%);
+}
+
+.signin-icon {
+    position: absolute;
+    left: 10%;
+    margin: 2% 0;
+}

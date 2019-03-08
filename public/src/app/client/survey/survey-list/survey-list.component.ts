@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked, OnDestroy } from '@angular/core';
 import { MatPaginator, MatTableDataSource, MatDialog, MatBottomSheet } from '@angular/material';
-
+import { environment } from '../../../../environments/environment';
 
 import { SurveyService } from '../survey.service';
 import { Client } from '@shared/models/client';
@@ -13,6 +13,9 @@ import { WarnDialogComponent } from 'app/client/warn-dialog/warn-dialog.componen
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SubscriptionOverlayComponent } from 'app/client/profile/subscription-overlay/subscription-overlay.component';
+import { ShareSurveyDialogComponent } from '../share-survey-dialog/share-survey-dialog.component';
+
+declare const FB: any;
 
 /**
 TODO:
@@ -43,6 +46,9 @@ export class SurveyListComponent implements OnInit, AfterContentChecked, OnDestr
 
   private unsubscribe$ = new Subject();
 
+  // FACEBOOK
+  FB: any;
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['created', 'name', 'action'];
 
@@ -50,6 +56,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked, OnDestr
 
   constructor(
     public dialog: MatDialog,
+    public postDialog: MatDialog,
     private universalStorage: UniversalStorage,
     private _authService: AuthService,
     private _profileService: ProfileService,
@@ -187,4 +194,17 @@ export class SurveyListComponent implements OnInit, AfterContentChecked, OnDestr
     });
   }
 
+  facebookPost(id: any) {
+      const postRef = this.postDialog.open(ShareSurveyDialogComponent, {
+        data: id,
+      });
+
+      postRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('result is', result);
+        } else {
+          console.log('no result');
+        }
+      });
+    }
 }

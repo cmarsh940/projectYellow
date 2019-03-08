@@ -19,6 +19,7 @@ const SurveySchema = new mongoose.Schema({
   experationDate: {
     type: Date
   },
+  facebookPostId: { type: Array, "default": [] },
   incentive: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Incentive"

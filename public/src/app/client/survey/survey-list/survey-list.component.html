@@ -52,6 +52,14 @@
               <p>Take Survey</p>
             </button>
           </div>
+          <button mat-menu-item matTooltip="Post Survey to facebook" (click)="facebookPost(element._id)">
+            <mat-icon matTooltip="Edit" color="accent">
+              <i class="material-icons">
+                share
+              </i>
+            </mat-icon>
+            <p>Share</p>
+          </button>
           <button mat-menu-item matTooltip="Take Survey" [routerLink]="['edit', element._id]">
             <mat-icon matTooltip="Edit" color="accent">
               <i class="material-icons">

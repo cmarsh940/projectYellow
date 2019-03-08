@@ -46,11 +46,9 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy
     public dialogRef: MatDialogRef<RegisterDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any
   ) {
-    iconRegistry.addSvgIcon(
-      'facebook',
+    iconRegistry.addSvgIcon('facebook',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
-    iconRegistry.addSvgIcon(
-      'google',
+    iconRegistry.addSvgIcon('google',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'));
   }
 

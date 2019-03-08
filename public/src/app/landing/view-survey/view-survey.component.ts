@@ -1,3 +1,4 @@
+import { MetaService } from '@ngx-meta/core';
 import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, Inject, PLATFORM_ID, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
@@ -70,6 +71,7 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
+    private readonly meta: MetaService,
     public dialog: MatDialog,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
@@ -166,6 +168,10 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
             this._router.navigate(['/survey-closed']);
           }
           console.log('RETURNED SURVEY IS:', survey);
+          this.meta.setTag('og:title', survey.name);
+          this.meta.setTag('twitter:title', survey.name);
+          this.meta.setTag('og:description', 'Take our survey!');
+          this.meta.setTag('og:url', `https://surveysbyme.com/takeSurvey/${this.survey._id}`);
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }

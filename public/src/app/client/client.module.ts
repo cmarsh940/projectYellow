@@ -27,6 +27,7 @@ import { ProfileService } from './profile/profile.service';
 import { ClientService } from './client.service';
 import { NotificationComponent } from './notification/notification.component';
 import { DisableAccountComponent } from './profile/disable-account/disable-account.component';
+import { ShareSurveyDialogComponent } from './survey/share-survey-dialog/share-survey-dialog.component';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { DisableAccountComponent } from './profile/disable-account/disable-accou
     SubscriptionOverlayComponent,
     UploadUsersComponent,
     DisableAccountComponent,
-    WarnDialogComponent
+    WarnDialogComponent,
+    ShareSurveyDialogComponent
   ],
   providers: [
     ProfileService,

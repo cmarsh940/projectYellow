@@ -41,6 +41,7 @@ import { RightsComponent } from './policies/rights/rights.component';
 import { PoliciesModule } from './policies/policies.module';
 import { WarnDialogComponent } from './client/warn-dialog/warn-dialog.component';
 import { SubmitSurveyDialogComponent } from './landing/submit-survey-dialog/submit-survey-dialog.component';
+import { ShareSurveyDialogComponent } from './client/survey/share-survey-dialog/share-survey-dialog.component';
 
 export function initLanguage(translateService: TranslatesService): Function {
   return (): Promise<any> => translateService.initLanguage();
@@ -88,6 +89,7 @@ export function initLanguage(translateService: TranslatesService): Function {
     DisableAccountComponent,
     EditClientComponent,
     FeedbackComponent,
+    ShareSurveyDialogComponent,
     SubmitSurveyDialogComponent,
     SubscriptionOverlayComponent,
     RegisterDialogComponent,
