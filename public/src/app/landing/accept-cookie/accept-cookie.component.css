@@ -1,0 +1,9 @@
+.self {
+    width: 100%;
+    display: inline-flex;
+}
+
+button {
+    height: fit-content;
+    margin: auto;
+}

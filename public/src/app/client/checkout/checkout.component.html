@@ -15,7 +15,9 @@
         <div *ngFor="let plan of plans">
             <div *ngIf="plan.id === subscriptionId">
                 <h3>{{ plan.name }}</h3>
-                <h3>Payment amount: ${{plan.price}}</h3>
+                <h3>Plan amount: ${{plan.price}}</h3>
+                <h3>Tax: ${{plan.tax}}</h3>
+                <h3>Total: ${{plan.total}}</h3>
             </div>
         </div>
 

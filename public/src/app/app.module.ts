@@ -1,3 +1,4 @@
+import { AcceptCookieComponent } from './landing/accept-cookie/accept-cookie.component';
 import { DisableAccountComponent } from './client/profile/disable-account/disable-account.component';
 import { CookiesComponent } from './policies/cookies/cookies.component';
 import { OverviewModule } from './overview/overview.module';
@@ -85,6 +86,7 @@ export function initLanguage(translateService: TranslatesService): Function {
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   entryComponents: [
+    AcceptCookieComponent,
     AddUserComponent,
     DisableAccountComponent,
     EditClientComponent,
