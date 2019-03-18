@@ -81,6 +81,10 @@ button {
     margin-bottom: 2em;
 }
 
+#phonePrefix {
+    vertical-align: super;
+}
+
 
 @media (min-width: 900px) {
   .input-container {

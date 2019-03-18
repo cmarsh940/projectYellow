@@ -124,7 +124,8 @@
       <!-- PHONE -->
       <mat-form-field appearance="outline">
         <mat-hint align="start"><strong>No spaces Example: 9408088285</strong> </mat-hint>
-        <mat-label>Phone #</mat-label>
+        <mat-label>Telephone</mat-label>
+        <span matPrefix id="phonePrefix">+1 &nbsp;</span>
         <input matInput type="tel" [formControl]="phoneFormControl"  [errorStateMatcher]="matcher" autocomplete='tel-national'>
         <mat-error *ngIf="phoneFormControl.hasError('required')">
           Phone number is <strong>required</strong>

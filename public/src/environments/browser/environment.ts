@@ -20,6 +20,10 @@ export const environment = {
   // GOOGLE
   clientId: '312754153788-acm4ot95aftnmc568nj6mg23fjfq01vh.apps.googleusercontent.com',
 
+  // TWITTER
+  consumerKey: 'CKDbr4b6teVlJG32KmEiN1zf',
+  consumerSecret: 'z0E9jRzgYEK0tJa4XZCC61ED1MKVPB4i8ow0vzQyP0MYfpbJXp',
+  
   // REDIRECTS
   redirectUrl: 'http://localhost:4000/login',
   redirectLoginUrl: 'http://localhost:4000/dashboard',

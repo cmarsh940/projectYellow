@@ -10,7 +10,7 @@
         </div>
         
         <form [formGroup]="surveyForm" (ngSubmit)="submitForm()" class="form">
-            <ng-container [ngSwitch]="survey.layout">
+            <ng-container [ngSwitch]="survey?.layout">
                 <!-- STEPS LAYOUT -->
                 <ng-container *ngSwitchCase="'STEPS'">
                     <mat-horizontal-stepper formArrayName="questions" labelPosition="bottom" #stepper>

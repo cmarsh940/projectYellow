@@ -3,6 +3,10 @@
     max-width: 70em;
     height: 100%;
     margin: auto;
+    background-image: url("assets/img/background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .spacer {
@@ -24,6 +28,11 @@ mat-step-label {
 form {
     margin: auto;
     padding: 1em;
+    max-width: 55em;
+}
+
+.mat-card {
+  background-color:  #f9f9f970;
 }
 
 .mat-form-field {
@@ -48,6 +57,7 @@ form {
     text-decoration: black;
     font-size: large;   
     height: auto;
+    overflow: hidden;
 }
 
 .card-answer {
@@ -70,11 +80,6 @@ form {
     width: 100%;
 }
 
-.mat-card {
-    margin: 5em 0;
-    padding: 1em 0!important;
-}
-
 .mat-button-toggle-group {
     max-width: 100%;
 }
@@ -86,9 +91,6 @@ form {
     height: 1em;
 }
 
-#like-text, h6 {
-
-}
 
 .like-button {
     width: 9vw;

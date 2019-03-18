@@ -1,17 +1,17 @@
 import { MetaService } from '@ngx-meta/core';
-import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, Inject, PLATFORM_ID, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, Inject, PLATFORM_ID, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
-import { Subscription, Observable, fromEvent, merge } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { questionGroups, Question } from '@shared/models/question-group';
 import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
 import { GenericValidator } from '@shared/validators/generic-validator';
-import { debounceTime } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 import { MatDialog } from '@angular/material';
 import { SubmitSurveyDialogComponent } from '../submit-survey-dialog/submit-survey-dialog.component';
+import { takeUntil } from 'rxjs/operators';
 
 /**
 TODO:
@@ -22,13 +22,13 @@ TODO:
   templateUrl: './view-survey.component.html',
   styleUrls: ['./view-survey.component.css']
 })
-export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class ViewSurveyComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
   surveyId: string = '';
   errors = [];
-  _routeSubscription: Subscription;
+  private unsubscribe$ = new Subject();
   questionGroup = questionGroups;
   loaded: Boolean;
   currentPlatform: any;
@@ -106,8 +106,9 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
         questions: this.fb.array([this.buildQuestion()])
       });
 
-      this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+      this._activatedRoute.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
         this.surveyId = params['id'];
+        console.log('id is:', this.surveyId);
         this.getSurvey();
       });
 
@@ -115,19 +116,6 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
         this.loaded = true;
       }, 1000);
     }
-  }
-
-
-  ngAfterViewInit() {
-    // Watch for the blur event from any input element on the form.
-    const controlBlurs: Observable<any>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
-
-    // Merge the blur event observable with the valueChanges observable
-    merge(this.surveyForm.valueChanges, ...controlBlurs)
-      .pipe(debounceTime(800)).subscribe(value => {
-        this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
-      });
   }
 
   ngOnChanges() {
@@ -150,13 +138,16 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
 
 
   ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
   }
 
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId)
-      .subscribe(
+      .pipe(takeUntil(this.unsubscribe$)).subscribe(
         (survey: Survey) => {
           if (!survey) {
             this._router.navigate(['/404error']);
@@ -171,7 +162,7 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
           this.meta.setTag('og:title', survey.name);
           this.meta.setTag('twitter:title', survey.name);
           this.meta.setTag('og:description', 'Take our survey!');
-          this.meta.setTag('og:url', `https://surveysbyme.com/takeSurvey/${this.survey._id}`);
+          // this.meta.setTag('og:url', `https://surveysbyme.com/takeSurvey/${this.survey._id}`);
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }
