@@ -12,6 +12,7 @@ import { MetaGuard } from '@ngx-meta/core';
 import { ListSurveysComponent } from './list-surveys/list-surveys.component';
 import { ViewSurveyComponent } from './view-survey/view-survey.component';
 import { PrivateSurveyComponent } from './private-survey/private-survey.component';
+import { VerifiedComponent } from './verified/verified.component';
 
 
 const routes: Routes = [
@@ -69,6 +70,11 @@ const routes: Routes = [
         path: 'pSurvey/:id/:id',
         pathMatch: 'full',
         component: PrivateSurveyComponent
+      },
+      {
+        path: 'verified/:id/:id',
+        pathMatch: 'full',
+        component: VerifiedComponent
       },
     ]
   }

@@ -4,7 +4,7 @@ module.exports = [
         "name": "FREE",
         "price": 0.00,
         "tax": 0.00,
-        "total": 0.001,
+        "total": 0.00,
         "surveyCount": 5,
         "billingCycle": 1,
         "textSuport": false,

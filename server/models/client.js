@@ -164,7 +164,7 @@ const ClientSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     required: true,
-    default: true
+    default: false
   },
   _address: {
         type: mongoose.Schema.Types.ObjectId,

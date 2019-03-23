@@ -46,7 +46,7 @@ function uploadToS3(file, client) {
 
 
 function sendVerificationEmail(email) {
-  const url = `http://localhost:8000/verified/${email.client}/${email.message}`
+  const url = `${config.verifyRedirect}${email.client}/${email.message}`
   var output = ` 
     <h3>Hi ${email.name}!</h3>
     <br>

@@ -31,6 +31,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
   selected: any;
   amount: any;
   subscriptions = subscription;
+  selectedSubscription: any;
   clientId: any;
   planName = '';
   currentClient = new Client();
@@ -88,6 +89,14 @@ export class CheckoutComponent implements OnDestroy, OnInit {
           }
         }
         console.log('SELECTED PLAN', this.selectedPlan);
+        for (let i = 0; i < this.subscriptions.length; i++) {
+          const element = this.subscriptions[i];
+          console.log('element is:', element);
+          if (element.id === this.selectedPlan.id) {
+            this.selectedSubscription = element;
+          }
+        }
+        console.log(`selected subscription is ${this.selectedSubscription}, plan is ${this.selectedPlan}`);
       },
       error: err => {
         console.log('api error' + err);

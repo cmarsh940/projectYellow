@@ -9,7 +9,7 @@
             <h5 class="mat-title">{{ survey?.name | titlecase }}</h5>
         </div>
         
-        <form [formGroup]="surveyForm" (ngSubmit)="submitForm()" class="form">
+        <form [formGroup]="surveyForm" class="form">
             <ng-container [ngSwitch]="survey?.layout">
                 <!-- STEPS LAYOUT -->
                 <ng-container *ngSwitchCase="'STEPS'">
@@ -229,7 +229,7 @@
 
                                         <!-- DIRECTIONAL ARROWS -->
                                         <div *ngIf="i === 0 && survey?.questions?.length === 1" class="single-button">
-                                            <button mat-raised-button type="submit" [disabled]=!surveyForm.valid color="accent">Submit</button>
+                                            <button mat-raised-button (click)="submitForm()" [disabled]="!surveyForm.valid" color="accent">Submit</button>
                                         </div>
                                         <div *ngIf="i === 0 && survey?.questions?.length > 1" class="single-button">
                                             <button mat-stroked-button matStepperNext type="button" color="primary">
@@ -250,7 +250,7 @@
                                                 <img src="/assets/icons/arrow_back.svg" alt="navigate back icon"> Back
                                             </button>
                                             <span class="spacer"></span>
-                                            <button mat-raised-button type="submit" [disabled]=!surveyForm.valid color="accent">Submit</button>
+                                            <button mat-raised-button (click)="submitForm()" [disabled]="!surveyForm.valid" color="accent">Submit</button>
                                         </div>
                                     </mat-card-content>
                                 </mat-card>
@@ -522,7 +522,7 @@
                     <mat-card class="page-card">
                         <div class="submit-button">
                             <!-- SUBMIT BUTTON -->
-                            <button mat-raised-button type="submit" [disabled]=!surveyForm.valid color="accent" id="sub-but">Submit</button>
+                            <button mat-raised-button (click)="submitForm()" [disabled]="!surveyForm.valid" color="accent" id="sub-but">Submit</button>
                         </div>
                     </mat-card>
                 </ng-container>
