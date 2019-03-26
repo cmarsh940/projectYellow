@@ -4,6 +4,15 @@ const Client = mongoose.model('Client');
 const Survey = mongoose.model('Survey');
 
 class UsersController {
+    report(req, res) {
+        User.find({}).exec((err, users) => {
+            if (err) {
+                return res.json(err);
+            }
+            return res.json(users);
+        });
+    }
+
     
     create(req, res) {
         User.create(req.body, (err, user) => {

@@ -1,24 +1,78 @@
-<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<section>
+  <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
+
+    <!-- Created Column -->
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef>
+        Created
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.createdAt | date}}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>
+        Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <div *ngIf="element.role === 'admin'">
+          Admin {{element.firstName | titlecase }}
+        </div>
+        <div *ngIf="element.role === 'CLIENT'">
+          {{element.name | titlecase}}
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Surveys Column -->
+    <ng-container matColumnDef="surveys">
+      <mat-header-cell *matHeaderCellDef>
+        Surveys
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          {{element._surveys.length}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="sub">
+      <mat-header-cell *matHeaderCellDef> Subscription </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element._subscription }} </mat-cell>
+    </ng-container>
 
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element.firstName }} {{ element.lastName }} </mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="surveys">
-    <mat-header-cell *matHeaderCellDef> Surveys </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element._surveys.length }} </mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="sub">
-    <mat-header-cell *matHeaderCellDef> Subscription </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element._subscription }} </mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="created">
-    <mat-header-cell *matHeaderCellDef> Signed up </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element.createdAt | date }} </mat-cell>
-  </ng-container>
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
+    <!-- Action Column -->
+    <ng-container matColumnDef="action" stickyEnd>
+      <mat-header-cell *matHeaderCellDef>
+        <mat-icon class="action-icon">more_vert</mat-icon>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-icon-button [matMenuTriggerFor]="userAction" class="action-button">
+          <mat-icon class="action-icon">more_vert</mat-icon>
+        </button>
+        <mat-menu #userAction="matMenu" class="action">
+          <button mat-menu-item matTooltip="Edit User" [routerLink]="['edit', element._id]">
+            <mat-icon matTooltip="Edit" color="accent">
+              <i class="material-icons">
+                edit
+              </i>
+            </mat-icon>
+            <p>Edit User</p>
+          </button>
+          <button mat-menu-item matTooltip="Remove User" (click)="destroyUser(element._id)">
+            <mat-icon color="warn">
+              <i class="material-icons">
+                delete_forever
+              </i>
+            </mat-icon>
+            <p>Remove User</p>
+          </button>
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true"
+    [length]="totalSize" [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+  </mat-paginator>
+</section>

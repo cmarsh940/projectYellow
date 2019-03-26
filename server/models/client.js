@@ -134,11 +134,11 @@ const ClientSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
+    enum: ['CLIENT', 'SKIPPER'],
     required: true,
     uppercase: true,
     trim: true,
-    default: "CLIENT"
+    default: "SKIPPER"
   },
   subscriptionId: {
     type: String,
@@ -192,7 +192,7 @@ const ClientSchema = new mongoose.Schema({
   },
   _subscription: {
     type: String,
-    enum: ['FREE', 'BASIC', 'PRO', 'ELITE', 'CANCELED'],
+    enum: ['FREE', 'BASIC', 'PRO', 'ELITE', 'BASIC ANNUALLY', 'PRO ANNUALLY', 'ELITE ANNUALLY', 'CANCELED'],
     required: true,
     uppercase: true,
     trim: true,

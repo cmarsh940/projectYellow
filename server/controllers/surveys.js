@@ -27,6 +27,15 @@ class SurveysController {
     })
   }
 
+  report(req, res) {
+    Survey.find({}).exec((err, surveys) => {
+      if (err) {
+        return res.json(err);
+      }
+      return res.json(surveys);
+    });
+  }
+
   create(req, res) {
     console.log("BODY IS:", req.body);
     Survey.create(req.body, (err, survey) => {

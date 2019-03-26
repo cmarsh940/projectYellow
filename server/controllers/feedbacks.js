@@ -2,6 +2,14 @@ const mongoose = require('mongoose');
 const Feedback = mongoose.model('Feedback');
 
 class FeedbacksController {
+    report(req, res) {
+        Feedback.find({}).exec((err, feedbacks) => {
+            if (err) {
+                return res.json(err);
+            }
+            return res.json(feedbacks);
+        });
+    }
 
     create(req, res) {
         console.log("___ SERVER HIT CREATE FEEDBACK ___");

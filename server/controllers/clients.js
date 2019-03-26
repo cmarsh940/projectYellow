@@ -89,7 +89,7 @@ function sendVerificationEmail(email) {
 }
 
 class ClientsController {
-  index(req, res) {
+  report(req, res) {
     Client.find({}).populate('connections.item').exec((err, clients) => {
       if (err) {
         return res.json(err);
@@ -169,12 +169,12 @@ class ClientsController {
                 else if (client.registerPlatform === "F" || client.registerPlatform === "G") {
                   
                   console.log("*** SERVER CLIENT CREATED");
-
+                  let atype = client.role.slice(0, 1);
                   let token = jwt.sign({ client }, secret, { expiresIn: 604800 });
                   req.session.client = {
                     _id: client._id,
                     n: client.firstName + " " + client.lastName,
-                    a8o1: client.role,
+                    a8o1: atype,
                     b8o1: client._subscription,
                     c8o1: client.surveyCount,
                     d: client.lastUseDate,
@@ -221,10 +221,11 @@ class ClientsController {
         // CHECK IF CLIENT IS IN TRIAL OR SUBSCRIPTION
         if (client.subscriptionStatus === 'Trial') {
           console.log("_____SUBSCRIPTION IS TRIAL_____");
+          let atype = client.role.slice(0, 1);
           req.session.client = {
             _id: client._id,
             n: client.firstName + " " + client.lastName,
-            a8o1: client.role,
+            a8o1: atype,
             b8o1: client._subscription,
             c8o1: client.surveyCount,
             d: client.lastUseDate,
@@ -277,10 +278,11 @@ class ClientsController {
                     return res.json(err);
                   }
                   console.log(`___ UPDATED SUBSCRIBED CLIENT ___`);
+                  let atype = subscribedClient.role.slice(0, 1);
                   req.session.client = {
                     _id: subscribedClient._id,
                     n: subscribedClient.firstName + " " + subscribedClient.lastName,
-                    a8o1: subscribedClient.role,
+                    a8o1: atype,
                     b8o1: subscribedClient._subscription,
                     c8o1: subscribedClient.surveyCount,
                     d: subscribedClient.lastUseDate,
@@ -295,10 +297,11 @@ class ClientsController {
               });
             } else {
               console.log("_____PROBLEM WITH PAYMENT TIME_____");
+              let atype = client.role.slice(0, 1);
               req.session.client = {
                 _id: client._id,
                 n: client.firstName + " " + client.lastName,
-                a8o1: client.role,
+                a8o1: atype,
                 b8o1: client._subscription,
                 c8o1: client.surveyCount,
                 d: client.lastUseDate,
@@ -352,9 +355,10 @@ class ClientsController {
           return res.json(err);
         }
         console.log('client is:', client);
+        let atype = client.role.slice(0, 1);
         req.session.client = {
           n: client.firstName + " " + client.lastName,
-          a8o1: client.role,
+          a8o1: atype,
           b8o1: client._subscription,
           c8o1: client.surveyCount,
           d: client.lastUseDate,

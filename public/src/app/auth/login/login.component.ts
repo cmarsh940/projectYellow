@@ -230,7 +230,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
             this.errors = error.message;
           }
         } else {
-          if (data.a8o1 === 'CAPTAIN') {
+          if (data.a8o1 === 'S') {
             this._authService.setCurrentClient(data);
             this._router.navigateByUrl('/overview');
           } else {

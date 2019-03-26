@@ -3,6 +3,14 @@ const Category = mongoose.model('Category');
 
 class CategoriesController {
     index(req, res) {
+        Category.find({}).exec((err, categories) => {
+            if (err) {
+                return res.json(err);
+            }
+            return res.json(categories);
+        });
+    }
+    report(req, res) {
         Category.find({}).populate('connections.item').exec((err, categories) => {
             if (err) {
                 return res.json(err);
@@ -13,15 +21,6 @@ class CategoriesController {
     
     create(req, res) {
         Category.create(req.body, (err, category) => {
-            if (err) {
-                return res.json(err);
-            }
-            return res.json(category);
-        });
-    }
-
-    show(req, res) {
-        Category.findById({ _id: req.params.id }).populate('connections.item').exec((err, category) => {
             if (err) {
                 return res.json(err);
             }

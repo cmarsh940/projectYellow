@@ -88,6 +88,7 @@ export class AuthService {
     if (isPlatformBrowser(this.platformId)) {
       this.universalStorage.setItem('token', token);
       this.universalStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+      this.universalStorage.setItem('a8o1', client.a8o1);
       this.universalStorage.setItem('t940', client._id);
       localStorage.setItem('currentClient', JSON.stringify(client));
     }
@@ -171,7 +172,7 @@ export class AuthService {
     if (isPlatformBrowser(this.platformId)) {
       const data = JSON.parse(localStorage.getItem('currentUser'));
       if (data) {
-        if (data.a8o1 === 'CAPTAIN') {
+        if (data.a8o1 === 'S') {
           return true;
         } else {
           return false;
@@ -209,6 +210,21 @@ export class AuthService {
           return data;
         }
       }
+  }
+
+  getRoleToken() {
+    console.log('HIT GET ROLE TOKEN FROM AUTH SERVICE');
+    if (this.universalStorage.getItem('a8o1') === null || this.universalStorage.getItem('a8o1') === undefined) {
+      console.log('NO TOKEN HAS BEEN SET');
+      return false;
+    }
+    if (this.universalStorage.getItem('a8o1') === 'S') {
+      let id = this.universalStorage.getItem('a8o1');
+      console.log('id is:', id);
+      return id;
+    } else {
+      return false;
+    }
   }
 
   getExpiration() {

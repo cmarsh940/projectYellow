@@ -14,6 +14,7 @@ import { SurveyCategoryReportComponent } from './survey-category-report/survey-c
 import { SubscriptionReportComponent } from './subscription-report/subscription-report.component';
 import { EditCategoryComponent } from './survey-category-report/edit-category/edit-category.component';
 import { OverviewNavComponent } from '@shared/layouts/overview-nav/overview-nav.component';
+import { OverviewService } from './overview.service';
 
 @NgModule({
   imports: [
@@ -34,6 +35,9 @@ import { OverviewNavComponent } from '@shared/layouts/overview-nav/overview-nav.
     EditCategoryComponent,
     AddCategoryComponent,
     SubscriptionReportComponent
+  ],
+  providers: [
+    OverviewService
   ]
 })
 export class OverviewModule { }

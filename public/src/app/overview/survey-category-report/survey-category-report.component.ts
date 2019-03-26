@@ -1,8 +1,7 @@
+import { SurveyCategoryService } from 'app/overview/survey-category-report/survey-category.service';
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../auth/auth.service';
-import { Router } from '@angular/router';
-import { SurveyCategoryService } from './survey-category.service';
 import { SurveyCategory } from '@shared/models/survey-category';
+import { OverviewService } from '../overview.service';
 
 @Component({
   selector: 'app-survey-category-report',
@@ -15,6 +14,7 @@ export class SurveyCategoryReportComponent implements OnInit {
   errorMessage;
 
   constructor(
+    private _overviewService: OverviewService,
     private _surveyCategory: SurveyCategoryService
   ) { }
 
@@ -25,7 +25,7 @@ export class SurveyCategoryReportComponent implements OnInit {
 
   loadAll(): Promise<any> {
     const tempList = [];
-    return this._surveyCategory.getAll()
+    return this._overviewService.getAllCategories()
       .toPromise()
       .then((result) => {
         this.errorMessage = null;

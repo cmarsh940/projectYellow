@@ -44,10 +44,37 @@ async function validJWTNeeded(req, res, next) {
     }
 };
 
+async function validRole(req, res, next) {
+    if (req.headers['sh1p']) {
+        console.log("RECIEVED HEADER WITH ROLE IN IT");
+        try {
+            let Role = await req.headers['sh1p'].split(' ');
+            if (Role[0] !== 'Anchored') {
+                console.log("Not Valid");
+                return res.status(401).send();
+            } else {
+                console.log("ROLE IS SET");
+                return next();
+            }
+        }
+        catch (err) {
+            if (err.name === 'ROLE ERRO') {
+                console.log("ERROR ROLE", err);
+                return res.json(err);
+            } else {
+                console.log("ERROR", err)
+                return res.status(403).send();
+            }
+        }
+    } else {
+        console.log("ELSE");
+        return res.status(401).send();
+    }
+};
+
 
 module.exports = function (app) {
     // CLIENT
-    app.get('/api/clients', Clients.index);
     app.post('/api/clients', Clients.create);
     app.delete('/api/clients', [
         validJWTNeeded, 
@@ -94,6 +121,7 @@ module.exports = function (app) {
         validJWTNeeded,
         Clients.upload
     ]);
+
 
     // PAYMENTS
     app.get('/api/braintree/getclienttoken', [
@@ -144,6 +172,7 @@ module.exports = function (app) {
     app.put('/api/answer/surveys/:id', Surveys.answerSurvey);
     app.put('/api/answer/pSurveys/:id', Surveys.answerPrivateSurvey);
 
+
     // SURVEY CATEGORIES
     app.get('/api/survey-categories', [
         validJWTNeeded,
@@ -157,10 +186,6 @@ module.exports = function (app) {
         validJWTNeeded,
         Categories.delete
     ]);
-    app.get('/api/survey-categories/:id', [
-        validJWTNeeded,
-        Categories.show
-    ]);
     app.put('/api/survey-categories/:id', [
         validJWTNeeded,
         Categories.update
@@ -173,7 +198,11 @@ module.exports = function (app) {
         Texts.text
     ]);
 
-    // USERS
+    app.get('/api/users', [
+        validJWTNeeded,
+        Users.report
+    ])
+
     app.post('/api/users', [
         validJWTNeeded,
         Users.create
@@ -196,8 +225,32 @@ module.exports = function (app) {
         Users.upload
     ]);
 
-    // CATCH ALL
-    // app.all('*', (req, res, next) => {
-    //     res.sendFile(path.resolve('./public/dist/index.html'));
-    // })
+
+    // REPORTS
+    app.get('/api/reports/clients', [
+        validJWTNeeded,
+        validRole,
+        Clients.report
+    ]);
+    app.get('/api/reports/feedbacks', [
+        validJWTNeeded,
+        validRole,
+        Feedbacks.report
+    ]);
+    app.get('/api/reports/surveys', [
+        validJWTNeeded,
+        validRole,
+        Surveys.report
+    ]);
+    app.get('/api/reports/survey-categories', [
+        validJWTNeeded,
+        validRole,
+        Categories.report
+    ]);
+    app.get('/api/reports/users', [
+        validJWTNeeded,
+        validRole,
+        Users.report
+    ]);
+
 }
