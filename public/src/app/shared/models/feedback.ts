@@ -1,4 +1,5 @@
 export class Feedback {
+    _id: any;
     feedbackType: string;
     name?: string;
     email?: string;

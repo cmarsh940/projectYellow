@@ -28,6 +28,27 @@ function deepFlatten(arr) {
   );
 }
 
+function fancyTimeFormat(time) {
+  // Hours, minutes and seconds
+  // tslint:disable-next-line: no-bitwise
+  let hrs = ~~(time / 3600);
+  // tslint:disable-next-line: no-bitwise
+  let mins = ~~((time % 3600) / 60);
+  // tslint:disable-next-line: no-bitwise
+  let secs = ~~time % 60;
+
+  // Output like "1:01" or "4:03:59" or "123:03:59"
+  let ret = '';
+
+  if (hrs > 0) {
+    ret += '' + hrs + ':' + (mins < 10 ? '0' : '');
+  }
+
+  ret += '' + mins + ':' + (secs < 10 ? '0' : '');
+  ret += '' + secs;
+  return ret;
+}
+
 @Component({
   selector: 'app-survey-analytics',
   templateUrl: './survey-analytics.component.html',
@@ -243,9 +264,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       this.private = res.private;
       this.total = res.totalAnswers;
       // tslint:disable-next-line: no-bitwise
-      this.timeTotal = `${res.surveyTime / 60 ^ 0}:` + res.surveyTime % 60;
+      this.timeTotal = fancyTimeFormat(res.surveyTime);
       // tslint:disable-next-line: no-bitwise
-      this.surveyAvg = `${res.averageTime / 60 ^ 0}:` + res.averageTime % 60;
+      this.surveyAvg = fancyTimeFormat(res.averageTime);
 
 
       // SET QUESTIONS

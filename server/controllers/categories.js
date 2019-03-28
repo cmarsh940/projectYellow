@@ -11,7 +11,7 @@ class CategoriesController {
         });
     }
     report(req, res) {
-        Category.find({}).populate('connections.item').exec((err, categories) => {
+        Category.find({}).populate('connections.item').select("+_surveys").exec((err, categories) => {
             if (err) {
                 return res.json(err);
             }

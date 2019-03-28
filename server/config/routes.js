@@ -115,6 +115,11 @@ module.exports = function (app) {
 
     // FEEDBACK
     app.post('/api/upload/feedback', Feedbacks.create);
+    app.put('/api/feedbacks/:id', [
+        validJWTNeeded,
+        validRole,
+        Feedbacks.update
+    ]);
 
     // IMAGES
     app.post('/api/upload/portfolio/:id', [
@@ -231,6 +236,16 @@ module.exports = function (app) {
         validJWTNeeded,
         validRole,
         Clients.report
+    ]);
+    app.get('/api/reports/emails', [
+        validJWTNeeded,
+        validRole,
+        EmailSubs.report
+    ]);
+    app.delete('/api/reports/emails/:id', [
+        validJWTNeeded,
+        validRole,
+        EmailSubs.delete
     ]);
     app.get('/api/reports/feedbacks', [
         validJWTNeeded,

@@ -5,6 +5,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 // tslint:disable-next-line: max-line-length
 import { MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatDialog, MatSnackBar, MatIconRegistry, MatSnackBarConfig } from '@angular/material';
 import { RightsComponent } from 'app/policies/rights/rights.component';
+import { FeedbackComponent } from '@shared/feedback/feedback.component';
+import { UploadService } from '@shared/services/upload.service';
 
 
 @Component({
@@ -31,7 +33,7 @@ export class MainFooterComponent {
   contactEmail = 'mailto:surveysbyme@mellcgroup.com';
 
   constructor(
-    // private _uploadService: UploadService,
+    private _uploadService: UploadService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     iconRegistry: MatIconRegistry,
@@ -56,33 +58,33 @@ export class MainFooterComponent {
   }
 
   openFeedback() {
-    // const feedbackRef = this.dialog.open(FeedbackComponent);
+    const feedbackRef = this.dialog.open(FeedbackComponent);
 
-    // feedbackRef.afterClosed().subscribe(result => {
-    //   console.log(`Feedback result: ${result}`);
-    // });
+    feedbackRef.afterClosed().subscribe(result => {
+      console.log(`Feedback result: ${result}`);
+    });
   }
 
   addEmailSub(form: any) {
-    // this.errors = null;
-    // this.emailSub = {
-    //   'email': this.emailFormControl.value,
-    // };
+    this.errors = null;
+    this.emailSub = {
+      'email': this.emailFormControl.value,
+    };
 
-    // this._uploadService.addEmailSub(this.emailSub).subscribe((data) => {
-    //   if (data) {
-    //     if (data.errors) {
-    //       console.log("___ DATA ERROR ___:", data.errors);
-    //       this.errors = data.errors.email.message;
-    //     } else {
-    //       this.errors = null;
-    //       this.emailSubForm.setValue({
-    //         'email': null,
-    //       });
-    //       this.openSnackBar();
-    //     }
-    //   }
-    // })
+    this._uploadService.addEmailSub(this.emailSub).subscribe((data) => {
+      if (data) {
+        if (data.errors) {
+          console.log('___ DATA ERROR ___:', data.errors);
+          this.errors = data.errors.email.message;
+        } else {
+          this.errors = null;
+          this.emailSubForm.setValue({
+            'email': null,
+          });
+          this.openSnackBar();
+        }
+      }
+    });
   }
 
   openSnackBar() {

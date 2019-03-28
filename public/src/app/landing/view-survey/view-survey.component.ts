@@ -101,7 +101,6 @@ export class ViewSurveyComponent implements OnInit, OnChanges, OnDestroy {
       this.currentPlatform = window.clientInformation.vendor;
       this.agent = window.clientInformation.userAgent;
 
-      this.startTimer();
       this.surveyForm = this.fb.group({
         questions: this.fb.array([this.buildQuestion()])
       });
@@ -113,6 +112,7 @@ export class ViewSurveyComponent implements OnInit, OnChanges, OnDestroy {
       });
 
       setTimeout(() => {
+        this.startTimer();
         this.loaded = true;
       }, 1000);
     }
@@ -238,7 +238,10 @@ export class ViewSurveyComponent implements OnInit, OnChanges, OnDestroy {
   // prepareSaveSurvey(): Survey {
     const tempTotal = this.survey.totalAnswers + 1;
     const allTime = this.survey.surveyTime + this.interval;
+    console.log('intervals are:', this.interval);
+    console.log('all time id:', allTime);
     this.timeAverage = allTime / tempTotal;
+    console.log('time average is:', this.timeAverage);
 
     // CANCEL INTERVALS
     clearInterval(this.interval);

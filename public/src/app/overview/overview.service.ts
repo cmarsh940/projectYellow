@@ -30,6 +30,10 @@ export class OverviewService {
     let NAMESPACE = 'reports/surveys';
     return this.dataService.getAll(NAMESPACE);
   }
+  public getAllEmails(): Observable<any[]> {
+    let NAMESPACE = 'reports/emails';
+    return this.dataService.getAll(NAMESPACE);
+  }
 
   public getparticipant(id: any): Observable<any> {
     let NAMESPACE = 'reports/users';
@@ -45,6 +49,11 @@ export class OverviewService {
     return this.dataService.add(NAMESPACE, itemToAdd);
   }
 
+  public updateFeedback(id: any, itemToUpdate: any): Observable<any> {
+    let NAMESPACE = 'feedbacks';
+    return this.dataService.update(NAMESPACE, id, itemToUpdate);
+  }
+
   public updateParticipant(id: any, itemToUpdate: any): Observable<any> {
     let NAMESPACE = 'users';
     return this.dataService.update(NAMESPACE, id, itemToUpdate);
@@ -57,6 +66,10 @@ export class OverviewService {
 
   public deleteParticipant(id: any): Observable<any> {
     let NAMESPACE = 'reports/users';
+    return this.dataService.delete(NAMESPACE, id);
+  }
+  public deleteEmail(id: any): Observable<any> {
+    let NAMESPACE = 'reports/emails';
     return this.dataService.delete(NAMESPACE, id);
   }
 }

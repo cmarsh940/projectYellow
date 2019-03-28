@@ -28,7 +28,10 @@ class SurveysController {
   }
 
   report(req, res) {
-    Survey.find({}).exec((err, surveys) => {
+    Survey.find({})
+      .populate('category')
+      .populate('creator')
+      .exec((err, surveys) => {
       if (err) {
         return res.json(err);
       }

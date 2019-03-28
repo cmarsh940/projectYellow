@@ -15,6 +15,9 @@ import { SubscriptionReportComponent } from './subscription-report/subscription-
 import { EditCategoryComponent } from './survey-category-report/edit-category/edit-category.component';
 import { OverviewNavComponent } from '@shared/layouts/overview-nav/overview-nav.component';
 import { OverviewService } from './overview.service';
+import { FeedbackReportComponent } from './feedback-report/feedback-report.component';
+import { EmailReportComponent } from './email-report/email-report.component';
+import { ViewFeedbackComponent } from './feedback-report/view-feedback/view-feedback.component';
 
 @NgModule({
   imports: [
@@ -34,7 +37,10 @@ import { OverviewService } from './overview.service';
     SurveyCategoryReportComponent,
     EditCategoryComponent,
     AddCategoryComponent,
-    SubscriptionReportComponent
+    SubscriptionReportComponent,
+    FeedbackReportComponent,
+    EmailReportComponent,
+    ViewFeedbackComponent
   ],
   providers: [
     OverviewService

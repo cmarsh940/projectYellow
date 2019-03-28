@@ -23,6 +23,23 @@ class FeedbacksController {
             return res.json(feedback);
         });
     }
+    
+    update(req, res) {
+        console.log("___ SERVER HIT UPDATE FEEDBACK ___");
+        Feedback.findByIdAndUpdate(
+            req.params.id,
+            { $set: req.body },
+            { new: true },
+            (err, feedback) => {
+                if (err) {
+                    console.log('Error updating feedback', err);
+                    return res.json(err);
+                }
+                console.log('updated feedback is:', feedback);
+                return res.json(feedback);
+            }
+        );
+    }
 }
 
 module.exports = new FeedbacksController();

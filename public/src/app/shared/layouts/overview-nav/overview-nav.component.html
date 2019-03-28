@@ -14,28 +14,37 @@
       </a>
       <mat-divider></mat-divider>
       <a mat-list-item routerLink="/overview" (click)="drawer.toggle()">
-        <mat-icon mat-list-icon>dashboard</mat-icon>
+        <mat-icon mat-list-icon>public</mat-icon>
         <h4 mat-line>Overview</h4>
       </a>
       <a mat-list-item routerLink="/dashboard" (click)="drawer.toggle()">
         <mat-icon mat-list-icon>dashboard</mat-icon>
         <h4 mat-line>Dashboard</h4>
       </a>
-      <a mat-list-item [routerLink]="['surveyReport']" (click)="drawer.toggle()">
-        <mat-icon mat-list-icon>assignment</mat-icon>
-        <h4 mat-line>Surveys</h4>
-      </a>
+      <mat-divider></mat-divider>
       <a mat-list-item [routerLink]="['surveyCategoriesReport']" (click)="drawer.toggle()">
         <mat-icon mat-list-icon>category</mat-icon>
-        <h4 mat-line>Survey Categories</h4>
+        <h4 mat-line>Categories</h4>
       </a>
-      <a mat-list-item [routerLink]="['clientReport']" (click)="drawer.toggle()"> 
+      <a mat-list-item [routerLink]="['clientReport']" (click)="drawer.toggle()">
         <mat-icon mat-list-icon>group</mat-icon>
         <h4 mat-line>Clients</h4>
       </a>
-      <a mat-list-item [routerLink]="['subscriptionReport']" (click)="drawer.toggle()">
-        <mat-icon mat-list-icon>group</mat-icon>
-        <h4 mat-line>Subscriptions (SOON)</h4>
+      <a mat-list-item [routerLink]="['emailReport']" (click)="drawer.toggle()" disabled>
+        <mat-icon mat-list-icon>email</mat-icon>
+        <h4 mat-line>Email List</h4>
+      </a>
+      <a mat-list-item [routerLink]="['feedbackReport']" (click)="drawer.toggle()" disabled>
+        <mat-icon mat-list-icon>feedback</mat-icon>
+        <h4 mat-line>Feedbacks</h4>
+      </a>
+      <a mat-list-item [routerLink]="['subscriptionReport']" (click)="drawer.toggle()" disabled>
+        <mat-icon mat-list-icon>subscriptions</mat-icon>
+        <h4 mat-line>Subscriptions</h4>
+      </a>
+      <a mat-list-item [routerLink]="['surveyReport']" (click)="drawer.toggle()">
+        <mat-icon mat-list-icon>assignment</mat-icon>
+        <h4 mat-line>Surveys</h4>
       </a>
     </mat-nav-list>
   </mat-sidenav>

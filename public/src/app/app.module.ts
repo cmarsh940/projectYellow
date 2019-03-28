@@ -37,12 +37,12 @@ import { SubscriptionOverlayComponent } from './client/profile/subscription-over
 import { UploadUsersComponent } from './client/user/upload-users/upload-users.component';
 import { AuthService } from './auth/auth.service';
 import { AuthInterceptor } from '@shared/interceptors/auth-interceptor';
-import { NgtUniversalModule } from '@ng-toolkit/universal';
 import { RightsComponent } from './policies/rights/rights.component';
 import { PoliciesModule } from './policies/policies.module';
 import { WarnDialogComponent } from './client/warn-dialog/warn-dialog.component';
 import { SubmitSurveyDialogComponent } from './landing/submit-survey-dialog/submit-survey-dialog.component';
 import { ShareSurveyDialogComponent } from './client/survey/share-survey-dialog/share-survey-dialog.component';
+import { ViewFeedbackComponent } from './overview/feedback-report/view-feedback/view-feedback.component';
 
 export function initLanguage(translateService: TranslatesService): Function {
   return (): Promise<any> => translateService.initLanguage();
@@ -55,7 +55,6 @@ export function initLanguage(translateService: TranslatesService): Function {
     OverviewModule,
     LandingModule,
     PoliciesModule,
-    NgtUniversalModule,
     TransferHttpCacheModule,
     HttpModule,
     HttpClientModule,
@@ -98,6 +97,7 @@ export function initLanguage(translateService: TranslatesService): Function {
     RightsComponent,
     CookiesComponent,
     UploadUsersComponent,
+    ViewFeedbackComponent,
     WarnDialogComponent
   ]
 })

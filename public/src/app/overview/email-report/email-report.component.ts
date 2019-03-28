@@ -1,28 +1,20 @@
+import { EmailSub } from './../../shared/models/emailSub';
 import { Component, OnInit, AfterContentChecked, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { SurveyService } from '../../client/survey/survey.service';
-import { Survey } from '@shared/models/survey';
-import { MatPaginator } from '@angular/material';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { OverviewService } from '../overview.service';
 
-
-export interface Type {
-  value: string;
-  viewValue: string;
-}
-
 @Component({
-  selector: 'app-survey-report',
-  templateUrl: './survey-report.component.html',
-  styleUrls: ['./survey-report.component.css']
+  selector: 'app-email-report',
+  templateUrl: './email-report.component.html',
+  styleUrls: ['./email-report.component.css']
 })
-export class SurveyReportComponent implements OnInit, AfterContentChecked {
-  dataSource: any;
-  errors: any;
+export class EmailReportComponent implements OnInit, AfterContentChecked {
+  errors; any;
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['owner', 'name', 'category', 'action'];
+  allEmails = [];
 
   // PAGINATE
+  dataSource: any;
   array: any;
   resultsLength = 0;
   pageSize = 10;
@@ -31,14 +23,19 @@ export class SurveyReportComponent implements OnInit, AfterContentChecked {
   legth = 0;
   pageEvent;
 
+
+  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
+  displayedColumns = ['created', 'email', 'action'];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    private _overviewService: OverviewService,
+    public _overviewService: OverviewService,
     private cdref: ChangeDetectorRef
-  ) { }
+  ) {
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadAll();
   }
 
@@ -47,16 +44,12 @@ export class SurveyReportComponent implements OnInit, AfterContentChecked {
   }
 
   loadAll(): Promise<any> {
-    const tempList = [];
-    return this._overviewService.getAllSurveys()
+    return this._overviewService.getAllEmails()
       .toPromise()
       .then((result) => {
-        console.log('data', result);
+        console.log('all jobs are:', result);
         this.errors = null;
-        result.forEach(asset => {
-          tempList.push(asset);
-        });
-        this.dataSource = tempList;
+        this.dataSource = new MatTableDataSource<Element>(result);
         this.dataSource.paginator = this.paginator;
         this.array = result;
         if (!this.array) {
@@ -66,12 +59,12 @@ export class SurveyReportComponent implements OnInit, AfterContentChecked {
         }
       })
       .catch((error) => {
-        console.log('Retreaving Surveys Error', error);
+        console.log('Error', error);
       });
   }
 
-  TrackById(index: number, survey: Survey) {
-    return survey._id;
+  TrackById(index: number, email: EmailSub) {
+    return email._id;
   }
 
   handlePage(e: any) {
@@ -89,4 +82,12 @@ export class SurveyReportComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  destroy(id: string) {
+    this._overviewService.deleteEmail(id).subscribe(res => {
+      console.log('DESTROY EMAIL', res);
+      if (true) {
+        this.loadAll();
+      }
+    });
+  }
 }
