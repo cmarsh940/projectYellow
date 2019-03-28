@@ -1,37 +1,54 @@
 <footer>
-  <mat-grid-list cols="3" rowHeight="50px">
+  <section>
+    <div class="sub-header">
+      <h5>{{ "footer.header" | translate }}</h5>
+    </div>
+    <div *ngIf="errors" class="errors">
+      <span>{{ errors }}</span>
+    </div>
+    <form [formGroup]="emailSubForm">
+      <mat-form-field class="emailSub">
+        <mat-label>email</mat-label>
+        <input matInput autocomplete="email" [formControl]="emailFormControl" />
+        <button mat-icon-button type="submit" (click)="addEmailSub(emailSubForm)" [disabled]="!emailSubForm.valid"
+          matSuffix>
+          <mat-icon color="accent">
+            send
+          </mat-icon>
+        </button>
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('maxlength')">
+          cannot be > then 250 charactors
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </section>
+  <mat-grid-list cols="4" rowHeight="50px">
     <!-- LEFT COLUMN -->
     <mat-grid-tile colspan="2" rowspan="4" id="left-column">
       <ul>
         <li><h5>{{ "footer.left" | translate }}</h5></li>
         <li>
-          <form [formGroup]="emailSubForm">
-          <div *ngIf="errors" class="errors">
-            <span>{{ errors }}</span>
-          </div>
-          <mat-form-field class="emailSub">
-            <mat-label>email</mat-label>
-            <input matInput autocomplete="email" [formControl]="emailFormControl" />
-            <button mat-icon-button type="submit" (click)="addEmailSub(emailSubForm)" [disabled]="!emailSubForm.valid" matSuffix>
-              <mat-icon color="accent">
-                send
-              </mat-icon>
-            </button>
-            <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-              Please enter a valid email
-            </mat-error>
-            <mat-error *ngIf="emailFormControl.hasError('required')">
-              Email is <strong>required</strong>
-            </mat-error>
-            <mat-error *ngIf="emailFormControl.hasError('maxlength')">
-              cannot be > then 250 charactors
-            </mat-error>
-          </mat-form-field>
-        </form></li>
+          <a routerLink="/about">
+            <mat-icon aria-label="Contact Icon">domain</mat-icon>
+            <span> About Us</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/policies">
+            <mat-icon aria-label="Contact Icon" color="accent">error_outline</mat-icon>
+            <span> Policies</span>
+          </a>
+        </li>
       </ul>
     </mat-grid-tile>
     <!-- RIGHT COLUMN -->
-    <mat-grid-tile colspan="1" rowspan="4">
+    <mat-grid-tile colspan="2" rowspan="4">
       <ul id="services-list">
         <li>
           <h5>{{ "footer.right" | translate }}</h5>
@@ -57,7 +74,7 @@
       </ul>
     </mat-grid-tile>
     <!-- BOTTOM COPY RIGHT -->
-    <mat-grid-tile colspan="3" rowspan="1">
+    <mat-grid-tile colspan="4" rowspan="1">
       <button mat-button (click)="openDialog()" id="copyright">&copy; 2019 ME LLC Group. {{ "footer.copyright" | translate }}</button>
     </mat-grid-tile>
   </mat-grid-list>

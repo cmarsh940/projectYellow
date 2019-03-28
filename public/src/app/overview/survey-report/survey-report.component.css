@@ -1,24 +1,46 @@
-form {
-    margin: auto;
-    padding: 1em;
-}
-
-.mat-form-field {
-    display: block;
-}
-
 .spacer {
   flex: 1 1 auto;
 }
 
-#submit-button {
-    width:100%;
+#add-button {
+    margin: 1em;
 }
 
-button {
-    width: 90%;
+.mat-paginator {
+    display: block;
+    position: fixed!important;
+    bottom: 0!important;
+    width: 100%;
 }
 
-#button-group {
-    margin: 2em 0;
+.mat-button, p {
+  display: inline-block;
+  margin: 0 3px;
+}
+
+mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
+    padding-left: 20px;
+    max-width: 30%;
+}
+
+mat-header-cell:last-of-type, mat-cell:last-of-type, mat-footer-cell:last-of-type {
+    padding: 0;
+    max-width: 3em!important;
+}
+
+mat-cell.mat-button-wrapper {
+    margin: auto!important;
+}
+
+.action-button {
+    display: inline-flex;
+    right: 0;
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+}
+
+.action-icon {
+    margin: auto;
+    width: 100%;
 }

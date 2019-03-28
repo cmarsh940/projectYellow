@@ -39,7 +39,13 @@ const FeedbackSchema = new mongoose.Schema({
     screenshot: {
         type: String,
         get: v => `${root}${v}`
-    }  
+    },
+     
+    status: {
+        type: String,
+        enum: ["NEW", "VIEWED", "OPENED", "CLOSED"],
+        default: "NEW"
+    }
 }, { timestamps: true });
 
 const Feedback = mongoose.model('Feedback', FeedbackSchema);

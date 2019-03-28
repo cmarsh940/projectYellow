@@ -1,10 +1,8 @@
 .container {
     width: 100%;
+    max-width: 70em;
     height: 100%;
-    background-image: url("assets/img/background.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    margin: auto;
 }
 .info {
     padding-top: 3em;
@@ -75,15 +73,19 @@ img {
     text-align: center;
 }
 
+.action {
+    width: 100%;
+    text-align: center;
+}
+
 .action button {
     width: 100%;
+    max-width: 25em;
 }
 .action button:first-child {
-    width: 100%;
     margin: 2em auto 0;
 }
 .action button:last-child {
-    width: 100%;
     margin: 0.5em auto;
 }
 

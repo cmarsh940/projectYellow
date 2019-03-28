@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatDialog } from '@angular/material';
 import { CheckoutComponent } from '../../checkout/checkout.component';
 
@@ -7,13 +7,17 @@ import { CheckoutComponent } from '../../checkout/checkout.component';
   templateUrl: './subscription-overlay.component.html',
   styleUrls: ['./subscription-overlay.component.css']
 })
-export class SubscriptionOverlayComponent {
+export class SubscriptionOverlayComponent implements OnInit {
 
   constructor(
     public checkoutDialog: MatDialog,
     private bottomSheetRef: MatBottomSheetRef<SubscriptionOverlayComponent>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any
   ) { }
+
+  ngOnInit() {
+    console.log('data is', this.data);
+  }
 
   openLink(event: MouseEvent, subscriptionId: any): void {
     console.log('DATA IS', this.data);

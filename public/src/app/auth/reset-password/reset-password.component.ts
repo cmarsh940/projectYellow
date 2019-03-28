@@ -1,14 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css']
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
   errors: any;
   clientId = '';
   requestId = '';
@@ -17,6 +19,7 @@ export class ResetPasswordComponent implements OnInit {
   verified: Boolean;
 
   private participant;
+  private unsubscribe$ = new Subject();
 
   requestForm: FormGroup;
   verifyForm: FormGroup;
@@ -61,6 +64,13 @@ export class ResetPasswordComponent implements OnInit {
     this.verified = false;
   }
 
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
+  }
+
   sendRequest(email: any) {
     this.requested = false;
     this.verified = false;
@@ -68,7 +78,7 @@ export class ResetPasswordComponent implements OnInit {
     this.participant = {
       'email': this.email.value,
     };
-    this._authService.requestPasswordChange(this.participant).subscribe((data) => {
+    this._authService.requestPasswordChange(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data) {
         if (data.errors) {
           console.log('___ LOGIN ERROR ___:');

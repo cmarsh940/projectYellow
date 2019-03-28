@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, AfterViewInit, OnDestroy } from '@angular/core';
 // tslint:disable-next-line: max-line-length
 import { MatDialogRef, MAT_DIALOG_DATA, MatIconRegistry, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { environment } from './../../../environments/environment';
@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Client } from '@shared/models/client';
+import { takeUntil } from 'rxjs/operators';
 
 declare const FB: any;
 declare const gapi: any;
@@ -22,7 +23,7 @@ TODO:
 - [] change google and facebook to just icons
 */
 
-export class RegisterDialogComponent implements OnInit, AfterViewInit {
+export class RegisterDialogComponent implements OnInit, AfterViewInit, OnDestroy {
 
   FB: any;
   gapi: any;
@@ -32,8 +33,9 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   auth2: any;
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
+  errorData: boolean;
 
-  private ngUnsubscribe = new Subject();
+  private unsubscribe$ = new Subject();
 
   constructor(
     private _authService: AuthService,
@@ -44,15 +46,14 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
     public dialogRef: MatDialogRef<RegisterDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any
   ) {
-    iconRegistry.addSvgIcon(
-      'facebook',
+    iconRegistry.addSvgIcon('facebook',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebookWhite.svg'));
-    iconRegistry.addSvgIcon(
-      'google',
+    iconRegistry.addSvgIcon('google',
       sanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'));
   }
 
   ngOnInit() {
+    this.errorData = false;
     this.loadFacebook();
   }
 
@@ -67,13 +68,19 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
+  }
+
   attachSignin(element) {
     this.auth2.attachClickHandler(element, {},
       (data) => {
         const subscription = 'FREE';
         const registerPlatform = 'G';
         const authResponse = data.Zi;
-        console.log('LOGEDINUSER:', data);
         const client = new Client();
         client.platformId = data.El;
         client.email = data.w3.U3;
@@ -90,6 +97,7 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
         console.log('ADDED AND RETURNING');
       }, function (error) {
         console.log('GOOGLE LOGIN ERROR', error);
+        this.errors = error;
       });
   }
 
@@ -120,7 +128,6 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
       const subscription = 'FREE';
       const registerPlatform = 'F';
       FB.login((response: any) => {
-        console.table(response);
         if (response.authResponse) {
           const authResponse = response.authResponse;
           FB.api('/me', { fields: 'email, first_name, last_name, picture' }, (data: any) => {
@@ -143,8 +150,12 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
           reject('User cancelled login or did not fully authorize.');
         }
       }, { scope: 'email,public_profile' });
-      this.openSnackBar();
-      this.dialogRef.close();
+      if (this.errorData) {
+        console.log('error with errorData');
+      } else {
+        this.openSnackBar();
+        this.dialogRef.close();
+      }
     });
   }
 
@@ -154,16 +165,17 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   }
 
   addParticipant(response: any) {
+    this.errorData = false;
     this.errors = [];
     this.participant = response;
-    console.log('ADDING PARTICIPANT:', this.participant);
-    this._authService.addParticipant(this.participant).subscribe((data) => {
+    this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+      console.log('add participant data', data);
       if (data.errors) {
         console.log('ERROR', data);
-        this.errors.push(data.message);
-        return data;
+        let dataError = data.message;
+        this.errorData = true;
+        this.errorSnackBar(dataError);
       } else {
-        console.log('ADDED DATA', data);
         this._authService.setCurrentClient(data);
         window.location.href = environment.redirectLoginUrl;
       }
@@ -171,18 +183,17 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
   }
 
   addGoogleParticipant(response: any) {
+    this.errorData = false;
     this.errors = [];
     this.participant = response;
-    console.log('ADDING PARTICIPANT:', this.participant);
-    this._authService.addParticipant(this.participant).subscribe((data) => {
+    this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data.errors) {
         console.log('ERROR', data);
-        this.errors.push(data.message);
+        this.errors = data.message;
+        this.errorData = true;
       } else {
-        console.log('ADDED DATA', data);
         this._authService.setCurrentClient(data);
-        console.log('RETURNING FROM ADDING GOOGLE CLIENT');
-        window.location.href = environment.redirectUrl;
+        window.location.href = environment.redirectLoginUrl;
       }
     });
   }
@@ -191,8 +202,17 @@ export class RegisterDialogComponent implements OnInit, AfterViewInit {
     const config = new MatSnackBarConfig();
     config.verticalPosition = this.verticalPosition;
     config.horizontalPosition = this.horizontalPosition;
-    config.duration = 3500;
+    config.duration = 2500;
     config.panelClass = ['logout-snackbar'];
     this.snackBar.open('Thank you for registering', '', config);
+  }
+
+  errorSnackBar(data: any) {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 2500;
+    config.panelClass = ['error-snackbar'];
+    this.snackBar.open(data, '', config);
   }
 }

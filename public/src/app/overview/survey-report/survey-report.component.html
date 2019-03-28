@@ -1,23 +1,65 @@
-<mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<section>
+  <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
 
-  <!-- Owner Column -->
-  <ng-container matColumnDef="owner">
-    <mat-header-cell *matHeaderCellDef> Owner </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.creator.firstName}} </mat-cell>
-  </ng-container>
-  
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
-  </ng-container>
+    <!-- Created Column -->
+    <ng-container matColumnDef="owner">
+      <mat-header-cell *matHeaderCellDef>
+        Owner
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.creator.firstName}}</mat-cell>
+    </ng-container>
 
-  <!-- Category Column -->
-  <ng-container matColumnDef="category">
-    <mat-header-cell *matHeaderCellDef> Category </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.category.name}} </mat-cell>
-  </ng-container>
+    <!-- Account Type Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef>
+        Name
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name | titlecase}}</mat-cell>
+    </ng-container>
 
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
+
+    <!-- Account Type Column -->
+    <ng-container matColumnDef="category">
+      <mat-header-cell *matHeaderCellDef>
+        Category
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.category.name | titlecase}}</mat-cell>
+    </ng-container>
+
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action" stickyEnd>
+      <mat-header-cell *matHeaderCellDef>
+        <mat-icon class="action-icon">more_vert</mat-icon>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-icon-button [matMenuTriggerFor]="userAction" class="action-button">
+          <mat-icon class="action-icon">more_vert</mat-icon>
+        </button>
+        <mat-menu #userAction="matMenu" class="action">
+          <button mat-menu-item matTooltip="Open Survey" (click)="openSurvey(element._id)">
+            <mat-icon color="warn">
+              <i class="material-icons">
+                delete_forever
+              </i>
+            </mat-icon>
+            <p>Open Survey</p>
+          </button>
+          <button mat-menu-item matTooltip="Close Survey" (click)="closeSurvey(element._id)">
+            <mat-icon color="warn">
+              <i class="material-icons">
+                delete_forever
+              </i>
+            </mat-icon>
+            <p>Close Survey</p>
+          </button>
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true"
+    [length]="totalSize" [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+  </mat-paginator>
+</section>

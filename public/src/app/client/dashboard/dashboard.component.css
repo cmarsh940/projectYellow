@@ -16,11 +16,14 @@
 }
 
 #upgrade-card {
-  margin: 1em
+  margin: 1em;
+  max-width: 40em;
+  margin: auto;
 }
 
 #upgrade-text {
   font-size: small;
+  text-align: center;
 }
 
 #upgrade-link, #upgrade-button {
@@ -28,6 +31,9 @@
 }
 
 .dashboard-card {
+  max-width: 30em;
+  max-height: 30em;
+  margin: 0 auto;
   position: absolute;
   top: 15px;
   left: 15px;

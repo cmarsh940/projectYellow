@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
-import { MatPaginator, MatTableDataSource, MatDialog } from '@angular/material';
-
+import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked, OnDestroy } from '@angular/core';
+import { MatPaginator, MatTableDataSource, MatDialog, MatBottomSheet, MatDialogConfig } from '@angular/material';
+import { environment } from '../../../../environments/environment';
 
 import { SurveyService } from '../survey.service';
 import { Client } from '@shared/models/client';
@@ -10,6 +10,12 @@ import { ProfileService } from 'app/client/profile/profile.service';
 import { UniversalStorage } from '@shared/storage/universal.storage';
 import { AuthService } from 'app/auth/auth.service';
 import { WarnDialogComponent } from 'app/client/warn-dialog/warn-dialog.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { SubscriptionOverlayComponent } from 'app/client/profile/subscription-overlay/subscription-overlay.component';
+import { ShareSurveyDialogComponent } from '../share-survey-dialog/share-survey-dialog.component';
+
+declare const FB: any;
 
 /**
 TODO:
@@ -20,7 +26,7 @@ TODO:
   templateUrl: './survey-list.component.html',
   styleUrls: ['./survey-list.component.css']
 })
-export class SurveyListComponent implements OnInit, AfterContentChecked {
+export class SurveyListComponent implements OnInit, AfterContentChecked, OnDestroy {
   currentClient: Client;
   remaining: number;
   pc: boolean;
@@ -38,6 +44,11 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   legth = 0;
   pageEvent;
 
+  private unsubscribe$ = new Subject();
+
+  // FACEBOOK
+  FB: any;
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['created', 'name', 'action'];
 
@@ -45,10 +56,12 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
 
   constructor(
     public dialog: MatDialog,
+    public postDialog: MatDialog,
     private universalStorage: UniversalStorage,
     private _authService: AuthService,
     private _profileService: ProfileService,
     private _surveyService: SurveyService,
+    private bottomSheet: MatBottomSheet,
     private cdref: ChangeDetectorRef
   ) { }
 
@@ -59,6 +72,13 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
 
   ngAfterContentChecked() {
     this.cdref.detectChanges();
+  }
+
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
   }
 
   check() {
@@ -75,8 +95,7 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
   }
 
   getSurveys() {
-    this._profileService.getparticipant(this.id)
-      .subscribe((response) => {
+    this._profileService.getparticipant(this.id).pipe(takeUntil(this.unsubscribe$)).subscribe((response) => {
         this.remaining = response.surveyCount;
         this.dataSource = new MatTableDataSource<Element>(response._surveys);
         this.dataSource.paginator = this.paginator;
@@ -169,4 +188,28 @@ export class SurveyListComponent implements OnInit, AfterContentChecked {
     }
   }
 
+  openBottomSheet(): void {
+    this.bottomSheet.open(SubscriptionOverlayComponent, {
+      data: this.currentClient,
+    });
+  }
+
+  facebookPost(id: any) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.closeOnNavigation = true;
+    dialogConfig.width = '22em';
+    dialogConfig.data = {
+      id: id,
+    };
+
+      const postRef = this.postDialog.open(ShareSurveyDialogComponent, dialogConfig);
+
+      postRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('result is', result);
+        } else {
+          console.log('no result');
+        }
+      });
+    }
 }

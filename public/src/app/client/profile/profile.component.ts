@@ -99,7 +99,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
 
     checkoutRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (result) {
+        console.log('result is', result);
+      } else {
+        console.log('no result');
+        this.openCheckout();
+      }
     });
   }
 

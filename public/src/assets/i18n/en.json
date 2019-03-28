@@ -111,8 +111,9 @@
   },
 
   "footer": {
-    "left": "SUBSCRIBE",
-    "right": "COMPANY",
+    "header": "Subscribe to recieve news, updates, and speacial offers.",
+    "left": "COMPANY",
+    "right": "CONTACT",
     "copyright": "All Rights Reserved"
   }
 }

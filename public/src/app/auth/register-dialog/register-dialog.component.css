@@ -53,3 +53,10 @@ strong {
 button {
     letter-spacing: -0.5px;
 }
+
+.errors {
+    width: 100%;
+    text-align: center;
+    color: red;
+    height: 10em;
+}

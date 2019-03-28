@@ -14,7 +14,7 @@ const User = mongoose.model('User');
 
 class SurveysController {
   index(req, res) {
-    Survey.find({}).lean()
+    Survey.find({ public: true }).lean()
     .populate({ path: "category", select: 'name', model: Category })
     .populate({ path: "creator", select: 'firstName lastName businessName', model: Client })
     .exec((err, surveys) => {
@@ -25,6 +25,18 @@ class SurveysController {
       console.log("*** FOUND SURVEYS ***");
       return res.json(surveys);
     })
+  }
+
+  report(req, res) {
+    Survey.find({})
+      .populate('category')
+      .populate('creator')
+      .exec((err, surveys) => {
+      if (err) {
+        return res.json(err);
+      }
+      return res.json(surveys);
+    });
   }
 
   create(req, res) {
@@ -372,41 +384,36 @@ class SurveysController {
         return res.json(err);
       } else {
         var arr = req.body.questions;
-        console.log("___ ARRAY OF QUESTIONS TO UPDATE ___");
+        console.log("___ ARRAY OF QUESTIONS TO UPDATE ___", arr);
 
         for (let i = 0; i < arr.length; i++) {
-          Question.findById(arr[i]._id, (err, question) => {
-            if (err) {
-              console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
-              return res.json(err);
-            }
-            if (arr[i]._id == null) {
-              Question.create(arr[i], function (err, newQuestion) {
-                if (err) {
-                  console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
-                  return res.json(err);
-                }
+          console.log("Question id is", arr[i].id);
+          if (arr[i].id === undefined || arr[i].id === null) {
+            console.log("___ CREATING SURVEY QUESTION ___");
+            arr[i]._survey = survey._id;
+            Question.create(arr[i], function (err, newQuestion) {
+              if (err) {
+                console.log("___ CREATE SURVEY QUESTION ERROR ___", err);
+                return res.json(err);
+              }
 
-                // PUSH SURVEY ID INTO CLIENTS SURVEY ARRAY
-                Survey.findByIdAndUpdate(req.body._id, { $push: { questions: newQuestion._id } }, { new: true }, (err, survey) => {
-                  if (err) {
-                    console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
-                    return res.json(err);
-                  }
-                })
-              })
-            } else {
-              question.question = arr[i].question;
-              question.questionType = arr[i].questionType;
-              question.save((err, question) => {
+              // PUSH SURVEY ID INTO CLIENTS SURVEY ARRAY
+              Survey.findByIdAndUpdate(req.body._id, { $push: { questions: newQuestion._id } }, { new: true }, (err, survey) => {
                 if (err) {
-                  console.log(`___ SAVE SURVEY QUESTION[${i}] ERROR ___`, err);
+                  console.log("___ CREATE SURVEY CLIENT ERROR ___", err);
                   return res.json(err);
                 }
-                console.log(`___ UPDATED QUESTION[${i}] ___`);
-              });
-            }
-          })
+              })
+            })
+          } else {
+            Question.findByIdAndUpdate(arr[i].id, arr[i], (err, questions) => {
+              if (err) {
+                console.log(`___ UPDATE SURVEY QUESTION[${i}] ERROR ___`, err);
+                return res.json(err);
+              }
+              console.log("Questions Updated", questions);
+            })
+          }
         }
         survey.private = req.body.private;
         survey.name = req.body.name;

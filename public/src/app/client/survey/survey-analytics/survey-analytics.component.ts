@@ -7,10 +7,13 @@ import { Survey } from '@shared/models/survey';
 import { Question } from '@shared/models/question-group';
 import { SurveyService } from '../survey.service';
 import { AuthService } from 'app/auth/auth.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 import * as Chart from 'chart.js';
 import * as moment from 'moment';
+import * as XLSX from 'xlsx';
 
+type AOA = any[];
 
 function flatten(arr) {
   return [].concat(...arr);
@@ -25,13 +28,35 @@ function deepFlatten(arr) {
   );
 }
 
+function fancyTimeFormat(time) {
+  // Hours, minutes and seconds
+  // tslint:disable-next-line: no-bitwise
+  let hrs = ~~(time / 3600);
+  // tslint:disable-next-line: no-bitwise
+  let mins = ~~((time % 3600) / 60);
+  // tslint:disable-next-line: no-bitwise
+  let secs = ~~time % 60;
+
+  // Output like "1:01" or "4:03:59" or "123:03:59"
+  let ret = '';
+
+  if (hrs > 0) {
+    ret += '' + hrs + ':' + (mins < 10 ? '0' : '');
+  }
+
+  ret += '' + mins + ':' + (secs < 10 ? '0' : '');
+  ret += '' + secs;
+  return ret;
+}
+
 @Component({
   selector: 'app-survey-analytics',
   templateUrl: './survey-analytics.component.html',
   styleUrls: ['./survey-analytics.component.css']
 })
 export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
-  survey: Survey = new Survey();
+  // SURVEY TOOLS
+  survey: any;
   questions: Question[] = [];
   surveyId = '';
   surveyName: string;
@@ -50,22 +75,26 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   title: string;
   lvl: any;
   isBrowser: any;
-
   timeSinceLastSubmission: any;
+  subscription: string;
 
-  chart: any;
-  barChart: any;
-
+  // SNACKBAR
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
+  // TEXT FILE
+  downloadJsonHref: any;
+
+  // CHART
+  chart: any;
   @ViewChild('myCanvas') myCanvas: ElementRef;
   public context: CanvasRenderingContext2D;
-
-  // tslint:disable-next-line: max-line-length
   colors = ['#ffd600', '#ffab00', '#ff6d00', '#ff3d00', '#c51162', '#536dfe', '#2979ff', '#0091ea', '#00b8d4', '#00bfa5', '#00c853', '#64dd17', '#aeea00'];
 
-  displayedColumns = ['optionName', 'count', 'percentage'];
+  // EXCEL
+  uploadData: AOA = [];
+  wopts: XLSX.WritingOptions = { bookType: 'xlsx', type: 'array' };
+  fileName: string = 'surveyQuestions.xlsx';
 
   constructor(
     private _surveyService: SurveyService,
@@ -74,6 +103,7 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
     private _router: Router,
     private location: Location,
     public snackBar: MatSnackBar,
+    private sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -93,7 +123,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
+    if (this._routeSubscription) {
+      this._routeSubscription.unsubscribe();
+    }
   }
 
   isLoggedIn() {
@@ -107,7 +139,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId).subscribe(res => {
+      console.log(res);
       this.surveyName = res.name;
+      this.subscription = res.creator._subscription;
       const alldates = res.submissionDates;
       const answeredTempDates = {};
       const tempDates = [];
@@ -211,7 +245,6 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
                 }
               }],
               yAxes: [{
-                display: false,
                 scaleLabel: {
                   display: true,
                   labelString: 'Volume'
@@ -231,9 +264,9 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
       this.private = res.private;
       this.total = res.totalAnswers;
       // tslint:disable-next-line: no-bitwise
-      this.timeTotal = `${res.surveyTime / 60 ^ 0}:` + res.surveyTime % 60;
+      this.timeTotal = fancyTimeFormat(res.surveyTime);
       // tslint:disable-next-line: no-bitwise
-      this.surveyAvg = `${res.averageTime / 60 ^ 0}:` + res.averageTime % 60;
+      this.surveyAvg = fancyTimeFormat(res.averageTime);
 
 
       // SET QUESTIONS
@@ -251,23 +284,43 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   loopThroughQuestions() {
     for (let i = 0; i < (<any>this.survey).length; i++) {
       // tslint:disable-next-line: max-line-length
-      if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star') {
+      if (this.survey[i].questionType === 'smilieFaces' || this.survey[i].questionType === 'satisfaction' || this.survey[i].questionType === 'rate' || this.survey[i].questionType === 'star' || this.survey[i].questionType === 'likelyUnlikely') {
         let b = 0;
+        // COLLECT ARRAY OF ANSWERS
         const c = this.survey[i].answers.map(parseFloat);
-        const d = 0;
+        // REMOVE NAN FROM THE ARRAY
+        const d = c.filter(value => !Number.isNaN(value));
+        // SET NUMBER TO COUNT NUMBER OF UNANSWERED QUESTIONS(NaN)
+        let e = 0;
+
+        // LOOP THROUGH UNFILTERED ARRAY AND COUNT NAN SO OUR AVERAGE WONT COUNT UNANSWERED QUESTIONS
+        c.forEach(element => {
+          if (!element) {
+            e += 1;
+          }
+        });
+
+        // SET NEW LENGTH THAT TAKES OF UNANSWERED
+        let answersLength = this.survey[i].answers.length - e;
 
         // TOTAL NUMBER OF ANSWERS TO CALCULATE
-        this.countAvgAnswers = this.survey[i].answers.length;
+        this.countAvgAnswers = answersLength;
 
-        for (let a = 0; a < this.survey[i].answers.length; a++) {
-          b += c[a];
+        // LOOP THROUGH AND CALCULATE AVERAGE
+        for (let a = 0; a < answersLength; a++) {
+          b += d[a];
         }
-        this.average = b / this.survey[i].answers.length;
-        const avg = this.average.toString();
+
+        this.average = b / answersLength;
+        const avg = {
+          avg: this.average.toString(),
+          notAnswered: e
+        };
+
+        // SET ANSWERS TO EMPTY ARRAY FOR NEW ANSWERS
         this.survey[i].answers = [];
         this.survey[i].answers.push(avg);
         this.questions.push(this.survey[i]);
-      // tslint:disable-next-line: max-line-length
       } else if (this.survey[i].questionType === 'boolean' || this.survey[i].questionType === 'yesno' || this.survey[i].questionType === 'likeunlike' || this.survey[i].questionType === 'goodbad') {
         let percentE: number;
         let e = 0;
@@ -371,9 +424,60 @@ export class SurveyAnalyticsComponent implements OnInit, OnDestroy {
   }
 
   downloadJson(): void {
+    let theJSON = JSON.stringify(this.survey);
+    let blob = new Blob([theJSON], { type: 'text/json' });
+    let url = window.URL.createObjectURL(blob);
+    let uri: SafeUrl = this.sanitizer.bypassSecurityTrustUrl(url);
+    this.downloadJsonHref = uri;
   }
 
   downloadText(): void {
+  }
+
+  exportExcel(): void {
+    let tempSurvey = [];
+    tempSurvey.push(this.survey);
+
+    const exportedQuestions = [['question', 'questionType', 'lastAnswered', 'answers']];
+
+    for (let i = 0; i < this.survey.length; i++) {
+      let tempQuestion = [];
+      const element = this.survey[i];
+      tempQuestion.push(element.question);
+      tempQuestion.push(element.questionType);
+      tempQuestion.push(element.lastAnswered);
+      if (element.questionType === 'multiplechoice' || element.questionType === 'dropDown' || element.questionType === 'dropDownMultiple') {
+        for (let j = 0; j < element.answers.length - 1; j++) {
+          const answer = element.answers[j];
+          if (!answer.count) {
+            console.log('no answer for this option');
+            tempQuestion.push(element.answers);
+          } else {
+            console.log('answer for this option is:', answer.optionName);
+            tempQuestion.push(answer.optionName);
+            tempQuestion.push(answer.count);
+          }
+        }
+      }
+      if (element.questionType === 'smilieFaces' || element.questionType === 'satisfaction' || element.questionType === 'rate' || element.questionType === 'star') {
+        element.answers.forEach(answer => {
+          tempQuestion.push(answer.avg);
+        });
+      } else {
+        tempQuestion.push(element.answers);
+      }
+      exportedQuestions.push(tempQuestion);
+    }
+
+    /* generate worksheet */
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(exportedQuestions);
+
+    /* generate workbook and add the worksheet */
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    /* save to file */
+    XLSX.writeFile(wb, this.fileName);
   }
 
   openSnackBar() {

@@ -12,6 +12,7 @@ const CategorySchema = new mongoose.Schema({
                 ref: "Survey"
             }
         ],
+        select: false,
         default: []
     },
 }, { timestamps: true });

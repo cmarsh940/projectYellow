@@ -9,11 +9,14 @@ export class Survey {
     experationDate?: any;
     incentive?: any;
     lastSubmission?: any;
+    layout?: string;
+    logo?: string;
     name?: string;
     platform?: any;
     private?: boolean;
     public?: boolean;
     questions?: any;
+    slug?: any;
     submissionDates?: any;
     surveyTime?: number;
     totalAnswers?: number;

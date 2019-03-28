@@ -1,13 +1,17 @@
-import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, AfterViewInit, OnChanges } from '@angular/core';
+import { MetaService } from '@ngx-meta/core';
+import { Component, OnInit, OnDestroy, Input, ViewChildren, ElementRef, Inject, PLATFORM_ID, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControlName, FormControl } from '@angular/forms';
-import { Subscription, Observable, fromEvent, merge } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { questionGroups, Question } from '@shared/models/question-group';
 import { SurveyService } from 'app/client/survey/survey.service';
 import { Survey } from '@shared/models/survey';
 import { GenericValidator } from '@shared/validators/generic-validator';
-import { debounceTime } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
+import { MatDialog } from '@angular/material';
+import { SubmitSurveyDialogComponent } from '../submit-survey-dialog/submit-survey-dialog.component';
+import { takeUntil } from 'rxjs/operators';
 
 /**
 TODO:
@@ -18,13 +22,13 @@ TODO:
   templateUrl: './view-survey.component.html',
   styleUrls: ['./view-survey.component.css']
 })
-export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class ViewSurveyComponent implements OnInit, OnChanges, OnDestroy {
 
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
   surveyId: string = '';
   errors = [];
-  _routeSubscription: Subscription;
+  private unsubscribe$ = new Subject();
   questionGroup = questionGroups;
   loaded: Boolean;
   currentPlatform: any;
@@ -32,6 +36,8 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
   agent: any;
 
   other = 'Other';
+  userOther: any;
+  checked: boolean;
 
   @Input() survey: any;
 
@@ -65,7 +71,12 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     private _surveyService: SurveyService,
     private _activatedRoute: ActivatedRoute,
     private _router: Router,
+    private readonly meta: MetaService,
+    public dialog: MatDialog,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
+    this.checked = false;
+
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
@@ -84,37 +95,31 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
   }
 
   ngOnInit(): void {
-    this.loaded = false;
-    this.currentDevice = window.clientInformation.platform;
-    this.currentPlatform = window.clientInformation.vendor;
-    this.agent = window.clientInformation.userAgent;
+    if (isPlatformBrowser(this.platformId)) {
+      this.loaded = false;
+      this.currentDevice = window.clientInformation.platform;
+      this.currentPlatform = window.clientInformation.vendor;
+      this.agent = window.clientInformation.userAgent;
 
-    this.startTimer();
-    this.surveyForm = this.fb.group({
-      questions: this.fb.array([this.buildQuestion()])
-    });
+      this.surveyForm = this.fb.group({
+        questions: this.fb.array([this.buildQuestion()])
+      });
 
-    this._routeSubscription = this._activatedRoute.params.subscribe(params => {
-      this.surveyId = params['id'];
-      this.getSurvey();
-    });
+      this._activatedRoute.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
+        this.surveyId = params['id'];
+        console.log('id is:', this.surveyId);
+        this.getSurvey();
+      });
 
-    setTimeout(() => {
-      this.loaded = true;
-    }, 1000);
+      setTimeout(() => {
+        this.startTimer();
+        this.loaded = true;
+      }, 1000);
+    }
   }
 
-
-  ngAfterViewInit() {
-    // Watch for the blur event from any input element on the form.
-    const controlBlurs: Observable<any>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
-
-    // Merge the blur event observable with the valueChanges observable
-    merge(this.surveyForm.valueChanges, ...controlBlurs)
-      .pipe(debounceTime(800)).subscribe(value => {
-        this.displayMessage = this.genericValidator.processMessages(this.surveyForm);
-      });
+  ngOnChanges() {
+    this.rebuildForm();
   }
 
   addQuestion(): void {
@@ -126,23 +131,23 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     return this.fb.group({
       answers: ['',  Validators.required],
       isRequired: [''],
-      question: ['', { disabled: true }, Validators.required],
-      options: this.fb.array([])
+      question: ['', { disabled: true, value: null }, Validators.required],
+      options: this.fb.array([]),
     });
   }
 
-  ngOnChanges() {
-    this.rebuildForm();
-  }
 
   ngOnDestroy() {
-    this._routeSubscription.unsubscribe();
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
   }
 
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId)
-      .subscribe(
+      .pipe(takeUntil(this.unsubscribe$)).subscribe(
         (survey: Survey) => {
           if (!survey) {
             this._router.navigate(['/404error']);
@@ -154,6 +159,10 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
             this._router.navigate(['/survey-closed']);
           }
           console.log('RETURNED SURVEY IS:', survey);
+          this.meta.setTag('og:title', survey.name);
+          this.meta.setTag('twitter:title', survey.name);
+          this.meta.setTag('og:description', 'Take our survey!');
+          // this.meta.setTag('og:url', `https://surveysbyme.com/takeSurvey/${this.survey._id}`);
           for (let i = 0; i < survey.questions.length; i++) {
             survey.questions[i].answers = [];
           }
@@ -177,7 +186,7 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
           if (error) {
             for (const key of Object.keys(error)) {
               const errors = error[key];
-              this.errors.push(errors.message);
+              this.errors = errors.message;
             }
           }
         }
@@ -214,26 +223,25 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     this.survey = this.prepareSaveSurvey();
     this._surveyService.updateAnswer(this.survey._id, this.survey).subscribe(
       result => {
-        alert('Thank you for taking our survey!');
-        this._router.navigate(['/survey-list']);
+        this.submittedDialog();
       },
       error => {
         console.log('___ERROR___:', error);
         for (const key of Object.keys(error)) {
           const errors = error[key];
-          this.errors.push(errors.message);
+          this.errors = errors.message;
         }
       });
-    if (!this.errors) {
-      this._router.navigate(['/survey-list']);
-    }
   }
 
   prepareSaveSurvey() {
   // prepareSaveSurvey(): Survey {
     const tempTotal = this.survey.totalAnswers + 1;
     const allTime = this.survey.surveyTime + this.interval;
+    console.log('intervals are:', this.interval);
+    console.log('all time id:', allTime);
     this.timeAverage = allTime / tempTotal;
+    console.log('time average is:', this.timeAverage);
 
     // CANCEL INTERVALS
     clearInterval(this.interval);
@@ -283,4 +291,16 @@ export class ViewSurveyComponent implements OnInit, AfterViewInit, OnChanges, On
     }, 1000);
   }
 
+  OnChange($event) {
+    console.log($event);
+    this.userOther = $event.target.value;
+  }
+
+  submittedDialog() {
+    const dialogRef = this.dialog.open(SubmitSurveyDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this._router.navigate(['/survey-list']);
+    });
+  }
 }

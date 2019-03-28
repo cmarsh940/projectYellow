@@ -1,0 +1,26 @@
+<section>
+  <p>type: {{data.feedbackType}}</p>
+  <p>status: {{data.status}}</p>
+  <p>name: {{data.name}}</p>
+  <p>email: {{data.email}}</p>
+  <p>phone: {{data.phone}}</p>
+  <p>rating: {{data.rating}}</p>
+  <p>message: {{data.message}}</p>
+  <p>created at: {{data.createdAt}}</p>
+
+
+  <div *ngIf="errors" class="errors">
+    {{ errors }}
+  </div>
+
+  <button mat-stroked-button (click)="close()">Exit</button>
+  <div *ngIf="data.status === 'NEW'">
+    <button mat-stroked-button (click)="closeFeedback(data._id)" color='primary'>Mark as Read </button>
+  </div>
+  <div *ngIf="data.status === 'NEW' || data.status === 'VIEWED' || data.status === 'OPENED'">
+    <button mat-stroked-button (click)="closeFeedback(data._id)" color='warn'>Close Feedback</button>
+  </div>
+  <div *ngIf="data.status === 'CLOSED'">
+    <button mat-stroked-button (click)="openFeedback(data._id)" color='primary'>Open Feedback</button>
+  </div>
+</section>

@@ -4,12 +4,12 @@
   </div>
   <mat-grid-list cols="1" rowHeight="2:2">
 
-    <!-- ACTIVITY CARD -->
+    <!-- CLIENTS CARD -->
     <mat-grid-tile>
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title>
-            Activity
+            Clients
             <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu" disabled>
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -41,7 +41,28 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          data
+          COMING SOON
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+
+    <!-- CATEGORIES CARD -->
+    <mat-grid-tile>
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            Categories
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu" disabled>
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item disabled>Expand</button>
+              <button mat-menu-item disabled>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          COMING SOON
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

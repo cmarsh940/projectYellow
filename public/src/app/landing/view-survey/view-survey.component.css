@@ -1,3 +1,14 @@
+.container {
+    width: 100%;
+    max-width: 70em;
+    height: 100%;
+    margin: auto;
+    background-image: url("assets/img/background.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
@@ -17,6 +28,11 @@ mat-step-label {
 form {
     margin: auto;
     padding: 1em;
+    max-width: 55em;
+}
+
+.mat-card {
+  background-color:  #f9f9f970;
 }
 
 .mat-form-field {
@@ -25,10 +41,15 @@ form {
 
 .mat-card-header {
     margin: 1em 0;
+    display: block;
+    height: auto;
 }
+
 .mat-card-header-text {
     margin: 0!important;
+    width: 100%;
 }
+
 
 #question-input {
     width: 100%;
@@ -36,12 +57,14 @@ form {
     text-decoration: black;
     font-size: large;   
     height: auto;
+    overflow: hidden;
 }
 
 .card-answer {
     width: 100%;
     text-align: center;
     margin: 2em 0;
+    padding: 1em 0;
 }
 
 .mat-radio-button {
@@ -57,8 +80,20 @@ form {
     width: 100%;
 }
 
-.mat-card {
-    margin: 5em 0;
+.mat-button-toggle-group {
+    max-width: 100%;
+}
+
+#like-text {
+    width: 100%;
+    display: inline-flex;
+    padding: 0 1em;
+    height: 1em;
+}
+
+
+.like-button {
+    width: 9vw;
 }
 
 .button-group {
@@ -174,4 +209,22 @@ strong {
 
 .satisfaction-button {
     margin: 0 1em!important;
+}
+
+.page-card {
+    margin: 1em 0!important;
+}
+
+.submit-button {
+    width: 100%;
+    text-align: center;
+}
+
+#sub-but {
+    width: 100%;
+}
+
+/* MAT CHIPS */
+.mat-chip {
+    margin:1px!important;
 }

@@ -11,7 +11,7 @@
   <!-- SURVEY COLUMN -->
   <ng-container matColumnDef="surveys">
     <mat-header-cell *matHeaderCellDef> Surveys </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element._surveys.length }} </mat-cell>
+    <mat-cell *matCellDef="let element"> {{ element._surveys?.length }} </mat-cell>
   </ng-container>
 
   <!-- ACTION COLUMN -->

@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { client, hostedFields } from 'braintree-web';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { EditClientComponent } from '../profile/edit-client/edit-client.component';
 import { subscription } from '@shared/models/subscription';
 import { Client } from '@shared/models/client';
@@ -31,6 +31,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
   selected: any;
   amount: any;
   subscriptions = subscription;
+  selectedSubscription: any;
   clientId: any;
   planName = '';
   currentClient = new Client();
@@ -39,6 +40,9 @@ export class CheckoutComponent implements OnDestroy, OnInit {
 
   private clientToken: string;
   private ngUnsubscribe = new Subject();
+
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center';
 
 
 
@@ -49,6 +53,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
     private _router: Router,
     private _profileService: ProfileService,
     private location: Location,
+    public snackBar: MatSnackBar,
     private checkoutRef: MatDialogRef<EditClientComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) { }
@@ -84,6 +89,14 @@ export class CheckoutComponent implements OnDestroy, OnInit {
           }
         }
         console.log('SELECTED PLAN', this.selectedPlan);
+        for (let i = 0; i < this.subscriptions.length; i++) {
+          const element = this.subscriptions[i];
+          console.log('element is:', element);
+          if (element.id === this.selectedPlan.id) {
+            this.selectedSubscription = element;
+          }
+        }
+        console.log(`selected subscription is ${this.selectedSubscription}, plan is ${this.selectedPlan}`);
       },
       error: err => {
         console.log('api error' + err);
@@ -138,7 +151,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
           'color': 'red'
         },
         'input.valid': {
-          'color': 'green'
+          'color': 'mediumseagreen'
         },
         // placeholder styles need to be individually adjusted
         '::-webkit-input-placeholder': {
@@ -204,7 +217,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
                 self.processing = false;
                 console.error('api error', res);
               } else {
-                alert('Thank you for your subscription');
+                self.openSnackBar();
                 window.location.reload();
               }
             }
@@ -218,7 +231,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
                   alert('YOUR PAYMENT WAS DECLINED');
                   console.error('api error', res);
                 } else {
-                  alert('Thank you for your subscription');
+                  self.openSnackBar();
                   window.location.reload();
                 }
               }
@@ -231,6 +244,15 @@ export class CheckoutComponent implements OnDestroy, OnInit {
 
   cancel() {
     this.location.back();
+  }
+
+  openSnackBar() {
+    const config = new MatSnackBarConfig();
+    config.verticalPosition = this.verticalPosition;
+    config.horizontalPosition = this.horizontalPosition;
+    config.duration = 3500;
+    config.panelClass = ['success-snackbar'];
+    this.snackBar.open('Payment was accepted', '', config);
   }
 
 }

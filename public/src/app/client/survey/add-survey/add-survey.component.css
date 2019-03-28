@@ -41,3 +41,20 @@ button {
 .mat-card {
     margin: 1em 0;
 }
+
+.mat-radio-label {
+    align-items: end!important;
+}
+
+.layout-picture {
+    height: 13em;
+    width: 8em
+}
+
+.layout-span {
+    display: block;
+}
+
+.mat-radio-label-content {
+    display: content
+}

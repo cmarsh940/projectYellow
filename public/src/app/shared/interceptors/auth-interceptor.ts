@@ -12,11 +12,22 @@ export class AuthInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         const idToken = this.auth.getAuthorizationToken();
+        const idRole = this.auth.getRoleToken();
 
-        if (idToken) {
+        if (idToken && !idRole) {
             const cloned = req.clone({
                 headers: req.headers.set('Authorization',
                     `Bearer ${idToken}`)
+            });
+            console.log('SENDING CLONED HEADERS');
+            return next.handle(cloned);
+        }
+        if (idToken && idRole) {
+            const cloned = req.clone({
+                headers: req.headers
+                    .set('Authorization', `Bearer ${idToken}`)
+                    .set('Sh1p', `Anchored ${idRole}`)
+
             });
             console.log('SENDING CLONED HEADERS');
             return next.handle(cloned);

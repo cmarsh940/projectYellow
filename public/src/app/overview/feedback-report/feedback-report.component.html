@@ -1,0 +1,88 @@
+<section>
+  <div *ngIf="errors" class="errors">
+    {{ errors }}
+  </div>
+  <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
+
+    <!-- Created Column -->
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef>
+        Created
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.createdAt | date}}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="feedbackType">
+      <mat-header-cell *matHeaderCellDef>
+        Type
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.feedbackType | titlecase}} </mat-cell>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef>
+        Status
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action" stickyEnd>
+      <mat-header-cell *matHeaderCellDef>
+        <mat-icon class="action-icon">more_vert</mat-icon>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-icon-button [matMenuTriggerFor]="userAction" class="action-button">
+          <mat-icon class="action-icon">more_vert</mat-icon>
+        </button>
+        <mat-menu #userAction="matMenu" class="action">
+          <button mat-menu-item matTooltip="View Feedback" (click)="viewFeedback(element)">
+            <mat-icon matTooltip="View Feedback" color="accent">
+              <i class="material-icons">
+                visibility
+              </i>
+            </mat-icon>
+            <p>View</p>
+          </button>
+          <div *ngIf="element.status === 'NEW'">
+            <button mat-menu-item matTooltip="Mark as Viewed" (click)="markAsRead(element._id)">
+              <mat-icon matTooltip="Mark as Viewed" color="primary">
+                <i class="material-icons">
+                  edit
+                </i>
+              </mat-icon>
+              <p>Mark as Viewed</p>
+            </button>
+          </div>
+          <div *ngIf="element.status === 'NEW' || element.status === 'VIEWED' || element.status === 'OPENED'">
+            <button mat-menu-item matTooltip="Close Feedback" (click)="closeFeedback(element._id)">
+              <mat-icon color="warn">
+                <i class="material-icons">
+                  lock
+                </i>
+              </mat-icon>
+              <p>Close Feedback</p>
+            </button>
+          </div>
+          <div *ngIf="element.status === 'CLOSED'">
+            <button mat-menu-item matTooltip="Open Feedback" (click)="openFeedback(element._id)">
+              <mat-icon color="primary">
+                <i class="material-icons">
+                  lock_open
+                </i>
+              </mat-icon>
+              <p>Open Feedback</p>
+            </button>
+          </div>
+        </mat-menu>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 50, 100]" [showFirstLastButtons]="true"
+    [length]="totalSize" [pageIndex]="currentPage" (page)="pageEvent = handlePage($event)">
+  </mat-paginator>
+</section>

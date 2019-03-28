@@ -19,12 +19,23 @@ const SurveySchema = new mongoose.Schema({
   experationDate: {
     type: Date
   },
+  facebookPostId: { type: Array, "default": [] },
   incentive: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Incentive"
   },
   lastSubmission: {
     type: Date,
+  },
+  layout: {
+    type: String,
+    enum: ['STEPS', 'PAGE'],
+    required: true,
+    uppercase: true,
+    trim: true,
+  },
+  logo: {
+    type: String,
   },
   meta: {
     type: [

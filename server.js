@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
     res.header('Strict-Transport-Security', 'max-age=7889238; includeSubDomains; preload');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Expose-Headers', 'Content-Length');
-    res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range, X-XSRF-TOKEN');
+    res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range, X-XSRF-TOKEN, Sh1p');
     if (req.method === 'OPTIONS') {
         return res.sendStatus(200); 
     } else { 

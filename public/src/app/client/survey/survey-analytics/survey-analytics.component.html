@@ -15,11 +15,14 @@
       <p>Download results</p>
     </button>
     <mat-menu #downloadMenu="matMenu">
-      <button mat-menu-item (click)="downloadJson()">
+      <a mat-menu-item (click)="downloadJson()" [href]="downloadJsonHref" download="survey.json">
         Json file
-      </button>
+      </a>
       <button mat-menu-item (click)="downloadText()">
         Text file
+      </button>
+      <button mat-menu-item (click)="exportExcel()">
+        Excel file
       </button>
     </mat-menu>
     <br>
@@ -45,7 +48,7 @@
   </div>
 </div>
 
-<div class="small-boxes" *ngIf="private">
+<div class="small-boxes" *ngIf="subscription !=='FREE'">
   <mat-grid-list cols="3" rowHeight="100px">
     <mat-grid-tile >
       <mat-grid-tile-header>Total Answers</mat-grid-tile-header>
@@ -183,22 +186,58 @@
           
             <!-- FACES -->
             <ng-container *ngSwitchCase="'smilieFaces'">
-              <h4>
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
-                  <h1>{{answer | number }}</h1>
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </h4>
+              </div>
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
+              <div *ngIf="answer.avg >= 4" class="good">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
             </ng-container>
           
             <!-- SATISFACTION -->
             <ng-container *ngSwitchCase="'satisfaction'">
-              <h4>
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
-                  <h1>{{answer | number }}</h1>
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </h4>
+              </div>
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
+              <div *ngIf="answer.avg >= 4" class="good">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
             </ng-container>
           
             <!-- SLIDE -->
@@ -208,25 +247,65 @@
           
             <!-- SLIDE RATE -->
             <ng-container *ngSwitchCase="'rate'">
-              <h4>
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
-                  <h1>{{answer | number }}</h1>
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </h4>
+              </div>
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
+              <div *ngIf="answer.avg >= 4" class="good">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
             </ng-container>
 
             <!-- STAR RATING -->
             <ng-container *ngSwitchCase="'star'">
-              <h4>
+              <div *ngIf="answer.avg > 0 && answer.avg <= 2" class="bad">
                 <div class="average">
                   <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
-                  <h1>{{answer | number }}</h1>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
                   <h3>Average</h3>
                 </div>
-              </h4>
+              </div>
+              <div *ngIf="answer.avg > 2 && answer.avg < 4" class="nutuarl">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
+              <div *ngIf="answer.avg >= 4" class="good">
+                <div class="average">
+                  <h6>Calculations based off {{ countAvgAnswers }} Answers.</h6>
+                  <h6>Not answered: {{ answer.notAnswered }}</h6>
+                  <h1>{{answer.avg | number }}</h1>
+                  <h3>Average</h3>
+                </div>
+              </div>
             </ng-container>
           
+            <!-- LIKE UNLIKE -->
+            <ng-container *ngSwitchCase="'likelyUnlikely'">
+              {{answer | json}}
+            </ng-container>
+
             <!-- LIKE UNLIKE -->
             <ng-container *ngSwitchCase="'likeunlike'">
               <h4 class="booleanData">Like 
@@ -258,7 +337,6 @@
       </mat-card-content>
   </mat-card>
 </div>
-
 
 <div id="button-group">
   <button mat-raised-button (tap)="back()" color="primary">Back to Surveys</button>

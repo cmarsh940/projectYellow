@@ -4,6 +4,25 @@
 
 <form [formGroup]="surveyForm" (ngSubmit)="submitForm()" class="form">
   <section>
+    <!-- LAYOUT TYPE -->
+      <mat-radio-group class="layout-radio-group" formControlName="layout" required>
+        <mat-grid-list cols="4" rowHeight="17em">
+          <mat-grid-tile  [colspan]="2" [rowspan]="1" >
+            <mat-radio-button class="layout-radio-button" value="PAGE">
+              <span class="layout-span">Single Page</span>
+              <img src="assets/img/singleLayout.png" alt="single page layout picture" class="layout-picture" />
+            </mat-radio-button>
+          </mat-grid-tile>
+          <mat-grid-tile  [colspan]="2" [rowspan]="1" >
+            <mat-radio-button class="layout-radio-button" value="STEPS">
+              <span class="layout-span">1 Question at a time</span>
+              <img src="assets/img/stepsLayout.png" alt="one question at a time layout picture" class="layout-picture" />
+            </mat-radio-button>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-radio-group>
+
+    <!-- CATEGORY -->
     <mat-form-field>
       <mat-select placeholder="Survey Category" formControlName="category">
         <mat-option *ngFor="let category of categories" [value]="category">
@@ -11,6 +30,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+
     <!-- SURVEY NAME -->
     <mat-form-field appearance="outline">
       <mat-label>Survey Name:</mat-label>
@@ -259,6 +279,14 @@
 
                 <!-- STAR RATE -->
                 <ng-container *ngSwitchCase="'star'">
+                  <mat-form-field>
+                    <mat-label>Question:</mat-label>
+                    <input matInput formControlName="question">
+                  </mat-form-field>
+                </ng-container>
+
+                <!-- LIKELY UNLIKELY -->
+                <ng-container *ngSwitchCase="'likelyUnlikely'">
                   <mat-form-field>
                     <mat-label>Question:</mat-label>
                     <input matInput formControlName="question">

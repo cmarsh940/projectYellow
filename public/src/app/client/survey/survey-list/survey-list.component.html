@@ -1,11 +1,11 @@
 <div *ngIf="remaining !== 0">
   <button mat-stroked-button routerLink="add" matTooltip="Create Survey" color="primary" id="add-button">New Survey</button>
 </div>
-
 <div *ngIf="remaining === 0">
-  <h5 id="out">You are out of surveys. Upgrade your subscription to get more.</h5>
+  <h5 id="out">
+    <span>* NOTE: </span> You are out of surveys. <a (click)="openBottomSheet()" class="upgrade">Upgrade </a> your subscription to get more.
+  </h5>
 </div>
-
 <div>
   <mat-table [dataSource]="dataSource" [trackBy]="TrackById">
 
@@ -52,6 +52,14 @@
               <p>Take Survey</p>
             </button>
           </div>
+          <button mat-menu-item matTooltip="Post Survey to facebook" (click)="facebookPost(element._id)">
+            <mat-icon matTooltip="Edit" color="primary">
+              <i class="material-icons">
+                share
+              </i>
+            </mat-icon>
+            <p>Share</p>
+          </button>
           <button mat-menu-item matTooltip="Take Survey" [routerLink]="['edit', element._id]">
             <mat-icon matTooltip="Edit" color="accent">
               <i class="material-icons">

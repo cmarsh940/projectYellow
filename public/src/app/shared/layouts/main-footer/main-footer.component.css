@@ -15,6 +15,7 @@ a {
 
 .errors {
     color: red;
+    text-align: center;
 }
 
 .errors span {
@@ -52,6 +53,8 @@ form {
     display: flex;
     justify-content: center;
     padding: 1em 0;
+    max-width: 25em;
+    margin: auto;
 }
 
 .mat-form-field {
@@ -75,7 +78,7 @@ form {
 }
 
 span {
-    font-size: medium;
+    font-size: small;
     vertical-align: super;
     word-spacing: 0.5em;
 }
@@ -86,10 +89,23 @@ span {
 }
 
 #left-column {
-    padding: 0 0 0 1em;
+    margin: 0 0 0 1em;
 }
 
 #services-list {
     margin: 0;
     width: fit-content;
+}
+
+.sub-header {
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    padding: 1em 1em 0 1em;
+}
+
+h5 {
+    margin-top: 1em;
+    text-align: center;
 }

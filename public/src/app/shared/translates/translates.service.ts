@@ -11,6 +11,7 @@ import { Observable, of } from 'rxjs';
 
 import { ILang } from './translates.interface';
 import { UniversalStorage } from '@shared/storage/universal.storage';
+import { CookieOptions } from 'ngx-cookie';
 
 const LANG_LIST: ILang[] = [
   { code: 'en', name: 'English', culture: 'en-US' },
@@ -21,6 +22,9 @@ const STORAGE_LANG_NAME: string = 'langCode';
 
 @Injectable()
 export class TranslatesService {
+  exp = (new Date(Date.now() + 31556926 * 1000)).toUTCString();
+  cookieOptions = { expires: this.exp } as CookieOptions;
+
   constructor(
     @Inject(PLATFORM_ID) private _platformId: Object,
     @Inject(DOCUMENT) private _document: any,
@@ -29,6 +33,7 @@ export class TranslatesService {
     @Inject(MetaService) private _meta: MetaService,
     @Inject(REQUEST) private _req: any,
     @Inject(UniversalStorage) private _appStorage: Storage,
+    @Inject(UniversalStorage) private UniversalStorage: UniversalStorage,
   ) {}
 
   public initLanguage(): Promise<any> {
@@ -70,7 +75,8 @@ export class TranslatesService {
       }
     }
     language = language || LANG_DEFAULT;
-    this._appStorage.setItem(STORAGE_LANG_NAME, language.code);
+    // this._appStorage.setItem(STORAGE_LANG_NAME, language.code);
+    this.UniversalStorage.setItem(STORAGE_LANG_NAME, language.code, this.cookieOptions);
     return language;
   }
 
@@ -90,7 +96,8 @@ export class TranslatesService {
     if (!lang || lang.code === this._translate.currentLang) {
       return;
     }
-    this._appStorage.setItem(STORAGE_LANG_NAME, lang.code);
+    // this._appStorage.setItem(STORAGE_LANG_NAME, lang.code);
+    this.UniversalStorage.setItem(STORAGE_LANG_NAME, lang.code, this.cookieOptions);
     this._setLanguage(lang);
   }
 

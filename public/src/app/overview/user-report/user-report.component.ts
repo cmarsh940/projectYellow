@@ -1,229 +1,92 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { UserService } from '../../client/user/user.service';
 import { FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { OverviewService } from '../overview.service';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { User } from '@shared/models/user';
 
 @Component({
   selector: 'app-user-report',
   templateUrl: './user-report.component.html',
   styleUrls: ['./user-report.component.css']
 })
-export class UserReportComponent implements OnInit {
-  myForm: FormGroup;
+export class UserReportComponent implements OnInit, AfterContentChecked {
+  error; any;
 
-  allParticipants;
+  allParticipants = [];
+
+  // PAGINATE
+  dataSource: any;
+  array: any;
+  resultsLength = 0;
+  pageSize = 10;
+  currentPage = 0;
+  totalSize = 0;
+  legth = 0;
+  pageEvent;
+
   private participant;
-  private currentId;
-  errorMessage;
 
-  name = new FormControl('', Validators.required);
-  email = new FormControl('', Validators.required);
-  phone = new FormControl('', Validators.required);
-  surveyOwner = new FormControl('', Validators.required);
+  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
+  displayedColumns = ['created', 'name', 'surveyOwner', 'answered', 'action'];
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public _userService: UserService, fb: FormBuilder) {
-    this.myForm = fb.group({
-      name: this.name,
-      email: this.email,
-      phone: this.phone,
-      surveyOwner: this.surveyOwner
-    });
+  constructor(
+    public _overviewService: OverviewService,
+    private cdref: ChangeDetectorRef
+  ) {
   }
 
   ngOnInit(): void {
     this.loadAll();
   }
 
+  ngAfterContentChecked() {
+    this.cdref.detectChanges();
+  }
+
   loadAll(): Promise<any> {
-    const tempList = [];
-    return this._userService.getAll()
+    return this._overviewService.getAllUsers()
       .toPromise()
       .then((result) => {
-        this.errorMessage = null;
-        result.forEach(participant => {
-          tempList.push(participant);
+        console.log('all users are:', result);
+        this.error = null;
+        this.allParticipants = result;
+        this.allParticipants.forEach(participant => {
+          let name = `${participant.firstName} ${participant.lastName}`;
+          participant.name = name;
         });
-        this.allParticipants = tempList;
+        this.dataSource = new MatTableDataSource<Element>(this.allParticipants);
+        this.dataSource.paginator = this.paginator;
+        this.array = result;
+        if (!this.array) {
+          this.totalSize = 0;
+        } else {
+          this.totalSize = this.array.length;
+        }
       })
       .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-          this.errorMessage = error;
-        }
+        console.log('Error', error);
       });
   }
 
-/**
- * Event handler for changing the checked state of a checkbox (handles array enumeration values)
- * @param {String} name - the name of the participant field to update
- * @param {any} value - the enumeration value for which to toggle the checked state
- */
-  changeArrayValue(name: string, value: any): void {
-    const index = this[name].value.indexOf(value);
-    if (index === -1) {
-      this[name].value.push(value);
-    } else {
-      this[name].value.splice(index, 1);
+  TrackById(index: number, user: User) {
+    return user._id;
+  }
+
+  handlePage(e: any) {
+    this.currentPage = e.pageIndex;
+    this.pageSize = e.pageSize;
+    this.iterator();
+  }
+
+  private iterator() {
+    if (this.array) {
+      const end = (this.currentPage + 1) * this.pageSize;
+      const start = this.currentPage * this.pageSize;
+      const part = this.array.slice(start, end);
+      this.dataSource = part;
     }
   }
-
-/**
- * Checkbox helper, determining whether an enumeration value should be selected or not (for array enumeration values
- * only). This is used for checkboxes in the participant updateDialog.
- * @param {String} name - the name of the participant field to check
- * @param {any} value - the enumeration value to check for
- * @return {Boolean} whether the specified participant field contains the provided value
- */
-  hasArrayValue(name: string, value: any): boolean {
-    return this[name].value.indexOf(value) !== -1;
-  }
-
-  addParticipant(form: any): Promise<any> {
-    this.participant = {
-      'name': this.name.value,
-      'email': this.email.value,
-      'phone': this.phone.value,
-      'surveyOwner': this.surveyOwner.value
-    };
-
-    this.myForm.setValue({
-      'name': null,
-      'email': null,
-      'phone': null,
-      'surveyOwner': null
-    });
-
-    return this._userService.addParticipant(this.participant)
-      .toPromise()
-      .then(() => {
-        this.errorMessage = null;
-        this.myForm.setValue({
-          'name': null,
-          'email': null,
-          'phone': null,
-          'surveyOwner': null
-        });
-        this.loadAll();
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else {
-          this.errorMessage = error;
-        }
-      });
-  }
-
-
-  updateParticipant(form: any): Promise<any> {
-    this.participant = {
-      'name': this.name.value,
-      'email': this.email.value,
-      'phone': this.phone.value,
-      'surveyOwner': this.surveyOwner.value
-    };
-
-    return this._userService.updateParticipant(form.get('_id').value, this.participant)
-      .toPromise()
-      .then(() => {
-        this.errorMessage = null;
-        this.loadAll();
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
-  }
-
-
-  deleteParticipant(): Promise<any> {
-
-    return this._userService.deleteParticipant(this.currentId)
-      .toPromise()
-      .then(() => {
-        this.errorMessage = null;
-        this.loadAll();
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
-  }
-
-  setId(id: any): void {
-    this.currentId = id;
-  }
-
-  getForm(id: any): Promise<any> {
-
-    return this._userService.getparticipant(id)
-      .toPromise()
-      .then((result) => {
-        this.errorMessage = null;
-        const formObject = {
-          'name': null,
-          'email': null,
-          'phone': null,
-          'surveyOwner': null
-        };
-
-        if (result.name) {
-          formObject.name = result.name;
-        } else {
-          formObject.name = null;
-        }
-
-        if (result.email) {
-          formObject.email = result.email;
-        } else {
-          formObject.email = null;
-        }
-
-        if (result.phone) {
-          formObject.phone = result.phone;
-        } else {
-          formObject.phone = null;
-        }
-
-        if (result.surveyOwner) {
-          formObject.surveyOwner = result.surveyOwner;
-        } else {
-          formObject.surveyOwner = null;
-        }
-
-        this.myForm.setValue(formObject);
-      })
-      .catch((error) => {
-        if (error === 'Server error') {
-          this.errorMessage = 'Could not connect to REST server. Please check your configuration details';
-        } else if (error === '404 - Not Found') {
-          this.errorMessage = '404 - Could not find API route. Please check your available APIs.';
-        } else {
-          this.errorMessage = error;
-        }
-      });
-
-  }
-
-  resetForm(): void {
-    this.myForm.setValue({
-      'name': null,
-      'email': null,
-      'phone': null,
-      'surveyOwner': null
-    });
-  }
-
 }

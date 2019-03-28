@@ -11,14 +11,11 @@
     </div>
 </div>
 <div *ngIf="loaded && !processing">
-    <div class="container">
-        <div *ngFor="let plan of plans">
-            <div *ngIf="plan.id === subscriptionId">
-                <h3>{{ plan.name }}</h3>
-                <h3>Payment amount: ${{plan.price}}</h3>
-            </div>
-        </div>
-
+    <div class="container">    
+        <h3>{{ selectedPlan.name }}</h3>
+        <h3>Plan amount: ${{selectedSubscription.price}}</h3>
+        <h3>Tax: ${{selectedSubscription.tax}}</h3>
+        <h3>Total: ${{selectedPlan.price}}</h3>
         <div class="card-container">
             <form action="/" method="post" id="cardForm">
                 <label class="hf-label" for="card-number">Card Number</label>

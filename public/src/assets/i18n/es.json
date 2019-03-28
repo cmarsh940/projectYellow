@@ -73,8 +73,9 @@
         "text11": "Para obtener más ayuda o información sobre las marcas registradas de ME LLC Group y los materiales con derechos de autor, puede comunicarse con ME LLC Group al: Teléfono: (940)808-8285 Correo electrónico: cam.marshall@mellcgroup.com Fecha efectiva: 1 de enero de 2019"
     },
     "footer": {
-        "left": "SUSCRIBIR",
-        "right": "EMPRESA",
+        "header": "Suscríbete para recibir noticias, actualizaciones y ofertas especiales.",
+        "left": "EMPRESA",
+        "right": "CONTACTO",
         "copyright": "Todos los derechos reservados"
     }
 }

@@ -7,10 +7,13 @@ const ClientSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  billingCycle: {
+  accountType: {
+    type: String,
+  },
+
+  bCycle: {
     type: Number,
     enum: [1, 12],
-    select: false
   },
   businessName: {
     type: String,
@@ -131,11 +134,11 @@ const ClientSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['CLIENT', 'SKIPPER', 'CAPTAIN'],
+    enum: ['CLIENT', 'SKIPPER'],
     required: true,
     uppercase: true,
     trim: true,
-    default: "CLIENT"
+    default: "SKIPPER"
   },
   subscriptionId: {
     type: String,
@@ -161,7 +164,7 @@ const ClientSchema = new mongoose.Schema({
   verified: {
     type: Boolean,
     required: true,
-    default: true
+    default: false
   },
   _address: {
         type: mongoose.Schema.Types.ObjectId,
@@ -189,7 +192,7 @@ const ClientSchema = new mongoose.Schema({
   },
   _subscription: {
     type: String,
-    enum: ['FREE', 'BASIC', 'PRO', 'ELITE', 'CANCELED'],
+    enum: ['FREE', 'BASIC', 'PRO', 'ELITE', 'BASIC ANNUALLY', 'PRO ANNUALLY', 'ELITE ANNUALLY', 'CANCELED'],
     required: true,
     uppercase: true,
     trim: true,

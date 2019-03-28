@@ -13,6 +13,21 @@
   <div class="form-container">
     <form [formGroup]="myForm">
       <div class="label">
+        <b class="text-center">Account</b>
+      </div>
+
+      <!-- ACCOUNT TYPE -->
+      <mat-form-field>
+        <mat-select placeholder="Account Type" [formControl]="accountType">
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let type of accountTypes" [value]="type.name">
+            {{type.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      
+      <div class="label">
         <b class="text-center">Information</b>
       </div>
 
@@ -109,7 +124,8 @@
       <!-- PHONE -->
       <mat-form-field appearance="outline">
         <mat-hint align="start"><strong>No spaces Example: 9408088285</strong> </mat-hint>
-        <mat-label>Phone #</mat-label>
+        <mat-label>Telephone</mat-label>
+        <span matPrefix id="phonePrefix">+1 &nbsp;</span>
         <input matInput type="tel" [formControl]="phoneFormControl"  [errorStateMatcher]="matcher" autocomplete='tel-national'>
         <mat-error *ngIf="phoneFormControl.hasError('required')">
           Phone number is <strong>required</strong>
@@ -186,7 +202,11 @@
 
       <mat-divider id="bottomDivider"></mat-divider>
 
-      <mat-checkbox required><strong>* I have read and agree to the <a routerLink='/policies/usage' id='termsLink'>terms of Service</a></strong> </mat-checkbox>
+      <mat-checkbox [formControl]="acceptFormControl" required><strong>* I have read and agree to the <a routerLink='/policies/usage' id='termsLink'>terms of Service</a></strong> 
+        <mat-error *ngIf="acceptFormControl.hasError('required')">
+          Accepting terms of service is <strong>required</strong>
+        </mat-error>
+      </mat-checkbox>
 
       <!-- SUBMIT BUTTON -->
       <div class="text-center" id="submitButton">
@@ -197,6 +217,7 @@
       </div>
     </form>
   </div>
+</div>
 
 
 

@@ -5,7 +5,6 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { LOCAL_STORAGE } from '@ng-toolkit/universal';
 import { UniversalStorage } from '@shared/storage/universal.storage';
 
 @Component({

@@ -1,5 +1,5 @@
 import { AuthService } from './../auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 // tslint:disable-next-line: max-line-length
@@ -7,6 +7,9 @@ import { MatSnackBar, MatSnackBarVerticalPosition, MatSnackBarHorizontalPosition
 import { Client } from '@shared/models/client';
 import { states } from '@shared/models/states';
 import { forbiddenNameValidator } from '@shared/validators/forbidden-name.directive';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 
 
@@ -24,7 +27,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./register.component.css']
 })
 
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   myForm: FormGroup;
   newClient: Client = new Client();
   password_confirmation: string;
@@ -37,8 +40,22 @@ export class RegisterComponent implements OnInit {
   currentPlatform: any;
   agent: any;
   errors = [];
-
+  accountTypes = [
+    {
+      name: 'Business'
+    },
+    {
+      name: 'Personal'
+    },
+    {
+      name: 'School'
+    },
+    {
+      name: 'Other'
+    }
+  ];
   private participant;
+  private unsubscribe$ = new Subject();
 
   firstNameFormControl = new FormControl('', [
     Validators.required,
@@ -53,6 +70,10 @@ export class RegisterComponent implements OnInit {
     Validators.maxLength(250),
   ]);
   businessName = new FormControl('');
+  accountType = new FormControl('');
+  acceptFormControl = new FormControl('', [
+    Validators.required,
+  ]);
   emailFormControl = new FormControl('', [
     Validators.required,
     Validators.email,
@@ -101,11 +122,14 @@ export class RegisterComponent implements OnInit {
     private _authService: AuthService,
     private _router: Router,
     public snackBar: MatSnackBar,
-    fb: FormBuilder
+    fb: FormBuilder,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
     this.myForm = fb.group({
       firstName: this.firstNameFormControl,
       lastName: this.lastNameFormControl,
+      accept: this.acceptFormControl,
+      accountType: this.accountType,
       businessName: this.businessName,
       email: this.emailFormControl,
       password: this.passwordFormControl,
@@ -119,17 +143,26 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.currentDevice = window.clientInformation.platform;
-    this.currentPlatform = window.clientInformation.vendor;
-    this.agent = window.clientInformation.userAgent;
+    if (isPlatformBrowser(this.platformId)) {
+      this.currentDevice = window.clientInformation.platform;
+      this.currentPlatform = window.clientInformation.vendor;
+      this.agent = window.clientInformation.userAgent;
+    }
   }
 
+  ngOnDestroy(): void {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
+  }
 
   addParticipant(form: any) {
     this.errors = [];
     const subscription = 'FREE';
     const platform = 'EMAIL';
     this.participant = {
+      'accountType': this.accountType.value,
       'firstName': this.firstNameFormControl.value,
       'lastName': this.lastNameFormControl.value,
       'businessName': this.businessName.value,
@@ -145,7 +178,7 @@ export class RegisterComponent implements OnInit {
       'subscription': subscription
     };
 
-    this._authService.addParticipant(this.participant).subscribe((data) => {
+    this._authService.addParticipant(this.participant).pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       if (data) {
         if (data.errors) {
           console.log('___ DATA ERROR ___:', data.errors);
@@ -157,8 +190,10 @@ export class RegisterComponent implements OnInit {
         } else {
           this.errors = null;
           this.myForm.setValue({
+            'accountType': null,
             'firstName': null,
             'lastName': null,
+            'accept': false,
             'businessName': null,
             'email': null,
             'password': null,
