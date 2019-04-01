@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-
+import { MatBadgeModule } from '@angular/material/badge';
 import {
   MatButtonModule,
   MatToolbarModule,
@@ -41,6 +41,7 @@ import { ScrollingModule, ScrollDispatchModule } from '@angular/cdk/scrolling';
 @NgModule({
   imports: [
     MatAutocompleteModule,
+    MatBadgeModule,
     MatBottomSheetModule,
     MatButtonModule,
     MatButtonToggleModule,
@@ -77,6 +78,7 @@ import { ScrollingModule, ScrollDispatchModule } from '@angular/cdk/scrolling';
   ],
   exports: [
     MatAutocompleteModule,
+    MatBadgeModule,
     MatBottomSheetModule,
     MatButtonModule,
     MatButtonToggleModule,

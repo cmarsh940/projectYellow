@@ -43,6 +43,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
   questionGroups = questionGroups;
   checked: boolean;
   reward: boolean;
+  experation: boolean;
   layout: boolean;
 
   @Input() survey: Survey;
@@ -61,6 +62,7 @@ export class AddSurveyComponent implements OnInit, OnChanges {
   ) {
     this.checked = false;
     this.reward = false;
+    this.experation = false;
     this.createForm();
   }
 
@@ -247,6 +249,9 @@ export class AddSurveyComponent implements OnInit, OnChanges {
 
   OnChange($event) {
     this.reward = $event.checked;
+  }
+  addExperation($event) {
+    this.experation = $event.checked;
   }
 
 }

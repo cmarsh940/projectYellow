@@ -2,6 +2,7 @@ const Categories = require('../controllers/categories');
 const Clients = require('../controllers/clients');
 const EmailSubs = require('../controllers/emailSubs');
 const Feedbacks = require('../controllers/feedbacks');
+const Notifications = require('../controllers/notifications');
 const path = require('path');
 const Payments = require('../controllers/payments');
 const ResetRequests = require('../controllers/resetRequests');
@@ -92,6 +93,10 @@ module.exports = function (app) {
     app.get('/api/clients/info/:id', [
         validJWTNeeded,
         Clients.info
+    ]);
+    app.get('/api/clients/notifications/:id', [
+        validJWTNeeded,
+        Notifications.single
     ]);
     app.put('/api/clients/:id', [
         validJWTNeeded,

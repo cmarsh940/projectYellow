@@ -235,7 +235,6 @@ export class ViewSurveyComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   prepareSaveSurvey() {
-  // prepareSaveSurvey(): Survey {
     const tempTotal = this.survey.totalAnswers + 1;
     const allTime = this.survey.surveyTime + this.interval;
     console.log('intervals are:', this.interval);

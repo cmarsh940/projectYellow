@@ -52,6 +52,12 @@ export class DataService<Type> {
       catchError(this.handleError('getSingle', []))
     );
   }
+  public getNotifications(ns: string, id: string): Observable<any> {
+    console.log('*** GET ***');
+    return this.http.get<any>(this.actionUrl + ns + '/' + id).pipe(
+      catchError(this.handleError('getNotifications', []))
+    );
+  }
 
   public add(ns: string, asset: any): Observable<any> {
     console.log('Entered DataService add');

@@ -344,7 +344,9 @@
           <mat-hint align="start"><strong>MM/DD/YYYY</strong> </mat-hint>
         </mat-form-field>
       </div>
-      <div *ngIf="!reward">
+      <mat-slide-toggle (change)="addExperation($event)">Add experation date</mat-slide-toggle>
+
+      <div *ngIf="!reward && experation">
         <h5>Experation date of survey</h5>
         <mat-form-field>
           <input matInput [matDatepicker]="experation" placeholder="Choose a date" formControlName="experationDate" (click)="experation.open()">

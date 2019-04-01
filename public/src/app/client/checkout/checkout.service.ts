@@ -4,9 +4,6 @@ import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HandleError, HttpErrorHandler } from '@shared/services/http-error-handler.service';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })

@@ -11,11 +11,6 @@
   flex: 1 1 auto;
 }
 
-.mat-drawer-content {
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-
 .mat-form-field {
     font-size: small!important;
     font-weight: 100;

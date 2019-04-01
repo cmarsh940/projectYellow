@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChildren, ElementRef, Input, Inject, PLATFORM_ID, OnChanges, AfterViewInit } from '@angular/core';
-import { FormControlName, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
-import { Subscription, Observable, fromEvent, merge } from 'rxjs';
+import { FormControlName, FormGroup, FormArray, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Subscription, Observable, fromEvent, merge, Subject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { questionGroups, Question } from '@shared/models/question-group';
 import { GenericValidator } from '@shared/validators/generic-validator';
@@ -16,12 +16,12 @@ import { SubmitSurveyDialogComponent } from '../submit-survey-dialog/submit-surv
   templateUrl: './private-survey.component.html',
   styleUrls: ['./private-survey.component.css']
 })
-export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges {
+export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   surveyForm: FormGroup;
   surveyId: string = '';
   errors = [];
-  _routeSubscription: Subscription;
+  private unsubscribe$ = new Subject();
   questionGroup = questionGroups;
   loaded: Boolean;
   userId: String;
@@ -36,11 +36,18 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
   interval;
   timeAverage: any;
 
+  incentiveForm: FormGroup;
   assigned: Boolean;
+  userOther: any;
+  checked: boolean;
 
   // Use with the generic validation message class
   displayMessage: { [key: string]: string } = {};
   private validationMessages: { [key: string]: { [key: string]: string } };
+
+  private participant;
+
+  userEmail = new FormControl('');
   private genericValidator: GenericValidator;
 
   weekdayFilter = (d: Date): boolean => {
@@ -63,6 +70,7 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
     @Inject(PLATFORM_ID) private platformId: object
   ) {
 
+    this.checked = false;
     // Defines all of the validation messages for the form.
     // These could instead be retrieved from a file or database.
     this.validationMessages = {
@@ -74,6 +82,10 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
     // Define an instance of the validator for use with this form,
     // passing in this form's set of validation messages.
     this.genericValidator = new GenericValidator(this.validationMessages);
+
+    this.incentiveForm = fb.group({
+      userEmail: this.userEmail,
+    });
   }
 
   ngOnInit(): void {
@@ -91,7 +103,7 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
 
       this.userId = this._activatedRoute.snapshot.url[1].path;
 
-      this._routeSubscription = this._activatedRoute.params.subscribe(params => {
+      this._activatedRoute.params.pipe(takeUntil(this.unsubscribe$)).subscribe(params => {
         this.surveyId = params['id'];
         this.getSurvey();
       });
@@ -115,6 +127,13 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
       });
   }
 
+  ngOnDestroy() {
+    if (this.unsubscribe$) {
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
+    }
+  }
+
   addQuestion(): void {
     this.questions.push(this.buildQuestion());
   }
@@ -134,15 +153,20 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
     this.rebuildForm();
   }
 
-  // ngOnDestroy() {
-  //   this._routeSubscription.unsubscribe();
-  // }
-
 
   getSurvey() {
     this._surveyService.getAsset(this.surveyId)
-      .subscribe(
+      .pipe(takeUntil(this.unsubscribe$)).subscribe(
         (survey: Survey) => {
+          if (!survey) {
+            this._router.navigate(['/404error']);
+          }
+          if (!survey.private) {
+            this._router.navigate(['/404error']);
+          }
+          if (!survey.active) {
+            this._router.navigate(['/survey-closed']);
+          }
           this.assigned = false;
 
           // CHECK IF SURVEY IS PRIVATE
@@ -151,6 +175,18 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
             // SET ANSWERS TO EMPTY []
             for (let i = 0; i < survey.questions.length; i++) {
               survey.questions[i].answers = [];
+            }
+            if (survey.incentive) {
+              console.log('INCENTIVE STARTED');
+              const incentiveQuestion = {
+                userEmail: '',
+                isRequired: false,
+                question: 'Survey Complete',
+                option: survey.incentive.name,
+                questionType: 'incentive'
+              };
+              survey.questions.push(incentiveQuestion);
+              console.log('NEW QUESTIONS W/ INCENTIVE:', survey.questions);
             }
             this.assigned = false;
 
@@ -246,6 +282,13 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
 
     const formModel = this.surveyForm.value;
 
+    this.participant = {
+      'email': this.userEmail.value,
+    };
+    console.log('PARTICIPANT IS:', this.participant);
+    if (this.survey.incentive) {
+      formModel.questions.pop();
+    }
     // deep copy of form model questions
     const questionsDeepCopy: Question[] = formModel.questions.map(
       (question: Question) => Object.assign({}, question)
@@ -268,7 +311,9 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
       creator: this.survey.creator,
       device: this.currentDevice,
       agent: this.agent,
+      active: this.survey.active,
       platform: this.currentPlatform,
+      incentive: this.survey.incentive,
       createdAt: this.survey.createdAt,
       updatedAt: this.survey.updatedAt
     };
@@ -279,6 +324,11 @@ export class PrivateSurveyComponent implements OnInit, AfterViewInit, OnChanges 
     this.interval = setInterval(() => {
       this.time++;
     }, 1000);
+  }
+
+  OnChange($event) {
+    console.log($event);
+    this.userOther = $event.target.value;
   }
 
   submittedDialog() {

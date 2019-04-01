@@ -180,6 +180,15 @@ const ClientSchema = new mongoose.Schema({
     select: false,
     default: []
   },
+  _notifications: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Notification"
+      }
+    ],
+    default: []
+  },
   _resetRequest: {
     type: [
       {

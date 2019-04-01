@@ -42,4 +42,8 @@ export class ClientService {
   public deleteParticipant(id: any): Observable<Client> {
     return this.dataService.delete(this.NAMESPACE, id);
   }
+  public getNotifications(id: any): Observable<any> {
+    const NAMESPACE = 'clients/notifications';
+    return this.dataService.getNotifications(NAMESPACE, id);
+  }
 }
