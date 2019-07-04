@@ -6,7 +6,9 @@
   "main": "server.js",
   "scripts": {
     "DB": "mongod --auth --port 27017 --dbpath /data/db",
-    "start": "node server.js"
+    "start": "node server.js",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [],
   "author": "Cam",
@@ -30,6 +32,8 @@
     "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
     "nodemailer": "^6.0.0",
-    "twilio": "^3.29.2"
-  }
+    "twilio": "^3.29.2",
+    "snyk": "^1.189.0"
+  },
+  "snyk": true
 }
