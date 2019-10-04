@@ -34,3 +34,8 @@ patch:
         patched: '2019-07-04T15:28:23.511Z'
     - snyk > @snyk/dep-graph > graphlib > lodash:
         patched: '2019-07-04T15:28:23.511Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - snyk > proxy-agent > https-proxy-agent:
+        patched: '2019-10-04T22:53:32.993Z'
+    - snyk > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2019-10-04T22:53:32.993Z'
