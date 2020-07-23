@@ -27,7 +27,7 @@
     "@angular/material": "~7.3.6",
     "@angular/platform-browser": "7.2.0",
     "@angular/platform-browser-dynamic": "7.2.0",
-    "@angular/pwa": "0.13.1",
+    "@angular/pwa": "0.803.29",
     "@angular/router": "7.2.0",
     "@angular/service-worker": "7.2.0",
     "@gorniv/ngx-transfer-http": "2.2.9",
