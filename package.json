@@ -16,7 +16,7 @@
     "aws-sdk": "^2.430.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "braintree": "^2.15.0",
+    "braintree": "^3.0.0",
     "busboy": "^0.3.0",
     "busboy-body-parser": "^0.3.2",
     "compression": "^1.7.4",
@@ -27,12 +27,12 @@
     "express-session": "^1.15.6",
     "geoip-lite": "^1.3.6",
     "helmet": "^3.16.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "6.0.4",
     "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
     "nodemailer": "^6.0.0",
-    "twilio": "^3.29.2",
+    "twilio": "^4.0.0",
     "snyk": "^1.316.1"
   },
   "snyk": true
