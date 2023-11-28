@@ -47,7 +47,7 @@
     "ngx-cookie": "4.1.2",
     "reflect-metadata": "0.1.13",
     "rxjs": "6.4.0",
-    "rxjs-tslint": "0.1.7",
+    "rxjs-tslint": "0.1.8",
     "xlsx": "^0.16.0",
     "zone.js": "0.8.26"
   },
