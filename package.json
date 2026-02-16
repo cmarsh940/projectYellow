@@ -32,7 +32,7 @@
     "mongoose-unique-validator": "^2.0.2",
     "morgan": "^1.9.1",
     "nodemailer": "^6.0.0",
-    "twilio": "^3.29.2",
+    "twilio": "^4.19.3",
     "snyk": "^1.316.1"
   },
   "snyk": true
